@@ -1,6 +1,7 @@
 <template>
   <section>
-    <h1 class="header">Nuxt TypeScript Starter</h1>
+    <Header/>
+    asdf
     <div class="cards">
       <Card
         v-for="person in people"
@@ -19,10 +20,12 @@ import {
 import { State } from "vuex-class"
 import type { Person } from "~/types";
 import Card from "~/components/Card.vue"
+import Header from "~/components/Header.vue"
 
 @Component({
   components: {
-    Card
+    Card,
+    Header,
   }
 })
 export default class extends Vue {
@@ -31,9 +34,6 @@ export default class extends Vue {
 </script>
 
 <style scoped>
-.header {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 
 .cards {
   display: flex;
