@@ -16,7 +16,7 @@
             {{ formatDate(article.updatedAt) }}
           </p>
           <span class="mr-3">•</span>
-          <p>{{ article.author.name }}</p>
+          <!-- <p>{{ article.author.name }}</p> -->
         </div>
         <h1 class="text-6xl font-bold">{{ article.title }}</h1>
       </div>
@@ -37,7 +37,7 @@
       <p>{{ article.description }}</p>
       <p class="pb-4">Post last updated: {{ formatDate(article.updatedAt) }}</p>
       <!-- table of contents -->
-      <nav class="pb-6">
+      <!-- <nav class="pb-6">
         <ul>
           <li
             v-for="link of article.toc"
@@ -57,15 +57,13 @@
             >
           </li>
         </ul>
-      </nav>
+      </nav> -->
       <!-- content from markdown -->
       <nuxt-content :document="article" />
       <!-- content author component -->
-      <author :author="'hi'" />
+      <!-- <author :author="'hi'" /> -->
       <!-- prevNext component -->
-      <PrevNext :prev="prev" :next="next" class="mt-8" />
-    <pre>{{article}}</pre>
-
+      <!-- <PrevNext :prev="prev" :next="next" class="mt-8" /> -->
     </div>
   </article>
 </template>

@@ -3,7 +3,7 @@
 const config =  {
   env: {},
   head: {
-    title: "template",
+    title: "Jeffrey Li",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
