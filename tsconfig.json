@@ -23,6 +23,7 @@
     "types": [
       "@types/node",
       "@nuxt/types",
+      "@nuxt/content",
     ]
   }
 }

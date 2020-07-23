@@ -1,4 +1,6 @@
-export default {
+// import {NuxtConfig} from '@nuxt/types';
+
+const config =  {
   env: {},
   head: {
     title: "template",
@@ -17,7 +19,8 @@ export default {
   buildModules: [
     "@nuxt/typescript-build",
     '@nuxtjs/stylelint-module',
-    "@nuxtjs/tailwindcss"
+    "@nuxtjs/tailwindcss",
+    'nuxt-composition-api'
   ],
   modules: [
     "@nuxt/content",
@@ -28,3 +31,5 @@ export default {
   },
   axios: {}
 }
+
+export default config;
