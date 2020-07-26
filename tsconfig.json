@@ -23,6 +23,7 @@
     "types": [
       "@types/node",
       "@nuxt/types",
+      "vuesax/types",
       "@nuxt/content",
     ]
   }

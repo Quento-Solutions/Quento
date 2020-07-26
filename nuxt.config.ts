@@ -14,7 +14,7 @@ const config =  {
     ]
   },
   loading: { color: "#3B8070" },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/main.css", "vuesax/dist/vuesax.css"],
   build: {},
   buildModules: [
     "@nuxt/typescript-build",
@@ -25,6 +25,10 @@ const config =  {
   modules: [
     "@nuxt/content",
     "@nuxtjs/axios",
+  ],
+  plugins: [
+    "@/plugins/vuesax",
+    "@/plugins/aos"
   ],
   content : {
 

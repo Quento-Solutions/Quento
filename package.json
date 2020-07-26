@@ -9,12 +9,15 @@
     "@nuxt/typescript-runtime": "^1.0.0",
     "@nuxtjs/axios": "5.11.0",
     "@nuxtjs/tailwindcss": "^2.1.0",
+    "@types/aos": "^3.0.3",
+    "aos": "^3.0.0-beta.6",
     "fs": "0.0.1-security",
     "net": "^1.0.2",
     "nuxt": "^2.13.3",
     "nuxt-composition-api": "^0.10.6",
     "nuxt-property-decorator": "2.7.2",
     "tailwindcss": "^1.5.2",
+    "vuesax": "^4.0.1-alpha.23",
     "vuex-class": "0.3.2"
   },
   "scripts": {
