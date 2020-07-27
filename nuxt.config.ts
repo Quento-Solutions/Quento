@@ -14,24 +14,30 @@ const config =  {
     ]
   },
   loading: { color: "#3B8070" },
-  css: ["~/assets/css/main.css", "vuesax/dist/vuesax.css"],
+  css: ["~/assets/css/main.css", "vuesax/dist/vuesax.css", 'aos/dist/aos.css', 'boxicons/css/boxicons.min.css', "video.js/dist/video-js.css"],
+  
   build: {},
   buildModules: [
     "@nuxt/typescript-build",
-    '@nuxtjs/stylelint-module',
+    // '@nuxtjs/stylelint-module',
     "@nuxtjs/tailwindcss",
     'nuxt-composition-api'
   ],
   modules: [
     "@nuxt/content",
     "@nuxtjs/axios",
+    "@nuxtjs/style-resources"
   ],
   plugins: [
     "@/plugins/vuesax",
-    "@/plugins/aos"
+    { src : "@/plugins/client_runtime", mode : "client"},
+    {src : "@/plugins/vue-video-player", ssr : false}
   ],
   content : {
 
+  },
+  styleResources : {
+    scss : ['./assets/scss/*.scss']
   },
   axios: {}
 }

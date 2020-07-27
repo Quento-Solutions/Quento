@@ -1,23 +1,39 @@
 <template>
-  <NuxtLink
-    :to="{ name: 'blog-slug', params: { slug: article.slug } }"
-    class="flex transition-shadow duration-150 ease-in-out shadow-sm hover:shadow-md xxlmax:flex-col rounded-md overflow-hidden"
-  >
-    <img
-      v-if="article.img"
-      class="h-48 xxlmin:w-1/2 xxlmax:w-full object-cover"
-      :src="article.img"
-    />
+  <div
+    :class="{'withHover': actionable, 'fixedHeight': fixedHeight }"
+    class="con-vs-card">
+    <header
+      v-if="hasSlot('header')"
+      class="vs-card--header">
+      <slot name="header"></slot>
+    </header>
 
     <div
-      class="p-6 flex flex-col justify-between xxlmin:w-1/2 xxlmax:w-full"
-    >
-      <h2 class="font-bold">{{ article.title }}</h2>
-      <p class="font-bold text-gray-600 text-sm">
-        {{ article.description }}
-      </p>
+      v-if="hasSlot('media')"
+      class="vs-card--media">
+      <slot name="media"></slot>
     </div>
-  </NuxtLink>
+
+    <div
+      v-if="hasSlot('default')"
+      :class="{'fixedHeight': fixedHeight }"
+      class="vs-card--content">
+      <slot></slot>
+    </div>
+
+    <div
+      v-if="hasSlot('extra-content')"
+      class="vs-card-extra--content">
+      <slot name="extra-content"></slot>
+    </div>
+
+    <footer
+      v-if="hasSlot('footer')"
+      :class="{'fixedHeight': fixedHeight }"
+      class="vs-card--footer">
+      <slot name="footer"></slot>
+    </footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,11 +42,15 @@ import {
   Prop,
   Vue
 } from "nuxt-property-decorator"
-import type { Article } from "~/types";
 
-@Component({})
+@Component<Card>({})
 export default class Card extends Vue {
-  @Prop() article!: Article
+  @Prop({default : false}) actionable!: boolean;
+  @Prop({default : false}) fixedHeight !: boolean;
+
+  hasSlot(slot : string) {
+    return this.$slots[slot] != undefined;
+  }
 }
 </script>
 

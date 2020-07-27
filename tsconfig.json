@@ -17,11 +17,13 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "importsNotUsedAsValues": "preserve",
+    "importHelpers": true, 
     "paths": {
       "~/*": ["./*"]
     },
     "types": [
       "@types/node",
+      "./typings",
       "@nuxt/types",
       "vuesax/types",
       "@nuxt/content",
