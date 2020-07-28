@@ -19,11 +19,11 @@
                 <slot name="actions">
                     <div class="vx-card__action-buttons p-2 m-0 rounded-md" v-if="(actionButtons || collapseAction || refreshContentAction || removeCardAction) && !codeToggler" style="border-style : solid; border-width: 2px;  ">
                         <i @click="toggleContent"  :class="{rotate180: !isContentCollapsed}" class="bx bxs-chevrons-down" style="color : green; font-size : 1.5rem;" v-if="actionButtons || collapseAction" />
-                        <feather-icon @click="refreshcard" icon="RotateCwIcon" class="ml-4" v-if="actionButtons || refreshContentAction" />
+                        <i @click="refreshcard" icon="RotateCwIcon" class="ml-4" v-if="actionButtons || refreshContentAction" />
                         <i @click="removeCard" icon="XIcon" class="ml-4 bx bx-x-circle" style="color : red; font-size : 1.5rem;" v-if="actionButtons || removeCardAction" />
                     </div>
                     <div class="vx-card__code-toggler sm:block hidden" v-if="codeToggler && !actionButtons">
-                        <feather-icon icon="CodeIcon" :class="{'border border-solid border-primary border-t-0 border-r-0 border-l-0': showCode}" @click="toggleCode"></feather-icon>
+                        <i icon="CodeIcon" :class="{'border border-solid border-primary border-t-0 border-r-0 border-l-0': showCode}" @click="toggleCode"/>
                     </div>
                 </slot>
             </div>

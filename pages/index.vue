@@ -1,20 +1,7 @@
 <template>
   <div>
     <div class="p-8 obelisk bg-cover bg-center" style="">
-      <Card
-        style="
-          position: absolute;
-          width: 53%;
-          height: 57%;
-          top: 17%;
-          left: 23.7%;
-        "
-        data-aos="flip-up"
-      >
-        <template slot="no-body">
-          <Home />
-        </template>
-      </Card>
+      <component :is="currentTabComponent"/>
     </div>
     <Sidebar />
     <FooterCard />
@@ -29,12 +16,14 @@ import { Context, windowStore, navigationStore } from '~/store'
 
 import { Button } from 'vuesax'
 import Home from '~/screens/home.vue'
+import SignUp from '~/screens/SignUp.vue';
+import Login from '~/screens/Login.vue';
 import FooterCard from '~/components/FooterCard.vue'
 import Sidebar from '~/components/Sidebar.vue'
 import Card from '~/components/VxCard.vue'
 
 @Component({
-  components: { Card, Button, Sidebar, FooterCard, Home },
+  components: { Card, Button, Sidebar, FooterCard, Home, Login, SignUp },
   mounted() {
     window.addEventListener('resize', windowStore.handleResize)
     windowStore.handleResize()
@@ -47,6 +36,22 @@ import Card from '~/components/VxCard.vue'
   }
 })
 export default class extends Vue {
+
+  // currentTabComponent = Login;
+  get currentTabComponent()
+  {
+    switch(navigationStore.currentPage)
+    {
+      case "login":
+        return Login;
+      case "signup":
+        return SignUp;
+      default : 
+        return Home;
+    }
+  }
+
+
   async asyncData({ $content, params }: Context) {
     const articles = await $content('articles', params.slug)
       .only(['title', 'description', 'img', 'slug', 'author'])

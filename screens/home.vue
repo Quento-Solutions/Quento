@@ -1,13 +1,14 @@
 <template>
+<ScreenCard>
   <vs-row class="absolute w-full">
     <vs-col w="6" class="p-6 h-full border-solid" style="border-style: solid;">
-      <h1 class="text-title text-5xl">&nbsp; &nbsp; Hi, I'm Jeffrey Li</h1>
+      <h1 class="text-title text-5xl">&nbsp; &nbsp; Hi, I'm {{username}}</h1>
       <VxCard class="mt-6 p-4 px-8" actionButtons=true collapseAction=true removeAction=true title="A Little About Me">
         <p class="font-display introduction-p">
           &nbsp; &nbsp;{{ introductionText }}
         </p>
       <vs-row justify="flex-end" class="mt-8 justify-end">
-        <vs-button gradient size="xl" class="text-title text-4xl mt-8 ml-6">Take A Look Around &nbsp;
+        <vs-button gradient size="xl" class="text-title text-4xl mt-8 ml-6"  @click="firebaseLogin()">Take A Look Around &nbsp;
             <i class="bx bx-right-arrow-circle text-2xl"/>
         </vs-button>
       </vs-row>
@@ -89,15 +90,21 @@
       </div>
     </vs-col>
   </vs-row>
+</ScreenCard>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import VxCard from '~/components/VxCard.vue'
 import type { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
+
+import ScreenCard from './ScreenCard.vue';
+import { getModule } from 'vuex-module-decorators';
+import {authStore} from "~/store";
+import VxCard from '~/components/VxCard.vue'
+
 @Component<Home>({
   components: {
-    VxCard
+    VxCard, ScreenCard
   },
   mounted() {
     this.snowPlayer.play()
@@ -105,6 +112,15 @@ import type { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
   }
 })
 export default class Home extends Vue {
+
+  get username()
+  {
+    console.log(authStore.user);
+    return authStore.user?.email;
+  }
+  async firebaseLogin() {
+    authStore.signInWithGoogle();
+  }
   introductionText =
     'Hi! My name is Jeffrey Li and I am a hard working life long learner looking to broaden my horizons. My main areas of interest are mathematics and physics, solving software challenges as well as UI/UX design, playing piano and music as a whole and mechanical build.'
   playerOptions: VideoJsPlayerOptions = {
@@ -128,7 +144,6 @@ export default class Home extends Vue {
 
 <style lang="scss" scoped>
 @import '../assets/scss/components/_main.scss';
-
 
 .introduction-p {
   line-height: 2;

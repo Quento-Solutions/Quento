@@ -1,4 +1,5 @@
 // import {NuxtConfig} from '@nuxt/types';
+import {firebaseConfig} from './envars';
 
 const config =  {
   env: {},
@@ -26,15 +27,31 @@ const config =  {
   modules: [
     "@nuxt/content",
     "@nuxtjs/axios",
-    "@nuxtjs/style-resources"
+    "@nuxtjs/style-resources",
+    "@nuxtjs/firebase"
   ],
   plugins: [
     "@/plugins/vuesax",
     { src : "@/plugins/client_runtime", mode : "client"},
-    {src : "@/plugins/vue-video-player", ssr : false}
+    {src : "@/plugins/vue-video-player", ssr : false},
+    "@/plugins/firebase",
+    "@/plugins/firestore",
+    "@/plugins/fireauth",
+    "@/plugins/vee-validate",
   ],
   content : {
 
+  },
+  firebase : {
+    config: firebaseConfig,
+    services: {
+      auth: true,
+      firestore: true,
+      functions: true,
+      storage: true,
+      analytics: true
+      // Just as example. Can be any other service.
+    }
   },
   styleResources : {
     scss : ['./assets/scss/*.scss']

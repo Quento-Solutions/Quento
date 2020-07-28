@@ -6,10 +6,13 @@ import {
   Mutation
 } from 'vuex-module-decorators'
 
-const NavigationOptions = {
+export const NavigationOptions = {
   home: 'home',
   projects: 'projects',
-  contact: 'contact'
+  contact: 'contact',
+  login : 'login',
+  signup : 'signup',
+
 } as const
 
 export type NavigationOptionType = keyof typeof NavigationOptions
@@ -21,7 +24,7 @@ export interface NavigationState {
 @Module({ stateFactory: true, name: 'navigation', namespaced: true })
 export default class NavigationModule extends VuexModule
   implements NavigationState {
-  currentPage: NavigationOptionType = 'home'
+  currentPage: NavigationOptionType = 'login'
 
   @Mutation
   private CHANGE_PAGE(page: NavigationOptionType) {

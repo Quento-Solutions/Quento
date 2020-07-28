@@ -22,9 +22,10 @@
       "~/*": ["./*"]
     },
     "types": [
+      "@nuxt/types",
       "@types/node",
       "./typings",
-      "@nuxt/types",
+      "@nuxtjs/firebase",
       "vuesax/types",
       "@nuxt/content",
     ]
