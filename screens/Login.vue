@@ -1,6 +1,6 @@
 <template>
 <ScreenCard>
-  <vs-row class="absolute w-full" justify="center" style="height: 100%;">
+  <vs-row class="w-full" justify="center" style="height: 100%;">
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
       <h1 class="text-title text-5xl">&nbsp; &nbsp; Welcome To Wani Nani</h1>
       <VxCard
@@ -113,7 +113,6 @@ export default class Login extends Vue {
 
     const loading = this.$vs.loading();
     try {
-      console.log(this.password);
       await authStore.signInWithEmail({...this});
       navigationStore.changePage('home');
       // Handle Sign Up Stuff Actually this should be in Actions but

@@ -108,14 +108,12 @@ import VxCard from '~/components/VxCard.vue'
   },
   mounted() {
     this.snowPlayer.play()
-    // console.log(this.snowPlayer)
   }
 })
 export default class Home extends Vue {
 
   get username()
   {
-    console.log(authStore.user);
     return authStore.user?.email;
   }
   async firebaseLogin() {

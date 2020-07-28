@@ -39,7 +39,6 @@ export default class AuthModule extends VuexModule implements AuthState {
     @Mutation
     private SET_USER(user : User) 
     {
-        console.log({user});
         this.user = user;
     }
     
@@ -70,7 +69,6 @@ export default class AuthModule extends VuexModule implements AuthState {
                 user = {...user, isAdmin : role.data()?.role === 'admin'};
             }
         }
-        console.log({user});
         this.context.commit('SET_USER', (user));
         this.context.commit('SET_LOADING', (false));
     }
@@ -94,13 +92,10 @@ export default class AuthModule extends VuexModule implements AuthState {
     }
 
     @Action({rawError : true})
-
     public async signOut()
     {
         await firebaseAuth.signOut();
         this.context.commit('SET_USER', (null));
     }
-
-
 
 }

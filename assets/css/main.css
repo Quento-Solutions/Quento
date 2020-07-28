@@ -1,1 +1,5 @@
 @import './fonts.css';
+
+:root {
+    --bg-aspect-ratio: calc(1356/898);
+}

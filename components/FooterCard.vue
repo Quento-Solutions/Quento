@@ -1,8 +1,8 @@
 <template>
   <vs-row align="center" justify="space-around" class="footer-card px-6 py-2" style="">
     <vs-tooltip v-for="(item, index) in contactInformation" :key="index">
-        <vs-avatar  size="64" :color="item.backgroundColor" @click="pushWebsite(item.href)" >
-            <i :class="item.iconClass" :style='`font-size: 2rem; color: ${item.color}`' ></i>
+        <vs-avatar class="bottomIcon" :color="item.backgroundColor" @click="pushWebsite(item.href)" >
+            <i :class="item.iconClass" :style='`font-size: 2vw; color: ${item.color}`' ></i>
         </vs-avatar>
         <template #tooltip>
             {{item.toolTipText}}
@@ -62,7 +62,6 @@ export default class FooterCard extends Vue {
 
     pushWebsite(website ?: string) 
     {
-        console.log(website);
         if(website) window.open(website);
     }
 }
@@ -71,14 +70,20 @@ export default class FooterCard extends Vue {
 <style lang="scss" scoped>
 .footer-card {
   transform: translate(-50%, 0%);
-  position: fixed;
+  position: absolute;
   background-color: white;
   border-radius: 0.5rem;
   align-items: center;
-  top: 86%;
+  top: 87%;
   height: auto;
   left: 50%;
   width: auto;
   min-width: 20%;
+
+  .bottomIcon 
+  {
+    width: 3.5vw;
+    height : 3.5vw;
+  }
 }
 </style>

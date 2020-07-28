@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div class="p-8 obelisk bg-cover bg-center" style="">
+  <div class="relative disable-scrollbars overflow-x-hidden" style="width : 100vw; height : 100vh;">
+    <div class="p-8 obelisk bg-cover bg" style="">
       <component :is="currentTabComponent"/>
+      <FooterCard />
+
     </div>
     <Sidebar />
-    <FooterCard />
   </div>
 </template>
 
@@ -14,21 +15,19 @@ import AOS from 'aos'
 
 import { Context, windowStore, navigationStore } from '~/store'
 
-import { Button } from 'vuesax'
-import Home from '~/screens/home.vue'
+import Home from "~/screens/Home.vue";
+
 import SignUp from '~/screens/SignUp.vue';
 import Login from '~/screens/Login.vue';
 import FooterCard from '~/components/FooterCard.vue'
 import Sidebar from '~/components/Sidebar.vue'
-import Card from '~/components/VxCard.vue'
+import Blank from '~/screens/Blank.vue';
 
 @Component({
-  components: { Card, Button, Sidebar, FooterCard, Home, Login, SignUp },
+  components: { Sidebar, FooterCard, Home, Login, SignUp, Blank },
   mounted() {
     window.addEventListener('resize', windowStore.handleResize)
     windowStore.handleResize()
-
-    console.log({ windowHello: windowStore.windowHeight })
 
     AOS.init({
       duration: 1000
@@ -37,9 +36,12 @@ import Card from '~/components/VxCard.vue'
 })
 export default class extends Vue {
 
+
   // currentTabComponent = Login;
   get currentTabComponent()
   {
+    // return Blank;
+
     switch(navigationStore.currentPage)
     {
       case "login":
@@ -75,11 +77,21 @@ export default class extends Vue {
 
 <style lang="scss">
 .obelisk {
-  width: 120%;
-  height: 120%;
-  transform: translate(-7.5%, -7.5%);
-  position: fixed;
+  width: 120vw;
+  height: calc(100vw/var(--bg-aspect-ratio));
+  position : absolute;
+  background-position: center top;
+  transform: translate( -8% , -20%);
   background-image: url('https://images.unsplash.com/photo-1585792180666-f7347c490ee2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1356&q=80');
+}
+
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Chrome/Safari/Webkit */
+  }
 }
 
 .article-card {
@@ -92,4 +104,5 @@ export default class extends Vue {
 .article-card img div {
   border-radius: 8px 0 0 8px;
 }
+
 </style>
