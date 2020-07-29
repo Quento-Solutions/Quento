@@ -7,6 +7,8 @@ import {
 } from 'vuex-module-decorators';
 
 import type { User as FirebaseUser} from 'firebase'
+import type {FireAuthServerUser} from '@nuxtjs/firebase'
+
 import firestore from '~/plugins/firestore';
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase';
 
@@ -16,19 +18,19 @@ export interface AuthState {
 }
 export type User  = {
     uid: string;
-    displayName: string | null;
-    email: string | null;
-    phoneNumber: string | null;
-    photoURL: string | null;
-    providerId: string;
+    displayName ?: string | null;
+    email ?: string | null;
+    phoneNumber ?: string | null;
+    photoURL ?: string | null;
+    providerId ?: string;
     emailVerified: boolean;
-    isAnonymous: boolean;
-    isAdmin: boolean;
+    isAnonymous ?: boolean;
+    isAdmin ?: boolean;
 } | null;
 
 @Module({ stateFactory: true, name: 'auth', namespaced: true })
 export default class AuthModule extends VuexModule implements AuthState {
-    user !: User;
+    user : User = null;
     loading = false;
     
     @Mutation
@@ -41,7 +43,21 @@ export default class AuthModule extends VuexModule implements AuthState {
     {
         this.user = user;
     }
-    
+
+    @Action({rawError : true})
+    public async serverAuthStateChangeAction(user ?: FireAuthServerUser)
+    {
+        // console.log("server state ")
+        if (!user) {
+            this.context.commit('SET_USER', null);
+            return
+        }
+        const { uid, email, emailVerified, displayName, photoURL } = user!;
+        this.context.commit('SET_USER', {
+            uid, email, emailVerified, displayName, photoURL
+        })
+    }
+
     @Action({rawError : true})
     public async authStateChange(firebaseUser : FirebaseUser) {
         this.context.commit('SET_LOADING', (true));

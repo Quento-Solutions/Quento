@@ -6,6 +6,8 @@ export default class WindowModule extends VuexModule {
     windowHeight = 0
     windowWidth = 0;
 
+    sidenavIsOpen = false;
+
     screenDimensions = [1356 , 898] as const;
     
     @Mutation
@@ -14,6 +16,19 @@ export default class WindowModule extends VuexModule {
         this.windowHeight = a.height;
         this.windowWidth = a.width;
     }
+
+    @Action
+    public SetSidenavState(open : boolean)
+    {
+        this.SET_SIDENAV_OPEN(open);
+    }
+
+    @Mutation
+    private SET_SIDENAV_OPEN(open : boolean)
+    {
+        this.sidenavIsOpen = open;
+    }
+
     @Action
     public handleResize() {
     this.UPDATE_WINDOW_SIZE({
@@ -49,4 +64,15 @@ export default class WindowModule extends VuexModule {
     {
         return (percent : number) => percent * this.windowWidth;
     }
+
+    public get isSmallScreen()
+    {
+        return this.windowWidth < 992;
+    }
+
+    public get sidebarOpen()
+    {
+        return !this.isSmallScreen || this.sidenavIsOpen;
+    }
+
 }

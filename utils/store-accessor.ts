@@ -1,8 +1,9 @@
-import { Store } from 'vuex'
+import { Store, ModuleTree} from 'vuex'
 import { getModule } from "vuex-module-decorators";
 import window from "~/store/window";
 import navigation from '~/store/navigation';
 import auth from '~/store/auth';
+
 
 let windowStore : window;
 let navigationStore : navigation;

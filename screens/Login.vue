@@ -2,7 +2,7 @@
 <ScreenCard>
   <vs-row class="w-full" justify="center" style="height: 100%;">
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
-      <h1 class="text-title text-5xl">&nbsp; &nbsp; Welcome To Wani Nani</h1>
+      <h1 class="text-title text-5xl">&nbsp; &nbsp; Welcome To [Page Name]</h1>
       <VxCard
         class="mt-6 p-4 px-8"
         actionButtons="true"
@@ -93,6 +93,7 @@ export default class Login extends Vue {
   errorCode : number | null = null;
   pushSignUpPage()
   {
+    // console.log({user : authStore.user, auth : this.$fireAuth.currentUser});
     navigationStore.changePage('signup');
   }
 
@@ -114,7 +115,7 @@ export default class Login extends Vue {
     const loading = this.$vs.loading();
     try {
       await authStore.signInWithEmail({...this});
-      navigationStore.changePage('home');
+      this.$router.push('/home');
       // Handle Sign Up Stuff Actually this should be in Actions but
     }
     catch (error)

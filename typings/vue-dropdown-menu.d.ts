@@ -1,0 +1,1 @@
+declare module '@innologica/vue-dropdown-menu'

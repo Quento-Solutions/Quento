@@ -26,6 +26,7 @@
       "@types/node",
       "./typings",
       "@nuxtjs/firebase",
+      "@nuxtjs/pwa",
       "vuesax/types",
       "@nuxt/content",
     ]
