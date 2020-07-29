@@ -3,9 +3,7 @@
     <div class="p-8 obelisk bg-cover bg" style="">
       <component :is="currentTabComponent"/>
       <FooterCard />
-
     </div>
-
   </div>
 </template>
 
@@ -49,8 +47,6 @@ export default class extends Vue {
         return Login;
     }
   }
-
-
 
   get windowDimensions() {
     return navigationStore.currentPage

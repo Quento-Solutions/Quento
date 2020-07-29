@@ -22,10 +22,10 @@
             <template #icon>
               <i class="bx bx-user"></i>
             </template>
-            <template v-if="validEmail" #message-success>
+            <template v-if="validEmail(email)" #message-success>
               Email Valid
             </template>
-            <template v-if="!validEmail && email !== ''" #message-danger>
+            <template v-if="!validEmail(email) && email !== ''" #message-danger>
               Email Invalid
             </template>
           </vs-input>
@@ -49,7 +49,7 @@
             warn
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
-            @click="pushSignUpPage()"
+            @click="PushSignUpPage()"
             >Sign Up &nbsp;
             <i class="bx bx-user-plus text-2xl" />
           </vs-button>
@@ -57,7 +57,7 @@
             gradient
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
-            @click="loginWithGoogle()"
+            @click="LoginGoogle()"
             >Sign In With Google &nbsp;
             <i class="bx bxl-google text-2xl" />
           </vs-button>
@@ -66,7 +66,7 @@
             success
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
-            @click="Login()"
+            @click="LoginEmailPassword(email, password)"
             >Sign In &nbsp;
             <i class="bx bx-right-arrow-circle text-2xl" />
           </vs-button>
@@ -78,78 +78,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 
 import ScreenCard from './ScreenCard.vue';
 import VxCard from '~/components/VxCard.vue';
+import Auth from '~/mixins/AuthenticationMixin'
 
-import {navigationStore, authStore} from '~/store';
+import {navigationStore} from '~/store';
 @Component<Login>({
   components: { VxCard, ScreenCard }
 })
-export default class Login extends Vue {
+export default class Login extends mixins(Auth) {
 
-  errorMessage = "";
-  errorCode : number | null = null;
-  pushSignUpPage()
+  PushSignUpPage()
   {
     navigationStore.changePage('signup');
   }
-
-  resetError()
-  {
-    this.errorMessage = "";
-    this.errorCode = null;
-  }
-
-  async Login()
-  {
-    this.resetError();
-    if(!this.email || !this.password)
-    {
-      this.errorMessage = "All Fields Must Be Filled In";
-      return;
-    }
-
-    const loading = this.$vs.loading();
-    try {
-      await authStore.signInWithEmail({...this});
-      setTimeout(() => this.$router.push("/home"), 500); 
-      // Let the authentication propagate, I wish there was a better way but w/e
-      // TODO : Fix this btw
-      // Handle Sign Up Stuff Actually this should be in Actions but
-    }
-    catch (error)
-    {
-      if(error.message) this.errorMessage = error.message
-      else this.errorMessage = error;
-      if(error.code) this.errorCode = error.code; 
-    }
-    loading.close();
-  }
-
-  async loginWithGoogle() {
-    const loading = this.$vs.loading();
-    this.resetError();
-    try {
-      await authStore.signInWithGoogle();
-      setTimeout(() => this.$router.push("/home"), 500); 
-      // Let the authentication propagate, I wish there was a better way but w/e
-      // TODO : Fix this btw
-    }
-    catch (error)
-    {
-      if(error.message) this.errorMessage = error.message
-      else this.errorMessage = error;
-      if(error.code) this.errorCode = error.code; 
-    }
-    loading.close()
-  }
-
   email: string = ''
   password: string = ''
-  get validEmail() {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)
-  }
 }
 </script>
