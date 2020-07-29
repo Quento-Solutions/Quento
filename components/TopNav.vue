@@ -67,7 +67,6 @@ export default class TopNav extends Vue {
     }
     get userName()
     {
-        console.log(authStore.user);
         return authStore.user?.displayName
     }
     get photoURL()

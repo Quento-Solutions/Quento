@@ -24,7 +24,7 @@ const config : NuxtConfig = {
   ],
   server:
   {
-    port : 4000
+    port : 3000
   },
   router : {
     middleware : 'router-auth'

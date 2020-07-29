@@ -31,7 +31,7 @@ import Blank from '~/screens/Blank.vue';
   },
 
 })
-export default class extends Vue {
+export default class extends Vue { 
 
 
   // currentTabComponent = Login;
@@ -51,15 +51,6 @@ export default class extends Vue {
   }
 
 
-  async asyncData({ $content, params }: Context) {
-    const articles = await $content('articles', params.slug)
-      .only(['title', 'description', 'img', 'slug', 'author'])
-      .sortBy('createdAt', 'desc')
-      .fetch()
-    return {
-      articles
-    }
-  }
 
   get windowDimensions() {
     return navigationStore.currentPage

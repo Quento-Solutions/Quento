@@ -47,7 +47,6 @@ export default class AuthModule extends VuexModule implements AuthState {
     @Action({rawError : true})
     public async serverAuthStateChangeAction(user ?: FireAuthServerUser)
     {
-        // console.log("server state ")
         if (!user) {
             this.context.commit('SET_USER', null);
             return

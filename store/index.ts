@@ -9,8 +9,6 @@ import type { Context as AppContext, } from "@nuxt/types";
 
 export const actions = {
     async nuxtServerInit({}, ctx : AppContext) {
-        // console.log("SERVER BTW")
-        // console.log(ctx.res.locals.user);
         if(ctx.res && ctx.res.locals && ctx.res.locals.user)
         {
             initialiseStores(ctx.store);

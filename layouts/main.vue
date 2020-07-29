@@ -170,11 +170,9 @@ export default class MainLayout extends Vue {
 
   handleFocus()
   {
-    console.log("focus")
   }
   handleFocusOut()
   {
-    console.log("Focus out")
   }
   get isAppPage() {
     // if(this.$route.path.includes('/apps/')) return true

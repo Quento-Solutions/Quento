@@ -137,7 +137,9 @@ export default class Login extends Vue {
     const loading = this.$vs.loading();
     try {
       await authStore.signUpWithEmail({...this});
-      navigationStore.changePage('home');
+      setTimeout(() => this.$router.push("/home"), 500); 
+      // Let the authentication propagate, I wish there was a better way but w/e
+      // TODO : Fix this btw
       // Handle Sign Up Stuff Actually this should be in Actions but
     }
     catch (error)
@@ -153,7 +155,9 @@ export default class Login extends Vue {
     const loading = this.$vs.loading();
     try {
       await authStore.signInWithGoogle();
-      navigationStore.changePage('home');
+      setTimeout(() => this.$router.push("/home"), 500); 
+      // Let the authentication propagate, I wish there was a better way but w/e
+      // TODO : Fix this btw
     }
     catch (error)
     {
