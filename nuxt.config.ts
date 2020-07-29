@@ -1,4 +1,5 @@
 import type {NuxtConfig} from '@nuxt/types';
+// import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
 
 const config : NuxtConfig = {
@@ -27,7 +28,8 @@ const config : NuxtConfig = {
     port : 3000
   },
   router : {
-    middleware : 'router-auth'
+    middleware : 'router-auth',
+    routeNameSplitter: '/'
   },
 
   build: {},
@@ -51,6 +53,7 @@ const config : NuxtConfig = {
     '@/plugins/firebase',
     '@/plugins/firestore',
     '@/plugins/fireauth',
+    { src: "~/plugins/aos", ssr: false }
    
   ],
   pwa : {
