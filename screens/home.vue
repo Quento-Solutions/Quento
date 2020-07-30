@@ -97,7 +97,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import type { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 
-import ScreenCard from './ScreenCard.vue';
+import ScreenCard from '~/components/ScreenCard.vue';
 import { getModule } from 'vuex-module-decorators';
 import {authStore} from "~/store";
 import VxCard from '~/components/VxCard.vue'
