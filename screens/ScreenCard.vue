@@ -1,5 +1,5 @@
 <template>
-  <Card style="" class="screen-card absolute" data-aos="flip-up" fitContent="true">
+  <Card style="" class="screen-card absolute"  fitContent="true" >
       <template slot="no-body">
         <perfect-scrollbar :options="scrollbarOptions" watchOptions class='scroll-area' style="width: 100%;  height : 100%">
             <slot></slot>
@@ -9,16 +9,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, mixins } from 'nuxt-property-decorator'
 
 import { windowStore } from '~/store'
 
 import type {} from 'perfect-scrollbar';
 import Card from '~/components/VxCard.vue'
-@Component({
+import AOS from '~/mixins/AOSMixin';
+
+@Component<ScreenCard>({
   components: { Card }
 })
-export default class ScreenCard extends Vue {
+export default class ScreenCard extends mixins(AOS) {
 
   scrollbarOptions = {
     wheelPropagation : false,

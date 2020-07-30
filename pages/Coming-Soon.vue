@@ -9,7 +9,7 @@
                 <img src="~assets/images/rocket.png" alt="coming-soon" class="mx-auto mb-2" width="150">
                 <!-- <p>Thank you for checking out our app. We are under construction, we will be here soon with our new awesome app. </p> -->
                 <div class="count-down">
-                    <countdown :time="new Date('03/09/2021 00:00:00').getTime() - new Date().getTime()">
+                    <countdown :time="new Date('08/12/2020 00:00:00').getTime() - new Date().getTime()">
                         <template slot-scope="props">
                             <div class="single-counter">
                                 <span class="timer">{{ props.days }}</span>

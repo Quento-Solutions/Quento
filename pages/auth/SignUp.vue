@@ -1,16 +1,16 @@
 <template>
 <ScreenCard>
-  <vs-row class="w-full" justify="center" style="height: 100%;">
+  <vs-row class="absolute w-full" justify="center" style="height: 100%;">
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
-      <h1 class="text-title text-5xl">&nbsp; &nbsp; Welcome To [Page Name]</h1>
       <VxCard
-        class="mt-6 p-4 px-8"
+        class="mt-4 p-4 px-8"
         actionButtons="true"
         collapseAction="true"
         removeAction="true"
-        title="Login Or Sign Up"
+        title="Sign Up To [Name]"
       >
       <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>
+
         <div class="p-6">
           <vs-input
             v-model="email"
@@ -43,15 +43,31 @@
           </vs-input>
         </div>
 
+        <div class="p-6">
+          <vs-input
+            v-model="confirm_password"
+            type="password"
+            label="Confirm Password"
+            class="block w-6"
+          >
+            <template #icon>
+              <i class="bx bx-hash"></i>
+            </template>
+            <template v-if="password != confirm_password && confirm_password !== ''" #message-danger>
+              Passwords Must Match
+            </template>
+          </vs-input>
+        </div>
+
         <vs-row justify="space-between" class="mt-8 justify-end">
           <vs-button
             gradient
             warn
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
-            @click="PushSignUpPage()"
-            >Sign Up &nbsp;
-            <i class="bx bx-user-plus text-2xl" />
+            @click="PushLoginPage()"
+            >Login Instead&nbsp;
+            <i class="bx bx-log-in text-2xl" />
           </vs-button>
           <vs-button
             gradient
@@ -66,8 +82,8 @@
             success
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
-            @click="LoginEmailPassword(email, password)"
-            >Sign In &nbsp;
+            @click="SignUp(email,password,confirm_password)"
+            >Sign Up &nbsp;
             <i class="bx bx-right-arrow-circle text-2xl" />
           </vs-button>
         </vs-row>
@@ -78,23 +94,27 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
+import { Component, Prop, Vue, mixins} from 'nuxt-property-decorator'
 
-import ScreenCard from './ScreenCard.vue';
-import VxCard from '~/components/VxCard.vue';
+import ScreenCard from '~/screens/ScreenCard.vue';
+import VxCard from '~/components/VxCard.vue'
+
 import Auth from '~/mixins/AuthenticationMixin'
 
-import {navigationStore} from '~/store';
-@Component<Login>({
-  components: { VxCard, ScreenCard }
-})
-export default class Login extends mixins(Auth) {
+import {navigationStore, authStore} from '~/store'
+@Component<SignUp>({
+  components: { VxCard, ScreenCard },
 
-  PushSignUpPage()
+  layout : 'auth'
+})
+export default class SignUp extends mixins(Auth) {
+  email: string = '';
+  password: string = '';
+  confirm_password : string = '';
+
+  PushLoginPage()
   {
-    navigationStore.changePage('signup');
-  }
-  email: string = ''
-  password: string = ''
+    this.$router.replace('/auth/login')
+  } 
 }
 </script>
