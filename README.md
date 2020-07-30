@@ -27,4 +27,6 @@ Vue: [Vue.js](https://vuejs.org/v2/guide/)
 
 Nuxt: [Nuxt.js](https://nuxtjs.org/guide/installation/)
 
+Vuesax: [Vuesax](https://vuesax.com/docs/components/Input.html#default)
+
 Tailwind: [Tailwind.css](https://tailwindcss.com/docs/installation)
