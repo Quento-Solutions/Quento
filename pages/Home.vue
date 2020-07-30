@@ -37,6 +37,7 @@
                 color="warning"
                 class="vx-col shadow-md  m-4 text-bold"
                 style="font-weight : bold"
+                size="xl"
                 @click="pushComingSoon()"
                 >Subscribe To News Letter
                 </vs-button>
@@ -46,7 +47,8 @@
                 color="success"
                 class="vx-col shadow-md m-4 text-bold"
                 style="font-weight : bold"
-                @click="pushComingSoon()"
+                size="xl"
+                @click="PushSuggestionsPage()"
                 >
                 Suggest Features
               </vs-button>
@@ -74,6 +76,10 @@ export default class Home extends Vue {
   pushComingSoon()
   {
     this.$router.push('/coming-soon');
+  }
+  PushSuggestionsPage()
+  {
+    this.$router.push("/suggestions");
   }
 
 }
