@@ -66,7 +66,7 @@
             size="xl"
             class="text-title text-4xl mt-8 ml-6"
             @click="PushLoginPage()"
-            >Login Instead&nbsp;
+            >Login &nbsp;
             <i class="bx bx-log-in text-2xl" />
           </vs-button>
           <vs-button
@@ -96,7 +96,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, mixins} from 'nuxt-property-decorator'
 
-import ScreenCard from '~/screens/ScreenCard.vue';
+import ScreenCard from '~/components/ScreenCard.vue';
 import VxCard from '~/components/VxCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin'

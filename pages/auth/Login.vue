@@ -80,7 +80,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 
-import ScreenCard from '~/screens/ScreenCard.vue';
+import ScreenCard from '~/components/ScreenCard.vue';
 import VxCard from '~/components/VxCard.vue';
 
 import Auth from '~/mixins/AuthenticationMixin';
