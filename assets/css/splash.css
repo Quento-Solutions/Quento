@@ -1,0 +1,325 @@
+
+@keyframes flickerAnimation {
+    0%   { opacity:0.85; }
+    50%  { opacity:0; }
+    100% { opacity:0.85; }
+  }
+  @-o-keyframes flickerAnimation{
+    0%   { opacity:0.85; }
+    50%  { opacity:0; }
+    100% { opacity:0.85; }
+  }
+  @-moz-keyframes flickerAnimation{
+    0%   { opacity:0.85; }
+    50%  { opacity:0; }
+    100% { opacity:0.85; }
+  }
+  @-webkit-keyframes flickerAnimation{
+    0%   { opacity:0.85; }
+    50%  { opacity:0; }
+    100% { opacity:0.85; }
+  }
+  .animate-flicker {
+     -webkit-animation: flickerAnimation 3s infinite;
+     -moz-animation: flickerAnimation 3s infinite;
+     -o-animation: flickerAnimation 3s infinite;
+      animation: flickerAnimation 3s infinite;
+  }
+  .textInput {
+     border:none;
+         padding-left:0.3vw;
+          width: 30vw;
+          height: 2.5vw;
+          font-size: 1vw;
+          border-radius: 0.4vw;
+          margin-top: 0;
+          color:#42547d;
+          background:#f6f9fc;
+          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+      }
+     textarea {
+           border:none;
+           box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+  
+         padding-left:0.3vw;
+          width: 30vw;
+          height: 12vw;
+          font-size: 1vw;
+          border-radius: 0.4vw;
+          margin-top: 0;
+          color:#42547d;
+          background:#f6f9fc;
+     }
+     #submitForm {
+        background-color:#6b3deb;
+        color:white;
+        border:none;
+        border-radius:2vw;
+        padding:0.3vw;
+        width:20vw;
+        font-family:ginger-normal;
+        font-size:1vw;margin-top:1vw;
+        display:inline-block;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+     }
+  
+  .bruh {
+     transform: translateZ(2vw);
+     padding-top:2vw;
+     width:80%;
+     margin-left: 10%;
+  }
+  
+     @font-face {
+    font-family: "ginger-bold";
+    src: url("../font/HelveticaNowText-Bold.woff");
+  }
+  @font-face {
+    font-family: "ginger-normal";
+    src: url("../font/HelveticaNowText-Regular.woff");
+  }
+  @font-face {
+    font-family: "ginger-light";
+    src: url("../font/HelveticaNowText-Light.woff");
+  }
+  
+  @import '../assets/scss/components/_main.scss';
+  .background {
+      position:absolute;
+      height:55vw;
+      width:100vw;
+      background: url("../images/background2.jpg") no-repeat;
+      background-size:100%;
+  }
+  
+  .diagonal-background {
+     position:absolute;
+     background-image: linear-gradient(to right, #4a45f4, #df43c6);
+     height:50vw;
+     width:130vw;
+     transform: rotate(-8deg);
+     left:-20vw;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#nav {
+    height:4vw;
+    width:100vw;
+    margin-top:1vw;
+}
+
+#nav .logo {
+    font-size:2vw;
+    left:8vw;
+}
+
+#nav .contact{
+    font-size:1vw;
+    right:8vw;
+    border-radius:2vw;
+    padding:0.35vw 2vw;
+}
+
+#splash {
+    height:55vw;
+}
+
+#splash .mainContent {
+    top:12vw;
+    left:15vw;
+    width:40vw;
+}
+
+#splash .mainContent h1{
+    font-size:5vw;
+    letter-spacing:-0.2vw;
+    line-height:5vw;
+}
+
+#splash .mainContent .link1{
+    font-size:1vw;
+    margin-top:1vw;
+    border-radius:2vw;
+    padding:0.3vw 2vw;
+}
+
+#splash .mainContent .link2{
+    font-size:1vw;
+    margin-top:1vw;
+    padding:0.3vw 2vw;
+}
+
+#splash .scrollDown {
+    top:45vw;
+}
+
+#splash .scrollDown h1 {
+    font-size:1.4vw;
+}
+#splash .scrollDown img {
+    margin-top:1vw;
+    width:2vw;
+}
+
+#aboutContent {
+    width:100vw;
+    height:55vw;
+    overflow-x: hidden;
+}
+
+
+#aboutContent .leftContent{
+    margin-top:5vw;margin-left:10vw;
+}
+
+#aboutContent .leftContent h1{
+    font-size:3vw;padding-top:1vw;letter-spacing:-0.1vw;}
+
+#aboutContent .leftContent h2{
+    font-size:1.5vw;padding-top:1vw;}
+
+#aboutContent .leftContent p{
+    font-size:1vw;padding-top:1vw;}
+
+    
+#aboutContent .leftContent a{
+    border-radius:2vw;padding:0.3vw 2vw;font-size:1vw;margin-top:1vw;}
+
+#aboutContent .leftContent h3{
+    font-size:2vw;padding-top:1vw;
+}
+#aboutContent .leftContent h4{
+    margin-top:4vw;font-size:1.1vw;}        
+
+.leftDiv {
+    width:50%;
+}
+
+.rightDiv {
+    width:50%;
+}
+
+.rightDiv img {
+    width:90%;
+}
+
+
+#features {
+    height:55vw;
+    width:100vw;
+}
+
+#features .mainTD {
+    width:50%;
+}
+
+#features .cardsContainer {
+    margin-top:5vw;
+    margin-left:8vw;
+}
+
+
+#features .cardsContainer .card{
+    height:17vw;width:12vw;border-radius:1vw;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+
+#features .cardsContainer .card h1{
+    width:3vw;height:3vw;font-size:2vw;border-radius:10vw;padding-top:0.25vw;
+}
+
+
+#features .cardsContainer .card h3{
+    font-size:1vw;padding-top:1vw;
+}
+
+#features .cardsContainer .card p{
+    font-size:0.7vw;margin-top:1vw;line-height:0.75vw;}
+
+
+#features .vision {
+    width:40vw;
+}
+
+#features .vision h1 {
+    font-size:3vw;padding-top:1vw;letter-spacing:-0.1vw;}
+#features .vision p {
+    font-size:1vw;padding-top:1vw;}
+#features .vision  a{
+    margin-top:1vw;font-size:1vw;border-radius:2vw;padding:0.35vw 2vw;}
+
+
+#betaInfo {
+    margin-top:5vw;
+} 
+
+#betaInfo .leftDiv {
+    width:50%;
+}
+
+#betaInfo .rightDiv {
+    width:50%;
+    margin-top:10vw;
+}
+
+#betaInfo .leftDiv .largeContainer {
+    margin-top:5vw;margin-left:10vw;
+}
+
+
+#betaInfo .leftDiv .largeContainer h1 {
+    font-size:2.5vw;padding-top:1vw;letter-spacing:-0.1vw;}
+
+    #betaInfo .leftDiv .largeContainer .marginTop2 {
+        margin-top:2vw;}
+
+#betaInfo .leftDiv .largeContainer p{
+    font-size:1vw;padding-top:1vw;}
+
+
+#betaInfo .leftDiv .largeContainer a{
+    border-radius:2vw;padding:0.3vw 2vw;font-size:1vw;margin-top:1vw;}
+
+    #betaInfo .rightDiv h1{
+        font-size:2.5vw;padding-top:1vw;letter-spacing:-0.1vw;margin-bottom:2vw;
+    }  
+
+    #betaInfo .rightDiv .imageContainer{
+        margin-top:3vw;    }    
+    
+    #betaInfo .rightDiv .imageContainer img{
+        width:4vw;
+    }  
+    
+    #betaInfo .rightDiv .imageContainer .image2{
+        margin-left:2vw;
+    }    
+
+
+    #footerContainer {
+        margin-top:5vw;
+    }
+
+    #footerContainer .footer {
+        width:100vw;height:5vw;
+    }
+
+    #footerContainer .footer a {
+        font-size:1.3vw;left:8vw;
+    }
+    #footerContainer .footer span {
+        font-size:0.8vw    }
+
