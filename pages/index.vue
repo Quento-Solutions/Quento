@@ -164,7 +164,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-const VueTilt = require('vue-tilt.js');
+import VueTilt from 'vue-tilt.js';
 Vue.use(VueTilt);
 import AOS from 'aos'
 
