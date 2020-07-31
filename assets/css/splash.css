@@ -70,19 +70,6 @@
      margin-left: 10%;
   }
   
-     @font-face {
-    font-family: "ginger-bold";
-    src: url("../font/HelveticaNowText-Bold.woff");
-  }
-  @font-face {
-    font-family: "ginger-normal";
-    src: url("../font/HelveticaNowText-Regular.woff");
-  }
-  @font-face {
-    font-family: "ginger-light";
-    src: url("../font/HelveticaNowText-Light.woff");
-  }
-  
   .background {
       position:absolute;
       height:55vw;
@@ -98,6 +85,9 @@
      width:130vw;
      transform: rotate(-8deg);
      left:-20vw;
+  }
+  .loadingLogo {
+    background: linear-gradient(to right, #4a45f4, #df43c6);-webkit-background-clip: text;-webkit-text-fill-color: transparent;font-size:10vw;margin-top:30vh
   }
 
 
