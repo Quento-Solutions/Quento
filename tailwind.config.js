@@ -17,7 +17,10 @@ module.exports = {
     },
     fontFamily: {
       display: ['Quicksand', 'sans-serif'],
-      body: ['Quicksand', 'sans-serif']
+      body: ['Quicksand', 'sans-serif'],
+      'ginger' : ['ginger-light', 'sans-serif'],
+      'ginger-n' : ['ginger-normal', 'sans-serif'],
+      'ginger-b' : ['ginger-bold', 'sans-serif'],
     },
     borderWidth: {
       default: '1px',
@@ -27,7 +30,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        cyan: '#9cdbff'
+        cyan: '#9cdbff',
+        
       },
       spacing: {
         '96': '24rem',
