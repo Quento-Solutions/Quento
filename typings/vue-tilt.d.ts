@@ -1,1 +1,1 @@
-declare module 'vue-tilt.js'
+declare module 'vue-tilt'

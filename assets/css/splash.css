@@ -63,7 +63,7 @@
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
      }
   
-  .bruh {
+  .container3d {
      transform: translateZ(2vw);
      padding-top:2vw;
      width:80%;
@@ -83,7 +83,6 @@
     src: url("../font/HelveticaNowText-Light.woff");
   }
   
-  @import '../assets/scss/components/_main.scss';
   .background {
       position:absolute;
       height:55vw;
@@ -102,19 +101,6 @@
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #nav {
     height:4vw;
     width:100vw;
@@ -125,10 +111,17 @@
     font-size:2vw;
     left:8vw;
 }
-
+.navRightContainer {
+    right:8vw;
+} 
 #nav .contact{
     font-size:1vw;
-    right:8vw;
+    border-radius:2vw;
+    padding:0.35vw 2vw;
+}
+
+#nav .contact2{
+    font-size:1vw;
     border-radius:2vw;
     padding:0.35vw 2vw;
 }
@@ -349,10 +342,15 @@
         font-size:6vw;
         left:8vw;
     }
-    
+
     #nav .contact{
         font-size:3vw;
-        right:8vw;
+        border-radius:6vw;
+        padding:1vw 6vw;
+    }
+    
+    #nav .contact2{
+        font-size:3vw;
         border-radius:6vw;
         padding:1vw 6vw;
     }
@@ -489,7 +487,7 @@
     
     
     #features .cardsContainer .card{
-        height:50vw;width:30vw;border-radius:3vw;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        height:55vw;width:30vw;border-radius:3vw;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
     
     

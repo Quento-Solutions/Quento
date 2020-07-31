@@ -1,7 +1,7 @@
 <template>
 <section style="overflow-x:hidden;position:relative;">
    <section>
-      <div id="loadingPage" style="position:fixed;z-index:1000;background:white; transition:2s ease-in-out;width:100%;height:100%;text-align:center;transition-delay:1s;">
+      <div class="loadingPage" :class="loading ? '' : 'loaded'">
          <h1 style="background: linear-gradient(to right, #4a45f4, #df43c6);-webkit-background-clip: text;-webkit-text-fill-color: transparent;font-family:ginger-bold;font-size:10vw;margin-top:30vh">QUENTO</h1>
       </div>
    </section>
@@ -11,13 +11,16 @@
       <section>
          <div id="nav" data-aos="fade-down" data-aos-duration="1000" style="position:absolute;top:0;left:0; display:flex;alignItems:center;transition-delay:4.5s;">
             <a href="" class="logo" style="position:absolute;color:white;opacity:0.95;font-family:ginger-bold;">Quento</a>      
-            <a href="auth/login.vue" class="contact" style="position:absolute;color:white;opacity:0.95;font-family:ginger-normal; background-color:rgba(255, 255, 255,0.3);">Sign in</a>      
-         </div>
+            <div class="navRightContainer" style="position:absolute;">
+               <button @click="$router.push('/auth/login')" class="contact" style="color:white;opacity:0.95;font-family:ginger-normal; background-color:rgba(255, 255, 255,0.3);">Sign in</button>
+            <button @click="$router.push('/auth/signup')" class="contact2" style="color:white;font-family:ginger-normal;">Sign Up</button>        
+            </div>
+            </div>
       </section>
       <section id="splash">
          <div class="mainContent" style="position:absolute;">
             <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;font-weight:bold;font-family:ginger-bold;">A collection of utilities created by <span style="color:#ff5c9f;">students</span>, for <span style="color:#ff5c9f;">students</span>.</h1>
-            <a href="#beta" class="link1" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;background:rgba(255,255,255,0.3);">Sign up for the BETA</a>
+            <a href="#beta" class="link1" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;background:rgba(255,255,255,0.3);">Learn More About the BETA</a>
             <a href="#beta" class="link2" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.5s;color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;">Contact us</a>
          </div>
          <div class="animate-flicker scrollDown" style="position:absolute;left:50%;transform:translate(-50%);text-align:center;">
@@ -56,7 +59,7 @@
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="0" style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000,}" style="width:100%;height:100%;transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
-                              <div class="bruh">
+                              <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">1</h1>
                                  <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Easily convert written notes into a digital format</h3>
                               </div>
@@ -66,7 +69,7 @@
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200" style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000,}" style="width:100%;height:100%;transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
-                              <div class="bruh">
+                              <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">2</h1>
                                  <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Forward notifications from supported platforms<span style="color:gold;">*</span> as an SMS, Facebook, or Discord message</h3>
                                  <p style="color:white;font-family:ginger-normal;"><span style="color:gold">*</span> Managebac, Google Classroom, etc.</p>
@@ -79,7 +82,7 @@
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200" style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000,}" style="width:100%;height:100%;transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
-                              <div class="bruh">
+                              <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">3</h1>
                                  <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Create and join groups where you can create class calendars and plot out lessons</h3>
                               </div>
@@ -89,7 +92,7 @@
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400" style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000,}" style="width:100%;height:100%;transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
-                              <div class="bruh">
+                              <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">4</h1>
                                  <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Suggest feature ideas and provide feedback</h3>
                               </div>
@@ -125,25 +128,25 @@
          </div>
          <div class="rightDiv" data-aos="fade-left" data-aos-duration="1000">
          <center>
-            <div id="formSubmitted" style="position:absolute;transform: translateY(20%);opacity:0;transition: 1s ease-in-out;z-index:-1;">
+            <div id="formSubmitted" :class="formSubmitted ? 'submitted' : ''">
                <img src="../assets/images/quento.png" style="width:100%;height:100%;">
             </div>
-            <div id="formArea" style="z-index:10;transition: 1s ease-in-out;">
+            <div id="formArea" :class="formSubmitted ? 'submitted' : ''">
             <h1 style="text-align:center;color:#6b3deb;font-family:ginger-normal;font-weight:bold;">Get in touch</h1>
             <form id="gform" enctype="text/plain" action="https://docs.google.com/forms/d/e/1FAIpQLSfRH7TjjLrd3SbBLeM4WJvDUruR0iJr61gQPHxkNr17ZXZ5nw/formResponse?usp=pp_url" target="hidden_iframe" @submit="handleFormSubmit">
-               <center><input id="entry.527074164" name="entry.527074164" style="font-family:ginger-normal, FontAwesome" class="textInput" placeholder=" Name" type="text" required></center>
+               <center><input id="entry.527074164" name="entry.527074164" class="textInput" placeholder=" Name" type="text" required></center>
                <br>
-               <center><input id="entry.186440784" name="entry.186440784" style="font-family:ginger-normal, FontAwesome" class="textInput" placeholder="  Email" type="email" required></center>
+               <center><input id="entry.186440784" name="entry.186440784" class="textInput" placeholder="  Email" type="email" required></center>
                <br>
-               <center><textarea id="entry.42021065" name="entry.42021065" style="font-family:ginger-normal, FontAwesome" placeholder="  Message" required></textarea></center>
+               <center><textarea id="entry.42021065" name="entry.42021065" placeholder="  Message" required></textarea></center>
                <br>
-               <center><input style="font-family:ginger-normal, FontAwesome" id="submitForm" type="submit" value="Send"></center>
+               <center><input id="submitForm" type="submit" value="Send" :class="formSubmitted ? 'submitted' : ''"></center>
             </form>
                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {}"></iframe>
             </div>
             <div class="imageContainer" style="display:flex;alignItems:center;justifyContent:center;">
                <a href="https://github.com/Quento-Solutions"><img src="../assets/images/github.png"> </a>
-               <a href="https://discord.gg/kJaede"><img src="../assets/images/discord.png" class="image2"> </a>
+               <a href="https://discord.gg/pfyFWus"><img src="../assets/images/discord.png" class="image2"> </a>
             </div>
                         </center>
 
@@ -151,7 +154,7 @@
       </section>
       <section id="footerContainer">
          <div class="footer" style=" background-image: linear-gradient(to right, #4a45f4, #df43c6);display:flex;alignItems:center;width:100%;">
-            <a style="position:absolute;color:white;opacity:0.95;font-family:ginger-light;">Quento <span>2020&nbsp;&nbsp;&nbsp;&nbsp;hello@quento.ca</span></a>
+            <a style="position:absolute;color:white;opacity:0.95;font-family:ginger-light;">Quento &nbsp;<span>2020&nbsp;&nbsp;&nbsp;&nbsp;hello@quento.ca</span></a>
          </div>
       </section>
    </div>
@@ -161,34 +164,35 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import VueTilt from 'vue-tilt.js'
-Vue.use(VueTilt)
-
+const VueTilt = require('vue-tilt.js');
+Vue.use(VueTilt);
+import AOS from 'aos'
 
 @Component<Splash>({
   components: {
   },
+  async mounted()
+  {
+   AOS.init();
+   this.loading = false;
+   window.scrollTo(0,0);
+  }
 })
 
 export default class Splash extends Vue {
-handleFormSubmit() {
-   document.getElementById('submitForm').style.display = 'none';
-   document.getElementById('formArea').style.opacity = '0';
-   document.getElementById('formSubmitted').style.transform = 'translateY(0)';
-   document.getElementById('formSubmitted').style.zIndex = '20';
-   document.getElementById('formSubmitted').style.opacity = '1';
 
-}
 
-   async mounted() {
-  const AOS = await import('aos');
-  AOS.init();
-  console.log("LOADDEDEDEFD")
-  document.getElementById('loadingPage').style.zIndex = '-1';
-  document.getElementById('loadingPage').style.opacity = '0';
-window.scrollTo(0,0);
- 
-}
+   formSubmitted = false;
+   loading = true;
+   handleFormSubmit() {
+      this.$vs.notification({
+         color : 'white',
+
+         title : 'You Information Was Submitted Successfully'
+      })
+      this.formSubmitted = true;
+   }
+
     name="splash"
 }
 </script>
@@ -196,4 +200,42 @@ window.scrollTo(0,0);
 <style lang="scss" scoped>
 @import "../assets/css/splash.css";
 
+
+#formSubmitted
+{
+   position:absolute;transform: translateY(20%);opacity:0;transition: 1s ease-in-out;z-index:-1;
+}
+#formSubmitted.submitted
+   { 
+      transform : translateY(0) !important;
+      z-index:20 !important;
+      opacity:1 !important;
+   }
+
+#submitForm 
+{
+   font-family:ginger-normal, FontAwesome;
+}
+#submitForm.submitted
+{
+   display:none !important;
+}
+#formArea 
+{
+   z-index:10;transition: 1s ease-in-out; 
+}
+#formArea.submitted{
+   opacity:0 !important;
+   }
+
+.loadingPage 
+{
+   position:fixed;z-index:1000;background:white; transition:2s ease-in-out;width:100%;height:100%;text-align:center;transition-delay:1s;
+}
+.loadingPage.loaded
+
+{
+   z-index : -1 !important;
+   opacity :0 !important;
+}
 </style>
