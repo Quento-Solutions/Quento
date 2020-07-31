@@ -18,7 +18,7 @@ export default function({store, redirect, route} : Context)
 
 function isAdminRoute(route : Route)
 {
-    if (route.matched.some(record => (record.path == "/Home")))
+    if (route.matched.some(record => (record.path == "/Home" || record.path == "/Suggestions")))
     {
         return true
     }

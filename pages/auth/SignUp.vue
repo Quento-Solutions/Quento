@@ -4,10 +4,7 @@
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
       <VxCard
         class="mt-4 p-4 px-8"
-        actionButtons="true"
-        collapseAction="true"
-        removeAction="true"
-        title="Sign Up To [Name]"
+        title="Sign Up To Quento"
       >
       <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>
 
@@ -64,7 +61,7 @@
             gradient
             warn
             size="xl"
-            class="text-title text-4xl mt-8 ml-6"
+            class="text-title mt-8"
             @click="PushLoginPage()"
             >Login &nbsp;
             <i class="bx bx-log-in text-2xl" />
@@ -72,7 +69,7 @@
           <vs-button
             gradient
             size="xl"
-            class="text-title text-4xl mt-8 ml-6"
+            class="text-title mt-8"
             @click="LoginGoogle()"
             >Sign In With Google &nbsp;
             <i class="bx bxl-google text-2xl" />
@@ -81,7 +78,7 @@
             gradient
             success
             size="xl"
-            class="text-title text-4xl mt-8 ml-6"
+            class="text-title mt-8"
             @click="SignUp(email,password,confirm_password)"
             >Sign Up &nbsp;
             <i class="bx bx-right-arrow-circle text-2xl" />
@@ -118,3 +115,7 @@ export default class SignUp extends mixins(Auth) {
   } 
 }
 </script>
+
+<style lang="scss" >
+
+</style>

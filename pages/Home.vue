@@ -14,8 +14,8 @@
         <template slot="no-body">
           <vs-row justify="center" class="my-16">
           <img
-          src="~/assets/images/logo2.png"
-            class="p-6 inline-flex rounded-full text-white center"
+            src="~/assets/images/QuentoLogoMain.png"
+            class="p-6 inline-flex rounded-full text-white center h-64"
             alt="Logo"
           />
           </vs-row>
@@ -23,7 +23,7 @@
           <!-- <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svgClasses="h-8 w-8"></feather-icon> -->
           <div class="vx-row justify-center px-8">
           <h1 class="mb-12 text-white text-title text-5xl mr-2">
-            Welcome To The Club
+            Welcome To The QUENTO &nbsp;
           </h1>
           <vs-avatar style="width : 5rem; height : 5rem;">
               <img src="https://vignette.wikia.nocookie.net/leagueoflegends/images/6/6a/LoR_Cheers_Emote.png/revision/latest/top-crop/width/300/height/300?cb=20200429081948"/>
@@ -37,6 +37,7 @@
                 color="warning"
                 class="vx-col shadow-md  m-4 text-bold"
                 style="font-weight : bold"
+                size="xl"
                 @click="pushComingSoon()"
                 >Subscribe To News Letter
                 </vs-button>
@@ -46,7 +47,8 @@
                 color="success"
                 class="vx-col shadow-md m-4 text-bold"
                 style="font-weight : bold"
-                @click="pushComingSoon()"
+                size="xl"
+                @click="PushSuggestionsPage()"
                 >
                 Suggest Features
               </vs-button>
@@ -74,6 +76,10 @@ export default class Home extends Vue {
   pushComingSoon()
   {
     this.$router.push('/coming-soon');
+  }
+  PushSuggestionsPage()
+  {
+    this.$router.push("/suggestions");
   }
 
 }

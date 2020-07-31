@@ -5,13 +5,13 @@ import { firebaseConfig } from './envars'
 const config : NuxtConfig = {
   env: {},
   head: {
-    title: 'We Need A Title',
+    title: 'Quento',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '{{ description }}' }
+      { hid: 'description', name: 'description', content: 'Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favico.ico' }]
   },
   loading: { color: '#3B8070' },
   css: [

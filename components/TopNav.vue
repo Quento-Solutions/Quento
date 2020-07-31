@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative" style="z-index: 999">
     <div class="vx-navbar-wrapper navbar-default p-0" style="z-index: 1;">
       <vs-navbar
         class="navbar-custom navbar-skelton navbar-reduced rounded-md shadow-md p-1"

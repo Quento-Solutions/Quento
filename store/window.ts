@@ -8,8 +8,9 @@ export default class WindowModule extends VuexModule {
 
     sidenavIsOpen = false;
 
-    screenDimensions = [1356 , 898] as const;
-    
+    readonly screenDimensions = [1356 , 898] as const;
+
+
     @Mutation
     private UPDATE_WINDOW_SIZE(a : {height : number , width : number})
     {
@@ -49,11 +50,6 @@ export default class WindowModule extends VuexModule {
     public get constrainingDimension() : 'width' | 'height' 
     {
         return this.windowAspectRatio > this.screenAspectRatio ? 'width' : 'height';    
-    }
-
-    public get screenWidth()
-    {
-        return this.windowHeight;
     }
 
     get heightPercent()
