@@ -26,7 +26,7 @@ const config : NuxtConfig = {
   server:
   {
     port : 80,
-    host : '0.0.0.0'
+    // host : '0.0.0.0'
   },
   router : {
     middleware : 'router-auth',
