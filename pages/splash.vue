@@ -1,19 +1,24 @@
 <template>
 <section style="overflow-x:hidden;position:relative;">
+   <section>
+      <div id="loadingPage" style="position:fixed;z-index:1000;background:white; transition:2s ease-in-out;width:100%;height:100%;text-align:center;transition-delay:1s;">
+         <h1 style="background: linear-gradient(to right, #4a45f4, #df43c6);-webkit-background-clip: text;-webkit-text-fill-color: transparent;font-family:ginger-bold;font-size:10vw;margin-top:30vh">QUENTO</h1>
+      </div>
+   </section>
    <div class="w-full" style="overflow-x:hidden;">
       <div class="background">
       </div>
       <section>
-         <div id="nav" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="1500" style="position:absolute;top:0;left:0; display:flex;alignItems:center;">
+         <div id="nav" data-aos="fade-down" data-aos-duration="1000" style="position:absolute;top:0;left:0; display:flex;alignItems:center;transition-delay:4.5s;">
             <a href="" class="logo" style="position:absolute;color:white;opacity:0.95;font-family:ginger-bold;">Quento</a>      
             <a href="auth/login.vue" class="contact" style="position:absolute;color:white;opacity:0.95;font-family:ginger-normal; background-color:rgba(255, 255, 255,0.3);">Sign in</a>      
          </div>
       </section>
       <section id="splash">
          <div class="mainContent" style="position:absolute;">
-            <h1 data-aos="fade-up" data-aos-duration="1000" style="color:white;font-weight:bold;font-family:ginger-bold;">A collection of utilities created by <span style="color:#ff5c9f;">students</span>, for <span style="color:#ff5c9f;">students</span>.</h1>
-            <a href="#beta" class="link1" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="1200" style="color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;background:rgba(255,255,255,0.3);">Sign up for the BETA</a>
-            <a href="#beta" class="link2" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="1500" style="color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;">Contact us</a>
+            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;font-weight:bold;font-family:ginger-bold;">A collection of utilities created by <span style="color:#ff5c9f;">students</span>, for <span style="color:#ff5c9f;">students</span>.</h1>
+            <a href="#beta" class="link1" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;background:rgba(255,255,255,0.3);">Sign up for the BETA</a>
+            <a href="#beta" class="link2" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.5s;color:white;font-family:ginger-normal;font-weight:bold;display:inline-block;">Contact us</a>
          </div>
          <div class="animate-flicker scrollDown" style="position:absolute;left:50%;transform:translate(-50%);text-align:center;">
             <h1 style="color:white;font-family:ginger-normal;font-weight:bold;">Scroll Down</h1>
@@ -168,16 +173,21 @@ Vue.use(VueTilt)
 export default class Splash extends Vue {
 handleFormSubmit() {
    document.getElementById('submitForm').style.display = 'none';
-   document.getElementById('formArea').style.opacity = 0;
+   document.getElementById('formArea').style.opacity = '0';
    document.getElementById('formSubmitted').style.transform = 'translateY(0)';
-   document.getElementById('formSubmitted').style.zIndex = 20;
-   document.getElementById('formSubmitted').style.opacity = 1;
+   document.getElementById('formSubmitted').style.zIndex = '20';
+   document.getElementById('formSubmitted').style.opacity = '1';
 
 }
 
    async mounted() {
   const AOS = await import('aos');
   AOS.init();
+  console.log("LOADDEDEDEFD")
+  document.getElementById('loadingPage').style.zIndex = '0';
+  document.getElementById('loadingPage').style.opacity = '0';
+window.scrollTo(0,0);
+ 
 }
     name="splash"
 }
