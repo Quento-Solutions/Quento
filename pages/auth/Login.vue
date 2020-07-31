@@ -55,6 +55,8 @@
           </button>
 
         </vs-col>
+              <FooterCard />
+
       </VxCard>
     </vs-col>
   </vs-row>
@@ -63,15 +65,15 @@
 <script lang="ts">
 import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 
-import ScreenCard from '~/components/ScreenCard.vue';
 import VxCard from '~/components/VxCard.vue';
+import FooterCard from '~/components/FooterCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin';
 import AOS from 'aos'
 
 import {navigationStore} from '~/store';
 @Component<Login>({
-  components: { VxCard, ScreenCard },
+  components: { VxCard, FooterCard },
   layout : 'auth',
 
 })
@@ -102,7 +104,7 @@ export default class Login extends mixins(Auth) {
   }
 
   .card {
-    width:30vw;height:35vw;position:absolute;left:50%;transform: translateX(-50%);
+    width:30vw;height:auto;position:absolute;left:50%;transform: translateX(-50%);
   }
   .title {
     font-family:ginger-bold;padding-bottom:0.5vw;font-size:2vw;color:#4e5557
@@ -124,7 +126,6 @@ font-size:2vw;padding-right:0.5vw;
   @media only screen and (max-width: 1200px) {
     .card {
     width:40vw;
-    height:50vw;
   }
   .google {
     margin-bottom:5vw;
@@ -134,7 +135,6 @@ font-size:2vw;padding-right:0.5vw;
    @media only screen and (max-width: 850px) {
     .card {
     width:80vw;
-    height:80vw;
   }
   .title {
     font-size:5vw;
@@ -156,7 +156,6 @@ font-size:4vw;padding-right:1vw;
    @media only screen and (max-width: 520px) {
     .card {
     width:80vw;
-    height:150vw;
     padding:0vw;
   }
   .title {

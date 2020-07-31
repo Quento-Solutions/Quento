@@ -2,18 +2,13 @@
 
     <div>
         <nuxt />
-      <!-- <FooterCard /> -->
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import FooterCard from '~/components/FooterCard.vue'
 
 @Component<AuthLayout>({
-  components: {
-    FooterCard
-  },
 })
 export default class AuthLayout extends Vue {}
 </script>
