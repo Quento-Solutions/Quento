@@ -13,7 +13,7 @@
           <template #icon>
             <img :src="require(`~/assets/images/QuentoLogoMain.png`)" />
           </template>
-          <div style="">UENTO</div>
+          <div style="">QUENTO</div>
         </vs-sidebar-item>
       </template>
       <vs-sidebar-item
