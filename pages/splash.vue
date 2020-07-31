@@ -184,7 +184,7 @@ handleFormSubmit() {
   const AOS = await import('aos');
   AOS.init();
   console.log("LOADDEDEDEFD")
-  document.getElementById('loadingPage').style.zIndex = '0';
+  document.getElementById('loadingPage').style.zIndex = '-1';
   document.getElementById('loadingPage').style.opacity = '0';
 window.scrollTo(0,0);
  
