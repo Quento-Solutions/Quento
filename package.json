@@ -1,8 +1,8 @@
 {
-  "name": "template",
-  "description": "{{ description }}",
-  "version": "2.13.3",
-  "private": true,
+  "name": "Quento",
+  "description": "Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.",
+  "version": "1.0.0",
+  "private": false,
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.5",
     "@innologica/vue-dropdown-menu": "^0.1.3",

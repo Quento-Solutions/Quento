@@ -4,7 +4,7 @@
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
       <VxCard
         class="mt-4 p-4 px-8"
-        title="Sign Up To [Name]"
+        title="Sign Up To Quento"
       >
       <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>
 
