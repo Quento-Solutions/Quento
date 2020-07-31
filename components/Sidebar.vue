@@ -11,9 +11,9 @@
       <template #logo>
         <vs-sidebar-item>
           <template #icon>
-            <img :src="require(`~/assets/images/QuentoLogoMain.png`)" />
+            <img :src="require(`~/assets/images/QuentoLogoMain.png`)" style="width:2.7rem;height:3rem;"/>
           </template>
-          <div style="">UENTO</div>
+          <div style="">QUENTO</div>
         </vs-sidebar-item>
       </template>
       <vs-sidebar-item
@@ -27,6 +27,20 @@
         {{ item.name }}
       </vs-sidebar-item>
 
+        <vs-sidebar-item href="https://github.com/Quento-Solutions">
+          <template #icon>
+           <i class="sidebar-icon bx bxl-github"></i>
+          </template>
+          <div style="">Github</div>
+        </vs-sidebar-item>
+
+        <vs-sidebar-item href="https://discord.gg/pfyFWus">
+          <template #icon>
+           <i class="sidebar-icon bx bxl-discord"></i>
+          </template>
+          <div style="">Discord</div>
+        </vs-sidebar-item>
+       
       <vs-sidebar-group>
         <template #header>
           <vs-sidebar-item arrow>
@@ -50,15 +64,10 @@
       </vs-sidebar-group>
 
       <template #footer>
-        <vs-row justify="space-between">
-          <vs-avatar success>
-            <i class="bx bxl-vuejs"></i>
-          </vs-avatar>
-
-          <vs-avatar warn>
-            <i class="bx bx-news"></i>
-          </vs-avatar>
-        </vs-row>
+        <!-- <vs-col>
+          <a href="https://discord.gg/pfyFWus"><i class="text-4xl bx bxl-discord"></i></a>
+          <a href="https://github.com/Quento-Solutions"><i class="text-4xl bx bxl-github"></i></a>
+        </vs-col> -->
       </template>
     </vs-sidebar>
   </div>

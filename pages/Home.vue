@@ -12,39 +12,43 @@
             ')'"
         >
         <template slot="no-body">
-          <vs-row justify="center" class="my-16">
+          <div class="my-16 titleContainer">
+            <div>
           <img
             src="~/assets/images/QuentoLogoMain.png"
             class="p-6 inline-flex rounded-full text-white center h-64"
-            alt="Logo"
-          />
-          </vs-row>
+            alt="Logo"/>
+            </div>
+            <div>
+            <h1 class="mb-12 text-white text-title title">
+            QUENTO 
+          </h1>
+          </div>
+          </div>
 
           <!-- <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svgClasses="h-8 w-8"></feather-icon> -->
           <div class="vx-row justify-center px-8">
-          <h1 class="mb-12 text-white text-title text-5xl mr-2">
-            Welcome To The QUENTO &nbsp;
-          </h1>
-          <vs-avatar style="width : 5rem; height : 5rem;">
+
+          <!-- <vs-avatar style="width : 5rem; height : 5rem;">
               <img src="https://vignette.wikia.nocookie.net/leagueoflegends/images/6/6a/LoR_Cheers_Emote.png/revision/latest/top-crop/width/300/height/300?cb=20200429081948"/>
-            </vs-avatar>
+            </vs-avatar> -->
           </div>
           
           <vs-row justify="center" class="vx-row mt-10">
             <div class="p-6 vx-row md:justify-end justify-center w-full md:w-1/2">
               <vs-button
                 type="filled"
-                color="warning"
+                color="#aba6e0"
                 class="vx-col shadow-md  m-4 text-bold"
                 style="font-weight : bold"
                 size="xl"
-                @click="pushComingSoon()"
+                href="https://docs.google.com/forms/d/e/1FAIpQLScrpPrTcpq41DJTXsmu1AvLOBXVHjG7vh2s_Q62M8oPx1ibmA/viewform?usp=sf_link"
                 >Subscribe To News Letter
                 </vs-button>
             </div>
             <div w=6 class="p-6 vx-row md:w-1/2 w-full md:justify-start justify-center">
               <vs-button
-                color="success"
+                color="#aba6e0"
                 class="vx-col shadow-md m-4 text-bold"
                 style="font-weight : bold"
                 size="xl"
@@ -84,3 +88,33 @@ export default class Home extends Vue {
 
 }
 </script>
+
+<style scoped>
+.title {
+font-family:ginger-bold;
+font-size:14rem;
+}
+.titleContainer {
+  display:flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 1200px) {
+.title {
+font-family:ginger-bold;
+font-size:10rem;
+}
+.titleContainer {
+  flex-direction: column;
+  align-items: center;
+
+}
+}
+
+@media only screen and (max-width: 767px) {
+.title {
+font-family:ginger-bold;
+font-size:15vw;
+}
+}
+</style>
