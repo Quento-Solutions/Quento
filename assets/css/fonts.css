@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@500&display=swap');
 
+
+
+@font-face {
+    font-family: "Oswald";
+    src: url("../font/Oswald-VariableFont_wght.ttf"); 
+}
+@font-face {
+    font-family: "Quicksand";   
+    src: url("../font/Quicksand_Book.woff");    
+}
+
 .text-title {
-    font-family: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
