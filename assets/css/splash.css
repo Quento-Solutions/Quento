@@ -266,49 +266,49 @@
     margin-top:1vw;font-size:1vw;border-radius:2vw;padding:0.35vw 2vw;}
 
 
-#betaInfo {
+#beta {
     margin-top:5vw;
 } 
 
-#betaInfo .leftDiv {
+#beta .leftDiv {
     width:50%;
 }
 
-#betaInfo .rightDiv {
+#beta .rightDiv {
     width:50%;
     margin-top:10vw;
 }
 
-#betaInfo .leftDiv .largeContainer {
+#beta .leftDiv .largeContainer {
     margin-top:5vw;margin-left:10vw;
 }
 
 
-#betaInfo .leftDiv .largeContainer h1 {
+#beta .leftDiv .largeContainer h1 {
     font-size:2.5vw;padding-top:1vw;letter-spacing:-0.1vw;}
 
-    #betaInfo .leftDiv .largeContainer .marginTop2 {
+    #beta .leftDiv .largeContainer .marginTop2 {
         margin-top:2vw;}
 
-#betaInfo .leftDiv .largeContainer p{
+#beta .leftDiv .largeContainer p{
     font-size:1vw;padding-top:1vw;}
 
 
-#betaInfo .leftDiv .largeContainer a{
+#beta .leftDiv .largeContainer a{
     border-radius:2vw;padding:0.3vw 2vw;font-size:1vw;margin-top:1vw;}
 
-    #betaInfo .rightDiv h1{
+    #beta .rightDiv h1{
         font-size:2.5vw;padding-top:1vw;letter-spacing:-0.1vw;margin-bottom:2vw;
     }  
 
-    #betaInfo .rightDiv .imageContainer{
+    #beta .rightDiv .imageContainer{
         margin-top:3vw;    }    
     
-    #betaInfo .rightDiv .imageContainer img{
+    #beta .rightDiv .imageContainer img{
         width:4vw;
     }  
     
-    #betaInfo .rightDiv .imageContainer .image2{
+    #beta .rightDiv .imageContainer .image2{
         margin-left:2vw;
     }    
 
@@ -326,6 +326,14 @@
     }
     #footerContainer .footer span {
         font-size:0.8vw    }
+
+        #formArea {
+            width:35vw;height:35vw;
+        }
+
+        #formSubmitted {
+            width:35vw;height:35vw;margin-left:7.5vw;
+        }
 
 
 
@@ -511,50 +519,50 @@
         margin-top:3vw;font-size:3vw;border-radius:6vw;padding:1vw 6vw;}
     
     
-    #betaInfo {
+    #beta {
         margin-top:15vw;
         flex-direction: column;
     } 
     
-    #betaInfo .leftDiv {
+    #beta .leftDiv {
         width:100%;
     }
     
-    #betaInfo .rightDiv {
+    #beta .rightDiv {
         width:100%;
         margin-top:10vw;
     }
     
-    #betaInfo .leftDiv .largeContainer {
+    #beta .leftDiv .largeContainer {
         margin-top:5vw;margin-left:10vw;margin-right:10vw;
     }
     
     
-    #betaInfo .leftDiv .largeContainer h1 {
+    #beta .leftDiv .largeContainer h1 {
         font-size:7.5vw;padding-top:3vw;letter-spacing:-0.1vw;}
     
-        #betaInfo .leftDiv .largeContainer .marginTop2 {
+        #beta .leftDiv .largeContainer .marginTop2 {
             margin-top:6vw;}
     
-    #betaInfo .leftDiv .largeContainer p{
+    #beta .leftDiv .largeContainer p{
         font-size:3vw;padding-top:3vw;}
     
     
-    #betaInfo .leftDiv .largeContainer a{
+    #beta .leftDiv .largeContainer a{
         border-radius:6vw;padding:1vw 6vw;font-size:3vw;margin-top:3vw;}
     
-        #betaInfo .rightDiv h1{
+        #beta .rightDiv h1{
             font-size:7.5vw;padding-top:3vw;letter-spacing:-0.1vw;margin-bottom:6vw;
         }  
     
-        #betaInfo .rightDiv .imageContainer{
+        #beta .rightDiv .imageContainer{
             margin-top:9vw;    }    
         
-        #betaInfo .rightDiv .imageContainer img{
+        #beta .rightDiv .imageContainer img{
             width:12vw;
         }  
         
-        #betaInfo .rightDiv .imageContainer .image2{
+        #beta .rightDiv .imageContainer .image2{
             margin-left:6vw;
         }    
     
@@ -610,4 +618,12 @@
                    display:inline-block;
                    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
                 }
+                #formArea {
+                    width:90vw;height:90vw;
+                }
+
+                #formSubmitted {
+                    width:90vw;height:90vw;margin-left:5vw;
+                }
+               
 }
