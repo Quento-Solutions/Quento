@@ -222,8 +222,12 @@
     width:100vw;
 }
 
-#features .mainTD {
+#features .td1 {
     width:50%;
+}
+#features .td2 {
+    width:50%;
+    margin-top:10vw;
 }
 
 #features .cardsContainer {
@@ -323,3 +327,287 @@
     #footerContainer .footer span {
         font-size:0.8vw    }
 
+
+
+@media only screen and (max-width: 767px) {
+
+    #nav {
+        height:12vw;
+        width:100vw;
+        margin-top:5vw;
+    }
+    
+    #nav .logo {
+        font-size:6vw;
+        left:8vw;
+    }
+    
+    #nav .contact{
+        font-size:3vw;
+        right:8vw;
+        border-radius:6vw;
+        padding:1vw 6vw;
+    }
+    
+    #splash {
+        height:200vw;
+    }
+
+    .background {
+      height:200vw;
+      background-size:100% 100%;
+    }
+    
+    #splash .mainContent {
+        top:30vw;
+        left:0;
+        margin-left:50%;
+        transform: translateX(-50%);
+        width:80vw;
+    }
+    
+    #splash .mainContent h1{
+        font-size:10vw;
+        letter-spacing:-0.2vw;
+        line-height:10vw;
+    }
+    
+    #splash .mainContent .link1{
+        font-size:3vw;
+        margin-top:10vw;
+        border-radius:6vw;
+        padding:0.9vw 6vw;
+    }
+    
+    #splash .mainContent .link2{
+        font-size:3vw;
+        margin-top:10vw;
+        padding:0.9vw 6vw;
+    }
+    
+    #splash .scrollDown {
+        top:160vw;
+    }
+    
+    #splash .scrollDown h1 {
+        font-size:4.2vw;
+    }
+    #splash .scrollDown img {
+        margin-top:3vw;
+        width:6vw;
+    }
+    
+    #aboutContent {
+        width:100vw;
+        height:240vw;
+        flex-direction: column;
+    }
+    
+    
+    #aboutContent .leftContent{
+        margin-top:10vw;
+        margin-left:10vw;
+        margin-right:10vw;
+    }
+    
+    #aboutContent .leftContent h1{
+        font-size:7vw;
+        padding-top:3vw;
+        letter-spacing:-0.1vw;}
+    
+    #aboutContent .leftContent h2{
+        font-size:4.5vw;
+        padding-top:3vw;}
+    
+    #aboutContent .leftContent p{
+        font-size:3vw;
+        padding-top:3vw;}
+    
+        
+    #aboutContent .leftContent a{
+        border-radius:6vw;
+        padding:0.9vw 6vw;
+        font-size:3vw;
+        margin-top:3vw;}
+    
+    #aboutContent .leftContent h3{
+        font-size:6vw;padding-top:3vw;
+    }
+    #aboutContent .leftContent h4{
+        margin-top:4vw;font-size:3.3vw;
+    }        
+    
+    .leftDiv {
+        width:100%;
+    }
+    
+    .rightDiv {
+        width:100%;
+    }
+    
+    .rightDiv img {
+        width:90%;
+        margin-top:10vw;
+    }
+    
+    
+    #features {
+        height:220vw;
+        width:100vw;
+    }
+    #features .td1 {
+        width:100%;
+    }
+    #features .td2 {
+        width:100%;
+        margin-top:10vw;
+    }
+
+    #features .featuresContainer {
+        flex-direction: column;
+    }
+
+    .diagonal-background {
+        height:220vw;
+        width:150vw;
+        left:-20vw;
+    }
+    
+    #features .cardsContainer {
+        margin-top:15vw;
+        margin-left:50%;
+        transform: translateX(-50%);
+    }
+    
+    
+    #features .cardsContainer .card{
+        height:50vw;width:30vw;border-radius:3vw;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    
+    
+    #features .cardsContainer .card h1{
+        width:9vw;height:9vw;font-size:6vw;border-radius:30vw;padding-top:1vw;margin-top:1vw;
+    }
+    
+    
+    #features .cardsContainer .card h3{
+        font-size:3vw;padding-top:3vw;
+    }
+    
+    #features .cardsContainer .card p{
+        font-size:2vw;margin-top:2vw;line-height:2vw;}
+    
+    
+    #features .vision {
+        width:80vw;
+        margin-left:10vw;
+    }
+    
+    #features .vision h1 {
+        font-size:9vw;padding-top:0vw;letter-spacing:-0.1vw;}
+    #features .vision p {
+        font-size:3vw;padding-top:3vw;}
+    #features .vision  a{
+        margin-top:3vw;font-size:3vw;border-radius:6vw;padding:1vw 6vw;}
+    
+    
+    #betaInfo {
+        margin-top:15vw;
+        flex-direction: column;
+    } 
+    
+    #betaInfo .leftDiv {
+        width:100%;
+    }
+    
+    #betaInfo .rightDiv {
+        width:100%;
+        margin-top:10vw;
+    }
+    
+    #betaInfo .leftDiv .largeContainer {
+        margin-top:5vw;margin-left:10vw;margin-right:10vw;
+    }
+    
+    
+    #betaInfo .leftDiv .largeContainer h1 {
+        font-size:7.5vw;padding-top:3vw;letter-spacing:-0.1vw;}
+    
+        #betaInfo .leftDiv .largeContainer .marginTop2 {
+            margin-top:6vw;}
+    
+    #betaInfo .leftDiv .largeContainer p{
+        font-size:3vw;padding-top:3vw;}
+    
+    
+    #betaInfo .leftDiv .largeContainer a{
+        border-radius:6vw;padding:1vw 6vw;font-size:3vw;margin-top:3vw;}
+    
+        #betaInfo .rightDiv h1{
+            font-size:7.5vw;padding-top:3vw;letter-spacing:-0.1vw;margin-bottom:6vw;
+        }  
+    
+        #betaInfo .rightDiv .imageContainer{
+            margin-top:9vw;    }    
+        
+        #betaInfo .rightDiv .imageContainer img{
+            width:12vw;
+        }  
+        
+        #betaInfo .rightDiv .imageContainer .image2{
+            margin-left:6vw;
+        }    
+    
+    
+        #footerContainer {
+            margin-top:15vw;
+        }
+    
+        #footerContainer .footer {
+            width:100vw;height:15vw;
+        }
+    
+        #footerContainer .footer a {
+            font-size:4vw;left:8vw;
+        }
+        #footerContainer .footer span {
+            font-size:2.5vw    }
+    
+            .textInput {
+                border:none;
+                    padding-left:0.9vw;
+                     width: 90vw;
+                     height: 7.5vw;
+                     font-size: 3vw;
+                     border-radius: 1.2vw;
+                     margin-top: 0;
+                     color:#42547d;
+                     background:#f6f9fc;
+                     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+                 }
+                textarea {
+                      border:none;
+                      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+             
+                    padding-left:0.9vw;
+                     width: 90vw;
+                     height: 36vw;
+                     font-size: 3vw;
+                     border-radius: 1.2vw;
+                     margin-top: 0;
+                     color:#42547d;
+                     background:#f6f9fc;
+                }
+                #submitForm {
+                   background-color:#6b3deb;
+                   color:white;
+                   border:none;
+                   border-radius:6vw;
+                   padding:0.9vw;
+                   width:60vw;
+                   font-family:ginger-normal;
+                   font-size:3vw;margin-top:3vw;
+                   display:inline-block;
+                   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+                }
+}

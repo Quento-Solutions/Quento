@@ -44,9 +44,8 @@
       </section>
       <section id="features">
          <div class="diagonal-background"></div>
-         <table style="height:100%;width:100%;margin:0;">
-            <tr style="width:100%;">
-               <td class="mainTD">
+         <div class="featuresContainer" style="height:100%;width:100%;margin:0;display:flex;">
+               <div class="td1">
                   <table class="cardsContainer" style="position:relative;width;100%;height:80%;">
                      <tr>
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="0" style="padding:2vw;">
@@ -94,16 +93,15 @@
                         </td>
                      </tr>
                   </table>
-               </td>
-               <td class="mainTD">
+               </div>
+               <div class="td2">
                   <div data-aos="fade-left" data-aos-duration="1200" class="vision" style="position:relative;">
                      <h1 style="color:white;font-family:ginger-bold;font-weight:bold;">Our Vision</h1>
                      <p style="color:white;font-family:ginger-normal;">Faced with daily dilemmas such as “how should I take notes?” and “how do I stay on top of the ever-increasing workload?”, we established Quento Solutions as a platform to end these “darn!” moments once and for all. But how are we going to achieve this, you might ask? <br><br>Quento is currently in early stages of development. However, we need all the help that we can get. Scroll down below to check out how you can contribute and gain exclusive benefits as one of our earliest members and beta testers!</p>
                      <a style="color:white;opacity:0.95;display:inline-block;font-family:ginger-normal;background-color:rgba(255, 255, 255,0.3);">Learn how you can help</a>      
                   </div>
-               </td>
-            </tr>
-         </table>
+               </div>
+         </div>
       </section>
       <section id="betaInfo" style="background:#f6f9fc;width;100vw;display:flex;">
          <div class="leftDiv">
