@@ -86,6 +86,9 @@
      transform: rotate(-8deg);
      left:-20vw;
   }
+  .loadingLogo {
+    background: linear-gradient(to right, #4a45f4, #df43c6);-webkit-background-clip: text;-webkit-text-fill-color: transparent;font-size:10vw;margin-top:30vh
+  }
 
 
 #nav {
