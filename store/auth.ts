@@ -123,4 +123,8 @@ export default class AuthModule extends VuexModule implements AuthState {
         this.context.commit('SET_USER', (null));
     }
 
+    get CurrentUser()
+    {
+        return firebaseAuth.currentUser;
+    }
 }

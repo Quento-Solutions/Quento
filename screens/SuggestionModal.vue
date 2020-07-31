@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog v-model="value" id="suggestionsPopup" scroll>
+  <vs-dialog v-model="active" id="suggestionsPopup" scroll>
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">Post A <b>Suggestion</b></h4>
@@ -61,6 +61,16 @@ import VsTextarea from '~/components/VsTextarea.vue'
 export default class SuggestionModal extends Vue {
   @Prop({ default: false }) value!: boolean
 
+
+
+    get active()
+    {
+        return this.value;
+    }
+    set active(value : boolean)
+    {
+        this.$emit('input', value);
+    }
   title = ''
   contents = ''
 
@@ -83,7 +93,7 @@ export default class SuggestionModal extends Vue {
         text:
           'Thank you for your insights, we will notify you once it is implemented!'
       })
-
+        await suggestionsStore.GetSuggestions();
       this.state = false
       loading.close()
     } catch (error) {
@@ -91,6 +101,7 @@ export default class SuggestionModal extends Vue {
         color: 'danger',
         title: 'An Error Occurred While Posting Your Suggestion'
       })
+    
       this.state = false
       loading.close()
     }
@@ -98,10 +109,10 @@ export default class SuggestionModal extends Vue {
 
   set state(value: boolean) {
     this.title = this.contents = ''
-    this.value = false
+    this.active = false
   }
   get state() {
-    return this.value
+    return this.active
   }
 
   get formErrors() {

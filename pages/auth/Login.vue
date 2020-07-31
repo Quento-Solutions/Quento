@@ -5,9 +5,6 @@
       <h1 class="text-title text-5xl">&nbsp; &nbsp; Welcome To [Page Name]</h1>
       <VxCard
         class="mt-6 p-4 px-8"
-        actionButtons="true"
-        collapseAction="true"
-        removeAction="true"
         title="Login Or Sign Up"
       >
       <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>

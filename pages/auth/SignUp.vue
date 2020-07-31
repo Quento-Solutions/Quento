@@ -4,9 +4,6 @@
     <vs-col w="10" class="p-6 h-full border-solid" style="border-style: solid;">
       <VxCard
         class="mt-4 p-4 px-8"
-        actionButtons="true"
-        collapseAction="true"
-        removeAction="true"
         title="Sign Up To [Name]"
       >
       <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>

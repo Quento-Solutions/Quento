@@ -2,7 +2,6 @@ import type {Context, } from '@nuxt/types'
 import type {Route} from 'vue-router'
 export default function({store, redirect, route} : Context)
 {
-    return;
     route.matched
     console.log({route : route.name, user : store.state.auth.user?.displayName} )
 
@@ -18,7 +17,7 @@ export default function({store, redirect, route} : Context)
 
 function isAdminRoute(route : Route)
 {
-    if (route.matched.some(record => (record.path == "/Home")))
+    if (route.matched.some(record => (record.path == "/Home" || record.path == "/Suggestions")))
     {
         return true
     }

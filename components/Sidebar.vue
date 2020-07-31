@@ -4,24 +4,13 @@
       <template #logo>
         <img :src='require(`~/assets/images/logo2.png`)'/>
       </template>
-      <vs-sidebar-item id="home">
+      <vs-sidebar-item v-for="(item, index) in NavOptions" :key="index" :id="item.href" >
         <template #icon>
-          <i class="sidebar-icon bx bx-home"></i>
-        </template>
-        Home
+            <i class="sidebar-icon bx " :class="item.icon"></i>
+          </template>
+          {{item.name}}
       </vs-sidebar-item>
-      <vs-sidebar-item id="projects">
-        <template #icon>
-          <i class="sidebar-icon bx bx-shape-polygon"></i>
-        </template>
-        Projects
-      </vs-sidebar-item>
-      <vs-sidebar-item id="contact">
-        <template #icon>
-          <i class="sidebar-icon bx bxs-contact"></i>
-        </template>
-        Contact
-      </vs-sidebar-item>
+     
       <template #footer>
         <vs-row justify="space-between">
           <vs-avatar success>
@@ -52,8 +41,47 @@ import { NavigationOptionType } from "~/store/navigation";
 @Component
 export default class Sidebar extends Vue 
 {
-    active = 'home';
+  get active() {
+    return this.$route.path;
+  } 
+  set active(id : string)
+  {
+    this.PushRouterLink(id);
+  }
 
+
+
+  NavOptions = [
+    {
+      name : "Home",
+      id : "home",
+      icon : "bx bx-home",
+      href : '/home'
+    },
+    {
+      name : "Suggestions",
+      id : "suggestions",
+      icon : "bx bxs-message-square-edit",
+      href : '/suggestions'
+    },
+    {
+      name : "Projects",
+      id : "projects",
+      icon : "bx bx-shape-polygon",
+      href : '/coming-soon'
+    },
+    {
+      name : "Contact",
+      id : "contact",
+      icon : "bx bxs-contact",
+      href : '/contact'
+    }
+  ] as const
+
+  PushRouterLink(link : string)
+  {
+    this.$router.push(link);
+  }
   get open()
   {
     return windowStore.sidebarOpen;
