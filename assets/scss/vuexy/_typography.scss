@@ -11,7 +11,7 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
 
 body {
-    color: $content-color;
+    // color: $content-color;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -33,6 +33,11 @@ h4 {
     .vs-tooltip &{
         color: $white;
     }
+}
+
+.vs-tooltip 
+{
+  color : white !important;
 }
 
 

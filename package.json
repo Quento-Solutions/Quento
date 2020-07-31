@@ -34,6 +34,7 @@
     "vue-feather-icons": "^5.0.0",
     "vue-prism-component": "^1.2.0",
     "vue-select": "^3.10.7",
+    "vue-tilt.js": "^1.1.1",
     "vue-video-player": "^5.0.2",
     "vue2-perfect-scrollbar": "^1.4.0",
     "vuesax": "^4.0.1-alpha.23",

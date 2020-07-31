@@ -5,11 +5,12 @@ export default function({store, redirect, route} : Context)
     route.matched
     console.log({route : route.name, user : store.state.auth.user?.displayName} )
 
-    if(store.state.auth.user != null && (route?.name?.split('/').some(record => record == 'auth') || route.name == null))
+    if(route.name == null) redirect ('/')
+    if(store.state.auth.user != null && (route?.name?.split('/').some(record => record == 'auth')))
     {
         redirect('/home')
     }
-    if(store.state.auth.user == null && (isAdminRoute(route) || route.name == null)) {
+    if(store.state.auth.user == null && (isAdminRoute(route))) {
         redirect('/auth/login')
     };
 
