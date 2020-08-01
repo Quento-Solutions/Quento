@@ -19,12 +19,12 @@
       </section>
       <section id="splash">
          <div class="mainContent absolute font-ginger-b font-white">
-            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;">A collection of utilities created by <span style="color:#ff5c9f;">students</span>, for <span style="color:#ff5c9f;">students</span>.</h1>
+            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;">A collection of utilities created by <span style="color:#ff70ab;">students</span>, for <span style="color:#ff70ab;">students</span>.</h1>
             <a href="#beta" class="link1 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;">Learn More About the BETA</a>
             <a href="#beta" class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="color:white;transition-delay:4.5s;">Contact us</a>
          </div>
-         <div class="animate-flicker scrollDown absolute text-center" style="left:50%;transform:translate(-50%);">
-            <h1 style="color:white;font-family:ginger-bold">Scroll Down</h1>
+         <div class="scrollDown absolute text-center" style="left:50%;transform:translate(-50%);" :class="pageLoaded ? 'animate-flicker' : ''">
+            <h1 style="color:white;font-family:ginger-normal;">Scroll Down</h1>
             <img style="margin-left:50%;transform:translate(-50%);" src="../assets/images/down.png">
          </div>
       </section>
@@ -176,6 +176,7 @@ import AOS from 'aos'
    AOS.init();
    this.loading = false;
    window.scrollTo(0,0);
+   setTimeout(this.handlePageLoad, 4000);
   }
 })
 
@@ -184,6 +185,7 @@ export default class Splash extends Vue {
 
    formSubmitted = false;
    loading = true;
+   pageLoaded = false;
    handleFormSubmit() {
       this.$vs.notification({
          color : 'white',
@@ -191,6 +193,9 @@ export default class Splash extends Vue {
          title : 'You Information Was Submitted Successfully'
       })
       this.formSubmitted = true;
+   }
+   handlePageLoad() {
+      this.pageLoaded = true;
    }
 
     name="splash"
