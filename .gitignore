@@ -12,3 +12,7 @@ dist
 envars.*
 serviceAccount.json
 .env
+
+# sacred texts
+Dockerfile
+/*.sh
