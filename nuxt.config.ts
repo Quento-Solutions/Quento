@@ -2,8 +2,11 @@ import type {NuxtConfig} from '@nuxt/types';
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
 
+console.log(process.env.BASE_URL, process.env.host, process.env.port)
 const config : NuxtConfig = {
-  env: {},
+  env: {
+    baseUrl : process.env.BASE_URL || `${process.env.host}:${process.env.port}` || 'localhost:3000'
+  },
   head: {
     title: 'Quento',
     meta: [
@@ -26,8 +29,8 @@ const config : NuxtConfig = {
   server:
   {
 
-    port : 80,
-    host : '0.0.0.0'
+    port : process.env.port || 3000,
+    host : process.env.host || 'localhost'
 
 
   },
