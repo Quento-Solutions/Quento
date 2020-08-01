@@ -9,7 +9,6 @@
           content-color="black"
         >
           <template slot="no-body">
-            <!-- <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svgClasses="h-8 w-8"></feather-icon> -->
             <div class="vx-row justify-center px-8">
               <h1 class="mb-12 text-title text-5xl mr-2">
                 Suggestions
@@ -59,9 +58,9 @@
 
                       <vs-tooltip class="float-right">
                         <vs-avatar>
-                          <template #text>
-                            {{ item.userDisplayName }}
-                          </template>
+                          {{trimText(item.userDisplayName)}}
+                          
+
                         </vs-avatar>
                         <template #tooltip>
                           {{ item.userDisplayName }}
@@ -142,6 +141,20 @@ import VxCard from '~/components/VxCard.vue'
 })
 export default class SuggestionsPage extends Vue {
   active = false
+  trimText(iText : string) {
+    const text = iText.trim()
+    let getLetters = [text]
+    if (text.length > 5) {
+      getLetters = text.split(/\s/g).map((item) => {
+        return item[0]
+      })
+    }
+    if(getLetters.length > 5)
+    {
+      [...getLetters] = getLetters[0]
+    }
+    return getLetters.join('')
+  }
   parseDate(d: number) {
     return new Date(d * 1000).toDateString()
   }
