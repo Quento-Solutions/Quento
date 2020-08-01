@@ -89,7 +89,8 @@ export default class FooterCard extends Vue {
 <style lang="scss" scoped>
 .footer-card {
   transform: translate(-50%, 0%);
-  position: absolute;
+  margin-top:1vw;
+  margin-bottom:1vw;
   background-color: white;
   border-radius: 0.5rem;
   align-items: center;
@@ -97,11 +98,30 @@ export default class FooterCard extends Vue {
   height: auto;
   left: 50%;
   width: auto;
-  min-width: 20%;
+  min-width: 60%;
 
   .bottomIcon {
     width: 3.5vw;
     height: 3.5vw;
   }
+
+    @media only screen and (max-width: 1200px) {
+      .bottomIcon {
+    width: 5vw;
+    height: 5vw;
+  }
+  .bottomIcon i{
+    font-size: 3vw !important;
+  }
+    }
+   @media only screen and (max-width: 850px) {
+      .bottomIcon {
+    width: 10vw;
+    height: 10vw;
+  }
+  .bottomIcon i{
+    font-size: 6vw !important;
+  }
+    }
 }
 </style>

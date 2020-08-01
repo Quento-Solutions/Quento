@@ -1,25 +1,14 @@
 <template>
-  <div
-    class="relative disable-scrollbars overflow-x-hidden"
-    style="width: 100vw; height: 100vh;"
-  >
-    <div class="p-8 obelisk bg-cover bg" style="">
-      <transition name="bounce" mode="out-in">
+
+    <div>
         <nuxt />
-      </transition>
-      <FooterCard />
     </div>
-  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import FooterCard from '~/components/FooterCard.vue'
 
 @Component<AuthLayout>({
-  components: {
-    FooterCard
-  },
 })
 export default class AuthLayout extends Vue {}
 </script>

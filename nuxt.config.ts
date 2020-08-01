@@ -2,8 +2,11 @@ import type {NuxtConfig} from '@nuxt/types';
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
 
+console.log(process.env.BASE_URL, process.env.host, process.env.port)
 const config : NuxtConfig = {
-  env: {},
+  env: {
+    baseUrl : process.env.BASE_URL || `${process.env.host}:${process.env.port}` || 'localhost:3000'
+  },
   head: {
     title: 'Quento',
     meta: [
@@ -11,7 +14,7 @@ const config : NuxtConfig = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favico.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
   loading: { color: '#3B8070' },
   css: [
@@ -25,7 +28,11 @@ const config : NuxtConfig = {
   ],
   server:
   {
-    port : 3000,
+
+    port : process.env.port || 3000,
+    host : process.env.host || 'localhost'
+
+
   },
   router : {
     middleware : 'router-auth',
