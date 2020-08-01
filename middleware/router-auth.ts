@@ -3,9 +3,6 @@ import type {Route} from 'vue-router'
 
 export default function({store, redirect, route} : Context)
 {
-    route.matched
-    console.log({route : route.name, user : store.state.auth.user?.displayName} )
-
     if(route.name == null) redirect ('/')
     if(store.state.auth.user != null && (route?.name?.split('/').some(record => record == 'auth')))
     {
@@ -14,7 +11,6 @@ export default function({store, redirect, route} : Context)
     if(store.state.auth.user == null && (isAdminRoute(route))) {
         redirect('/auth/login')
     };
-
 }
 
 function isAdminRoute(route : Route)
