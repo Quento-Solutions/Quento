@@ -126,7 +126,7 @@ export default class SignUp extends mixins(Auth) {
     font-family:ginger-bold;padding-bottom:0.5vw;font-size:2vw;color:#4e5557
   }
   .google {
-    margin-top:0.5vw;background:#f4f7f8;margin-bottom:2vw;color:#494949;font-family:ginger-normal;font-size:0.8vw;
+    margin-top:0.5vw;background:#DB4437;margin-bottom:2vw;color:white;font-family:ginger-normal;font-size:0.8vw;
   }
 
   .google i {

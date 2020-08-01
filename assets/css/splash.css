@@ -129,11 +129,18 @@ textarea {
     font-size:1vw;
     border-radius:2vw;
     padding:0.35vw 2vw;
+    background:white;
+    color:#9c44db;
+    font-weight: bold;
 }
 #nav .contact2{
     font-size:1vw;
     border-radius:2vw;
     padding:0.35vw 2vw;
+    margin-left:2vw;
+    color:white;
+    background:rgba(255,255,255,0.1);
+    font-weight: bold;
 }
 #splash {
     height:55vw;
@@ -141,7 +148,7 @@ textarea {
 #splash .mainContent {
     top:12vw;
     left:15vw;
-    width:40vw;
+    width:45vw;
 }
 #splash .mainContent h1{
     font-size:5vw;
@@ -152,12 +159,24 @@ textarea {
     font-size:1vw;
     margin-top:1vw;
     border-radius:2vw;
-    padding:0.3vw 2vw;
+    padding:0vw 2vw;
+    height:3vw;
+    margin-left:1vw;
+}
+#splash .mainContent .link1 img{
+    width:2vw;
+    height:2vw;
+    margin-right:1vw;
+    display:inline;
 }
 #splash .mainContent .link2{
     font-size:1vw;
     margin-top:1vw;
-    padding:0.3vw 2vw;
+    border-radius:2vw;
+    padding:0vw 2vw;
+    height:3vw;
+    background:#ff70ab;
+    color:white;
 }
 #splash .scrollDown {
     top:85vh;
@@ -271,7 +290,7 @@ textarea {
    padding:0.35vw 2vw;
 }
 #beta {
-    margin-top:5vw;
+    margin-top:0;
 }
 #beta .leftDiv {
     width:50%;
@@ -379,17 +398,29 @@ textarea {
         letter-spacing:-0.2vw;
         line-height:10vw;
    }
-    #splash .mainContent .link1{
-        font-size:3vw;
-        margin-top:10vw;
-        border-radius:6vw;
-        padding:0.9vw 6vw;
-   }
+   #splash .mainContent .link1{
+    font-size:3vw;
+    margin-top:2vw;
+    border-radius:6vw;
+    padding:0vw 6vw;
+    height:9vw;
+    margin-left:0;
+    }
     #splash .mainContent .link2{
         font-size:3vw;
-        margin-top:10vw;
-        padding:0.9vw 6vw;
-   }
+        margin-top:2vw;
+        border-radius:6vw;
+        padding:0vw 6vw;
+        height:9vw;
+        margin-left:0;
+        background:#ff70ab;
+        color:white;
+    }
+    #splash .mainContent .link1 img{
+        width:6vw !important;
+        height:6vw !important;
+        margin-right:2vw !important;
+    }
     #splash .scrollDown {
         top:160vw;
    }
@@ -462,7 +493,7 @@ textarea {
         flex-direction: column;
    }
     .diagonal-background {
-        height:220vw;
+        height:225vw;
         width:150vw;
         left:-20vw;
    }
