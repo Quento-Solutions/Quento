@@ -16,3 +16,7 @@ serviceAccount.json
 # sacred texts
 Dockerfile
 /*.sh
+
+*.pem
+
+server

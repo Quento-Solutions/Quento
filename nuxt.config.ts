@@ -1,8 +1,11 @@
 import type {NuxtConfig} from '@nuxt/types';
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
+import path from 'path';
+import fs from 'fs';
 
 console.log(process.env.BASE_URL, process.env.host, process.env.port)
+
 const config : NuxtConfig = {
   env: {
     baseUrl : process.env.BASE_URL || `${process.env.host}:${process.env.port}` || 'localhost:3000'
@@ -30,8 +33,12 @@ const config : NuxtConfig = {
   {
 
     port : process.env.port || 3000,
-    host : process.env.host || 'localhost'
-
+    host : process.env.host || 'localhost',
+    https : process.env.host == '0.0.0.0' ? 
+    {
+      key : fs.readFileSync(path.resolve(__dirname, 'server', 'privkey1.pem')),
+      cert : fs.readFileSync(path.resolve(__dirname, 'server', 'cert1.pem')),
+    } : undefined,
 
   },
   router : {
