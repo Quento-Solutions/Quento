@@ -70,11 +70,11 @@ import { Vue, Component } from 'nuxt-property-decorator'
 
 import { windowStore, authStore } from '~/store'
 
-import VxCard from '~/components/VxCard.vue'
+// import VxCard from '~/components/VxCard.vue'
 
 @Component({
   layout: 'main',
-  components: { VxCard }
+  components: {  }
 })
 export default class Home extends Vue {
   pushComingSoon()

@@ -4,10 +4,7 @@
 
     <vs-row justify="center">
       <vs-col class="vx-col w-full">
-        <VxCard
-          class="text-center greet-user p-8"
-          content-color="black"
-        >
+        <VxCard class="text-center greet-user p-8" content-color="black">
           <template slot="no-body">
             <!-- <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svgClasses="h-8 w-8"></feather-icon> -->
             <div class="vx-row justify-center px-8">
@@ -15,26 +12,30 @@
                 Suggestions
               </h1>
               &nbsp; &nbsp;
-              
             </div>
             <div class="vx-row w-full justify-around">
-                <div>
-            <vs-select color="#7d33ff" label="Sort By" v-model="sortBy">
-              <vs-option  :label="item.label" :value="item.value" v-for="(item, index) in sortByOptions" :key="index">
-                {{item.label}}
-              </vs-option>
-            </vs-select>
-                </div>
-            <vs-button
-                  size="xl"
-                  type="filled"
-                  color="primary"
-                  class="vx-col shadow-md ml-4 text-bold float-right"
-                  style="font-weight: bold;"
-                  @click="active = !active"
-                  >Post Suggestion &nbsp;
-                  <i class="bx bx-highlight text-2xl" />
-                </vs-button>
+              <div>
+                <vs-select color="#7d33ff" label="Sort By" v-model="sortBy">
+                  <vs-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="(item, index) in sortByOptions"
+                    :key="index"
+                  >
+                    {{ item.label }}
+                  </vs-option>
+                </vs-select>
+              </div>
+              <vs-button
+                size="xl"
+                type="filled"
+                color="primary"
+                class="vx-col shadow-md ml-4 text-bold float-right"
+                style="font-weight: bold;"
+                @click="active = !active"
+                >Post Suggestion &nbsp;
+                <i class="bx bx-highlight text-2xl" />
+              </vs-button>
             </div>
             <div class="vx-row md:px-8">
               <div
@@ -59,6 +60,7 @@
 
                       <vs-tooltip class="float-right">
                         <vs-avatar>
+                          
                           <template #text>
                             {{ item.userDisplayName }}
                           </template>
@@ -126,18 +128,17 @@ import { windowStore, authStore, suggestionsStore } from '~/store'
 import VsTextarea from '~/components/VsTextarea.vue'
 
 import SuggestionModal from '~/screens/SuggestionModal.vue'
-import VxCard from '~/components/VxCard.vue'
+// import VxCard from '~/components/VxCard.vue'
 
 @Component<SuggestionsPage>({
   layout: 'main',
-  components: { VxCard, VsTextarea, SuggestionModal },
+  components: { VsTextarea, SuggestionModal },
   mounted() {
     // Add vs loading
     // Date.
     if (suggestionsStore.suggestions.length == 0) {
-      this.GetSuggestions();
+      this.GetSuggestions()
     }
-
   }
 })
 export default class SuggestionsPage extends Vue {
@@ -145,25 +146,21 @@ export default class SuggestionsPage extends Vue {
   parseDate(d: number) {
     return new Date(d * 1000).toDateString()
   }
-    get sortBy()
-    {
-        return suggestionsStore.field as 'createdAt' | 'upVotes';
+  get sortBy() {
+    return suggestionsStore.field as 'createdAt' | 'upVotes'
+  }
+  set sortBy(value: 'createdAt' | 'upVotes') {
+    try {
+      suggestionsStore.SetSortBy(value)
+    } catch (error) {
+      console.log({ error })
     }
-    set sortBy(value : 'createdAt' | 'upVotes')
-    {
-        try {
-            suggestionsStore.SetSortBy(value);
-        }
-        catch (error)
-        {
-            console.log({error});
-        }
-    }
+  }
   sortByOptions = [
     { value: 'createdAt', label: 'Created At' },
     { value: 'upVotes', label: 'Up Votes' }
   ] as const
-//   sortBy: 'createdAt' | 'upVotes' = 'createdAt'
+  //   sortBy: 'createdAt' | 'upVotes' = 'createdAt'
   async GetLikedSuggestions() {
     if (suggestionsStore.likedSuggestions.length == 0) {
       const loading = this.$vs.loading()
@@ -197,33 +194,29 @@ export default class SuggestionsPage extends Vue {
   }
 
   async LoadMoreSuggestions() {
-    const loading = this.$vs.loading();
+    const loading = this.$vs.loading()
     try {
-       const suggestions = suggestionsStore.GetNextPage();
-        await Promise.all([suggestions]);
-        loading.close();
+      const suggestions = suggestionsStore.GetNextPage()
+      await Promise.all([suggestions])
+      loading.close()
+    } catch (error) {
+      console.error({ error })
+      loading.close()
     }
-    catch (error)
-    {
-        console.error({error});
-        loading.close();
-    }
-    return;
+    return
   }
   async GetSuggestions() {
-    const loading = this.$vs.loading();
+    const loading = this.$vs.loading()
     try {
-       const suggestions = suggestionsStore.GetSuggestions();
-       const favorites = suggestionsStore.GetLikedSuggestions();
-        await Promise.all([suggestions, favorites]);
-        loading.close();
+      const suggestions = suggestionsStore.GetSuggestions()
+      const favorites = suggestionsStore.GetLikedSuggestions()
+      await Promise.all([suggestions, favorites])
+      loading.close()
+    } catch (error) {
+      console.error({ error })
+      loading.close()
     }
-    catch (error)
-    {
-        console.error({error});
-        loading.close();
-    }
-    return;
+    return
   }
 
   pushComingSoon() {
