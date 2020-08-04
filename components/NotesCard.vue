@@ -42,29 +42,40 @@
         </vs-avatar>
       </div>
     </div>
-    <div class="w-full vx-row p-2 items-center text-sm">
-      <div class="rounded-full bg-purple-500 p-2 vx-row items-center text-ginger text-white mr-2" >
-        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)"/>
-        {{note.subject}}
-      </div>
-      <div class="rounded-full bg-orange-500 p-2 vx-row items-center text-ginger text-white" >
-      Grade {{note.grade}}
-      </div>
-    </div>
 
     <!-- Title -->
-    <div class="w-full text-ginger-b text-xl lg:px-10 p-4 pt-0" style="line-height: 1 ">
+    <div
+      class="w-full text-ginger-b text-xl lg:px-10 p-4 pb-0"
+      style="line-height: 1;"
+    >
       {{ note.title }}
+    </div>
+
+    <!-- Category Pills -->
+    <div class="w-full vx-row p-2 items-center text-sm">
+      <div
+        class="rounded-full bg-orange-500 p-2 vx-row items-center text-ginger text-white"
+      >
+        Grade {{ note.grade }}
+      </div>
+      <div
+        class="rounded-full bg-purple-500 p-2 vx-row items-center text-ginger text-white mx-2"
+      >
+        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)" />
+        {{ note.subject }}
+      </div>
     </div>
 
     <!-- <div style="width : 80%; margin-left: 10%;  height : 2px; background-color: gray" class="my-2"></div> -->
 
     <!-- Content -->
-    <div class="vx-row w-full justify-center p-4 m-0" style="margin: 0;">
+    <div class="vx-row w-full justify-center p-4 m-0 pt-0" style="margin: 0;">
       <div
         class="md:w-2/3 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
-          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''">
+          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''
+        "
+      >
         <img
           :src="note.images[0]"
           class="responsive rounded border-solid mb-4"
@@ -75,7 +86,6 @@
           :options="vfOptions"
           :images="note.images"
           :transitions="vfTransitions"
-          :captions="vfCaptions"
           class="w-full"
           ref="slider"
           v-if="hasImage && !preview"
@@ -101,16 +111,13 @@
           </template>
         </vue-flux>
         <div
-
           v-html="$md.render(note.contents)"
           class="w-full text-ginger p-2"
         />
       </div>
     </div>
 
-    <div class="vx-row w-full">
-
-    </div>
+    <div class="vx-row w-full"></div>
 
     <div
       style="
@@ -153,18 +160,17 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
-import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects';
+import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 const a = new Date().toLocaleString()
 // console.log({ a })
 @Component<NotesCard>({
-  // components : 
+  // components :
   mounted() {
     if (this.note.images && this.note.images.length) {
       this.image = new Image()
       this.image.src = this.note.images[0]
       this.hasImage = true
     }
-    console.log({ content: this.note.contents })
   }
 })
 export default class NotesCard extends Vue {
@@ -172,9 +178,8 @@ export default class NotesCard extends Vue {
   @Prop({ default: false }) clickable!: boolean
   @Prop({ default: false }) preview!: boolean
 
-  getIcon(subject : SubjectGroup_O | Subject_O)
-  {
-    return SubjectIconList[subject];
+  getIcon(subject: SubjectGroup_O | Subject_O) {
+    return SubjectIconList[subject]
   }
 
   vfOptions = {

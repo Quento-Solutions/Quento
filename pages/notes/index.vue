@@ -1,22 +1,23 @@
 <template>
   <div
     class="vx-row w-full relative justify-evenly"
+    :class="[{ 'show-overlay': bodyOverlay }]"
     id="notes-screen-container"
   >
-  
-  <PostNotesModal v-model="notesModalActive"/>
+    <div id="notes-content-overlay"></div>
 
-  <NotesSidebar/>
+    <PostNotesModal v-model="notesModalActive" />
+    <PreviewNotesModal v-model="previewModalActive" />
+    <NotesSidebar />
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-1/2 md:w-2/3 w-full sidebar-spacer-margin">
-    <div class="vx-col w-full  inline-flex md:hidden" style="">
-      <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
-        <vs-avatar class="icon-small float-right" @click="openNotesSidebar()">
-          <i class="bx bx-menu" style="font-size: 1.25rem;" />
-        </vs-avatar>
-
+      <div class="vx-col w-full inline-flex md:hidden" style="">
+        <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
+          <vs-avatar class="icon-small float-right" @click="openNotesSidebar()">
+            <i class="bx bx-menu" style="font-size: 1.25rem;" />
+          </vs-avatar>
+        </div>
       </div>
-    </div>
       <NotesCard
         v-for="(note, index) in notesList"
         :key="index"
@@ -32,10 +33,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import PostNotesModal from '~/screens/PostNotesModal.vue'
 
 import { Note } from '~/types/notes'
-import NotesCard from '~/components/NotesCard.vue'
 
 const html = `# Quento
 
@@ -59,56 +58,75 @@ $ npm run generate
 \`\`\`
 `
 
-
-import NotesSidebar from '~/components/NotesSidebar.vue';
 import { windowStore, notesStore } from '~/store'
-@Component<NotesPage>({ components: { NotesCard, NotesSidebar, PostNotesModal }, layout: 'main' })
+import NotesSidebar from '~/components/NotesSidebar.vue'
+import PostNotesModal from '~/screens/PostNotesModal.vue'
+import PreviewNotesModal from '~/screens/PreviewNotesModal.vue'
+
+import NotesCard from '~/components/NotesCard.vue'
+
+@Component<NotesPage>({
+  components: { NotesCard, NotesSidebar, PostNotesModal, PreviewNotesModal },
+  layout: 'main'
+})
 export default class NotesPage extends Vue {
+  get bodyOverlay() {
+    return windowStore.notesSidebarOpen && windowStore.isSmallScreen
+  }
+  get previewModalActive() {
+    return notesStore.PreviewModalOpen
+  }
+  set previewModalActive(value: boolean) {
+    notesStore.TogglePreviewModal(value)
+  }
 
-  get notesModalActive()
-  {
+  get notesModalActive() {
     return notesStore.NotesModuleOpen
-  } 
-  set notesModalActive( value : boolean )
-  {
-    notesStore.ToggleNotesModule( value );
   }
-  openNotesSidebar() 
-  {
-    windowStore.SetNotesState(true);
+  set notesModalActive(value: boolean) {
+    notesStore.ToggleNotesModule(value)
   }
-  
-  notesList: Note[] = [
-    Note.fromFirebase({
-      title:
-        'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
-      uid: '1892u3hs',
-      userDisplayName: 'Raheem Al-Ahmed ',
-      userPhotoUrl:
-        'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
-      createdAt: new Date(),
+  openNotesSidebar() {
+    windowStore.SetNotesState(true)
+  }
 
-      contents: '',
-      images: ['https://cdn-demo.algolia.com/bestbuy-0118/5477500_sb.jpg'],
-      upVotes: 0,
-      views: 0,
-      subject : 'Physics',
-      grade : 10,
-    }, 'ifwoifbw'),
-    Note.fromFirebase({
-      title:
-        'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
-      uid: '192hs983',
-      userDisplayName: 'Raheem Al-Ahmed ',
-      userPhotoUrl:
-        'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
-      createdAt: new Date(),
-      grade : 11,
-      contents: html,
-      upVotes: 0,
-      views: 0,
-      subject : 'Film',
-    }, "ujfioje92")
+  notesList: Note[] = [
+    Note.fromFirebase(
+      {
+        title:
+          'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
+        uid: '1892u3hs',
+        userDisplayName: 'Raheem Al-Ahmed ',
+        userPhotoUrl:
+          'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
+        createdAt: new Date(),
+
+        contents: '',
+        images: ['https://cdn-demo.algolia.com/bestbuy-0118/5477500_sb.jpg'],
+        upVotes: 0,
+        views: 0,
+        subject: 'Physics',
+        grade: 10
+      },
+      'ifwoifbw'
+    ),
+    Note.fromFirebase(
+      {
+        title:
+          'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
+        uid: '192hs983',
+        userDisplayName: 'Raheem Al-Ahmed ',
+        userPhotoUrl:
+          'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
+        createdAt: new Date(),
+        grade: 11,
+        contents: html,
+        upVotes: 0,
+        views: 0,
+        subject: 'Film'
+      },
+      'ujfioje92'
+    )
   ]
 }
 </script>
@@ -119,10 +137,32 @@ export default class NotesPage extends Vue {
     width: calc(260px);
     margin-left: 0;
   }
+
+  #notes-content-overlay {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: opacity 0.7s;
+    z-index: -1;
+  }
   // .sidebar-spacer-margin
   // {
   //     margin-left : calc(260px + 2.2rem);
   //    max-width : calc(100% - 260px - 2.2rem)
   // }
+
+}
+#notes-screen-container.show-overlay {
+  #notes-content-overlay {
+    z-index: 1;
+    opacity: 1;
+  }
 }
 </style>

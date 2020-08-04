@@ -7,15 +7,19 @@ import {
 } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import type { firestore as store } from 'firebase'
-import { firestore as YEE } from 'firebase/app'
 import { authStore } from './index'
 
-import { Suggestion, Suggestion_t_F } from '~/types/suggestions'
+import { Note, Note_t, Note_t_F } from '~/types/notes'
+import { NestedSubjectList, SubjectIconList } from '~/types/subjects'
+
 import firebase from '~/plugins/firebase'
 type QueryType = store.Query<store.DocumentData>
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
+
+    PreviewNote : Note | null = null;
+
     PreviewModalOpen = false;
     NotesModuleOpen = false;
 
@@ -41,5 +45,17 @@ export default class NotesModule extends VuexModule {
     public TogglePreviewModal( val : boolean )
     {
         this.TOGGLE_PREVIEW_MODAL(val);
+    }
+
+    @Mutation
+    private SET_PREVIEW_NOTE(val : Note | null)
+    {
+        this.PreviewNote = val;
+    }
+
+    @Action({rawError : true})
+    public SetPreviewNote( val : Note | null )
+    {
+        this.SET_PREVIEW_NOTE(val);
     }
 }

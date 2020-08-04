@@ -8,7 +8,7 @@
   >
     <template #logo>
       <vs-button icon danger @click="open = false">
-        <i class="bx bx-x text-2xl"/>
+        <i class="bx bx-x text-2xl" />
       </vs-button>
       <vs-button warn @click="toggleNotesModal(true)">
         <div class="text-2xl font-ginger-b">
@@ -126,6 +126,45 @@
           </vs-checkbox>
         </vs-sidebar-item>
       </vs-sidebar-group>
+      <div
+        class="w-full rounded my-4"
+        style="background-color: gray; height: 2px;"
+      />
+      <h6 class="font-bold mb-5">Grades</h6>
+                  <div
+              class="my-2 ml-6 vx-row items-center border-solid cursor-pointer"
+              @click="selectAllGrades()"
+            >
+              <i
+                class="bx text-3xl mr-2"
+                :class="
+                  allGradesSelected
+                    ? 'bxs-coin-stack text-purple-500'
+                    : 'bx-coin-stack text-gray-300'
+                "
+                style="transition-duration: 0.25s;"
+              />
+
+              <div class="font-bold truncate text-xl">
+                All
+              </div>
+            </div>
+
+
+        <vs-sidebar-item
+          v-for="(grade, index) in GradeOptions"
+          :key="index"
+        >
+          <vs-checkbox
+            v-model="currentGrades"
+            :val="grade"
+            @click="allGradesSelected = false"
+          >
+            <div class="font-bold truncate ml-6">
+              Grade {{grade}}
+            </div>
+          </vs-checkbox>
+        </vs-sidebar-item>
 
       <div class="vx-row w-full">
         <div class="vx-col w-1/2 text-ginger" style="">
@@ -159,13 +198,30 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { windowStore, notesStore } from '~/store'
-import { NestedSubjectList } from '~/types/subjects'
+import { NestedSubjectList, GradeList, Grade_O } from '~/types/subjects'
 
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
 
-  toggleNotesModal( val : boolean )
+  GradeOptions = GradeList;
+  currentGrades : Grade_O[] = [...GradeList];
+  allGradesSelected = true;
+
+
+  selectAllGrades()
   {
+    if (!this.allGradesSelected)
+    {
+      this.allGradesSelected = true;
+      this.currentGrades = [...GradeList];
+    } else 
+    {
+      this.allGradesSelected = false;
+      this.currentGrades = []
+    }
+  }
+
+  toggleNotesModal(val: boolean) {
     notesStore.ToggleNotesModule(val)
   }
 

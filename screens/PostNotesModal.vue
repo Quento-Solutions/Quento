@@ -73,9 +73,7 @@
           :label="`Grade ${grade}`"
           :value="grade"
         >
-          <div class="font-bold truncate">
-            Grade {{ grade }}
-          </div>
+          <div class="font-bold truncate">Grade {{ grade }}</div>
         </vs-option>
       </vs-select>
       <VsTextarea
@@ -86,20 +84,28 @@
         label="NOTABLE Content"
       >
       </VsTextarea>
-    <VsUpload :show-upload-button="false" multiple text="Upload Image(s)" accept="image/*" ref="imageUpload"/>
+      <VsUpload
+        :show-upload-button="false"
+        multiple
+        text="Upload Image(s)"
+        accept="image/*"
+        ref="imageUpload"
+      />
     </div>
 
     <template #footer>
-      <div class="footer-dialog vx-row justify-center md:pb-8 px-12">
+      <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
+
+
         <vs-button
-          class="md:w-1/2 p-8 w-full"
-          style="padding: 8;"
-          size="xl"
+          class="md:w-1/2 w-full"
           warn
-          :disabled="false && formErrors"
-          @click="PostedNote()"
+          :disabled="formErrors"
+          @click="PreviewNote()"
         >
-          PREVIEW NOTE
+          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
+            PREVIEW NOTE
+          </div>
         </vs-button>
       </div>
     </template>
@@ -117,15 +123,13 @@ import {
   SubjectIconList,
   Grade_O,
   GradeList
-} from '~/types/subjects';
-import {
-  Note
-} from '~/types/notes'
+} from '~/types/subjects'
+import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
-import VsUpload from '~/components/VsUpload.vue';
+import VsUpload from '~/components/VsUpload.vue'
 
 import { authStore } from '~/store'
-import { auth } from 'firebase';
+import { auth } from 'firebase'
 @Component<PostNotesModal>({
   components: {
     VsTextarea,
@@ -134,9 +138,13 @@ import { auth } from 'firebase';
 })
 export default class PostNotesModal extends Vue {
   subjectSelect: Subject_O | '' = ''
-  gradeSelect : Grade_O | '' = '';
+  gradeSelect: Grade_O | '' = ''
 
   readonly GradeList = GradeList
+  Cancel()
+  {
+
+  }
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
@@ -155,12 +163,24 @@ export default class PostNotesModal extends Vue {
     return windowStore.isLargeScreen
   }
 
-  async PostedNote() {
-    const refs = this.$refs.imageUpload as (Vue & { filesx : HTMLInputElement[]});
+  async PreviewNote() {
+    interface imageSrc {
+      error: boolean
+      orientation: 'w' | 'l'
+      percent: number | string | null
+      remove: boolean | null
+      src: string | null
+    }
+    const refs = this.$refs.imageUpload as Vue & {
+      filesx: HTMLInputElement[]
+      srcs: imageSrc[]
+    }
+    const srcs = refs.srcs.filter((src) => !src.remove).map((src) => src.src!)
     const imageUpload = refs.filesx
+    // const
     // Figure out how to retrieve the image file + url, render it as a preview note card, and then handle backend shit
-    console.log({imageUpload, refs})
-    return;
+    console.log({ imageUpload, refs })
+
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -168,45 +188,23 @@ export default class PostNotesModal extends Vue {
       })
       return
     }
-  
-    const loading = this.$vs.loading();
 
     const previewNote = new Note({
-      title : this.title,
-      uid : authStore.user?.uid!,
-      userDisplayName : authStore.user?.uid!,
-      userPhotoUrl : authStore.user?.photoURL!,
-      createdAt : new Date(),
-      upVotes : 0,
-      views : 0,
-      subject : this.subjectSelect as Subject_O,
-      grade : this.gradeSelect as Grade_O,
-      contents : this.contents,
-      images : [
-
-      ]
+      title: this.title,
+      uid: authStore.user?.uid!,
+      userDisplayName: authStore.user?.displayName!,
+      userPhotoUrl: authStore.user?.photoURL!,
+      createdAt: new Date(),
+      upVotes: 0,
+      views: 0,
+      subject: this.subjectSelect as Subject_O,
+      grade: this.gradeSelect as Grade_O,
+      contents: this.contents,
+      images: srcs
     })
-    const payload = { title: this.title, contents: this.contents }
-    try {
-      await suggestionsStore.PostSuggestion(payload)
-      this.$vs.notification({
-        color: 'success',
-        title: 'Suggestion Posted!',
-        text:
-          'Thank you for your insights, we will notify you once it is implemented!'
-      })
-      await suggestionsStore.GetSuggestions()
-      this.state = false
-      loading.close()
-    } catch (error) {
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Posting Your Suggestion'
-      })
 
-      this.state = false
-      loading.close()
-    }
+    notesStore.SetPreviewNote(previewNote)
+    notesStore.TogglePreviewModal(true)
   }
 
   set state(value: boolean) {
@@ -218,7 +216,13 @@ export default class PostNotesModal extends Vue {
   }
 
   get formErrors() {
-    return !this.title || this.subjectSelect == '' || this.gradeSelect == '' || !(!this.contents)
+    console.log(this.title, this.subjectSelect, this.gradeSelect, this.contents)
+    return (
+      !this.title ||
+      this.subjectSelect == '' ||
+      this.gradeSelect == '' ||
+      !this.contents
+    )
   }
 }
 </script>
@@ -228,8 +232,7 @@ export default class PostNotesModal extends Vue {
   z-index: 1000000000;
 }
 .content-popup {
-  .vs-dialog--scroll .vs-dialog__content
-  {
+  .vs-dialog--scroll .vs-dialog__content {
     max-height: calc(100vh - 200px);
   }
 
