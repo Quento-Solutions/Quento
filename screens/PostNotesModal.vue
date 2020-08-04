@@ -83,9 +83,10 @@
         placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
         class="block"
         height="20rem"
-        label="Feature Suggestion"
+        label="NOTABLE Content"
       >
       </VsTextarea>
+    <VsUpload :show-upload-button="false" multiple text="Upload Image(s)" accept="image/*" ref="imageUpload"/>
     </div>
 
     <template #footer>
@@ -94,11 +95,11 @@
           class="md:w-1/2 p-8 w-full"
           style="padding: 8;"
           size="xl"
-          success
-          :disabled="formErrors"
-          @click="PostSuggestion()"
+          warn
+          :disabled="false && formErrors"
+          @click="PostedNote()"
         >
-          Post
+          PREVIEW NOTE
         </vs-button>
       </div>
     </template>
@@ -116,15 +117,22 @@ import {
   SubjectIconList,
   Grade_O,
   GradeList
-} from '~/types/subjects'
+} from '~/types/subjects';
+import {
+  Note
+} from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
+import VsUpload from '~/components/VsUpload.vue';
 
-@Component<SuggestionModal>({
+import { authStore } from '~/store'
+import { auth } from 'firebase';
+@Component<PostNotesModal>({
   components: {
-    VsTextarea
+    VsTextarea,
+    VsUpload
   }
 })
-export default class SuggestionModal extends Vue {
+export default class PostNotesModal extends Vue {
   subjectSelect: Subject_O | '' = ''
   gradeSelect : Grade_O | '' = '';
 
@@ -147,7 +155,12 @@ export default class SuggestionModal extends Vue {
     return windowStore.isLargeScreen
   }
 
-  async PostSuggestion() {
+  async PostedNote() {
+    const refs = this.$refs.imageUpload as (Vue & { filesx : HTMLInputElement[]});
+    const imageUpload = refs.filesx
+    // Figure out how to retrieve the image file + url, render it as a preview note card, and then handle backend shit
+    console.log({imageUpload, refs})
+    return;
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -155,8 +168,24 @@ export default class SuggestionModal extends Vue {
       })
       return
     }
+  
+    const loading = this.$vs.loading();
 
-    const loading = this.$vs.loading()
+    const previewNote = new Note({
+      title : this.title,
+      uid : authStore.user?.uid!,
+      userDisplayName : authStore.user?.uid!,
+      userPhotoUrl : authStore.user?.photoURL!,
+      createdAt : new Date(),
+      upVotes : 0,
+      views : 0,
+      subject : this.subjectSelect as Subject_O,
+      grade : this.gradeSelect as Grade_O,
+      contents : this.contents,
+      images : [
+
+      ]
+    })
     const payload = { title: this.title, contents: this.contents }
     try {
       await suggestionsStore.PostSuggestion(payload)
@@ -189,7 +218,7 @@ export default class SuggestionModal extends Vue {
   }
 
   get formErrors() {
-    return !this.contents || !this.title
+    return !this.title || this.subjectSelect == '' || this.gradeSelect == '' || !(!this.contents)
   }
 }
 </script>

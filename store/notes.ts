@@ -16,6 +16,7 @@ type QueryType = store.Query<store.DocumentData>
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
+    PreviewModalOpen = false;
     NotesModuleOpen = false;
 
     @Mutation
@@ -28,5 +29,17 @@ export default class NotesModule extends VuexModule {
     public ToggleNotesModule( val : boolean )
     {
         this.TOGGLE_NOTES_MODULE(val);
+    }
+
+    @Mutation
+    private TOGGLE_PREVIEW_MODAL(val : boolean)
+    {
+        this.PreviewModalOpen = val;
+    }
+
+    @Action({rawError : true})
+    public TogglePreviewModal( val : boolean )
+    {
+        this.TOGGLE_PREVIEW_MODAL(val);
     }
 }
