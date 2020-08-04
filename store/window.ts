@@ -79,7 +79,11 @@ export default class WindowModule extends VuexModule {
     {
         return this.windowWidth < 992;
     }
-
+    
+    public get isLargeScreen()
+    {
+        return this.windowWidth >= 1280;
+    }
     public get sidebarOpen()
     {
         return !this.isSmallScreen || this.sidenavIsOpen;

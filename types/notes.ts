@@ -1,4 +1,6 @@
 
+import {Subject_O , Grade_O} from './subjects'
+
 export interface Note_t
 {
     title : string;
@@ -13,6 +15,8 @@ export interface Note_t
     upVotes : number;
     views : number;
 
+    subject : Subject_O;
+    grade : Grade_O;
     id ?: string;
 }
 
@@ -29,6 +33,8 @@ export interface Note_t_F
 
     createdAt : Date;
     upVotes : number;
+    subject : Subject_O;
+    grade : Grade_O;
     views : number;
 }
 

@@ -7,9 +7,20 @@
     style="z-index: 2; border-radius: 1rem; height: auto;"
   >
     <template #logo>
-      <div class="text-xl font-bold">Filters</div>
+      <vs-button icon danger @click="open = false">
+        <i class="bx bx-x text-2xl"/>
+      </vs-button>
+      <vs-button warn @click="toggleNotesModal(true)">
+        <div class="text-2xl font-ginger-b">
+          Posted Note &nbsp;
+        </div>
+        <i class="bx bx-notepad text-4xl" />
+      </vs-button>
     </template>
     <div class="sidebar-content p-6 pt-0 w-full">
+      <div class="text-xl font-bold w-full vx-row justify-center pb-2">
+        Filters
+      </div>
       <div
         class="w-full rounded mb-4"
         style="background-color: gray; height: 2px;"
@@ -147,148 +158,17 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-
-export interface SubjectItem {
-  name: string
-  iconClass: string
-}
-
-export interface SubjectGroup {
-  name: string
-  iconClass: string
-  group: true
-  items: SubjectItem[]
-}
-
-export const NestedSubjectList: SubjectGroup[] = [
-  {
-    name: 'Sciences',
-    iconClass: 'bxs-magic-wand',
-    // Maybe flask
-    group: true,
-    items: [
-      {
-        name: 'Physics',
-        iconClass: 'bx-atom'
-      },
-      {
-        name: 'Chemistry',
-        iconClass: 'bx-bong'
-      },
-      {
-        name: 'Biology',
-        iconClass: 'bx-hive'
-      },
-      {
-        name: 'Math',
-        iconClass: 'bx-brain'
-      }
-    ]
-  },
-
-  {
-    name: 'Languages',
-    iconClass: 'bxl-audible',
-    // user voice
-    group: true,
-    items: [
-      {
-        name: 'English',
-        iconClass: 'bx-book-bookmark'
-      },
-
-      {
-        name: 'French',
-        iconClass: 'bxs-map-alt'
-      },
-
-      {
-        name: 'Spanish',
-        iconClass: 'bx-church'
-      }
-    ]
-  },
-
-  {
-    name: 'Arts',
-    iconClass: 'bx-palette',
-    // user voice
-    group: true,
-    items: [
-      {
-        name: 'Visual Arts',
-        iconClass: 'bx-brush'
-      },
-      {
-        name: 'Music',
-        iconClass: 'bx-music'
-      },
-      {
-        name: 'Dance',
-        iconClass: 'bxs-guitar-amp'
-      },
-      {
-        name: 'Drama',
-        iconClass: 'bxs-user-voice'
-      },
-      {
-        name: 'Film',
-        iconClass: 'bx-camera-movie'
-      }
-    ]
-  },
-  {
-    name: 'Social Sciences',
-    iconClass: 'bx-group',
-    group: true,
-    items: [
-      {
-        name: 'TOK',
-        iconClass: 'bx-network-chart'
-      },
-
-      {
-        name: 'Geography',
-        iconClass: 'bx-landscape'
-      },
-
-      {
-        name: 'History',
-        iconClass: 'bxs-landmark'
-      },
-
-      {
-        name: 'Business',
-        iconClass: 'bx-briefcase'
-      }
-    ]
-  },
-  {
-    name: 'Technology',
-    iconClass: 'bx-laptop',
-    group: true,
-    items: [
-      {
-        name: 'ICS',
-        iconClass: 'bx-terminal'
-      },
-      {
-        name: 'ITGS',
-        iconClass: 'bx-globe-alt'
-      },
-
-      {
-        name: 'ComTech',
-        iconClass: 'bx-message-rounded-edit'
-      }
-    ]
-  }
-]
-
-import { windowStore } from '~/store'
+import { windowStore, notesStore } from '~/store'
+import { NestedSubjectList } from '~/types/subjects'
 
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
+
+  toggleNotesModal( val : boolean )
+  {
+    notesStore.ToggleNotesModule(val)
+  }
+
   currentSubjects = NestedSubjectList.flatMap((value) =>
     value.items.map((v2) => v2.name)
   )
@@ -345,11 +225,10 @@ export default class NotesSidebar extends Vue {
   filterSubjects() {}
 
   get open() {
-    return !windowStore.isSmallScreen || windowStore.notesSidebarOpen;
+    return !windowStore.isSmallScreen || windowStore.notesSidebarOpen
   }
 
   set open(open) {
-      console.log(open);
     windowStore.SetNotesState(open)
   }
 }

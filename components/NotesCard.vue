@@ -1,5 +1,10 @@
 <template>
-  <VxCard fitContent="true" class="note-card mb-8" >
+  <VxCard
+    fitContent="true"
+    class="note-card mb-8"
+    :class="clickable ? 'clickable' : ''"
+    @click="PushNotesPage()"
+  >
     <!-- Card Header -->
     <div class="vx-row w-full justify-between items-center">
       <!-- Profile Picture -->
@@ -37,34 +42,94 @@
         </vs-avatar>
       </div>
     </div>
-
+    <div class="w-full vx-row p-2 items-center text-sm">
+      <div class="rounded-full bg-purple-500 p-2 vx-row items-center text-ginger text-white mr-2" >
+        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)"/>
+        {{note.subject}}
+      </div>
+      <div class="rounded-full bg-orange-500 p-2 vx-row items-center text-ginger text-white" >
+      Grade {{note.grade}}
+      </div>
+    </div>
 
     <!-- Title -->
-    <div class="vx-row w-full text-ginger-b text-xl lg:px-10 p-4" style="">
+    <div class="w-full text-ginger-b text-xl lg:px-10 p-4 pt-0" style="line-height: 1 ">
       {{ note.title }}
     </div>
-    
+
     <!-- <div style="width : 80%; margin-left: 10%;  height : 2px; background-color: gray" class="my-2"></div> -->
 
     <!-- Content -->
     <div class="vx-row w-full justify-center p-4 m-0" style="margin: 0;">
       <div
-        class="md:w-2/3 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-0 border-solid "
-        :style="hasImage ? 'max-height : 512px' : 'max-height: 200px'"
-        style="border-width : 1px; border-color : #ccd6dd"
-      >
+        class="md:w-2/3 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
+        :style="
+          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''">
+        <img
+          :src="note.images[0]"
+          class="responsive rounded border-solid mb-4"
+          v-if="hasImage && preview"
+          style="border-width: 2px; border-color: #ccd6dd;"
+        />
+        <vue-flux
+          :options="vfOptions"
+          :images="note.images"
+          :transitions="vfTransitions"
+          :captions="vfCaptions"
+          class="w-full"
+          ref="slider"
+          v-if="hasImage && !preview"
+        >
+          <template v-slot:preloader>
+            <flux-preloader />
+          </template>
 
-        <img :src="note.images[0]" class="responsive rounded" v-if="hasImage" />
-        <div v-html="$md.render(note.contents)" class="w-full text-ginger"></div>
+          <template v-slot:caption>
+            <flux-caption />
+          </template>
+
+          <template v-slot:controls>
+            <flux-controls />
+          </template>
+
+          <template v-slot:pagination>
+            <flux-pagination />
+          </template>
+
+          <template v-slot:index>
+            <flux-index />
+          </template>
+        </vue-flux>
+        <div
+
+          v-html="$md.render(note.contents)"
+          class="w-full text-ginger p-2"
+        />
       </div>
     </div>
 
-    <div style="width : 80%; margin-left: 10%; margin-top:20px; height : 2px; background-color: gray"></div>
+    <div class="vx-row w-full">
+
+    </div>
+
+    <div
+      style="
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 20px;
+        height: 2px;
+        background-color: gray;
+      "
+    ></div>
 
     <!-- Footer -->
 
     <div class="vx-row w-full justify-evenly lg:px-10 p-6" style="">
-      <vs-avatar class="icon-small" :color="false ? 'danger' : '#f4f7f8'" badge-color="#7d33ff">
+      <vs-avatar
+        class="icon-small"
+        :color="false ? 'danger' : '#f4f7f8'"
+        badge-color="#7d33ff"
+      >
         <i
           class="bx bx-heart primary"
           :style="`color : ${false ? 'white' : '#ff4757'}`"
@@ -88,11 +153,11 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
-
+import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects';
 const a = new Date().toLocaleString()
-console.log({ a })
+// console.log({ a })
 @Component<NotesCard>({
-  components: {},
+  // components : 
   mounted() {
     if (this.note.images && this.note.images.length) {
       this.image = new Image()
@@ -104,18 +169,28 @@ console.log({ a })
 })
 export default class NotesCard extends Vue {
   @Prop({ required: true }) note!: Note
+  @Prop({ default: false }) clickable!: boolean
+  @Prop({ default: false }) preview!: boolean
 
+  getIcon(subject : SubjectGroup_O | Subject_O)
+  {
+    return SubjectIconList[subject];
+  }
+
+  vfOptions = {
+    autoplay: false,
+    allowFullscreen: true
+  }
+  vfTransitions = ['swipe']
+  PushNotesPage() {
+    if (this.clickable) return this.$router.push(`/notes/${this.note.id}`)
+  }
   hasImage = false
   image?: HTMLImageElement
 }
 </script>
 <style lang="scss">
 .note-card {
-    :hover {
-        background-color : #f5f5f6;
-    }
-    transition-duration : 100ms !important;
-
   .icon {
     width: 4rem !important;
     height: 4rem !important;
@@ -136,5 +211,11 @@ export default class NotesCard extends Vue {
       transform: translate(-25%, 90%);
     }
   }
+}
+.clickable {
+  :hover {
+    background-color: #f5f5f6;
+  }
+  transition-duration: 100ms !important;
 }
 </style>
