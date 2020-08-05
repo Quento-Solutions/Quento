@@ -15,3 +15,19 @@ var filter = function(text : string, length : number, clamp : string){
 };
 
 Vue.filter('truncate', filter);
+
+import {
+    VueFlux,
+    FluxCaption,
+    FluxControls,
+    FluxIndex,
+    FluxPagination,
+    FluxPreloader
+  } from 'vue-flux'
+
+Vue.component('vue-flux', VueFlux);
+Vue.component('flux-caption', FluxCaption);
+Vue.component('flux-controls', FluxControls);
+Vue.component('flux-index', FluxIndex);
+Vue.component('flux-pagination', FluxPagination);
+Vue.component('flux-preloader', FluxPreloader);

@@ -28,7 +28,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 
-import VxCard from './VxCard.vue'
+// import VxCard from './VxCard.vue'
 
 // :style="`border-width: 0.2rem; border-color: ${item.color}; border-style: solid`"
 
@@ -46,7 +46,7 @@ export interface ContactInformation {
 
 @Component({
   components: {
-    VxCard
+    // VxCard
   }
 })
 export default class FooterCard extends Vue {

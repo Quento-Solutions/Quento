@@ -52,7 +52,8 @@ const config : NuxtConfig = {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/firebase',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/markdownit'
   ],
   plugins: [
     '@/plugins/vuesax',
@@ -60,10 +61,20 @@ const config : NuxtConfig = {
     { src: '@/plugins/vue-video-player', ssr: false },
     '@/plugins/firebase',
     '@/plugins/firestore',
+    '@/plugins/firebaseStorage',
+
     '@/plugins/fireauth',
-    { src: "~/plugins/aos", ssr: false }
+    { src: "~/plugins/aos", ssr: false },
+    '@/plugins/globalComponents',
    
   ],
+  markdownit: {
+    preset: 'default',
+    linkify: true,
+    breaks: true,
+
+    injected : true
+  },
   pwa : {
     meta : false,
     icon : false,

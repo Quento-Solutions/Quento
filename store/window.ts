@@ -7,6 +7,7 @@ export default class WindowModule extends VuexModule {
     windowWidth = 0;
 
     sidenavIsOpen = false;
+    notesSidebarOpen = false;
 
     readonly screenDimensions = [1356 , 898] as const;
 
@@ -28,6 +29,19 @@ export default class WindowModule extends VuexModule {
     private SET_SIDENAV_OPEN(open : boolean)
     {
         this.sidenavIsOpen = open;
+    }
+
+
+    @Action
+    public SetNotesState(open : boolean)
+    {
+        this.SET_NOTESBAR_OPEN(open);
+    }
+
+    @Mutation
+    private SET_NOTESBAR_OPEN(open : boolean)
+    {
+        this.notesSidebarOpen = open;
     }
 
     @Action
@@ -65,7 +79,11 @@ export default class WindowModule extends VuexModule {
     {
         return this.windowWidth < 992;
     }
-
+    
+    public get isLargeScreen()
+    {
+        return this.windowWidth >= 1280;
+    }
     public get sidebarOpen()
     {
         return !this.isSmallScreen || this.sidenavIsOpen;

@@ -81,14 +81,14 @@
 <script lang="ts">
 import { Component, Prop, Vue, mixins} from 'nuxt-property-decorator'
 
-import VxCard from '~/components/VxCard.vue'
+// import VxCard from '~/components/VxCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin'
 import FooterCard from '~/components/FooterCard.vue'
 
 import {navigationStore, authStore} from '~/store'
 @Component<SignUp>({
-  components: { VxCard, FooterCard },
+  components: {  FooterCard },
 
   layout : 'auth'
 })
