@@ -4,8 +4,6 @@
     :class="[{ 'show-overlay': bodyOverlay }]"
     id="notes-screen-container"
   >
-  
-
     <PreviewNotesModal v-model="previewModalActive" />
     <PostNotesModal v-model="notesModalActive" />
     <div id="notes-content-overlay"></div>
@@ -69,12 +67,16 @@ import NotesCard from '~/components/NotesCard.vue'
 @Component<NotesPage>({
   components: { NotesCard, NotesSidebar, PostNotesModal, PreviewNotesModal },
   layout: 'main',
-  mounted()
-  {
-    notesStore.GetMoreNotes();
+  async mounted() {
+    const loading = this.$vs.loading()
+    const notes = notesStore.GetMoreNotes()
+    const likes = notesStore.GetLikedSuggestions()
+    await Promise.all([notes, likes])
+    loading.close()
   }
 })
 export default class NotesPage extends Vue {
+
   get bodyOverlay() {
     return windowStore.notesSidebarOpen && windowStore.isSmallScreen
   }
@@ -95,9 +97,8 @@ export default class NotesPage extends Vue {
     windowStore.SetNotesState(true)
   }
 
-  get notesList()
-  {
-    return notesStore.ActiveNotes;
+  get notesList() {
+    return notesStore.ActiveNotes
   }
 }
 </script>
@@ -128,7 +129,6 @@ export default class NotesPage extends Vue {
   //     margin-left : calc(260px + 2.2rem);
   //    max-width : calc(100% - 260px - 2.2rem)
   // }
-
 }
 #notes-screen-container.show-overlay {
   #notes-content-overlay {

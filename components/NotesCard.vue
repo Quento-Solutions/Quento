@@ -2,7 +2,7 @@
   <VxCard
     fitContent="true"
     class="note-card mb-8"
-    :class="clickable ? 'clickable' : ''"
+    :id="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
   >
     <!-- Card Header -->
@@ -134,12 +134,13 @@
     <div class="vx-row w-full justify-evenly lg:px-10 p-6" style="">
       <vs-avatar
         class="icon-small"
-        :color="false ? 'danger' : '#f4f7f8'"
+        :color="userLiked(note.id) ? 'danger' : '#f4f7f8'"
         badge-color="#7d33ff"
+        @click.stop="toggleLike(note.id)"
       >
         <i
           class="bx bx-heart primary"
-          :style="`color : ${false ? 'white' : '#ff4757'}`"
+          :style="`color : ${userLiked(note.id) ? 'white' : '#ff4757'}`"
         ></i>
         <template #badge>
           {{ note.upVotes }}
@@ -161,6 +162,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
+import {notesStore} from '~/store'
 const a = new Date().toLocaleString()
 // console.log({ a })
 @Component<NotesCard>({
@@ -181,7 +183,18 @@ export default class NotesCard extends Vue {
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
+  userLiked(id ?: string) {
+    if(!id) return false;
+    return notesStore.likedPosts.includes(id)
+  }
 
+  async toggleLike(id?: string, time?: any) {
+    if(!id) return;
+    const a = this.$vs.loading();
+    await notesStore.ToggleLikedNote(id)
+    a.close()
+    // console.log({ date: new Date(time.seconds) })
+  }
   vfOptions = {
     autoplay: false,
     allowFullscreen: true
@@ -195,7 +208,7 @@ export default class NotesCard extends Vue {
 }
 </script>
 <style lang="scss">
-.note-card {
+#note-card {
   .icon {
     width: 4rem !important;
     height: 4rem !important;
@@ -217,7 +230,7 @@ export default class NotesCard extends Vue {
     }
   }
 }
-.clickable {
+.previewClickable {
   :hover {
     background-color: #f5f5f6;
   }

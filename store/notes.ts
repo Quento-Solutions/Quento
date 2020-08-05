@@ -6,8 +6,8 @@ import {
   Mutation
 } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import type { firestore as store } from 'firebase'
 import { authStore } from './index'
+import { firestore as store } from 'firebase/app'
 
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import {
@@ -32,6 +32,8 @@ export default class NotesModule extends VuexModule {
   AllSubjects = true
   AllGrades = true
 
+
+  likedPosts : string[] = [];
   ActiveGrades: Grade_O[] = [...GradeList]
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
@@ -75,6 +77,72 @@ export default class NotesModule extends VuexModule {
       this.ActiveSubjects = []
     }
     this.EndOfList = false
+  }
+
+  @Mutation
+  private SET_LIKED_SUGGESTIONS(likedSuggestions: string[]) {
+    this.likedPosts = likedSuggestions
+  }
+
+  @Action({ rawError: true })
+  public async GetLikedSuggestions() {
+    console.log({ user: authStore.user })
+    const userId = authStore.user?.uid
+    console.log({ userId })
+    if (!userId) return
+    const user = await firestore.collection('users').doc(userId).get()
+
+    const userData = user.data()
+    console.log({ userData })
+    const likedSuggestions = user.data()?.likedNotes
+
+    console.log({ likedSuggestions })
+    if (likedSuggestions) {
+      this.SET_LIKED_SUGGESTIONS(likedSuggestions)
+    }
+  }
+
+  @Action({ rawError: true })
+  public async ToggleLikedNote(id: string) {
+    if (this.likedPosts.includes(id)) {
+      const updateUser = firestore
+        .collection('users')
+        .doc(authStore.CurrentUser?.uid)
+        .update({
+          likedNotes: store.FieldValue.arrayRemove(id)
+        })
+        const updateSuggestion = firestore.collection('notes').doc(id).update({
+            'upVotes' : store.FieldValue.increment(-1),
+        })
+        await Promise.all([updateUser, updateSuggestion]);
+
+    } else {
+        const updateUser = firestore
+        .collection('users')
+        .doc(authStore.CurrentUser?.uid)
+        .update({
+          likedNotes: store.FieldValue.arrayUnion(id)
+        })
+        const updateSuggestion = firestore.collection('notes').doc(id).update({
+            'upVotes' : store.FieldValue.increment(1),
+        })
+        await Promise.all([updateUser, updateSuggestion]);
+    }
+    this.TOGGLE_LIKED_SUGGESTION(id);
+    return;
+  }
+
+  @Mutation
+  private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
+    var index = this.likedPosts.indexOf(suggestionId)
+    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)!;
+    if (index === -1) {
+      this.likedPosts.push(suggestionId)
+      this.ActiveNotes[suggestionIndex].upVotes++;
+    } else {
+      this.likedPosts.splice(index, 1);
+      this.ActiveNotes[suggestionIndex].upVotes != 0 ? this.ActiveNotes[suggestionIndex].upVotes-- : '';  
+    }
   }
 
   @Mutation
