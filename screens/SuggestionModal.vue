@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog v-model="active" id="suggestionsPopup" scroll>
+  <vs-dialog v-model="active" id="suggestionsPopup" class="content-popup" scroll overflow-hidden>
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">Post A <b>Suggestion</b></h4>
