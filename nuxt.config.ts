@@ -34,12 +34,6 @@ const config : NuxtConfig = {
 
     port : process.env.port || 3000,
     host : process.env.host || 'localhost',
-    https : process.env.host == '0.0.0.0' ? 
-    {
-      key : fs.readFileSync(path.resolve(__dirname, 'server', 'privkey1.pem')),
-      cert : fs.readFileSync(path.resolve(__dirname, 'server', 'cert1.pem')),
-    } : undefined,
-
   },
   router : {
     middleware : 'router-auth',
