@@ -1,11 +1,11 @@
 <template>
   <div class="vx-row justify-center px-8">
     <h1 class="mb-12 text-title text-5xl mr-2">Newsletter Articles</h1>
-    <VxCard v-for="(item, index) in banana" :key="item.message" >
-      {{item.message}} - {{index}}
+    <VxCard v-for="n in numberOfArticles" >
+      {{n}}
       <div class="w-full text-ginger mb-20">
-        <h1 v-html="loaded? news[index].title:''"></h1>
-        <p v-html="loaded? $md.render(news[index].content):''"></p>
+        <h1 v-html="loaded? news[n-1].title:''"></h1>
+        <p v-html="loaded? $md.render(news[n-1].content):''"></p>
       </div>
       <!-- <div class="w-full text-ginger mb-20">
         <h1 v-html="loaded? news[].title:''"></h1>
@@ -32,7 +32,7 @@ import VxCard from '~/components/VxCard.vue'
   }
 })
 export default class Newsletters extends Vue {
-  banana = [{ message: 'foo' }, { message: 'bar' }]
+  numberOfArticles = 3
   loaded = false
   // contents:string[] = []
   // titles:string[] = []
@@ -51,6 +51,8 @@ export default class Newsletters extends Vue {
                 title: value[i].title,
                 content: value[i].content
               }
+              self.numberOfArticles = value.length;
+              // banana.push(d)
               console.log(self.news[0])
             }
           }
