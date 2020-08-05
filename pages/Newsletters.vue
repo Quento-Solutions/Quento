@@ -1,57 +1,65 @@
 <template>
-     <div class="vx-row justify-center px-8">
-              <h1 class="mb-12 text-title text-5xl mr-2">
-                Newsletter Articles
-              </h1>
-              <div class="w-full text-ginger mb-20">
-                <h1 v-html="loaded? titles[0]:''" ></h1>
-                <p v-html="loaded? $md.render(contents[0]):''" ></p>
-              </div>
-               <div class="w-full text-ginger mb-20">
-                <h1 v-html="loaded? titles[1]:''" ></h1>
-                <p v-html="loaded? $md.render(contents[1]):''" ></p>
-              </div> 
-              <div class="w-full text-ginger mb-20">
-                <h1 v-html="loaded? titles[2]:''" ></h1>
-                <p v-html="loaded? $md.render(contents[2]):''" ></p>
-              </div>
-              </div>
+  <div class="vx-row justify-center px-8">
+    <h1 class="mb-12 text-title text-5xl mr-2">Newsletter Articles</h1>
+    <VxCard v-for="(item, index) in banana" :key="item.message" >
+      {{item.message}} - {{index}}
+      <div class="w-full text-ginger mb-20">
+        <h1 v-html="loaded? news[index].title:''"></h1>
+        <p v-html="loaded? $md.render(news[index].content):''"></p>
+      </div>
+      <!-- <div class="w-full text-ginger mb-20">
+        <h1 v-html="loaded? news[].title:''"></h1>
+        <p v-html="loaded? $md.render(news[1].content):''"></p>
+      </div>
+      <div class="w-full text-ginger mb-20">
+        <h1 v-html="loaded? news[2].title:''"></h1>
+        <p v-html="loaded? $md.render(news[2].content):''"></p>
+      </div> -->
+    </VxCard>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 import { newslettersStore } from '~/store'
-
+import VxCard from '~/components/VxCard.vue'
 
 @Component<Newsletters>({
-    layout: 'main',
-    async mounted()
-  {
-   this.GetNewsletters();
+  layout: 'main',
+  components: { VxCard },
+  async mounted() {
+    this.GetNewsletters()
   }
 })
 export default class Newsletters extends Vue {
-        loaded = false
-        contents:string[] = []
-        titles:string[] = []
-    async GetNewsletters() {
-      const self = this
+  banana = [{ message: 'foo' }, { message: 'bar' }]
+  loaded = false
+  // contents:string[] = []
+  // titles:string[] = []
+  news = []
+  async GetNewsletters() {
+    const self = this
     try {
-       const newsletters = await newslettersStore.GetNewsletters().then(function(value){
-         if (value) {
-          for (let i = 0; i < value.length; i++){
-          self.contents[i] = (value[i].content);
-          self.titles[i] = (value[i].title);
+      const newsletters = await newslettersStore
+        .GetNewsletters()
+        .then(function (value) {
+          if (value) {
+            for (let i = 0; i < value.length; i++) {
+              // self.contents[i] = (value[i].content);
+              // self.titles[i] = (value[i].title);
+              self.news[i] = {
+                title: value[i].title,
+                content: value[i].content
+              }
+              console.log(self.news[0])
+            }
           }
-         }
-       });
-    } 
-    catch (error)
-    {
-        console.log({error});
+        })
+    } catch (error) {
+      console.log({ error })
     }
-    this.loaded = true;
-    return;
+    this.loaded = true
+    return
     // console.log(this.note)
   }
 }
