@@ -9,8 +9,19 @@ export const SubjectGroups = {
   Technology: ['ICS', 'ITGS', 'ComTech']
 } as const
 
+export const SortOptionsList = [{
+  name : "Up Votes", value : "upVotes"
+},
+{
+  name : "Views", value : "views",
+},
+{
+  name : "Recent", value : 'createdAt'
+}] as const
+
+export type SortOptions_O = typeof SortOptionsList[number]['value']
 export type SubjectGroup_O = keyof typeof SubjectGroups;
-export const GradeList = [9,10,11,12] as const;
+export const GradeList = [9,10,11,12, "ALL"] as const;
 export type Grade_O = typeof GradeList[number];
 export const SubjectList = Object.entries(SubjectGroups).flatMap(
   (group) => group[1]

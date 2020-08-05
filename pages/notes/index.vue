@@ -26,6 +26,24 @@
         :preview="true"
       >
       </NotesCard>
+      <vs-alert color="danger" v-if="noNotesFound">
+        <template #title>
+          No Notes Found For This Search
+        </template>
+        <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
+        Again.
+      </vs-alert>
+      <vs-button
+        size="xl"
+        type="filled"
+        color="warn"
+        class="vx-col shadow-md m-4 text-bold float-right"
+        style="font-weight: bold;"
+        @click="LoadMoreNotes()"
+        :disabled="endOfList"
+        >Load More &nbsp;
+        <i class="bx bx-loader-circle text-2xl" />
+      </vs-button>
     </div>
   </div>
 </template>
@@ -72,11 +90,26 @@ import NotesCard from '~/components/NotesCard.vue'
     const notes = notesStore.GetMoreNotes()
     const likes = notesStore.GetLikedSuggestions()
     await Promise.all([notes, likes])
+    // this.notesSearched = true;
     loading.close()
   }
 })
 export default class NotesPage extends Vue {
+  get noNotesFound() {
+    return notesStore.EndOfList && this.notesList.length == 0
+  }
+  async LoadMoreNotes()
+  {
+    const loading = this.$vs.loading()
+    await notesStore.GetMoreNotes()
+    loading.close();
+  }
 
+
+  get endOfList()
+  {
+    return notesStore.EndOfList;
+  }
   get bodyOverlay() {
     return windowStore.notesSidebarOpen && windowStore.isSmallScreen
   }
@@ -136,8 +169,7 @@ export default class NotesPage extends Vue {
     opacity: 1;
   }
 }
-.vs-loading
-{
-  z-index : 10000000000
+.vs-loading {
+  z-index: 10000000000;
 }
 </style>

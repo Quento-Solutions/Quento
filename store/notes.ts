@@ -17,14 +17,20 @@ import {
   NestedSubjectList,
   SubjectIconList,
   SubjectList,
-  Subject_O
+  Subject_O,
+  SortOptions_O
 } from '~/types/subjects'
 
 import firebase from '~/plugins/firebase'
 type QueryType = store.Query<store.DocumentData>
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
-
+export interface FilterOptions {
+  filterSubjects: Subject_O[]
+  filterGrades: Grade_O,
+  sortSelect : SortOptions_O
+  allSubjectsSelected: boolean
+};
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
@@ -32,49 +38,57 @@ export default class NotesModule extends VuexModule {
   PreviewModalOpen = false
   NotesModuleOpen = false
 
+  IsReset = false;
   AllSubjects = true
-  AllGrades = true
 
   UploadImages : File[] = [];
   likedPosts: string[] = []
-  ActiveGrades: Grade_O[] = [...GradeList]
+  ActiveGrade : Grade_O  = "ALL"
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
+  SortSelect : SortOptions_O = "upVotes"
 
   NotesPerPage = 5
   EndOfList = false
 
+  @Mutation
+  public SET_RESET(val : boolean)
+  {
+    this.IsReset = val;
+  }
+
+  
+  @Mutation
+  public RESET_NOTES()
+  {
+    this.ActiveNotes = [];
+    LastVisible = null;
+    this.EndOfList = false;
+  }
+
+  @Action({rawError: true})
+  public async ResetPosts()
+  {
+    this.RESET_NOTES();
+    this.SET_RESET(true);
+    this.TOGGLE_PREVIEW_MODAL(false);
+    this.TOGGLE_NOTES_MODULE(false);
+    return await this.GetMoreNotes();
+  }
+
   @Action({ rawError: true })
-  public async SetActiveFilter(bob: {
-    allGradesSelected: boolean
-    filterSubjects: Subject_O[]
-    filterGrades: Grade_O[]
-    allSubjectsSelected: boolean
-  }) {
-    this.SET_FILTER(bob)
+  public async SetActiveFilter(Options: FilterOptions) {
+    this.SET_FILTER(Options)
   }
   @Mutation
-  private SET_FILTER({
-    allGradesSelected,
-    allSubjectsSelected,
-    filterGrades,
-    filterSubjects
-  }: {
-    allGradesSelected: boolean
-    filterSubjects: Subject_O[]
-    filterGrades: Grade_O[]
-    allSubjectsSelected: boolean
-  }) {
+  private SET_FILTER({allSubjectsSelected,filterGrades,filterSubjects, sortSelect}: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
-    this.ActiveGrades = filterGrades
     this.ActiveSubjects = filterSubjects
-    this.AllGrades = allGradesSelected
+    this.ActiveGrade = filterGrades
     this.AllSubjects = allSubjectsSelected
+    this.SortSelect = sortSelect;
 
-    if (allGradesSelected) {
-      this.ActiveGrades = []
-    }
     if (allSubjectsSelected) {
       this.AllSubjects = true
       this.ActiveSubjects = []
@@ -89,17 +103,12 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public async GetLikedSuggestions() {
-    console.log({ user: authStore.user })
     const userId = authStore.user?.uid
-    console.log({ userId })
     if (!userId) return
     const user = await firestore.collection('users').doc(userId).get()
 
     const userData = user.data()
-    console.log({ userData })
     const likedSuggestions = user.data()?.likedNotes
-
-    console.log({ likedSuggestions })
     if (likedSuggestions) {
       this.SET_LIKED_SUGGESTIONS(likedSuggestions)
     }
@@ -188,15 +197,15 @@ export default class NotesModule extends VuexModule {
     }
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
-    console.log({ allSubjects: this.AllSubjects })
+
+    if (!(this.ActiveGrade === "ALL")) {
+      query = query.where('grade', '==', this.ActiveGrade)
+    }
     if (!this.AllSubjects) {
-      console.log(this.ActiveSubjects)
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
-    if (!this.AllGrades) {
-      query = query.where('grade', 'in', this.ActiveGrades)
-    }
-    query = query.orderBy('upVotes', 'desc')
+
+    query = query.orderBy(this.SortSelect, 'desc')
     query = query.limit(this.NotesPerPage)
 
     if (LastVisible) {

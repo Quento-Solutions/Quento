@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 
 import { suggestionsStore, notesStore, windowStore } from '~/store'
 import {
@@ -149,7 +149,22 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
-  readonly GradeList = GradeList
+  @Watch('IsReset')
+  onResetChanged(value : boolean, oldVal : boolean)
+  {
+    if(value)
+    {
+      this.ClearFields();
+      notesStore.SET_RESET(false);
+    }
+  }
+
+  get IsReset()
+  {
+    return notesStore.IsReset;
+  }
+
+  readonly GradeList = GradeList.filter(v=>v!=='ALL');
   Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
@@ -164,7 +179,11 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   }
   title = ''
   contents = ''
-
+  ClearFields()
+  {
+    this.title=  this.contents = this.subjectSelect = this.gradeSelect = '';
+    this.srcs.forEach(src => src.remove = true);
+  }
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
@@ -175,6 +194,14 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       srcs: imageSrc[]
       itemRemove: any[]
     }).filesx;
+  }
+  get srcs()
+  {
+    return (this.$refs.imageUpload as Vue & {
+      filesx: File[]
+      srcs: imageSrc[]
+      itemRemove: any[]
+    }).srcs;
   }
   async PreviewNote() {
     const refs = this.$refs.imageUpload as Vue & {

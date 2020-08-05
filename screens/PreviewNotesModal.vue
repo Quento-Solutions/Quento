@@ -95,6 +95,7 @@ export default class PreviewNotesModal extends Vue {
         title : 'Worked'
       })
       this.state = false
+      await notesStore.ResetPosts();
       loading.close()
     } catch (error) {
       console.log({error});

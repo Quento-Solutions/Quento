@@ -125,36 +125,43 @@
           </vs-checkbox>
         </vs-sidebar-item>
       </vs-sidebar-group>
-      <!-- <div
+      <div
         class="w-full rounded my-4"
         style="background-color: gray; height: 2px;"/>
-      <h6 class="font-bold mb-5">Grades</h6>
-      <div
-        class="my-2 ml-6 vx-row items-center border-solid cursor-pointer"
-        @click="selectAllGrades()"
+
+        <vs-select
+        label="Grade"
+        filter
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        placeholder="Grade"
+        v-model="gradeSelect"
       >
-        <i
-          class="bx text-3xl mr-2"
-          :class="allGradesSelected
-              ? 'bxs-coin-stack text-purple-500'
-              : 'bx-coin-stack text-gray-300'"
-          style="transition-duration: 0.25s;"
-        />
-
-        <div class="font-bold truncate text-xl">
-          All
-        </div>
-      </div>
-
-      <vs-sidebar-item v-for="(grade, index) in GradeOptions" :key="index">
-        <vs-checkbox
-          v-model="currentGrades"
-          :val="grade"
-          @click="allGradesSelected = false"
+        <vs-option
+          v-for="(grade, subIndex) in GradeList"
+          :key="subIndex"
+          :label="`Grade ${grade}`"
+          :value="grade"
         >
-          <div class="font-bold truncate ml-6">Grade {{ grade }}</div>
-        </vs-checkbox>
-      </vs-sidebar-item> -->
+          <div class="font-bold truncate">Grade {{ grade }}</div>
+        </vs-option>
+      </vs-select>
+
+        <vs-select
+        label="Sort By"
+        filter
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        placeholder="Sort By"
+        v-model="sortSelect"
+      >
+        <vs-option
+          v-for="(sort, subIndex) in SortOptions"
+          :key="subIndex"
+          :label="sort.name"
+          :value="sort.value"
+        >
+          <div class="font-bold truncate">{{sort.name}}</div>
+        </vs-option>
+      </vs-select>
 
       <div class="vx-row w-full">
         <div class="vx-col w-1/2 text-ginger" style="">
@@ -165,7 +172,7 @@
             :active="false"
             color="#808080"
             border
-            @click="selectAllSubjects()"
+            @click="clearFilter()"
             >CLEAR</vs-button
           >
         </div>
@@ -196,6 +203,8 @@ import {
   Subject_O,
   SubjectGroup_O,
   SubjectGroups,
+  SortOptionsList,
+  SortOptions_O
   // SubjectGroupDict
 } from '~/types/subjects'
 
@@ -215,9 +224,11 @@ import {
 // huh.
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
-  GradeOptions = GradeList
-  currentGrades: Grade_O[] = [...GradeList]
+  GradeList = GradeList
+  SortOptions = SortOptionsList;
+  gradeSelect: Grade_O = notesStore.ActiveGrade
   allGradesSelected = true
+  sortSelect : SortOptions_O = notesStore.SortSelect;
 
   subjectClicked(name : Subject_O, clicked = true, value =!this.SubjectDict[name])
   {
@@ -237,27 +248,16 @@ export default class NotesSidebar extends Vue {
       this.ActiveSubjectList = this.ActiveSubjectList.filter(val => val !== name);
     }
     if(!clicked) this.SubjectDict[name] = value;
-    console.log("SUBJECT CLICKED", { name }, this.ActiveSubjectList);
   }
 
   subjectGroupClicked(name : SubjectGroup_O)
   {
     SubjectGroups[name].forEach((subject : Subject_O)=> this.subjectClicked(subject, false, true));
-    // this.SubjectGroupDict[name] = value;
   }
 
-  selectAllGrades() {
-    if (!this.allGradesSelected) {
-      this.allGradesSelected = true
-      this.currentGrades = [...GradeList]
-    } else {
-      this.allGradesSelected = false
-      this.currentGrades = []
-    }
-  }
+
 
   toggleNotesModal(val: boolean) {
-    // notesStore.GetMoreNotes()
     notesStore.ToggleNotesModule(val)
   }
   SubjectDict = s;
@@ -287,7 +287,12 @@ export default class NotesSidebar extends Vue {
   activeStars = 3
 
   clearFilter() {
-    this.activeStars = this.hoverStars = this.filterStars = 0
+    if(!this.allSelected)
+    {
+      this.selectAllSubjects();
+    }
+    this.gradeSelect = 'ALL';
+    this.sortSelect = "upVotes";
   }
   setFilter() {
     this.activeStars = this.hoverStars = this.filterStars
@@ -319,9 +324,9 @@ export default class NotesSidebar extends Vue {
   async filterSubjects() {
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
-      allGradesSelected : this.allGradesSelected,
+      sortSelect : this.sortSelect,
       filterSubjects : this.ActiveSubjectList,
-      filterGrades : this.currentGrades,
+      filterGrades : this.gradeSelect,
       allSubjectsSelected : this.allSelected
     });
     await notesStore.GetMoreNotes();

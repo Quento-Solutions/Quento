@@ -73,8 +73,7 @@
       <div
         class="md:w-2/3 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
-          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''
-        "
+          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''"
       >
         <img
           :src="note.images[0]"
@@ -170,8 +169,7 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import {notesStore} from '~/store'
-const a = new Date().toLocaleString()
-// console.log({ a })
+
 @Component<NotesCard>({
   // components :
   mounted() {
@@ -204,7 +202,7 @@ export default class NotesCard extends Vue {
   }
   vfOptions = {
     autoplay: false,
-    allowFullscreen: true
+    allowFullscreen: true,
   }
   vfTransitions = ['swipe']
   PushNotesPage() {
