@@ -1,22 +1,18 @@
 FROM node:12
 
-WORKDIR /usr/src/
+ENV host '0.0.0.0'
+ENV port 80
+EXPOSE 80
 
+WORKDIR /usr/src/
+RUN mkdir /usr/src/content
 COPY package*.json ./
 
 RUN npm install
 
-RUN mkdir /usr/src/content
-
 COPY . .
 
-RUN echo "aG9zdCA9ICcwLjAuMC4wJwpwb3J0ID0gODAK" | base64 -d > .env
-
-RUN echo "ZXhwb3J0IGNvbnN0IGZpcmViYXNlQ29uZmlnID0gewogICAgYXBpS2V5OiAiQUl6YVN5RFNReHRQUFpBOVFIOGlFeEtYaE1GUGwtWVF1bkkycmwwIiwKICAgIGF1dGhEb21haW46ICJzdXBwbGFudC00NGUxNS5maXJlYmFzZWFwcC5jb20iLAogICAgZGF0YWJhc2VVUkw6ICJodHRwczovL3N1cHBsYW50LTQ0ZTE1LmZpcmViYXNlaW8uY29tIiwKICAgIHByb2plY3RJZDogInN1cHBsYW50LTQ0ZTE1IiwKICAgIHN0b3JhZ2VCdWNrZXQ6ICJzdXBwbGFudC00NGUxNS5hcHBzcG90LmNvbSIsCiAgICBtZXNzYWdpbmdTZW5kZXJJZDogIjE2NDc0NTExNjMxNyIsCiAgICBhcHBJZDogIjE6MTY0NzQ1MTE2MzE3OndlYjo5ODE4Yjc3NDhmYTBiYWM2OGMzMjc0IiwKICAgIG1lYXN1cmVtZW50SWQ6ICJHLVpTTjRDTlFUTkYiCn07Cg==" | base64 -d > envars.ts
-
 RUN npm run build
-
-EXPOSE 80
 
 CMD ["npm", "run", "start"]
 
