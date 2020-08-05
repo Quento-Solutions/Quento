@@ -82,7 +82,7 @@ import AOS from 'aos'
 
 import { navigationStore } from '~/store'
 @Component<Login>({
-  components: {  FooterCard },
+  components: { FooterCard },
   layout: 'auth'
 })
 export default class Login extends mixins(Auth) {
@@ -124,9 +124,9 @@ export default class Login extends mixins(Auth) {
 }
 .google {
   margin-top: 0.5vw;
-  background: #f4f7f8;
+  background: #db4437;
   margin-bottom: 2vw;
-  color: #494949;
+  color: #f4f7f8;
   font-family: ginger-normal;
   font-size: 0.8vw;
 }

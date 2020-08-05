@@ -8,8 +8,6 @@ import {
 
 import type { User as FirebaseUser} from 'firebase'
 import type {FireAuthServerUser} from '@nuxtjs/firebase'
-import Cookies from 'js-cookie';
-
 import firestore from '~/plugins/firestore';
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase';
 import fireauth from '~/plugins/fireauth';
@@ -63,8 +61,6 @@ export default class AuthModule extends VuexModule implements AuthState {
     @Action({rawError : true})
     public async authStateChange(firebaseUser : FirebaseUser) {
         this.context.commit('SET_LOADING', (true));
-        // const token = await firebaseAuth.currentUser?.getIdToken(true);
-        // Cookies.set('access_token', token);
 
         const firebaseUserInfo = firebaseUser.providerData[0]!;
         let user : User = {

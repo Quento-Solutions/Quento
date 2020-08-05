@@ -12,19 +12,19 @@
          <div id="nav" data-aos="fade-down" data-aos-duration="1000" class="absolute top-0 left-0 flex items-center" style="transition-delay:4.5s;">
             <a href="" class="logo absolute text-white text-ginger-b" style="color:white;">Quento</a>      
             <div class="navRightContainer absolute">
-               <button @click="$router.push('/auth/login')" class="contact text-white text-ginger" style="background-color:rgba(255, 255, 255,0.3);color:white;">Sign in</button>
-               <button @click="$router.push('/auth/signup')" class="contact2 text-white text-ginger" style="color:white;">Sign Up</button>        
+               <button @click="$router.push('/auth/login')" class="contact text-ginger">Sign in</button>
+               <a href="#beta" class="contact2 text-ginger" style="display:inline-block;">Contact Us</a>
             </div>
             </div>
       </section>
       <section id="splash">
          <div class="mainContent absolute font-ginger-b font-white">
-            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;">A collection of utilities created by <span style="color:#ff5c9f;">students</span>, for <span style="color:#ff5c9f;">students</span>.</h1>
-            <a href="#beta" class="link1 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;">Learn More About the BETA</a>
-            <a href="#beta" class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="color:white;transition-delay:4.5s;">Contact us</a>
+            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;">A collection of utilities created by <span style="color:#ff70ab;">students</span>, for <span style="color:#ff70ab;">students</span>.</h1>
+            <button class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;" @click="$router.push('/auth/signup')">Sign up for the BETA</button>
+            <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.gg/pfyFWus" style="color:white;"><img src="../assets/images/discord-white.png">Join us on Discord</a></button>
          </div>
-         <div class="animate-flicker scrollDown absolute text-center" style="left:50%;transform:translate(-50%);">
-            <h1 style="color:white;font-family:ginger-bold">Scroll Down</h1>
+         <div class="scrollDown absolute text-center" style="left:50%;transform:translate(-50%);" :class="pageLoaded ? 'animate-flicker' : ''">
+            <h1 style="color:white;font-family:ginger-normal;">Scroll Down</h1>
             <img style="margin-left:50%;transform:translate(-50%);" src="../assets/images/down.png">
          </div>
       </section>
@@ -32,22 +32,21 @@
          <div class="leftDiv">
             <div class="leftContent">
                <div data-aos="fade-right" data-aos-duration="1200">
-               <h1 style="color:#0a2540;font-family:ginger-bold;">If only… no longer</h1>
-               <h2 style="color:#6b3deb;font-family:ginger-normal;font-weight:bold;">The solution you've been waiting for is here.</h2>
+               <h1 style="color:#0a2540;font-family:ginger-bold;">A Revolutionary platform</h1>
+               <h2 style="color:#9c44db;font-family:ginger-normal;font-weight:bold;">The solution you've been waiting for is here.</h2>
                <p class="text-ginger" style="color:#42547d;">Have you ever found yourself face-to-face with a task so daunting that you just exclaim,
                   “Darn, if only there were only an app for that!”<br><br>As the high school students of today, we too-often find ourselves caught in an awkward transition period; one between the slow-to-change world of academia and our current age of rapidly-evolving technology. 
                </p>
-               <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#6b3deb;color:white;">Start your experience</a>
+               <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#9c44db;color:white;">Start your experience</a>
                </div>
-               <div data-aos="fade-right" data-aos-duration="1200">
-               <h4 style="color:#6b3deb;font-family:ginger-normal;font-weight:bold;">Revolutionary platform</h4>
-               <h3 style="color:#0a2540;font-family:ginger-normal;font-weight:bold;">A fully integrated suite of digital tools</h3>
-               <p class="text-ginger" style="color:#42547d;">Quento is <span class="text-bold" style="color:#6b3deb;">open-source</span>, freely available, and built from the ground up by a passionate community. Acting in the same capacity as a <span class="text-bold" style="color:#6b3deb;">digital pencil case</span>, the platform serves to centralize a wide variety of <span class="text-bold" style="color:#6b3deb;">web tools</span> created by and for <span class="text-bold" style="color:#6b3deb;">Canadian high school students</span>.</p>
+               <div data-aos="fade-right" data-aos-duration="1200" style="margin-top:4vw;">
+               <h1 style="color:#0a2540;font-family:ginger-normal;font-weight:bold;">A fully integrated suite of digital tools</h1>
+               <p class="text-ginger" style="color:#42547d;">Quento is <span style="color:#9c44db;font-weight:bold;">open-source</span>, freely available, and built from the ground up by a passionate community. Acting in the same capacity as a <span style="color:#9c44db;font-weight:bold;">digital pencil case</span>, the platform serves to centralize a wide variety of <span style="color:#9c44db;font-weight:bold;">web tools</span> created by and for <span style="color:#9c44db;font-weight:bold;">Canadian high school students</span>.</p>
                </div>
             </div>
          </div>
          <div data-aos="fade-left" data-aos-duration="1200" class="rightDiv flex items-center justify-center">
-            <img src="../assets/images/laptop.png" style="height:90%;"> 
+            <img src="../assets/images/laptop.png" style="height:80%;"> 
          </div>
       </section>
       <section id="features">
@@ -176,6 +175,7 @@ import AOS from 'aos'
    AOS.init();
    this.loading = false;
    window.scrollTo(0,0);
+   setTimeout(this.handlePageLoad, 4000);
   }
 })
 
@@ -184,6 +184,7 @@ export default class Splash extends Vue {
 
    formSubmitted = false;
    loading = true;
+   pageLoaded = false;
    handleFormSubmit() {
       this.$vs.notification({
          color : 'white',
@@ -191,6 +192,9 @@ export default class Splash extends Vue {
          title : 'You Information Was Submitted Successfully'
       })
       this.formSubmitted = true;
+   }
+   handlePageLoad() {
+      this.pageLoaded = true;
    }
 
     name="splash"

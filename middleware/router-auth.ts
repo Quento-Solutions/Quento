@@ -11,7 +11,6 @@ export default function({store, redirect, route} : Context)
     if(store.state.auth.user == null && (isAdminRoute(route))) {
         redirect('/auth/login')
     };
-
 }
 
 function isAdminRoute(route : Route)

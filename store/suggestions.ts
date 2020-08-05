@@ -16,7 +16,7 @@ type QueryType = store.Query<store.DocumentData>
 
 @Module({ stateFactory: true, name: 'suggestions', namespaced: true })
 export default class SuggestionsModule extends VuexModule {
-  field: keyof Suggestion = 'createdAt'
+  field: keyof Suggestion = 'upVotes'
   pageSize = 15
   currentPageSize = 15
     sortOrder : 'asc' | 'desc' = 'desc';
