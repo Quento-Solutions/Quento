@@ -24,29 +24,7 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note, Note_t_F } from '~/types/notes'
 import firestore from '~/plugins/firestore'
-
-const html = `# Quento
-
-## Description
-Welcome to Quento, a collection of utilities created by students, for students. Quento is an open source web app created by high school students using Vue.js, with the sole purpose of creating and compiling useful software to a single location to help students better manage their education.  
-
-## Build Setup
-\`\`\`
-# install dependencies
-$ npm install # Or yarn install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
-\`\`\`
-`
-
+import { notesStore } from '~/store'
 @Component<NotesContentPage>({
   components: { NotesCard },
   layout: 'main',
@@ -59,8 +37,8 @@ export default class NotesContentPage extends Vue {
   noteId: string | null = null
   docNotFound = false
   async fetchNotes() {
-    const loading = this.$vs.loading()
-    this.noteId = this.$route.params.id
+    const loading = this.$vs.loading();
+    this.noteId = this.$route.params.id;
     if (!this.noteId) {
       this.$router.push('/notes')
       return
@@ -73,6 +51,7 @@ export default class NotesContentPage extends Vue {
         loading.close()
         return
       }
+      notesStore.IncrementView(this.noteId);
       this.note = Note.fromFirebase(noteData, doc.id)
       loading.close()
       return

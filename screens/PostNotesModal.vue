@@ -95,8 +95,6 @@
 
     <template #footer>
       <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-
-
         <vs-button
           class="md:w-1/2 w-full"
           warn
@@ -113,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 
 import { suggestionsStore, notesStore, windowStore } from '~/store'
 import {
@@ -124,27 +122,35 @@ import {
   Grade_O,
   GradeList
 } from '~/types/subjects'
+
+import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 
 import { authStore } from '~/store'
 import { auth } from 'firebase'
+
+interface imageSrc {
+  error: boolean
+  orientation: 'w' | 'l'
+  percent: number | string | null
+  remove: boolean | null
+  src: string | null
+}
+
 @Component<PostNotesModal>({
   components: {
     VsTextarea,
     VsUpload
   }
 })
-export default class PostNotesModal extends Vue {
+export default class PostNotesModal extends mixins(ValidateImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
   readonly GradeList = GradeList
-  Cancel()
-  {
-
-  }
+  Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
@@ -163,20 +169,20 @@ export default class PostNotesModal extends Vue {
     return windowStore.isLargeScreen
   }
 
+  get imageRefs() {
+    return (this.$refs.imageUpload as Vue & {
+      filesx: File[]
+      srcs: imageSrc[]
+      itemRemove: any[]
+    }).filesx;
+  }
   async PreviewNote() {
-    interface imageSrc {
-      error: boolean
-      orientation: 'w' | 'l'
-      percent: number | string | null
-      remove: boolean | null
-      src: string | null
-    }
     const refs = this.$refs.imageUpload as Vue & {
-      filesx: HTMLInputElement[]
-      srcs: imageSrc[],
-      itemRemove : any[]
+      filesx: File[]
+      srcs: imageSrc[]
+      itemRemove: any[]
     }
-    const itemRemove = refs.itemRemove;
+    const itemRemove = refs.itemRemove
     const srcs = refs.srcs.filter((src) => !src.remove).map((src) => src.src!)
     const imageUpload = refs.filesx
     // window.refs= refs;
@@ -206,6 +212,7 @@ export default class PostNotesModal extends Vue {
       images: srcs
     })
 
+    notesStore.SET_UPLOAD_IMAGES(imageUpload);
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
   }
@@ -223,7 +230,8 @@ export default class PostNotesModal extends Vue {
       !this.title ||
       this.subjectSelect == '' ||
       this.gradeSelect == '' ||
-      !this.contents
+      !this.contents ||
+      (this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
     )
   }
 }

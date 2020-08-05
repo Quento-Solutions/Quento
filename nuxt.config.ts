@@ -60,6 +60,8 @@ const config : NuxtConfig = {
     { src: '@/plugins/vue-video-player', ssr: false },
     '@/plugins/firebase',
     '@/plugins/firestore',
+    '@/plugins/firebaseStorage',
+
     '@/plugins/fireauth',
     { src: "~/plugins/aos", ssr: false },
     '@/plugins/globalComponents',

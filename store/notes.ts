@@ -8,8 +8,9 @@ import {
 import firestore from '~/plugins/firestore'
 import { authStore } from './index'
 import { firestore as store } from 'firebase/app'
-
+import { v4 } from 'uuid';
 import { Note, Note_t, Note_t_F } from '~/types/notes'
+import storage from '~/plugins/firebaseStorage';
 import {
   GradeList,
   Grade_O,
@@ -23,6 +24,8 @@ import firebase from '~/plugins/firebase'
 type QueryType = store.Query<store.DocumentData>
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+
+
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
   PreviewNote: Note | null = null
@@ -32,8 +35,8 @@ export default class NotesModule extends VuexModule {
   AllSubjects = true
   AllGrades = true
 
-
-  likedPosts : string[] = [];
+  UploadImages : File[] = [];
+  likedPosts: string[] = []
   ActiveGrades: Grade_O[] = [...GradeList]
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
@@ -62,8 +65,8 @@ export default class NotesModule extends VuexModule {
     filterGrades: Grade_O[]
     allSubjectsSelected: boolean
   }) {
-    this.ActiveNotes = [];
-    LastVisible = null;
+    this.ActiveNotes = []
+    LastVisible = null
     this.ActiveGrades = filterGrades
     this.ActiveSubjects = filterSubjects
     this.AllGrades = allGradesSelected
@@ -101,6 +104,21 @@ export default class NotesModule extends VuexModule {
       this.SET_LIKED_SUGGESTIONS(likedSuggestions)
     }
   }
+  @Action({ rawError: true })
+  public async IncrementView(id: string) {
+    const updateViews = await firestore
+      .collection('notes')
+      .doc(id)
+      .update({
+        views: store.FieldValue.increment(1)
+      })
+    return updateViews
+  }
+
+  @Mutation
+  public SET_UPLOAD_IMAGES(images: File[]) {
+    this.UploadImages = images
+  }
 
   @Action({ rawError: true })
   public async ToggleLikedNote(id: string) {
@@ -111,37 +129,46 @@ export default class NotesModule extends VuexModule {
         .update({
           likedNotes: store.FieldValue.arrayRemove(id)
         })
-        const updateSuggestion = firestore.collection('notes').doc(id).update({
-            'upVotes' : store.FieldValue.increment(-1),
+      const updateSuggestion = firestore
+        .collection('notes')
+        .doc(id)
+        .update({
+          upVotes: store.FieldValue.increment(-1)
         })
-        await Promise.all([updateUser, updateSuggestion]);
-
+      await Promise.all([updateUser, updateSuggestion])
     } else {
-        const updateUser = firestore
+      const updateUser = firestore
         .collection('users')
         .doc(authStore.CurrentUser?.uid)
         .update({
           likedNotes: store.FieldValue.arrayUnion(id)
         })
-        const updateSuggestion = firestore.collection('notes').doc(id).update({
-            'upVotes' : store.FieldValue.increment(1),
+      const updateSuggestion = firestore
+        .collection('notes')
+        .doc(id)
+        .update({
+          upVotes: store.FieldValue.increment(1)
         })
-        await Promise.all([updateUser, updateSuggestion]);
+      await Promise.all([updateUser, updateSuggestion])
     }
-    this.TOGGLE_LIKED_SUGGESTION(id);
-    return;
+    this.TOGGLE_LIKED_SUGGESTION(id)
+    return
   }
 
   @Mutation
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
     var index = this.likedPosts.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)!;
+    const suggestionIndex = this.ActiveNotes.findIndex(
+      (doc) => doc.id! == suggestionId
+    )!
     if (index === -1) {
       this.likedPosts.push(suggestionId)
-      this.ActiveNotes[suggestionIndex].upVotes++;
+      this.ActiveNotes[suggestionIndex].upVotes++
     } else {
-      this.likedPosts.splice(index, 1);
-      this.ActiveNotes[suggestionIndex].upVotes != 0 ? this.ActiveNotes[suggestionIndex].upVotes-- : '';  
+      this.likedPosts.splice(index, 1)
+      this.ActiveNotes[suggestionIndex].upVotes != 0
+        ? this.ActiveNotes[suggestionIndex].upVotes--
+        : ''
     }
   }
 
@@ -161,9 +188,9 @@ export default class NotesModule extends VuexModule {
     }
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
-    console.log({allSubjects : this.AllSubjects});
+    console.log({ allSubjects: this.AllSubjects })
     if (!this.AllSubjects) {
-        console.log(this.ActiveSubjects)
+      console.log(this.ActiveSubjects)
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
     if (!this.AllGrades) {
@@ -177,7 +204,7 @@ export default class NotesModule extends VuexModule {
     }
     try {
       const snapshot = await query.get()
-        console.log({snapshot});
+      console.log({ snapshot })
       const notes = snapshot.docs.map((doc) =>
         Note.fromFirebase(doc.data() as Note_t_F, doc.id)
       )
@@ -188,13 +215,34 @@ export default class NotesModule extends VuexModule {
       this.PUSH_NOTES(notes)
       console.log({ stateNotes: this.ActiveNotes })
     } catch (error) {
-        console.log({error});
+      console.log({ error })
     }
   }
   @Action({ rawError: true })
   public async PostNote({ note, images }: { note: Note; images?: any[] }) {
+    
+    const uploadRefs = this.UploadImages.map(async (image) => {
+        const uid = v4();
+        const fileName = image.name.toLowerCase();
+        const extMatches = fileName.match(/\.([^\.]+)$/);
+        var ext = extMatches ? extMatches[0] : "";
+        const imageName = `${uid}${ext}`;
+        const imageRef = storage.ref(imageName);
+        const imageReuploadName = `postedNote@${imageName}`
+        const snapshot = await imageRef.put(image);
+         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${snapshot.ref.bucket}/o/${encodeURIComponent(imageReuploadName)}?alt=media`;
+        // return await snapshot.ref.;
+        console.log({ext, imageName, imageRef, imageUrl});
+        return imageUrl;
+    // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
+    })
+    const imageLinks = await Promise.all(uploadRefs);
+    console.log({imageLinks});
+    const newNote = note.toFirebase();
+    newNote.images = imageLinks
     try {
-      const docRef = await firestore.collection('notes').add(note.toFirebase())
+        
+      const docRef = await firestore.collection('notes').add(newNote)
     } catch (error) {}
   }
 

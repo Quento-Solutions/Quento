@@ -146,10 +146,17 @@
           {{ note.upVotes }}
         </template>
       </vs-avatar>
-
+      <vs-tooltip>
       <vs-avatar class="icon-small">
-        <i class="bx bx-chat"></i>
+        <i class="bx bx-meteor"></i>
+        <template #badge>
+          {{ note.views }}
+        </template>
       </vs-avatar>
+      <template #tooltip>
+        {{ note.views }} Views
+      </template>
+      </vs-tooltip>
 
       <vs-avatar class="icon-small">
         <i class="bx bx-save"></i>

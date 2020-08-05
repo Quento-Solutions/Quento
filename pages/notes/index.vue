@@ -136,4 +136,8 @@ export default class NotesPage extends Vue {
     opacity: 1;
   }
 }
+.vs-loading
+{
+  z-index : 10000000000
+}
 </style>
