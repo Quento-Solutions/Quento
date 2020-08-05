@@ -173,10 +173,13 @@ export default class PostNotesModal extends Vue {
     }
     const refs = this.$refs.imageUpload as Vue & {
       filesx: HTMLInputElement[]
-      srcs: imageSrc[]
+      srcs: imageSrc[],
+      itemRemove : any[]
     }
+    const itemRemove = refs.itemRemove;
     const srcs = refs.srcs.filter((src) => !src.remove).map((src) => src.src!)
     const imageUpload = refs.filesx
+    // window.refs= refs;
     // const
     // Figure out how to retrieve the image file + url, render it as a preview note card, and then handle backend shit
     console.log({ imageUpload, refs })
@@ -216,7 +219,6 @@ export default class PostNotesModal extends Vue {
   }
 
   get formErrors() {
-    console.log(this.title, this.subjectSelect, this.gradeSelect, this.contents)
     return (
       !this.title ||
       this.subjectSelect == '' ||

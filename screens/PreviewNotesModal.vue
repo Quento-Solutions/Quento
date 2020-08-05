@@ -21,16 +21,17 @@
     </div>
 
     <template #footer>
-      <div class="footer-dialog vx-row justify-center md:pb-8 px-12">
+      <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
+
+
         <vs-button
-          class="md:w-1/2 p-8 w-full"
-          style="padding: 8;"
-          size="xl"
-          warn
-          :disabled="false && formErrors"
+          class="md:w-1/2 w-full"
+          success
           @click="PostNote()"
         >
-          PREVIEW NOTE
+          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
+            POSTED NOTE
+          </div>
         </vs-button>
       </div>
     </template>
@@ -79,10 +80,20 @@ export default class PreviewNotesModal extends Vue {
 
   async PostNote() {
 
+    if(!notesStore.PreviewNote) return;
+
     const loading = this.$vs.loading();
 
     try {
 
+      await notesStore.PostNote({
+        note : notesStore.PreviewNote
+      })
+
+      this.$vs.notification({
+        color : 'success',
+        title : 'Worked'
+      })
       this.state = false
       loading.close()
     } catch (error) {
@@ -90,7 +101,6 @@ export default class PreviewNotesModal extends Vue {
         color: 'danger',
         title: 'An Error Occurred While Posting Your Suggestion'
       })
-
       this.state = false
       loading.close()
     }

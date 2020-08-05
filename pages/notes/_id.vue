@@ -8,16 +8,22 @@
           </vs-avatar>
         </div>
       </div>
-        <NotesCard :note="note" v-if="note">
-        </NotesCard>
+      <NotesCard :note="note" v-if="note"> </NotesCard>
+      <vs-alert color="danger" v-if="docNotFound">
+        <template #title>
+          Something Went Wrong
+        </template>
+        <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
+        Again.
+      </vs-alert>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import NotesCard from '~/components/NotesCard.vue';
-import {Note} from '~/types/notes'
-
+import NotesCard from '~/components/NotesCard.vue'
+import { Note, Note_t_F } from '~/types/notes'
+import firestore from '~/plugins/firestore'
 
 const html = `# Quento
 
@@ -41,40 +47,42 @@ $ npm run generate
 \`\`\`
 `
 
-
 @Component<NotesContentPage>({
   components: { NotesCard },
   layout: 'main',
   mounted() {
-    this.fetchNotes();
+    this.fetchNotes()
   }
 })
 export default class NotesContentPage extends Vue {
-
-    note : Note | null = null;
-  fetchNotes() {
-      this.note = Note.fromFirebase({
-      title:
-        'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
-      uid: '192hs983',
-      userDisplayName: 'Raheem Al-Ahmed ',
-      images: ['https://cdn-demo.algolia.com/bestbuy-0118/5477500_sb.jpg', 'https://images.unsplash.com/photo-1596450902102-0875071b55ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1353&q=80','https://images.unsplash.com/photo-1596449212953-4ca53eca4822?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80' ],
-
-      userPhotoUrl:
-        'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
-      createdAt: new Date(),
-
-      contents: html,
-      upVotes: 0,
-      views: 0,
-      subject : 'Physics',
-      grade : 11,
-    }, "ujfioje92");
-
+  note: Note | null = null
+  noteId: string | null = null
+  docNotFound = false
+  async fetchNotes() {
+    const loading = this.$vs.loading()
+    this.noteId = this.$route.params.id
+    if (!this.noteId) {
+      this.$router.push('/notes')
+      return
+    }
+    try {
+      const doc = await firestore.doc(`notes/${this.noteId}`).get()
+      const noteData = doc.data() as Note_t_F
+      if (!noteData) {
+        this.docNotFound = true
+        loading.close()
+        return
+      }
+      this.note = Note.fromFirebase(noteData, doc.id)
+      loading.close()
+      return
+    } catch (error) {
+      console.log({ error })
+      loading.close()
+    }
   }
-  goBack()
-  {
-      this.$router.back();
+  goBack() {
+    this.$router.push('/notes')
   }
 }
 </script>

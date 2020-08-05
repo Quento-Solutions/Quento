@@ -4,10 +4,11 @@
     :class="[{ 'show-overlay': bodyOverlay }]"
     id="notes-screen-container"
   >
-    <div id="notes-content-overlay"></div>
+  
 
-    <PostNotesModal v-model="notesModalActive" />
     <PreviewNotesModal v-model="previewModalActive" />
+    <PostNotesModal v-model="notesModalActive" />
+    <div id="notes-content-overlay"></div>
     <NotesSidebar />
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-1/2 md:w-2/3 w-full sidebar-spacer-margin">
@@ -67,7 +68,11 @@ import NotesCard from '~/components/NotesCard.vue'
 
 @Component<NotesPage>({
   components: { NotesCard, NotesSidebar, PostNotesModal, PreviewNotesModal },
-  layout: 'main'
+  layout: 'main',
+  mounted()
+  {
+    notesStore.GetMoreNotes();
+  }
 })
 export default class NotesPage extends Vue {
   get bodyOverlay() {
@@ -90,44 +95,10 @@ export default class NotesPage extends Vue {
     windowStore.SetNotesState(true)
   }
 
-  notesList: Note[] = [
-    Note.fromFirebase(
-      {
-        title:
-          'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
-        uid: '1892u3hs',
-        userDisplayName: 'Raheem Al-Ahmed ',
-        userPhotoUrl:
-          'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
-        createdAt: new Date(),
-
-        contents: '',
-        images: ['https://cdn-demo.algolia.com/bestbuy-0118/5477500_sb.jpg'],
-        upVotes: 0,
-        views: 0,
-        subject: 'Physics',
-        grade: 10
-      },
-      'ifwoifbw'
-    ),
-    Note.fromFirebase(
-      {
-        title:
-          'KubeCon + CloudNativeCon Virtual - August 17-20, 2020 - Connect from Anywhere',
-        uid: '192hs983',
-        userDisplayName: 'Raheem Al-Ahmed ',
-        userPhotoUrl:
-          'https://lh3.googleusercontent.com/a-/AOh14Ggj2FcgQxSBMwipYEazz4XFF3LqGlZZboUwHHKY',
-        createdAt: new Date(),
-        grade: 11,
-        contents: html,
-        upVotes: 0,
-        views: 0,
-        subject: 'Film'
-      },
-      'ujfioje92'
-    )
-  ]
+  get notesList()
+  {
+    return notesStore.ActiveNotes;
+  }
 }
 </script>
 

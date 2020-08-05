@@ -50,7 +50,6 @@ export const SubjectIconList :
     ComTech : 'bx-message-rounded-edit'
 } as const;
 
-
 export interface SubjectItem {
   name: Subject_O
   iconClass: typeof SubjectIconList[SubjectItem['name']]
@@ -60,10 +59,6 @@ export interface SubjectGroup {
   name: SubjectGroup_O;
   iconClass: string;
   items: SubjectItem[];
-}
-
-type Foo = {
-
 }
 
 export const NestedSubjectList: SubjectGroup[] = Object.entries(SubjectGroups).map( (kv, index) => 

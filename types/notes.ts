@@ -20,6 +20,12 @@ export interface Note_t
     id ?: string;
 }
 
+export interface Date_t_F
+{
+    seconds : number;
+    nanoseconds : number
+
+}
 export interface Note_t_F
 // How the data is stored in firebase
 {
@@ -31,7 +37,7 @@ export interface Note_t_F
     images ?: string[];
     contents ?: string;
 
-    createdAt : Date;
+    createdAt : Date_t_F | Date;
     upVotes : number;
     subject : Subject_O;
     grade : Grade_O;
@@ -50,7 +56,8 @@ export class Note
     static fromFirebase = (doc : Note_t_F, id ?: string) =>
     {
 
-        const obj = {...doc, createdAt : new Date(doc.createdAt), id};
+        const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
+        const obj = {...doc, createdAt, id};
         return new Note(obj)
     }
 

@@ -21,7 +21,8 @@
       <div class="text-xl font-bold w-full vx-row justify-center pb-2">
         Filters
       </div>
-      <div
+      
+      <!-- <div
         class="w-full rounded mb-4"
         style="background-color: gray; height: 2px;"
       />
@@ -40,8 +41,8 @@
           @mouseover="hoverStar(number)"
           @click="setStarsFilter(number)"
         />
-      </div>
-
+      </div> -->
+<!-- 
       <div class="vx-row w-full">
         <div class="vx-col w-1/2 text-ginger" style="">
           <vs-button
@@ -66,7 +67,7 @@
             >FILTER</vs-button
           >
         </div>
-      </div>
+      </div> -->
 
       <div
         class="w-full rounded my-4"
@@ -83,8 +84,7 @@
           :class="
             allSelected
               ? 'bxs-coin-stack text-purple-500'
-              : 'bx-coin-stack text-gray-300'
-          "
+              : 'bx-coin-stack text-gray-300'"
           style="transition-duration: 0.25s;"
         />
 
@@ -94,30 +94,29 @@
       </div>
       <vs-sidebar-group
         v-for="(subjectGroup, groupIndex) in subjectGroups"
-        :key="groupIndex"
+        :key="groupIndex + 4"
       >
         <template #header>
           <vs-sidebar-item arrow>
-            <vs-checkbox
-              v-model="currentSubjects"
-              :val="subjectGroup.name"
-              @click="allSelected = false"
-            >
-              <i class="bx text-3xl mr-2" :class="subjectGroup.iconClass" />
-              <div class="font-bold truncate">
+            <div class="vx-row w-full">
+            <!-- <vs-button /> -->
+              <i class="bx text-3xl" :class="subjectGroup.iconClass" />
+
+
+              <div class="font-bold truncate ml-4">
                 {{ subjectGroup.name }}
               </div>
-            </vs-checkbox>
+            </div>
           </vs-sidebar-item>
         </template>
+
         <vs-sidebar-item
           v-for="(subject, index) in subjectGroup.items"
           :key="index"
         >
           <vs-checkbox
-            v-model="currentSubjects"
-            :val="subject.name"
-            @click="allSelected = false"
+            v-model="SubjectDict[subject.name]"
+            @click="subjectClicked(subject.name)"
           >
             <i class="bx text-3xl mr-2" :class="subject.iconClass" />
             <div class="font-bold truncate">
@@ -126,45 +125,36 @@
           </vs-checkbox>
         </vs-sidebar-item>
       </vs-sidebar-group>
-      <div
+      <!-- <div
         class="w-full rounded my-4"
-        style="background-color: gray; height: 2px;"
-      />
+        style="background-color: gray; height: 2px;"/>
       <h6 class="font-bold mb-5">Grades</h6>
-                  <div
-              class="my-2 ml-6 vx-row items-center border-solid cursor-pointer"
-              @click="selectAllGrades()"
-            >
-              <i
-                class="bx text-3xl mr-2"
-                :class="
-                  allGradesSelected
-                    ? 'bxs-coin-stack text-purple-500'
-                    : 'bx-coin-stack text-gray-300'
-                "
-                style="transition-duration: 0.25s;"
-              />
+      <div
+        class="my-2 ml-6 vx-row items-center border-solid cursor-pointer"
+        @click="selectAllGrades()"
+      >
+        <i
+          class="bx text-3xl mr-2"
+          :class="allGradesSelected
+              ? 'bxs-coin-stack text-purple-500'
+              : 'bx-coin-stack text-gray-300'"
+          style="transition-duration: 0.25s;"
+        />
 
-              <div class="font-bold truncate text-xl">
-                All
-              </div>
-            </div>
+        <div class="font-bold truncate text-xl">
+          All
+        </div>
+      </div>
 
-
-        <vs-sidebar-item
-          v-for="(grade, index) in GradeOptions"
-          :key="index"
+      <vs-sidebar-item v-for="(grade, index) in GradeOptions" :key="index">
+        <vs-checkbox
+          v-model="currentGrades"
+          :val="grade"
+          @click="allGradesSelected = false"
         >
-          <vs-checkbox
-            v-model="currentGrades"
-            :val="grade"
-            @click="allGradesSelected = false"
-          >
-            <div class="font-bold truncate ml-6">
-              Grade {{grade}}
-            </div>
-          </vs-checkbox>
-        </vs-sidebar-item>
+          <div class="font-bold truncate ml-6">Grade {{ grade }}</div>
+        </vs-checkbox>
+      </vs-sidebar-item> -->
 
       <div class="vx-row w-full">
         <div class="vx-col w-1/2 text-ginger" style="">
@@ -198,33 +188,82 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { windowStore, notesStore } from '~/store'
-import { NestedSubjectList, GradeList, Grade_O } from '~/types/subjects'
+import {
+  NestedSubjectList,
+  GradeList,
+  Grade_O,
+  SubjectList,
+  Subject_O,
+  SubjectGroup_O,
+  SubjectGroups,
+  // SubjectGroupDict
+} from '~/types/subjects'
 
+  let s: {
+    [index in Subject_O]?: boolean
+  } = {}
+  SubjectList.forEach((subject) => (s[subject] = false))
+    const g: {
+    [index in SubjectGroup_O] : boolean
+  } = {
+    Sciences : false,
+    Arts : false,
+    Languages : false,
+    "Social Sciences" : false,
+    Technology : false,
+  }
+// huh.
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
+  GradeOptions = GradeList
+  currentGrades: Grade_O[] = [...GradeList]
+  allGradesSelected = true
 
-  GradeOptions = GradeList;
-  currentGrades : Grade_O[] = [...GradeList];
-  allGradesSelected = true;
-
-
-  selectAllGrades()
+  subjectClicked(name : Subject_O, clicked = true, value =!this.SubjectDict[name])
   {
-    if (!this.allGradesSelected)
+    this.allSelected = false;
+    if(value === true && !this.ActiveSubjectList.includes(name))
     {
-      this.allGradesSelected = true;
-      this.currentGrades = [...GradeList];
-    } else 
+      this.ActiveSubjectList.unshift(name);
+      if(this.ActiveSubjectList.length > 10)
+      {
+        const removedSubject = this.ActiveSubjectList.pop()!;
+        console.log({removedSubject});
+        this.SubjectDict[removedSubject] = false;
+      }
+    }
+    else 
     {
-      this.allGradesSelected = false;
+      this.ActiveSubjectList = this.ActiveSubjectList.filter(val => val !== name);
+    }
+    if(!clicked) this.SubjectDict[name] = value;
+    console.log("SUBJECT CLICKED", { name }, this.ActiveSubjectList);
+  }
+
+  subjectGroupClicked(name : SubjectGroup_O)
+  {
+    SubjectGroups[name].forEach((subject : Subject_O)=> this.subjectClicked(subject, false, true));
+    // this.SubjectGroupDict[name] = value;
+  }
+
+  selectAllGrades() {
+    if (!this.allGradesSelected) {
+      this.allGradesSelected = true
+      this.currentGrades = [...GradeList]
+    } else {
+      this.allGradesSelected = false
       this.currentGrades = []
     }
   }
 
   toggleNotesModal(val: boolean) {
+    // notesStore.GetMoreNotes()
     notesStore.ToggleNotesModule(val)
   }
+  SubjectDict = s;
+  ActiveSubjectList :Subject_O[] = [];
 
+  // selectedSubjects = SubjectList.map()
   currentSubjects = NestedSubjectList.flatMap((value) =>
     value.items.map((v2) => v2.name)
   )
@@ -234,9 +273,8 @@ export default class NotesSidebar extends Vue {
   selectAllSubjects() {
     console.log(this.allSelected)
     if (!this.allSelected) {
-      this.currentSubjects = NestedSubjectList.flatMap((value) =>
-        value.items.map((v2) => v2.name)
-      )
+      SubjectList.forEach((subject) => (this.SubjectDict[subject] = false))
+      this.ActiveSubjectList = [];
       this.allSelected = true
     } else {
       this.currentSubjects = []
@@ -278,7 +316,17 @@ export default class NotesSidebar extends Vue {
     this.hoverStars = this.filterStars = index
   }
 
-  filterSubjects() {}
+  async filterSubjects() {
+    const loading = this.$vs.loading()
+    notesStore.SetActiveFilter({
+      allGradesSelected : this.allGradesSelected,
+      filterSubjects : this.ActiveSubjectList,
+      filterGrades : this.currentGrades,
+      allSubjectsSelected : this.allSelected
+    });
+    await notesStore.GetMoreNotes();
+    loading.close()
+  }
 
   get open() {
     return !windowStore.isSmallScreen || windowStore.notesSidebarOpen
