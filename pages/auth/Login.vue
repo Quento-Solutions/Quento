@@ -24,7 +24,7 @@
             v-model="email"
             label="Email"
             color="primary"
-            placeholder="yeboi@ocdsb.ca"
+            placeholder="muhammad@ocdsb.ca"
             class="block"
           >
             <template #icon>
