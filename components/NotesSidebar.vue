@@ -239,7 +239,6 @@ export default class NotesSidebar extends Vue {
       if(this.ActiveSubjectList.length > 10)
       {
         const removedSubject = this.ActiveSubjectList.pop()!;
-        console.log({removedSubject});
         this.SubjectDict[removedSubject] = false;
       }
     }
@@ -271,7 +270,6 @@ export default class NotesSidebar extends Vue {
   subjectGroups = NestedSubjectList
 
   selectAllSubjects() {
-    console.log(this.allSelected)
     if (!this.allSelected) {
       SubjectList.forEach((subject) => (this.SubjectDict[subject] = false))
       this.ActiveSubjectList = [];

@@ -8,29 +8,19 @@ import {
 
 import type { User as FirebaseUser} from 'firebase'
 import type {FireAuthServerUser} from '@nuxtjs/firebase'
+import { User, UserData } from '~/types/user';
 import firestore from '~/plugins/firestore';
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase';
-import fireauth from '~/plugins/fireauth';
 
 export interface AuthState {
     user : User;
     loading : boolean;
 }
-export type User  = {
-    uid: string;
-    displayName ?: string | null;
-    email ?: string | null;
-    phoneNumber ?: string | null;
-    photoURL ?: string | null;
-    providerId ?: string;
-    emailVerified: boolean;
-    isAnonymous ?: boolean;
-    isAdmin ?: boolean;
-} | null;
 
 @Module({ stateFactory: true, name: 'auth', namespaced: true })
 export default class AuthModule extends VuexModule implements AuthState {
     user : User = null;
+    userData : UserData | null = null;
     loading = false;
     
     @Mutation
@@ -70,22 +60,9 @@ export default class AuthModule extends VuexModule implements AuthState {
             isAnonymous : firebaseUser.isAnonymous,
             uid : firebaseUser.uid
         }
-        if (user && user.uid)
-        {
-            firestore
-                .collection('users')
-                .doc(user.uid)
-                .get();
-            const role = await firestore
-                .collection('roles')
-                .doc(user.uid)
-                .get();
-            if (role.exists)
-            {
-                user = {...user, isAdmin : role.data()?.role === 'admin'};
-            }
-        }
+
         this.context.commit('SET_USER', (user));
+        await this.refreshUserData();
         this.context.commit('SET_LOADING', (false));
         
     }
@@ -124,6 +101,25 @@ export default class AuthModule extends VuexModule implements AuthState {
         await firebaseAuth.signOut();
         this.context.commit('SET_USER', (null));
     }
+
+    @Mutation
+    private SET_USER_DATA(userData : UserData | null)
+    {
+        this.userData = userData;
+    }
+    @Action({rawError : true})
+    public async refreshUserData()
+    {
+        if(!this.user || !this.user.uid) {
+            this.SET_USER_DATA(null);
+            return;
+        };
+
+        const fetchedUserData = await firestore.collection("users").doc(this.user.uid).get();
+        this.SET_USER_DATA(fetchedUserData.data() as UserData);
+        return;
+    }
+
 
     get CurrentUser()
     {
