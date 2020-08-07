@@ -16,19 +16,8 @@
         </template>
 
         <template #right>
-          <vs-avatar
-            class="notificationIcon icon"
-            badge
-            badge-position="top-right"
-          >
-            <i class="bx bx-bell" :style="`font-size: 2rem;`"></i>
-            <template slot="badge">
-              <div class="text">0</div>
-            </template>
-          </vs-avatar>
-
-          <h3 class="text-title">{{ userName }}</h3>
-
+          <div class="vx-row items-center" style="max-width: 50vw; flex-wrap: nowrap">
+          <h3 class="text-title truncate">{{ userName }}</h3>
           <vs-navbar-group id="profile">
             <vs-avatar class="profileIcon icon" badge badge-color="success">
               <img v-if="photoURL" :src="photoURL" />
@@ -51,6 +40,8 @@
               </vs-navbar-item>
             </template>
           </vs-navbar-group>
+          
+          </div>
         </template>
       </vs-navbar>
     </div>
