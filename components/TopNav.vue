@@ -6,6 +6,7 @@
         center-collapsed
       >
         <template #left>
+        
           <vs-avatar
             class="menuIcon icon"
             v-if="windowSmall"
@@ -18,6 +19,7 @@
         <template #right>
           <div class="vx-row items-center" style="max-width: 50vw; flex-wrap: nowrap">
           <h3 class="text-title truncate">{{ userName }}</h3>
+
           <vs-navbar-group id="profile">
             <vs-avatar class="profileIcon icon" badge badge-color="success">
               <img v-if="photoURL" :src="photoURL" />
