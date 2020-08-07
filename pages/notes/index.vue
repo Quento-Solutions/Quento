@@ -88,9 +88,8 @@ import NotesCard from '~/components/NotesCard.vue'
   async mounted() {
     const loading = this.$vs.loading()
     const notes = notesStore.GetMoreNotes()
-    const likes = notesStore.GetLikedSuggestions()
+    const likes = notesStore.GetLikedNotes()
     await Promise.all([notes, likes])
-    // this.notesSearched = true;
     loading.close()
   }
 })

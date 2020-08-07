@@ -189,7 +189,6 @@ export default class SuggestionsPage extends Vue {
   }
   toggleLike(id: string, time?: any) {
     suggestionsStore.ToggleLikedSuggestion(id)
-    console.log({ date: new Date(time.seconds) })
   }
 
   userLiked(id: string) {

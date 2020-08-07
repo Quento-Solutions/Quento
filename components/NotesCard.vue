@@ -198,7 +198,6 @@ export default class NotesCard extends Vue {
     const a = this.$vs.loading();
     await notesStore.ToggleLikedNote(id)
     a.close()
-    // console.log({ date: new Date(time.seconds) })
   }
   vfOptions = {
     autoplay: false,
