@@ -8,5 +8,3 @@ export default (!firebase.apps.length ? firebase.initializeApp(firebaseConfig) :
 const providerConstructor = firebase.auth?.GoogleAuthProvider!;
 export const GoogleAuthProvider = new providerConstructor();
 export const firebaseAuth = firebase?.auth!();
-// export const firestore = firebase.firestore;
-//lmao wtf quesiton mark exclamation mark btw
