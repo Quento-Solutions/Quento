@@ -29,6 +29,8 @@
       "@nuxtjs/pwa",
       "vuesax/types",
       "@nuxt/content",
+      "@nuxt/vue-app",
+      "@types/jest"
     ]
   }
 }
