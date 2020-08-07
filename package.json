@@ -55,16 +55,21 @@
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts build --target static && nuxt-ts export",
-    "stylelint": "stylelint '**/*.scss'"
+    "stylelint": "stylelint '**/*.scss'",
+    "test": "jest"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.0",
     "@nuxt/typescript-build": "^2.0.2",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
+    "@types/jest": "^26.0.9",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
+    "@vue/test-utils": "^1.0.3",
+    "babel-core": "^6.26.3",
     "eslint": "^7.5.0",
+    "jest": "^26.2.2",
     "node-sass": "^4.14.1",
     "prettier": "2.0.5",
     "sass-loader": "^9.0.2",
@@ -73,6 +78,8 @@
     "stylelint-config-standard": "^20.0.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
+    "ts-jest": "^26.1.4",
+    "vue-jest": "^3.0.6",
     "vuex-module-decorators": "^0.17.0"
   }
 }

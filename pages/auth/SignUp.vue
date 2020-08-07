@@ -13,7 +13,7 @@
             v-model="email"
             label="Email"
             color="primary"
-            placeholder="muhammad@ocdsb.ca"
+            placeholder="studentEmail@ocdsb.ca"
             class="block"
           >
             <template #icon>
