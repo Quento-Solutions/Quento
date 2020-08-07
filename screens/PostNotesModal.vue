@@ -129,7 +129,6 @@ import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 
 import { authStore } from '~/store'
-import { auth } from 'firebase'
 
 interface imageSrc {
   error: boolean
@@ -212,11 +211,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
     const itemRemove = refs.itemRemove
     const srcs = refs.srcs.filter((src) => !src.remove).map((src) => src.src!)
     const imageUpload = refs.filesx
-    // window.refs= refs;
-    // const
-    // Figure out how to retrieve the image file + url, render it as a preview note card, and then handle backend shit
-    console.log({ imageUpload, refs })
-
+    
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
