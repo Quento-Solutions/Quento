@@ -72,7 +72,6 @@ export default class AuthenticationMixin extends Vue {
   }
 
   async LoginEmailPassword(email: string, password: string) {
-    console.log({email, password});
     this.resetError()
     if (!email || !password) {
       this.errorMessage = 'All Fields Must Be Filled In'

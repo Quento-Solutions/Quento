@@ -11,17 +11,16 @@ import { firestore as store } from 'firebase/app'
 import { v4 } from 'uuid';
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage';
+import firebase from '~/plugins/firebase';
+
+// Fix the googl 
 import {
-  GradeList,
   Grade_O,
-  NestedSubjectList,
-  SubjectIconList,
   SubjectList,
   Subject_O,
   SortOptions_O
 } from '~/types/subjects'
 
-import firebase from '~/plugins/firebase'
 type QueryType = store.Query<store.DocumentData>
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
@@ -56,7 +55,6 @@ export default class NotesModule extends VuexModule {
   {
     this.IsReset = val;
   }
-
   
   @Mutation
   public RESET_NOTES()
@@ -80,6 +78,7 @@ export default class NotesModule extends VuexModule {
   public async SetActiveFilter(Options: FilterOptions) {
     this.SET_FILTER(Options)
   }
+
   @Mutation
   private SET_FILTER({allSubjectsSelected,filterGrades,filterSubjects, sortSelect}: FilterOptions) {
     this.ActiveNotes = []
@@ -97,22 +96,16 @@ export default class NotesModule extends VuexModule {
   }
 
   @Mutation
-  private SET_LIKED_SUGGESTIONS(likedSuggestions: string[]) {
-    this.likedPosts = likedSuggestions
+  private SET_LIKED_NOTES(likedSuggestions ?: string[]) {
+    this.likedPosts = likedSuggestions || [];
   }
 
   @Action({ rawError: true })
-  public async GetLikedSuggestions() {
-    const userId = authStore.user?.uid
-    if (!userId) return
-    const user = await firestore.collection('users').doc(userId).get()
-
-    const userData = user.data()
-    const likedSuggestions = user.data()?.likedNotes
-    if (likedSuggestions) {
-      this.SET_LIKED_SUGGESTIONS(likedSuggestions)
-    }
+  public async GetLikedNotes() {
+    const likedNotes = authStore.userData?.likedNotes;
+    this.SET_LIKED_NOTES(likedNotes);
   }
+
   @Action({ rawError: true })
   public async IncrementView(id: string) {
     const updateViews = await firestore
@@ -192,7 +185,6 @@ export default class NotesModule extends VuexModule {
   @Action({})
   public async GetMoreNotes() {
     if (this.EndOfList) {
-      console.log('END OF LIST')
       return
     }
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
@@ -213,18 +205,16 @@ export default class NotesModule extends VuexModule {
     }
     try {
       const snapshot = await query.get()
-      console.log({ snapshot })
       const notes = snapshot.docs.map((doc) =>
         Note.fromFirebase(doc.data() as Note_t_F, doc.id)
       )
 
-      console.log({ notes })
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
-      console.log({ stateNotes: this.ActiveNotes })
     } catch (error) {
       console.log({ error })
+      throw(error);
     }
   }
   @Action({ rawError: true })
@@ -241,12 +231,10 @@ export default class NotesModule extends VuexModule {
         const snapshot = await imageRef.put(image);
          const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${snapshot.ref.bucket}/o/${encodeURIComponent(imageReuploadName)}?alt=media`;
         // return await snapshot.ref.;
-        console.log({ext, imageName, imageRef, imageUrl});
         return imageUrl;
     // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
     })
     const imageLinks = await Promise.all(uploadRefs);
-    console.log({imageLinks});
     const newNote = note.toFirebase();
     newNote.images = imageLinks
     try {

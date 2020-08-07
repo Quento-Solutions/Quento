@@ -214,8 +214,6 @@
         }
       },
       removeFile(index){
-          console.log({index});
-
         this.itemRemove.push(index)
         this.$emit('on-delete', this.filesx[index])
         setTimeout(()=>{
