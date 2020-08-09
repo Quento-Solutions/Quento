@@ -45,7 +45,7 @@ export default class NotesModule extends VuexModule {
   ActiveGrade : Grade_O  = "ALL"
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
-  SortSelect : SortOptions_O = "upVotes"
+  SortSelect : SortOptions_O = "createdAt"
 
   NotesPerPage = 5
   EndOfList = false

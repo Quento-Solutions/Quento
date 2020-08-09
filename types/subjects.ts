@@ -34,31 +34,31 @@ export const SubjectIconList :
     [index in Subject_O | SubjectGroup_O] : string;
 } = 
 {
-    Sciences : 'bxs-magic-wand',
-    Languages : 'bxl-audible',
+    Sciences : 'bx-bulb',
+    Languages : 'bx-pen',
     Arts : 'bx-palette',
-    "Social Sciences" : 'bx-group',
-    Technology : 'bx-laptop',
+    "Social Sciences" : 'bx-world',
+    Technology : 'bx-server',
 
     Math : 'bx-brain',
     'Physics' : 'bx-atom',
-    Chemistry : 'bx-bong',
-    Biology : 'bx-hive',
+    Chemistry : 'bxs-flask',
+    Biology : 'bx-dna',
     'English' : 'bx-book-bookmark',
-    French : 'bxs-map-alt',
-    'Spanish' : 'bx-church',
-    "Visual Arts" : 'bx-brush',
-    Music : 'bx-music',
+    French : 'bx-book',
+    'Spanish' : 'bx-bible',
+    "Visual Arts" : 'bxs-brush',
+    Music : 'bxs-music',
     Dance : 'bxs-guitar-amp',
-    Drama : 'bxs-user-voice',
+    Drama : 'bx-mask',
     Film : 'bx-camera-movie',
     TOK : 'bx-network-chart',
-    'Geography' : 'bx-landscape',
+    'Geography' : 'bx-globe',
     History : 'bxs-landmark',
     Business : 'bx-briefcase',
-    ICS : 'bx-terminal',
-    ITGS : 'bx-globe-alt',
-    ComTech : 'bx-message-rounded-edit'
+    ICS : 'bx-code-alt',
+    ITGS : 'bx-data',
+    ComTech : 'bxs-component'
 } as const;
 
 export interface SubjectItem {
