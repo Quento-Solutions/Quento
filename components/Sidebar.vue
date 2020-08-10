@@ -11,7 +11,10 @@
       <template #logo>
         <vs-sidebar-item>
           <template #icon>
-            <img :src="require(`~/assets/images/QuentoLogoMain.png`)" style="width:2.7rem;height:3rem;"/>
+            <img
+              :src="require(`~/assets/images/QuentoLogoMain.png`)"
+              style="width: 2.7rem; height: 3rem;"
+            />
           </template>
           <div style="">QUENTO</div>
         </vs-sidebar-item>
@@ -27,20 +30,20 @@
         {{ item.name }}
       </vs-sidebar-item>
 
-        <vs-sidebar-item href="https://github.com/Quento-Solutions">
-          <template #icon>
-           <i class="sidebar-icon bx bxl-github"></i>
-          </template>
-          <div style="">Github</div>
-        </vs-sidebar-item>
+      <vs-sidebar-item href="https://github.com/Quento-Solutions">
+        <template #icon>
+          <i class="sidebar-icon bx bxl-github"></i>
+        </template>
+        <div style="">Github</div>
+      </vs-sidebar-item>
 
-        <vs-sidebar-item href="https://discord.gg/pfyFWus">
-          <template #icon>
-           <i class="sidebar-icon bx bxl-discord"></i>
-          </template>
-          <div style="">Discord</div>
-        </vs-sidebar-item>
-       
+      <vs-sidebar-item href="https://discord.gg/pfyFWus">
+        <template #icon>
+          <i class="sidebar-icon bx bxl-discord"></i>
+        </template>
+        <div style="">Discord</div>
+      </vs-sidebar-item>
+
       <vs-sidebar-group>
         <template #header>
           <vs-sidebar-item arrow>
@@ -63,8 +66,7 @@
         </vs-sidebar-item>
       </vs-sidebar-group>
 
-      <template #footer>
-      </template>
+      <template #footer> </template>
     </vs-sidebar>
   </div>
 </template>
@@ -93,35 +95,41 @@ export default class Sidebar extends Vue {
     },
 
     {
-      name : "Notes",
-      id : "notes",
-      icon : "bx bxs-note",
-      href : '/notes'
+      name: 'Notes',
+      id: 'notes',
+      icon: 'bx bxs-note',
+      href: '/notes'
     },
     {
-      name : "Questions",
-      id : "questions",
-      icon : "bx bx-comment-dots",
-      href : "/questions"
+      name: 'Questions',
+      id: 'questions',
+      icon: 'bx bx-comment-dots',
+      href: '/questions'
     },
-        {
+    {
+      name: 'Newsletter',
+      id: 'newsletters',
+      icon: 'bx bxs-envelope-open',
+      href: '/newsletters'
+    },
+    {
       name: 'Suggestions',
       id: 'suggestions',
       icon: 'bx bxs-message-square-edit',
       href: '/suggestions'
-    },
+    }
   ] as const
 
   ComingSoonGroup = [
     {
       name: 'Projects',
       id: 'projects',
-      icon: 'bx bx-meteor',
+      icon: 'bx bx-meteor'
     },
     {
       name: 'Contact',
       id: 'contact',
-      icon: 'bx bxs-contact',
+      icon: 'bx bxs-contact'
     }
   ]
 
