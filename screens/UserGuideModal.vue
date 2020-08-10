@@ -7,13 +7,13 @@
       <p>
         Quento is a growing community of students creating a better platform for
         online learning. Checkout our
-        <nuxt-link to="/notes">Posted Notes</nuxt-link> feature where you can
+        <nuxt-link @click="userGuideStoreOpen = false" to="/notes">Posted Notes</nuxt-link> feature where you can
         use the resources provided by other students. If you have any
         <i class="bx bx-bulb text-xl" /> ideas, please add a new
-        <nuxt-link to="/suggestions">Suggestion</nuxt-link> to make our platform
+        <nuxt-link @click="userGuideStoreOpen = false" to="/suggestions">Suggestion</nuxt-link> to make our platform
         even better. To keep up with the latest developments, join our
         <i class="bx bxl-discord text-xl" />
-        <nuxt-link to="">Discord Channel</nuxt-link>
+        <a href="https://discord.gg/pfyFWus" target="_blank">Discord Channel</a>
         where new updates are being announced every day.
       </p>
     </div>
@@ -23,7 +23,7 @@
           Don't Show Again
         </vs-checkbox>
         <vs-button @click="userGuideStoreOpen = false" transparent>
-          AIGHT FIRE <i class="bx bxs-flame text-xl " style="color : red"/>
+          AIGHT FIRE &nbsp;<i class="bx bxs-flame text-xl " style="color : red"/>
         </vs-button>
       </div>
     </template>
