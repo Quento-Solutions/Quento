@@ -343,7 +343,7 @@ export default class NotesSidebar extends Vue {
   }
 
   get open() {
-    return !windowStore.isSmallScreen || windowStore.notesSidebarOpen
+    return !windowStore.smallerThanMd || windowStore.notesSidebarOpen
   }
 
   set open(open) {
