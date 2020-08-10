@@ -1,11 +1,11 @@
 <template>
   <div class="vx-row justify-center px-8">
     <h1 class="mb-12 text-title text-5xl mr-2">Newsletter Articles</h1>
-    <VxCard v-for="n in numberOfArticles" >
-      {{n}}
+    <div v-if="loaded">
+    <VxCard v-for="(item, index) in newsletters" :key="index" class="mb-6">
       <div class="w-full text-ginger mb-20">
-        <h1 v-html="loaded? news[n-1].title:''"></h1>
-        <p v-html="loaded? $md.render(news[n-1].content):''"></p>
+        <h1>{{item.title}}</h1>
+        <div v-html="$md.render(item.content)" class="markdown-content"></div>
       </div>
       <!-- <div class="w-full text-ginger mb-20">
         <h1 v-html="loaded? news[].title:''"></h1>
@@ -16,6 +16,7 @@
         <p v-html="loaded? $md.render(news[2].content):''"></p>
       </div> -->
     </VxCard>
+    </div>
   </div>
 </template>
 
@@ -24,42 +25,33 @@ import { Vue, Component } from 'nuxt-property-decorator'
 import { newslettersStore } from '~/store'
 import VxCard from '~/components/VxCard.vue'
 
-@Component<Newsletters>({
+
+@Component<NewslettersPage>({
   layout: 'main',
   components: { VxCard },
   async mounted() {
     this.GetNewsletters()
   }
 })
-export default class Newsletters extends Vue {
+export default class NewslettersPage extends Vue {
   numberOfArticles = 3
   loaded = false
-  // contents:string[] = []
-  // titles:string[] = []
-  news = []
+
+  get newsletters()
+  {
+    return newslettersStore.newsletterList;
+  }
+
   async GetNewsletters() {
     const self = this
+    const loading = this.$vs.loading();
     try {
-      const newsletters = await newslettersStore
-        .GetNewsletters()
-        .then(function (value) {
-          if (value) {
-            for (let i = 0; i < value.length; i++) {
-              // self.contents[i] = (value[i].content);
-              // self.titles[i] = (value[i].title);
-              self.news[i] = {
-                title: value[i].title,
-                content: value[i].content
-              }
-              self.numberOfArticles = value.length;
-              // banana.push(d)
-              console.log(self.news[0])
-            }
-          }
-        })
+      await newslettersStore.GetNewsletters();
     } catch (error) {
       console.log({ error })
     }
+    loading.close();
+
     this.loaded = true
     return
     // console.log(this.note)
@@ -67,4 +59,12 @@ export default class Newsletters extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+
+.markdown-content{
+
+  color : pink !important;
+}
+
+
+</style>
