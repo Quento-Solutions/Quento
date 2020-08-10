@@ -6,21 +6,28 @@
     class="rounded-md w-full notes-sidebar"
     style="z-index: 2; border-radius: 1rem; height: auto;"
   >
-    <template #logo>
-      <vs-button icon danger @click="open = false">
-        <i class="bx bx-x text-2xl" />
-      </vs-button>
-      <vs-button warn @click="toggleNotesModal(true)">
+    <div>
+      <div class="vx-row w-full justify-center p-4">
+
+        <vs-button danger @click="open = false" class="w-full close-menu">
+        <i class="bx bx-x text-4xl" />
         <div class="text-2xl font-ginger-b">
-          Posted Note &nbsp;
+          &nbsp;Close Menu
         </div>
-        <i class="bx bx-notepad text-4xl" />
+      </vs-button> 
+
+      <vs-button warn @click="toggleNotesModal(true)" class="w-full">
+        <i class="bx bxs-plus-square text-4xl" />
+        <div class="text-2xl font-ginger-b">
+          &nbsp; Post New Note 
+        </div>
       </vs-button>
-    </template>
-    <div class="sidebar-content p-6 pt-0 w-full">
-      <div class="text-xl font-bold w-full vx-row justify-center pb-2">
-        Filters
       </div>
+    </div>
+    <div class="sidebar-content p-6 pt-0 w-full">
+      <!-- <div class="text-xl font-bold w-full vx-row justify-center pb-2">
+        Filters
+      </div> -->
       
       <!-- <div
         class="w-full rounded mb-4"
@@ -69,13 +76,17 @@
         </div>
       </div> -->
 
-      <div
+      <!-- <div
         class="w-full rounded my-4"
         style="background-color: gray; height: 2px;"
-      />
-      <h6 class="font-bold mb-5">Subjects</h6>
+      /> -->
+      <!-- <h6 class="font-bold mb-5">Subjects</h6> -->
 
-      <div
+
+
+      <!-- <h6 class="font-bold mb-5">Subjects</h6> -->
+
+      <!-- <div
         class="my-2 ml-6 vx-row items-center border-solid cursor-pointer"
         @click="selectAllSubjects()"
       >
@@ -91,8 +102,10 @@
         <div class="font-bold truncate text-xl">
           All
         </div>
-      </div>
+      </div> -->
+      <div class="filter-options">
       <vs-sidebar-group
+      color="#9331e1"
         v-for="(subjectGroup, groupIndex) in subjectGroups"
         :key="groupIndex + 4"
       >
@@ -115,6 +128,7 @@
           :key="index"
         >
           <vs-checkbox
+            color="#4D7C8A"
             v-model="SubjectDict[subject.name]"
             @click="subjectClicked(subject.name)"
           >
@@ -125,14 +139,12 @@
           </vs-checkbox>
         </vs-sidebar-item>
       </vs-sidebar-group>
-      <div
-        class="w-full rounded my-4"
-        style="background-color: gray; height: 2px;"/>
+      </div>
 
         <vs-select
         label="Grade"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
         placeholder="Grade"
         v-model="gradeSelect"
       >
@@ -149,7 +161,7 @@
         <vs-select
         label="Sort By"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
         placeholder="Sort By"
         v-model="sortSelect"
       >
@@ -164,29 +176,25 @@
       </vs-select>
 
       <div class="vx-row w-full">
-        <div class="vx-col w-1/2 text-ginger" style="">
+        
+        
           <vs-button
-            class="text-3xl text-ginger-b p-2 w-full"
+            class="text-3xl text-ginger-b p-2 w-full filter-button"
             style="font-size: 1.25rem;"
             size="lg"
-            :active="false"
-            color="#808080"
-            border
+            color="#99b8d1"
             @click="clearFilter()"
-            >CLEAR</vs-button
+            >CLEAR FILTERS</vs-button
           >
-        </div>
 
-        <div class="vx-col w-1/2 text-ginger" style="">
           <vs-button
-            class="text-3xl text-ginger-b p-2 w-full"
+            class="text-3xl text-ginger-b p-2 w-full filter-button"
             style="font-size: 1.25rem;"
             size="lg"
-            color="success"
+            color="#b553ea"
             @click="filterSubjects()"
-            >GO</vs-button
+            >FILTER</vs-button
           >
-        </div>
       </div>
     </div>
   </vs-sidebar>
@@ -205,7 +213,6 @@ import {
   SubjectGroups,
   SortOptionsList,
   SortOptions_O
-  // SubjectGroupDict
 } from '~/types/subjects'
 
   let s: {
@@ -221,7 +228,7 @@ import {
     "Social Sciences" : false,
     Technology : false,
   }
-// huh.
+
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
   GradeList = GradeList
@@ -239,7 +246,6 @@ export default class NotesSidebar extends Vue {
       if(this.ActiveSubjectList.length > 10)
       {
         const removedSubject = this.ActiveSubjectList.pop()!;
-        console.log({removedSubject});
         this.SubjectDict[removedSubject] = false;
       }
     }
@@ -263,7 +269,6 @@ export default class NotesSidebar extends Vue {
   SubjectDict = s;
   ActiveSubjectList :Subject_O[] = [];
 
-  // selectedSubjects = SubjectList.map()
   currentSubjects = NestedSubjectList.flatMap((value) =>
     value.items.map((v2) => v2.name)
   )
@@ -271,7 +276,6 @@ export default class NotesSidebar extends Vue {
   subjectGroups = NestedSubjectList
 
   selectAllSubjects() {
-    console.log(this.allSelected)
     if (!this.allSelected) {
       SubjectList.forEach((subject) => (this.SubjectDict[subject] = false))
       this.ActiveSubjectList = [];
@@ -292,7 +296,7 @@ export default class NotesSidebar extends Vue {
       this.selectAllSubjects();
     }
     this.gradeSelect = 'ALL';
-    this.sortSelect = "upVotes";
+    this.sortSelect = "createdAt";
   }
   setFilter() {
     this.activeStars = this.hoverStars = this.filterStars
@@ -322,6 +326,11 @@ export default class NotesSidebar extends Vue {
   }
 
   async filterSubjects() {
+    if (this.ActiveSubjectList.length == 0) {
+        this.allSelected = false
+        this.selectAllSubjects();
+      }
+    console.log(this.ActiveSubjectList)
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
       sortSelect : this.sortSelect,
@@ -334,7 +343,7 @@ export default class NotesSidebar extends Vue {
   }
 
   get open() {
-    return !windowStore.isSmallScreen || windowStore.notesSidebarOpen
+    return !windowStore.smallerThanMd || windowStore.notesSidebarOpen
   }
 
   set open(open) {
@@ -349,5 +358,32 @@ export default class NotesSidebar extends Vue {
 }
 .open {
   transform: translate(0%);
+}
+// sidebar subject hover effect
+.vs-sidebar__item:hover {
+  padding-left: 30px !important;
+}
+.filter-options {
+  padding:0 10px !important;
+}
+.vs-sidebar__item__arrow {
+  margin-right: 50px !important;
+}
+.vs-sidebar__group__header {
+  margin-bottom: 3% !important;
+}
+.sort-option {
+  margin-top: 40px;
+}
+.filter-button {
+  letter-spacing: 0.1rem;
+}
+.close-menu {
+  display:none;
+}
+@media only screen and (max-width: 991px) {
+  .close-menu {
+  display:block;
+  }
 }
 </style>

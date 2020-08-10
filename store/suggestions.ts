@@ -1,25 +1,17 @@
-import {
-  Module,
-  VuexModule,
-  MutationAction,
-  Action,
-  Mutation
-} from 'vuex-module-decorators'
+import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import type { firestore as store } from 'firebase'
-import { firestore as YEE } from 'firebase/app'
+import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from './index'
-
-import { Suggestion, Suggestion_t_F } from '~/types/suggestions'
-import firebase from '~/plugins/firebase'
-type QueryType = store.Query<store.DocumentData>
+import firebase from '~/plugins/firebase';
+// const a  = firebase.
+import { Suggestion,  } from '~/types/suggestions'
 
 @Module({ stateFactory: true, name: 'suggestions', namespaced: true })
 export default class SuggestionsModule extends VuexModule {
   field: keyof Suggestion = 'upVotes'
   pageSize = 15
   currentPageSize = 15
-    sortOrder : 'asc' | 'desc' = 'desc';
+  sortOrder: 'asc' | 'desc' = 'desc'
   likedSuggestions: string[] = []
   suggestions: Suggestion[] = []
 
@@ -45,7 +37,7 @@ export default class SuggestionsModule extends VuexModule {
     } catch (error) {
       console.log({ error })
     }
-    return;
+    return
   }
   @Mutation
   private SET_SUGGESTIONS({ suggestions }: { suggestions: Suggestion[] }) {
@@ -58,20 +50,24 @@ export default class SuggestionsModule extends VuexModule {
   }
 
   @Mutation
-  private SET_LIKED_SUGGESTIONS(likedSuggestions: string[]) {
-    this.likedSuggestions = likedSuggestions
+  private SET_LIKED_SUGGESTIONS(likedSuggestions?: string[]) {
+    this.likedSuggestions = likedSuggestions || []
   }
 
   @Mutation
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
     var index = this.likedSuggestions.indexOf(suggestionId)
-    const suggestionIndex = this.suggestions.findIndex((doc) => doc.id! == suggestionId)!;
+    const suggestionIndex = this.suggestions.findIndex(
+      (doc) => doc.id! == suggestionId
+    )!
     if (index === -1) {
       this.likedSuggestions.push(suggestionId)
-      this.suggestions[suggestionIndex].upVotes++;
+      this.suggestions[suggestionIndex].upVotes++
     } else {
-      this.likedSuggestions.splice(index, 1);
-      this.suggestions[suggestionIndex].upVotes != 0 ? this.suggestions[suggestionIndex].upVotes-- : '';  
+      this.likedSuggestions.splice(index, 1)
+      this.suggestions[suggestionIndex].upVotes != 0
+        ? this.suggestions[suggestionIndex].upVotes--
+        : ''
     }
   }
   @Action({ rawError: true })
@@ -81,82 +77,73 @@ export default class SuggestionsModule extends VuexModule {
         .collection('users')
         .doc(authStore.CurrentUser?.uid)
         .update({
-          likedSuggestions: YEE.FieldValue.arrayRemove(id)
+          likedSuggestions: FirestoreModule.FieldValue.arrayRemove(id)
         })
-        const updateSuggestion = firestore.collection('suggestions').doc(id).update({
-            'upVotes' : YEE.FieldValue.increment(-1),
+      const updateSuggestion = firestore
+        .collection('suggestions')
+        .doc(id)
+        .update({
+          upVotes: FirestoreModule.FieldValue.increment(-1)
         })
-        await Promise.all([updateUser, updateSuggestion]);
-
+      await Promise.all([updateUser, updateSuggestion])
     } else {
-        const updateUser = firestore
+      const updateUser = firestore
         .collection('users')
         .doc(authStore.CurrentUser?.uid)
         .update({
-          likedSuggestions: YEE.FieldValue.arrayUnion(id)
+          likedSuggestions: FirestoreModule.FieldValue.arrayUnion(id)
         })
-        const updateSuggestion = firestore.collection('suggestions').doc(id).update({
-            'upVotes' : YEE.FieldValue.increment(1),
+      const updateSuggestion = firestore
+        .collection('suggestions')
+        .doc(id)
+        .update({
+          upVotes: FirestoreModule.FieldValue.increment(1)
         })
-        await Promise.all([updateUser, updateSuggestion]);
+      await Promise.all([updateUser, updateSuggestion])
     }
-    this.TOGGLE_LIKED_SUGGESTION(id);
-    return;
+    this.TOGGLE_LIKED_SUGGESTION(id)
+    return
   }
   @Mutation
-  private SET_SORT_BY({field, order} : { field : "createdAt" | "upVotes", order : 'asc' | 'desc', })
-  {
-    this.field = field;
-    this.sortOrder = order;
-    this.currentPageSize = this.pageSize;
+  private SET_SORT_BY({
+    field,
+    order
+  }: {
+    field: 'createdAt' | 'upVotes'
+    order: 'asc' | 'desc'
+  }) {
+    this.field = field
+    this.sortOrder = order
+    this.currentPageSize = this.pageSize
   }
-  @Action({rawError : true})
-  public async SetSortBy(sortBy : "createdAt" | "upVotes")
-  {
-    if(this.field == sortBy || !sortBy) return;
-    switch(sortBy){
-        case "createdAt":
-            this.SET_SORT_BY({field : sortBy, order : 'desc' })
-            break;
-        case "upVotes":
-            this.SET_SORT_BY({field : sortBy, order : 'desc' })
-            break;
+  @Action({ rawError: true })
+  public async SetSortBy(sortBy: 'createdAt' | 'upVotes') {
+    if (this.field == sortBy || !sortBy) return
+    switch (sortBy) {
+      case 'createdAt':
+        this.SET_SORT_BY({ field: sortBy, order: 'desc' })
+        break
+      case 'upVotes':
+        this.SET_SORT_BY({ field: sortBy, order: 'desc' })
+        break
     }
-    
-    return await this.GetSuggestions();
+
+    return await this.GetSuggestions()
   }
   @Action({ rawError: true })
   public async GetLikedSuggestions() {
-    console.log({ user: authStore.user })
-    const userId = authStore.user?.uid
-    console.log({ userId })
-    if (!userId) return
-    const user = await firestore.collection('users').doc(userId).get()
-
-    const userData = user.data()
-    console.log({ userData })
-    const likedSuggestions = user.data()?.likedSuggestions
-
-    console.log({ likedSuggestions })
-    if (likedSuggestions) {
-      this.SET_LIKED_SUGGESTIONS(likedSuggestions)
-    }
+    const likedSuggestions = authStore.userData?.likedSuggestions
+    this.SET_LIKED_SUGGESTIONS(likedSuggestions)
   }
 
   @Action({ rawError: true })
   public async GetNextPage() {
-    try {
-      if (this.currentPageSize > this.suggestions.length) {
-        return
-      }
-      console.log('GETTING MORE BOIS')
-
-      const numberDocsToGet = this.currentPageSize + this.pageSize
-      this.SET_PAGE_SIZE(numberDocsToGet)
-      this.GetSuggestions()
-    } catch (error) {
-      console.log({ error })
+    if (this.currentPageSize > this.suggestions.length) {
+      return
     }
+    const numberDocsToGet = this.currentPageSize + this.pageSize
+    this.SET_PAGE_SIZE(numberDocsToGet)
+    this.GetSuggestions()
   }
 
   @Action({ rawError: true })
@@ -181,5 +168,6 @@ export default class SuggestionsModule extends VuexModule {
     const docRef = await firestore
       .collection('suggestions')
       .add(docData.toFirebase())
+    return docRef
   }
 }

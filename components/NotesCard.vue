@@ -147,7 +147,7 @@
       </vs-avatar>
       <vs-tooltip>
       <vs-avatar class="icon-small">
-        <i class="bx bx-meteor"></i>
+        <i class="bx bx-show"></i>
         <template #badge>
           {{ note.views }}
         </template>
@@ -158,7 +158,7 @@
       </vs-tooltip>
 
       <vs-avatar class="icon-small">
-        <i class="bx bx-save"></i>
+        <i class="bx bx-bookmark"></i>
       </vs-avatar>
     </div>
   </VxCard>
@@ -198,7 +198,6 @@ export default class NotesCard extends Vue {
     const a = this.$vs.loading();
     await notesStore.ToggleLikedNote(id)
     a.close()
-    // console.log({ date: new Date(time.seconds) })
   }
   vfOptions = {
     autoplay: false,

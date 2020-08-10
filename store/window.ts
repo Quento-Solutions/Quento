@@ -79,6 +79,11 @@ export default class WindowModule extends VuexModule {
     {
         return this.windowWidth < 992;
     }
+    public get smallerThanMd()
+    {
+        return this.windowWidth < 1024;
+    }
+    
     
     public get isLargeScreen()
     {
