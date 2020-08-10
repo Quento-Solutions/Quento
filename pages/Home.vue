@@ -42,7 +42,7 @@
                 class="vx-col shadow-md  m-4 text-bold"
                 style="font-weight : bold"
                 size="xl"
-                href="https://docs.google.com/forms/d/e/1FAIpQLScrpPrTcpq41DJTXsmu1AvLOBXVHjG7vh2s_Q62M8oPx1ibmA/viewform?usp=sf_link"
+                @click ="pushNewsletter()"
                 >Subscribe To News Letter
                 </vs-button>
             </div>
@@ -84,6 +84,10 @@ export default class Home extends Vue {
   PushSuggestionsPage()
   {
     this.$router.push("/suggestions");
+  }
+  pushNewsletter()
+  {
+    this.$router.push("/newsletters");
   }
 
 }
