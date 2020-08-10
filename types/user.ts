@@ -14,5 +14,6 @@ export interface UserData {
     email : string;
     likedSuggestions ?: string[];
     likedNotes ?: string[];
-    
+    newsletter ?: boolean;
+    userGuideClosed ?: boolean;
 }
