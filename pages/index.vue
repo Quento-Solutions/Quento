@@ -19,7 +19,8 @@
       </section>
       <section id="splash">
          <div class="mainContent absolute font-ginger-b font-white">
-            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000" style="color:white;">A collection of utilities created by <span style="color:#ff70ab;">students</span>, for <span style="color:#ff70ab;">students</span>.</h1>
+            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000"><h1 style="color:white;">School Is Dumb. <span style="color:#ff70ab;">You Don't Have to Be.</span></h1>
+            <h2  style="color:white;" class="mt-4">A learning platform created by <span style="color:#ff70ab;">students</span>, for <span style="color:#ff70ab;">students</span>.</h2></div>
             <button class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;" @click="$router.push('/auth/signup')">Sign up for the BETA</button>
             <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.gg/pfyFWus" style="color:white;"><img src="../assets/images/discord-white.png">Join us on Discord</a></button>
          </div>

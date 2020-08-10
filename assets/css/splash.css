@@ -155,6 +155,11 @@ textarea {
     letter-spacing:-0.2vw;
     line-height:5vw;
 }
+#splash .mainContent h2{
+    font-size:2.5vw;
+    letter-spacing:-0.1vw;
+    line-height:2.5vw;
+}
 #splash .mainContent .link1{
     font-size:1vw;
     margin-top:1vw;
