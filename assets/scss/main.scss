@@ -37,6 +37,12 @@
     min-height: 60vh !important;
   }
 }
+.content-popup.no-footer {
+  .vs-dialog--scroll .vs-dialog__content {
+    max-height: calc(90vh);
+  }
+}
+
 .vs-select__options {
   z-index: 1000000000;
 }
