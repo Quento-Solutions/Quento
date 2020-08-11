@@ -8,8 +8,10 @@
     <!-- Card Header -->
     <div class="vx-row w-full justify-between items-center">
       <!-- Profile Picture -->
-      <div class="">
-        <vs-tooltip>
+      <div class="justify-start w-5/6 m-0">
+      <div class="vx-row w-full justify-start items-center">
+      <div class="vx-col">
+        <vs-tooltip class="inline-block">
           <vs-avatar class="icon">
             <img v-if="note.userPhotoUrl" :src="note.userPhotoUrl" />
             <template #text v-else>
@@ -21,18 +23,20 @@
           </template>
         </vs-tooltip>
       </div>
+      <div class="vx-col">
       <!-- User name -->
-      <div class="lg:w-1/3 w-1/2 truncate">
-        <div class="vx-row w-full truncate text-xl text-ginger-b">
-          <div class="truncate">
+        <div class="text-xl text-ginger-b">
+          <div class="">
             {{ note.userDisplayName }}
           </div>
         </div>
-        <div class="vx-row w-full">
-          <div class="truncate">
+        <div class="">
+          <div class="">
             {{ note.createdAt.toLocaleString() }}
           </div>
         </div>
+      </div>
+      </div>
       </div>
 
       <!-- Action Button -->
@@ -43,38 +47,30 @@
       </div>
     </div>
 
-    <!-- Title -->
-    <div
-      class="w-full text-ginger-b text-xl lg:px-10 p-4 pb-0"
-      style="line-height: 1;"
-    >
-      {{ note.title }}
-    </div>
-
     <!-- Category Pills -->
-    <div class="w-full vx-row p-2 items-center text-sm">
-      <div
-        class="rounded-full bg-orange-500 p-2 vx-row items-center text-ginger text-white"
-      >
+    <div class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content">
+      <div class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white">
         Grade {{ note.grade }}
       </div>
-      <div
-        class="rounded-full bg-purple-500 p-2 vx-row items-center text-ginger text-white mx-2"
-      >
+      <div class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2">
         <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)" />
         {{ note.subject }}
       </div>
     </div>
 
-    <!-- <div style="width : 80%; margin-left: 10%;  height : 2px; background-color: gray" class="my-2"></div> -->
+    <!-- Title -->
+    <div class="w-4/5 text-ginger-b text-3xl p-4 ml-1/2 title-content" style="line-height: 1;">
+      {{ note.title }}
+    </div>
 
     <!-- Content -->
-    <div class="vx-row w-full justify-center p-4 m-0 pt-0" style="margin: 0;">
+    <div class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0" style="margin: 0;">
       <div
-        class="md:w-2/3 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
+        class="md:w-4/5 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
           preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''"
       >
+      <div style="width:100%;height:100%;position:absolute;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, white 90%);"></div>
         <img
           :src="note.images[0]"
           class="responsive rounded border-solid mb-4"
@@ -118,19 +114,9 @@
 
     <div class="vx-row w-full"></div>
 
-    <div
-      style="
-        width: 80%;
-        margin-left: 10%;
-        margin-top: 20px;
-        height: 2px;
-        background-color: gray;
-      "
-    ></div>
-
     <!-- Footer -->
 
-    <div class="vx-row w-full justify-evenly lg:px-10 p-6" style="">
+    <div class="vx-row w-full justify-evenly lg:px-10 p-6">
       <vs-avatar
         class="icon-small"
         :color="userLiked(note.id) ? 'danger' : '#f4f7f8'"
@@ -239,5 +225,26 @@ export default class NotesCard extends Vue {
     background-color: #f5f5f6;
   }
   transition-duration: 100ms !important;
+}
+::-webkit-scrollbar {
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90, 0.5);
+  border-radius: 15px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(90, 90, 90, 0.1);
+  border-radius: 15px !important;
+}
+.title-content {
+  margin-left: 10%;
+}
+@media only screen and (max-width: 768px) {
+  .title-content {
+  margin-left: 0%;
+  }
 }
 </style>
