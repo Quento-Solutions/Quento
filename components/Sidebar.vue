@@ -64,10 +64,6 @@
       </vs-sidebar-group>
 
       <template #footer>
-        <!-- <vs-col>
-          <a href="https://discord.gg/pfyFWus"><i class="text-4xl bx bxl-discord"></i></a>
-          <a href="https://github.com/Quento-Solutions"><i class="text-4xl bx bxl-github"></i></a>
-        </vs-col> -->
       </template>
     </vs-sidebar>
   </div>
@@ -139,6 +135,7 @@ export default class Sidebar extends Vue {
   }
 
   clickNotClose = true
+
   get currentPage() {
     return navigationStore.currentPage
   }
