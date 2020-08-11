@@ -27,41 +27,7 @@
     <div class="sidebar-content p-6 pt-0 w-full">
 
       <div class="filter-options">
-      <vs-sidebar-group
-      color="#9331e1"
-        v-for="(subjectGroup, groupIndex) in subjectGroups"
-        :key="groupIndex + 4"
-      >
-        <template #header>
-          <vs-sidebar-item arrow>
-            <div class="vx-row w-full">
-            <!-- <vs-button /> -->
-              <i class="bx text-3xl" :class="subjectGroup.iconClass" />
-
-
-              <div class="font-bold truncate ml-4">
-                {{ subjectGroup.name }}
-              </div>
-            </div>
-          </vs-sidebar-item>
-        </template>
-
-        <vs-sidebar-item
-          v-for="(subject, index) in subjectGroup.items"
-          :key="index"
-        >
-          <vs-checkbox
-            color="#4D7C8A"
-            v-model="SubjectDict[subject.name]"
-            @click="subjectClicked(subject.name)"
-          >
-            <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-            <div class="font-bold truncate">
-              {{ subject.name }}
-            </div>
-          </vs-checkbox>
-        </vs-sidebar-item>
-      </vs-sidebar-group>
+        <SubjectsDropdown :value.sync="SubjectDict" :list.sync="ActiveSubjectList"></SubjectsDropdown>
       </div>
 
         <vs-select
@@ -127,32 +93,18 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { windowStore, notesStore } from '~/store'
 import {
-  NestedSubjectList,
   GradeList,
   Grade_O,
   SubjectList,
   Subject_O,
-  SubjectGroup_O,
-  SubjectGroups,
   SortOptionsList,
-  SortOptions_O
+  SortOptions_O,
+  SubjectOptions
 } from '~/types/subjects'
 
-  let s: {
-    [index in Subject_O]?: boolean
-  } = {}
-  SubjectList.forEach((subject) => (s[subject] = false))
-    const g: {
-    [index in SubjectGroup_O] : boolean
-  } = {
-    Sciences : false,
-    Arts : false,
-    Languages : false,
-    "Social Sciences" : false,
-    Technology : false,
-  }
+import SubjectsDropdown from '~/components/SubjectsDropdown.vue';
 
-@Component<NotesSidebar>({ components: {} })
+@Component<NotesSidebar>({ components: { SubjectsDropdown } })
 export default class NotesSidebar extends Vue {
   GradeList = GradeList
   SortOptions = SortOptionsList;
@@ -160,92 +112,25 @@ export default class NotesSidebar extends Vue {
   allGradesSelected = true
   sortSelect : SortOptions_O = notesStore.SortSelect;
 
-  subjectClicked(name : Subject_O, clicked = true, value =!this.SubjectDict[name])
-  {
-    this.allSelected = false;
-    if(value === true && !this.ActiveSubjectList.includes(name))
-    {
-      this.ActiveSubjectList.unshift(name);
-      if(this.ActiveSubjectList.length > 10)
-      {
-        const removedSubject = this.ActiveSubjectList.pop()!;
-        this.SubjectDict[removedSubject] = false;
-      }
-    }
-    else 
-    {
-      this.ActiveSubjectList = this.ActiveSubjectList.filter(val => val !== name);
-    }
-    if(!clicked) this.SubjectDict[name] = value;
-  }
-
-  subjectGroupClicked(name : SubjectGroup_O)
-  {
-    SubjectGroups[name].forEach((subject : Subject_O)=> this.subjectClicked(subject, false, true));
-  }
-
-
-
   toggleNotesModal(val: boolean) {
     notesStore.ToggleNotesModule(val)
   }
-  SubjectDict = s;
-  ActiveSubjectList :Subject_O[] = [];
 
-  currentSubjects = NestedSubjectList.flatMap((value) =>
-    value.items.map((v2) => v2.name)
-  )
+  SubjectDict = SubjectOptions;
+  ActiveSubjectList :Subject_O[] = [];
   allSelected = true
-  subjectGroups = NestedSubjectList
 
   selectAllSubjects() {
-    if (!this.allSelected) {
-      SubjectList.forEach((subject) => (this.SubjectDict[subject] = false))
-      this.ActiveSubjectList = [];
-      this.allSelected = true
-    } else {
-      this.currentSubjects = []
-      this.allSelected = false
-    }
+    // Don't Reassign this.SubjectDict, alter values instead
+    SubjectList.forEach(subject => this.SubjectDict[subject] = false);
+    this.ActiveSubjectList.splice(0, this.ActiveSubjectList.length);
+    this.allSelected = true
   }
-
-  hoverStars = 3
-  filterStars = 3
-  activeStars = 3
 
   clearFilter() {
-    if(!this.allSelected)
-    {
-      this.selectAllSubjects();
-    }
+    this.selectAllSubjects();
     this.gradeSelect = 'ALL';
     this.sortSelect = "createdAt";
-  }
-  setFilter() {
-    this.activeStars = this.hoverStars = this.filterStars
-  }
-
-  get clearDisabled() {
-    return this.activeStars == 0
-  }
-  get buttonDisabled() {
-    return this.activeStars == this.filterStars
-  }
-
-  starColored(index: number) {
-    if (index <= this.hoverStars) return 'color : orange;'
-  }
-
-  hoverStar(index: number) {
-    this.hoverStars = index
-  }
-
-  unhoverStar() {
-    this.hoverStars = this.filterStars
-  }
-
-  setStarsFilter(index: number) {
-    this.hoverStars = this.filterStars = index
   }
 
   async filterSubjects() {
@@ -253,7 +138,6 @@ export default class NotesSidebar extends Vue {
         this.allSelected = false
         this.selectAllSubjects();
       }
-    console.log(this.ActiveSubjectList)
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
       sortSelect : this.sortSelect,
