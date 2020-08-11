@@ -4,20 +4,25 @@
     prevent-close
     not-close
     id="userInfoPopup"
-    class="content-popup"
+    class="content-popup no-footer"
     style="z-index: 1000000000;"
     scroll
     :full-screen="!isLargeScreen"
     v-model="userInfoPromptOpen"
   >
-    <template #header>
-      <h4 class="not-margin">
-        Hi <b>{{ activeUser.displayName }}!</b> Tell Us About Yourself
-      </h4>
-    </template>
     <div
       class="con-form md:p-4 lg:p-8 p-2 flex vx-row justify-evenly overflow-x-hidden"
     >
+      <div class="vx-row items-center w-full p-4 flex-no-wrap" style="flex-wrap: nowrap">
+        <div class="vx-col" style="">
+          <vs-avatar size="70" badge badge-color="success">
+            <img v-if="activeUser.photoURL" :src="activeUser.photoURL" />
+            <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
+          </vs-avatar>
+        </div>
+        <div class="text-body text-xl ">Hi <b>{{ activeUser.displayName }}!</b> Tell us a bit about yourself!</div>
+      </div>
+
       <div class="mb-6 p-4 w-full lg:w-1/2">
         <vs-select
           label="Grade"
@@ -215,12 +220,12 @@ export default class UserGuideModal extends Vue {
         currentGrade: this.gradeSelect,
         school: this.schoolSelect,
         bio: this.contents
-      });
-      loading.close();
+      })
+      loading.close()
     } catch (error) {
       // this.$vs
-      console.error({error});
-      loading.close();
+      console.error({ error })
+      loading.close()
     }
   }
 
