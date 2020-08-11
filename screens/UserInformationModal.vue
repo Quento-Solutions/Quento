@@ -7,6 +7,7 @@
     class="content-popup no-footer"
     style="z-index: 1000000000;"
     scroll
+    overflow-hidden
     :full-screen="!isLargeScreen"
     v-model="userInfoPromptOpen"
   >
@@ -20,7 +21,7 @@
             <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
           </vs-avatar>
         </div>
-        <div class="text-body text-xl ">Hi <b>{{ activeUser.displayName }}!</b> Tell us a bit about yourself!</div>
+        <div class="text-body text-xl p-2 " style="line-height : 1.25">Hi <b>{{ activeUser.displayName }}!</b> Tell us a bit about yourself!</div>
       </div>
 
       <div class="mb-6 p-4 w-full lg:w-1/2">
@@ -109,7 +110,7 @@
           placeholder="Hi! Welcome to Quento"
           class="block"
           height="20rem"
-          label="Short Bio (Optional)"
+          label="Bio (Optional)"
         >
         </VsTextarea>
       </div>
