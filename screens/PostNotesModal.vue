@@ -259,18 +259,4 @@ export default class PostNotesModal extends mixins(ValidateImage) {
 }
 </script>
 
-<style lang="scss">
-.vs-select__options {
-  z-index: 1000000000;
-}
-.content-popup {
-  .vs-dialog--scroll .vs-dialog__content {
-    max-height: calc(100vh - 200px);
-  }
 
-  .vs-dialog {
-    min-width: 40vw !important;
-    min-height: 60vh !important;
-  }
-}
-</style>

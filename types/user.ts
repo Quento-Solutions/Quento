@@ -1,3 +1,10 @@
+import {
+    Grade_O,
+    Subject_O
+} from './subjects';
+
+import { School_O } from './schools'
+
 export type User  = {
     uid: string;
     displayName ?: string | null;
@@ -12,8 +19,21 @@ export type User  = {
 
 export interface UserData {
     email : string;
+
     likedSuggestions ?: string[];
     likedNotes ?: string[];
-    newsletter ?: boolean;
+
     userGuideClosed ?: boolean;
+    userInformationAdded ?: boolean;
+
+    currentGrade ?: Grade_O;
+    interestedSubjects ?: Subject_O[];
+    bio ?: string;
+    school ?: School_O;
+
+    postedSuggestions ?: string[];
+    postedNotes ?: string[];
+    
+    newsletter ?: boolean;
+
 }

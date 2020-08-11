@@ -156,11 +156,6 @@ export default class NotesPage extends Vue {
     transition: opacity 0.7s;
     z-index: -1;
   }
-  // .sidebar-spacer-margin
-  // {
-  //     margin-left : calc(260px + 2.2rem);
-  //    max-width : calc(100% - 260px - 2.2rem)
-  // }
 }
 #notes-screen-container.show-overlay {
   #notes-content-overlay {
@@ -168,7 +163,5 @@ export default class NotesPage extends Vue {
     opacity: 1;
   }
 }
-.vs-loading {
-  z-index: 10000000000;
-}
+
 </style>
