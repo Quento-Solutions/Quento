@@ -14,7 +14,10 @@
     <div
       class="con-form md:p-4 lg:p-8 p-2 flex vx-row justify-evenly overflow-x-hidden"
     >
-      <div class="vx-row items-center w-full p-4 flex-no-wrap" style="flex-wrap: nowrap">
+      <div
+        class="vx-row items-center w-full p-4 flex-no-wrap"
+        style="flex-wrap: nowrap;"
+      >
         <div class="vx-col" style="">
           <vs-avatar size="70" badge badge-color="success">
             <img v-if="activeUser.photoURL" :src="activeUser.photoURL" />
@@ -68,39 +71,10 @@
         <h2 class="text-title mb-8">
           What Subjects Are You Interested In? (Optional)
         </h2>
-        <vs-sidebar-group
-          color="#9331e1"
-          v-for="(subjectGroup, groupIndex) in subjectGroups"
-          :key="groupIndex + 4"
-        >
-          <template #header>
-            <vs-sidebar-item arrow>
-              <div class="vx-row w-full">
-                <!-- <vs-button /> -->
-                <i class="bx text-3xl" :class="subjectGroup.iconClass" />
-                <div class="font-bold truncate ml-4">
-                  {{ subjectGroup.name }}
-                </div>
-              </div>
-            </vs-sidebar-item>
-          </template>
-
-          <vs-sidebar-item
-            v-for="(subject, index) in subjectGroup.items"
-            :key="index"
-          >
-            <vs-checkbox
-              color="#4D7C8A"
-              v-model="SubjectDict[subject.name]"
-              @click="subjectClicked(subject.name)"
-            >
-              <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-              <div class="font-bold truncate">
-                {{ subject.name }}
-              </div>
-            </vs-checkbox>
-          </vs-sidebar-item>
-        </vs-sidebar-group>
+        <SubjectsDropdown
+          :value.sync="SubjectDict"
+          :list.sync="ActiveSubjectList"
+        ></SubjectsDropdown>
       </div>
 
       <!-- Description  -->
@@ -120,7 +94,7 @@
         @click="submitUserInfo()"
         class="float-right text-ginger-b"
         size="xl"
-        :disabled="formErrors"
+        :disabled="false && formErrors"
       >
         NEXT &nbsp;<i class="bx bxs-rocket text-xl" />
       </vs-button>
@@ -132,31 +106,11 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { userGuideStore, authStore, windowStore } from '~/store'
 import { SchoolList, School_O } from '~/types/schools'
 
-import {
-  GradeList,
-  Grade_O,
-  SubjectGroup_O,
-  SubjectList,
-  SubjectIconList,
-  Subject_O,
-  NestedSubjectList
-} from '~/types/subjects'
+import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
 
-let s: {
-  [index in Subject_O]?: boolean
-} = {}
-SubjectList.forEach((subject) => (s[subject] = false))
-const g: {
-  [index in SubjectGroup_O]: boolean
-} = {
-  Sciences: false,
-  Arts: false,
-  Languages: false,
-  'Social Sciences': false,
-  Technology: false
-}
+import { GradeList, Grade_O, SubjectOptions, Subject_O } from '~/types/subjects'
 
-@Component<UserGuideModal>({ components: {} })
+@Component<UserGuideModal>({ components: { SubjectsDropdown } })
 export default class UserGuideModal extends Vue {
   readonly GradeList = GradeList.filter((val) => val != 'ALL')
   readonly SchoolList = SchoolList
@@ -164,6 +118,7 @@ export default class UserGuideModal extends Vue {
   get formErrors() {
     return this.gradeSelect == '' || this.schoolSelect == ''
   }
+  dontShowAgain = false
 
   gradeSelect: Grade_O | '' = ''
   schoolSelect: School_O | '' = ''
@@ -181,7 +136,7 @@ export default class UserGuideModal extends Vue {
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
-  dontShowAgain = false
+
   get userInfoPromptOpen() {
     return userGuideStore.userInfoPromptOpen
   }
@@ -193,26 +148,8 @@ export default class UserGuideModal extends Vue {
     userGuideStore.SET_GUIDE_CLOSED(!value)
   }
 
-  subjectClicked(
-    name: Subject_O,
-    clicked = true,
-    value = !this.SubjectDict[name]
-  ) {
-    if (value === true && !this.ActiveSubjectList.includes(name)) {
-      this.ActiveSubjectList.unshift(name)
-      if (this.ActiveSubjectList.length > 10) {
-        const removedSubject = this.ActiveSubjectList.pop()!
-        this.SubjectDict[removedSubject] = false
-      }
-    } else {
-      this.ActiveSubjectList = this.ActiveSubjectList.filter(
-        (val) => val !== name
-      )
-    }
-    if (!clicked) this.SubjectDict[name] = value
-  }
-
   async submitUserInfo() {
+    // return;
     if (this.gradeSelect == '' || this.schoolSelect == '') return
     const loading = this.$vs.loading()
     try {
@@ -230,8 +167,7 @@ export default class UserGuideModal extends Vue {
     }
   }
 
-  SubjectDict = s
+  SubjectDict = Object.assign({}, SubjectOptions)
   ActiveSubjectList: Subject_O[] = []
-  subjectGroups = NestedSubjectList
 }
 </script>
