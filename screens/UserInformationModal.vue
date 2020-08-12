@@ -112,6 +112,7 @@ import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
 
 import { GradeList, Grade_O, SubjectOptions, Subject_O } from '~/types/subjects'
 
+
 @Component<UserGuideModal>({ components: { SubjectsDropdown } })
 export default class UserGuideModal extends mixins(UserMixin) {
   readonly GradeList = GradeList.filter((val) => val != 'ALL')

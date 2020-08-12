@@ -9,12 +9,13 @@ export default class UserGuideModule extends VuexModule {
   UserGuideClosed = false
 
   public get userInfoPromptOpen() {
-    return !authStore.userData?.userInformationAdded
+    return !!authStore.user && !!authStore.userData && !authStore.userData.userInformationAdded
   }
   public get showUserGuide() {
     // Dont show if user info prompt is still up.
     return (
       !this.userInfoPromptOpen &&
+      !!authStore.userData &&
       !(this.UserGuideClosed || authStore.userData?.userGuideClosed)
     )
   }
