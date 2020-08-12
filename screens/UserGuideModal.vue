@@ -29,6 +29,7 @@
     </template>
   </vs-dialog>
 </template>
+
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { userGuideStore, authStore } from '~/store'
