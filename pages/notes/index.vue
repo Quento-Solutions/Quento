@@ -53,28 +53,6 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 
 import { Note } from '~/types/notes'
 
-const html = `# Quento
-
-## Description
-Welcome to Quento, a collection of utilities created by students, for students. Quento is an open source web app created by high school students using Vue.js, with the sole purpose of creating and compiling useful software to a single location to help students better manage their education.  
-
-## Build Setup
-\`\`\`
-# install dependencies
-$ npm install # Or yarn install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
-\`\`\`
-`
-
 import { windowStore, notesStore } from '~/store'
 import NotesSidebar from '~/components/NotesSidebar.vue'
 import PostNotesModal from '~/screens/PostNotesModal.vue'
@@ -156,11 +134,6 @@ export default class NotesPage extends Vue {
     transition: opacity 0.7s;
     z-index: -1;
   }
-  // .sidebar-spacer-margin
-  // {
-  //     margin-left : calc(260px + 2.2rem);
-  //    max-width : calc(100% - 260px - 2.2rem)
-  // }
 }
 #notes-screen-container.show-overlay {
   #notes-content-overlay {
@@ -168,7 +141,5 @@ export default class NotesPage extends Vue {
     opacity: 1;
   }
 }
-.vs-loading {
-  z-index: 10000000000;
-}
+
 </style>

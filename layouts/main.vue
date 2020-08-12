@@ -12,6 +12,8 @@
     class="layout--main"
     :class="[navbarClasses, footerClasses, { 'app-page': isAppPage }]"
   >
+    <UserGuideModal></UserGuideModal>
+    <UserInfoModal></UserInfoModal>
     <Sidebar @focus="handleFocus" @focusout="handleFocusOut" tabindex="0"></Sidebar>
 
     <div
@@ -122,6 +124,8 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 import Sidebar from '~/components/Sidebar.vue'
 import TopNav from '~/components/TopNav.vue'
+import UserGuideModal from '~/screens/UserGuideModal.vue'
+import UserInfoModal from '~/screens/UserInformationModal.vue';
 
 import themeConfig from '~/utils/themeConfig'
 import sidebarItems from '~/utils/sidebarItems'
@@ -131,7 +135,9 @@ import { windowStore } from '~/store'
 @Component<MainLayout>({
   components: {
     Sidebar,
-    TopNav
+    TopNav,
+    UserGuideModal,
+    UserInfoModal
   },
   watch: {
     isThemeDark(val) {
