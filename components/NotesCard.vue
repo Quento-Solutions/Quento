@@ -188,7 +188,9 @@ import { notesStore } from '~/store'
       this.hasImage = true
     }
   }
-})
+}
+)
+
 export default class NotesCard extends Vue {
   @Prop({ required: true }) note!: Note
   @Prop({ default: false }) clickable!: boolean
@@ -269,5 +271,11 @@ export default class NotesCard extends Vue {
   .title-content {
     margin-left: 0%;
   }
+}
+.flux-image {
+  background-position: 0px 0px !important;
+  background-size:auto 100% !important;
+  background-color: black;
+  background-position: center !important;
 }
 </style>
