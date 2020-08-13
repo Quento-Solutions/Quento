@@ -18,7 +18,7 @@
     <div
       class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
     >
-      <NotesCard v-if="previewNote" :note="previewNote"/> 
+      <NotesCard v-if="previewNote" :note="previewNote" :disabled="true"></NotesCard> 
     </div>
 
     <template #footer>

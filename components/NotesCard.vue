@@ -51,7 +51,7 @@
           >
             <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
           </vs-avatar>
-          <template #items>
+          <template #items v-if="!disabled">
               <div @click.stop.prevent="OpenEditingModal()" v-if="NoteOwner" class="w-full px-2 py-1 menu-item rounded-md">
                 <i class="bx bx-edit" style="font-size: 1.25rem;" />
                 Edit
@@ -208,7 +208,10 @@ import { notesStore, authStore } from '~/store'
 export default class NotesCard extends Vue {
   @Prop({ required: true }) note!: Note
   @Prop({ default: false }) clickable!: boolean
+  // Loaded full content
   @Prop({ default: false }) preview!: boolean
+  // Whether buttons should work or not
+  @Prop({ default : false }) disabled !: boolean;
 
   get NoteOwner() {
     return authStore.user?.uid == this.note.uid
@@ -225,7 +228,7 @@ export default class NotesCard extends Vue {
   }
 
   async toggleLike(id?: string, time?: any) {
-    if (!id) return
+    if (!id || this.disabled) return
     const a = this.$vs.loading()
     await notesStore.ToggleLikedNote(id)
     a.close()
