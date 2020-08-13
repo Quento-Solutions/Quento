@@ -1,8 +1,9 @@
 <template>
   <VxCard
     fitContent="true"
-    class="note-card mb-8"
-    :id="clickable ? 'previewClickable' : ''"
+    class="mb-8"
+    id="note-card"
+    :class="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
   >
     <!-- Card Header -->
@@ -41,9 +42,25 @@
 
       <!-- Action Button -->
       <div>
-        <vs-avatar class="icon-small float-right">
-          <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
-        </vs-avatar>
+        <vs-navbar-group id="menu-dots" @click.stop.prevent="() => false">
+          <vs-avatar
+            class="profileIcon icon"
+            :badge="NoteOwner"
+            badge-color="success"
+            @click.stop.prevent="() => false"
+          >
+            <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
+          </vs-avatar>
+          <template #items>
+              <div @click.stop.prevent="OpenEditingModal()" v-if="NoteOwner" class="w-full px-2 py-1 menu-item rounded-md">
+                <i class="bx bx-edit" style="font-size: 1.25rem;" />
+                Edit
+              </div>
+              <div @click.stop.prevent="PushNotesPage()" class="w-full px-2 py-1 menu-item rounded-md">
+                Details
+              </div>
+          </template>
+        </vs-navbar-group>
       </div>
     </div>
 
@@ -80,8 +97,7 @@
       <div
         class="md:w-4/5 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
-          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''
-        "
+          preview ? (hasImage ? 'max-height : 512px' : 'max-height: 200px') : ''"
       >
         <img
           :src="note.images[0]"
@@ -177,7 +193,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
-import { notesStore } from '~/store'
+import { notesStore, authStore } from '~/store'
 
 @Component<NotesCard>({
   // components :
@@ -194,6 +210,12 @@ export default class NotesCard extends Vue {
   @Prop({ default: false }) clickable!: boolean
   @Prop({ default: false }) preview!: boolean
 
+  get NoteOwner() {
+    return authStore.user?.uid == this.note.uid
+  }
+  OpenEditingModal() {
+    notesStore.SetEditNote(this.note)
+  }
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
@@ -215,6 +237,7 @@ export default class NotesCard extends Vue {
   vfTransitions = ['swipe']
   PushNotesPage() {
     if (this.clickable) return this.$router.push(`/notes/${this.note.id}`)
+
   }
   hasImage = false
   image?: HTMLImageElement
@@ -222,6 +245,19 @@ export default class NotesCard extends Vue {
 </script>
 <style lang="scss">
 #note-card {
+  .vs-navbar__group__items {
+    min-width: 100px;
+    background-color: white !important;
+    .menu-item:hover
+    {
+      background: #f5f5f6
+    }
+    .menu-item 
+    {
+      transition-duration : 0.1s;
+      cursor: pointer;
+    }
+  }
   .icon {
     width: 4rem !important;
     height: 4rem !important;

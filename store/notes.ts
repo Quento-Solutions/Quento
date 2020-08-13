@@ -8,12 +8,12 @@ import {
 import firestore from '~/plugins/firestore'
 import { authStore } from './index'
 import { firestore as store } from 'firebase/app'
-import { v4 } from 'uuid';
+import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
-import storage from '~/plugins/firebaseStorage';
-import firebase from '~/plugins/firebase';
+import storage from '~/plugins/firebaseStorage'
+import firebase from '~/plugins/firebase'
 
-// Fix the googl 
+// Fix the googl
 import {
   Grade_O,
   SubjectList,
@@ -26,52 +26,67 @@ type QueryType = store.Query<store.DocumentData>
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 export interface FilterOptions {
   filterSubjects: Subject_O[]
-  filterGrades: Grade_O,
-  sortSelect : SortOptions_O
+  filterGrades: Grade_O
+  sortSelect: SortOptions_O
   allSubjectsSelected: boolean
-};
+}
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
   PreviewNote: Note | null = null
+  EditingNote: Note | null = null
+
+  EditModalOpen = false
   PreviewModalOpen = false
   NotesModuleOpen = false
 
-  IsReset = false;
+  IsReset = false
   AllSubjects = true
 
-  UploadImages : File[] = [];
+  UploadImages: File[] = []
   likedPosts: string[] = []
-  ActiveGrade : Grade_O  = "ALL"
+  ActiveGrade: Grade_O = 'ALL'
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
-  SortSelect : SortOptions_O = "createdAt"
+  SortSelect: SortOptions_O = 'createdAt'
 
   NotesPerPage = 5
   EndOfList = false
 
   @Mutation
-  public SET_RESET(val : boolean)
-  {
-    this.IsReset = val;
-  }
-  
-  @Mutation
-  public RESET_NOTES()
-  {
-    this.ActiveNotes = [];
-    LastVisible = null;
-    this.EndOfList = false;
+  public SET_RESET(val: boolean) {
+    this.IsReset = val
   }
 
-  @Action({rawError: true})
-  public async ResetPosts()
-  {
-    this.RESET_NOTES();
-    this.SET_RESET(true);
-    this.TOGGLE_PREVIEW_MODAL(false);
-    this.TOGGLE_NOTES_MODULE(false);
-    return await this.GetMoreNotes();
+  @Mutation
+  public RESET_NOTES() {
+    
+    this.ActiveNotes = []
+    LastVisible = null
+    this.EndOfList = false
+  }
+
+  @Action({ rawError: true })
+  public SetEditNote(note: Note | null) {
+    console.log({note});
+    this.SET_EDIT_NOTE(note)
+  }
+
+  @Mutation
+  private SET_EDIT_NOTE(note: Note | null) {
+    this.EditingNote = note
+    this.EditModalOpen = !!note
+  }
+
+  @Action({ rawError: true })
+  public async ResetPosts() {
+
+    this.RESET_NOTES()
+    this.SET_RESET(true)
+    this.TOGGLE_PREVIEW_MODAL(false)
+    this.TOGGLE_NOTES_MODULE(false)
+    this.SET_EDIT_NOTE(null);
+    return await this.GetMoreNotes()
   }
 
   @Action({ rawError: true })
@@ -80,13 +95,18 @@ export default class NotesModule extends VuexModule {
   }
 
   @Mutation
-  private SET_FILTER({allSubjectsSelected,filterGrades,filterSubjects, sortSelect}: FilterOptions) {
+  private SET_FILTER({
+    allSubjectsSelected,
+    filterGrades,
+    filterSubjects,
+    sortSelect
+  }: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
     this.ActiveSubjects = filterSubjects
     this.ActiveGrade = filterGrades
     this.AllSubjects = allSubjectsSelected
-    this.SortSelect = sortSelect;
+    this.SortSelect = sortSelect
 
     if (allSubjectsSelected) {
       this.AllSubjects = true
@@ -96,8 +116,8 @@ export default class NotesModule extends VuexModule {
   }
 
   @Mutation
-  private SET_LIKED_NOTES(likedSuggestions ?: string[]) {
-    this.likedPosts = likedSuggestions || [];
+  private SET_LIKED_NOTES(likedSuggestions?: string[]) {
+    this.likedPosts = likedSuggestions || []
   }
 
   @Action({ rawError: true })
@@ -118,8 +138,8 @@ export default class NotesModule extends VuexModule {
   }
 
   @Mutation
-  public SET_UPLOAD_IMAGES(images: File[]) {
-    this.UploadImages = images
+  public SET_UPLOAD_IMAGES(images ?: File[]) {
+    this.UploadImages = images || [];
   }
 
   @Action({ rawError: true })
@@ -190,7 +210,7 @@ export default class NotesModule extends VuexModule {
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
 
-    if (!(this.ActiveGrade === "ALL")) {
+    if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
     }
     if (!this.AllSubjects) {
@@ -208,39 +228,42 @@ export default class NotesModule extends VuexModule {
       const notes = snapshot.docs.map((doc) =>
         Note.fromFirebase(doc.data() as Note_t_F, doc.id)
       )
-
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
     } catch (error) {
       console.log({ error })
-      throw(error);
+      throw error
     }
   }
   @Action({ rawError: true })
-  public async PostNote({ note, images }: { note: Note; images?: any[] }) {
-    
+  public async PostNote({ note }: { note: Note }) {
+    console.log({note});
+    if(note.id)
+    {
+      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(note));
+    }    
     const uploadRefs = this.UploadImages.map(async (image) => {
-        const uid = v4();
-        const fileName = image.name.toLowerCase();
-        const extMatches = fileName.match(/\.([^\.]+)$/);
-        var ext = extMatches ? extMatches[0] : "";
-        const imageName = `${uid}${ext}`;
-        const imageRef = storage.ref(imageName);
-        const imageReuploadName = `postedNote@${imageName}`
-        const snapshot = await imageRef.put(image);
-         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${snapshot.ref.bucket}/o/${encodeURIComponent(imageReuploadName)}?alt=media`;
-        // return await snapshot.ref.;
-        return imageUrl;
-    // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
+      const uid = v4()
+      const fileName = image.name.toLowerCase()
+      const extMatches = fileName.match(/\.([^\.]+)$/)
+      var ext = extMatches ? extMatches[0] : ''
+      const imageName = `${uid}${ext}`
+      const imageRef = storage.ref(imageName)
+      const imageReuploadName = `postedNote@${imageName}`
+      const snapshot = await imageRef.put(image)
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
+        snapshot.ref.bucket
+      }/o/${encodeURIComponent(imageReuploadName)}?alt=media`
+      // return await snapshot.ref.;
+      return imageUrl
+      // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
     })
-    const imageLinks = await Promise.all(uploadRefs);
-    const newNote = note.toFirebase();
+    const imageLinks = await Promise.all(uploadRefs)
+    const newNote = Note.toFirebase(note)
     newNote.images = imageLinks
-    try {
-        
-      const docRef = await firestore.collection('notes').add(newNote)
-    } catch (error) {}
+
+    await firestore.collection('notes').add(newNote)
   }
 
   @Mutation

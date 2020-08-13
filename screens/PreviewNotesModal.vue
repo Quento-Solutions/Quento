@@ -7,6 +7,7 @@
     scroll
     :full-screen="!isLargeScreen"
     prevent-close
+    overflow-hidden
   >
     <template #header>
       <div class="pt-10">

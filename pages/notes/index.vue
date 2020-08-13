@@ -4,8 +4,6 @@
     :class="[{ 'show-overlay': bodyOverlay }]"
     id="notes-screen-container"
   >
-    <PreviewNotesModal v-model="previewModalActive" />
-    <PostNotesModal v-model="notesModalActive" />
     <div id="notes-content-overlay"></div>
     <NotesSidebar />
     <div class="sidebar-spacer"></div>
@@ -62,7 +60,6 @@ import NotesCard from '~/components/NotesCard.vue'
 
 @Component<NotesPage>({
   components: { NotesCard, NotesSidebar, PostNotesModal, PreviewNotesModal },
-  layout: 'main',
   async mounted() {
     const loading = this.$vs.loading()
     const notes = notesStore.GetMoreNotes()
@@ -81,7 +78,6 @@ export default class NotesPage extends Vue {
     await notesStore.GetMoreNotes()
     loading.close();
   }
-
 
   get endOfList()
   {
@@ -114,32 +110,5 @@ export default class NotesPage extends Vue {
 </script>
 
 <style lang="scss">
-#notes-screen-container {
-  .sidebar-spacer {
-    width: calc(130px);
-    margin-left: 0;
-  }
-
-  #notes-content-overlay {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    transition: opacity 0.7s;
-    z-index: -1;
-  }
-}
-#notes-screen-container.show-overlay {
-  #notes-content-overlay {
-    z-index: 1;
-    opacity: 1;
-  }
-}
 
 </style>

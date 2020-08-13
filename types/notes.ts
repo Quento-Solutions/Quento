@@ -61,9 +61,9 @@ export class Note
         return new Note(obj)
     }
 
-    toFirebase() : Note_t_F
+    static toFirebase = (note : Note) : Note_t_F =>
     {
-        const {id, ...firebaseDoc} = {...this}
+        const {id, ...firebaseDoc} = {...note}
         return firebaseDoc
     }
 }
