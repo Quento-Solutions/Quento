@@ -118,13 +118,11 @@ export default class NotesSidebar extends Vue {
 
   SubjectDict = SubjectOptions;
   ActiveSubjectList :Subject_O[] = [];
-  allSelected = true
 
   selectAllSubjects() {
     // Don't Reassign this.SubjectDict, alter values instead
     SubjectList.forEach(subject => this.SubjectDict[subject] = false);
     this.ActiveSubjectList.splice(0, this.ActiveSubjectList.length);
-    this.allSelected = true
   }
 
   clearFilter() {
@@ -134,16 +132,12 @@ export default class NotesSidebar extends Vue {
   }
 
   async filterSubjects() {
-    if (this.ActiveSubjectList.length == 0) {
-        this.allSelected = false
-        this.selectAllSubjects();
-      }
+    console.log(this.ActiveSubjectList);
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
       sortSelect : this.sortSelect,
       filterSubjects : this.ActiveSubjectList,
       filterGrades : this.gradeSelect,
-      allSubjectsSelected : this.allSelected
     });
     await notesStore.GetMoreNotes();
     loading.close()
