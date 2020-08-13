@@ -28,7 +28,6 @@ export interface FilterOptions {
   filterSubjects: Subject_O[]
   filterGrades: Grade_O
   sortSelect: SortOptions_O
-  allSubjectsSelected: boolean
 }
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
@@ -41,7 +40,6 @@ export default class NotesModule extends VuexModule {
   NotesModuleOpen = false
 
   IsReset = false
-  AllSubjects = true
 
   UploadImages: File[] = []
   likedPosts: string[] = []
@@ -96,22 +94,15 @@ export default class NotesModule extends VuexModule {
 
   @Mutation
   private SET_FILTER({
-    allSubjectsSelected,
     filterGrades,
     filterSubjects,
     sortSelect
   }: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
-    this.ActiveSubjects = filterSubjects
+    this.ActiveSubjects = [...filterSubjects]
     this.ActiveGrade = filterGrades
-    this.AllSubjects = allSubjectsSelected
     this.SortSelect = sortSelect
-
-    if (allSubjectsSelected) {
-      this.AllSubjects = true
-      this.ActiveSubjects = []
-    }
     this.EndOfList = false
   }
 
@@ -213,7 +204,7 @@ export default class NotesModule extends VuexModule {
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
     }
-    if (!this.AllSubjects) {
+    if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
 
