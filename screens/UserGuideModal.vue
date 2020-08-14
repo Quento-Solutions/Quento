@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog width="550px" not-center v-model="userGuideStoreOpen">
+  <vs-dialog width="550px" not-center v-model="userGuideStoreOpen" v-if="AuthUser && UserData">
     <template #header>
       <h4 class="not-margin">Welcome to <b>Quento</b></h4>
     </template>
@@ -30,10 +30,11 @@
   </vs-dialog>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { userGuideStore, authStore } from '~/store'
+import UserMixin from '~/mixins/UserMixin';
 @Component<UserGuideModal>({ components: {} })
-export default class UserGuideModal extends Vue {
+export default class UserGuideModal extends mixins(UserMixin) {
   thingOpen = false
   dontShowAgain = false
   get userGuideStoreOpen() {

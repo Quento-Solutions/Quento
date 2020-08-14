@@ -25,7 +25,7 @@ export default class UserGuideModule extends VuexModule {
 
   @Action({ rawError: true })
   public async SetUserGuideClosed(value: boolean) {
-    await firestore.collection('users').doc(authStore.CurrentUser?.uid).update({
+    await firestore.collection('users').doc(authStore.user?.uid).update({
       userGuideClosed: value
     })
     return await authStore.refreshUserData()
