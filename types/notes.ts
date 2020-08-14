@@ -1,5 +1,7 @@
 
 import {Subject_O , Grade_O} from './subjects'
+import {Date_t_F, firebaseDate} from './firebaseTypes';
+
 
 export interface Note_t
 {
@@ -18,13 +20,6 @@ export interface Note_t
     subject : Subject_O;
     grade : Grade_O;
     id ?: string;
-}
-
-export interface Date_t_F
-{
-    seconds : number;
-    nanoseconds : number
-
 }
 export interface Note_t_F
 // How the data is stored in firebase
@@ -56,7 +51,7 @@ export class Note
     static fromFirebase = (doc : Note_t_F, id ?: string) =>
     {
 
-        const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
+        const createdAt = firebaseDate(doc.createdAt as Date_t_F)
         const obj = {...doc, createdAt, id};
         return new Note(obj)
     }

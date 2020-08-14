@@ -220,7 +220,6 @@ export default class NotesModule extends VuexModule {
   }
   @Action({ rawError: true })
   public async PostNote({ note }: { note: Note }) {
-    console.log({note});
     if(note.id)
     {
       return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(note));
