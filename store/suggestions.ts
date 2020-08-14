@@ -75,7 +75,7 @@ export default class SuggestionsModule extends VuexModule {
     if (this.likedSuggestions.includes(id)) {
       const updateUser = firestore
         .collection('users')
-        .doc(authStore.CurrentUser?.uid)
+        .doc(authStore.user?.uid)
         .update({
           likedSuggestions: FirestoreModule.FieldValue.arrayRemove(id)
         })
@@ -89,7 +89,7 @@ export default class SuggestionsModule extends VuexModule {
     } else {
       const updateUser = firestore
         .collection('users')
-        .doc(authStore.CurrentUser?.uid)
+        .doc(authStore.user?.uid)
         .update({
           likedSuggestions: FirestoreModule.FieldValue.arrayUnion(id)
         })

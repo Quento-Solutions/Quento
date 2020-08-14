@@ -89,7 +89,7 @@
         multiple
         text="Upload Image(s)"
         accept="image/*"
-        ref="imageUpload"
+        ref="postImageUpload"
       />
     </div>
 
@@ -181,36 +181,36 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   ClearFields()
   {
     this.title=  this.contents = this.subjectSelect = this.gradeSelect = '';
-    this.srcs.forEach(src => src.remove = true);
+    this.srcs?.forEach(src => src.remove = true);
   }
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
   get imageRefs() {
-    return (this.$refs.imageUpload as Vue & {
+    return (this.$refs.postImageUpload as Vue & {
       filesx: File[]
       srcs: imageSrc[]
       itemRemove: any[]
-    }).filesx;
+    }|undefined)?.filesx;
   }
   get srcs()
   {
-    return (this.$refs.imageUpload as Vue & {
+    return (this.$refs.postImageUpload as Vue & {
       filesx: File[]
       srcs: imageSrc[]
       itemRemove: any[]
-    }).srcs;
+    } | undefined)?.srcs;
   }
   async PreviewNote() {
-    const refs = this.$refs.imageUpload as Vue & {
+    const refs = this.$refs.postImageUpload as Vue & {
       filesx: File[]
       srcs: imageSrc[]
       itemRemove: any[]
-    }
-    const itemRemove = refs.itemRemove
-    const srcs = refs.srcs.filter((src) => !src.remove).map((src) => src.src!)
-    const imageUpload = refs.filesx
+    } | undefined
+    const itemRemove = refs?.itemRemove
+    const srcs = refs?.srcs.filter((src) => !src.remove).map((src) => src.src!)
+    const postImageUpload = refs?.filesx
     
     if (this.formErrors) {
       this.$vs.notification({
@@ -234,7 +234,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       images: srcs
     })
 
-    notesStore.SET_UPLOAD_IMAGES(imageUpload);
+    notesStore.SET_UPLOAD_IMAGES(postImageUpload);
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
   }
@@ -253,7 +253,8 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       this.subjectSelect == '' ||
       this.gradeSelect == '' ||
       !this.contents ||
-      (this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
+
+      (this.imageRefs && this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
     )
   }
 }

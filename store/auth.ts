@@ -119,10 +119,4 @@ export default class AuthModule extends VuexModule implements AuthState {
         this.SET_USER_DATA(fetchedUserData.data() as UserData);
         return;
     }
-
-
-    get CurrentUser()
-    {
-        return firebaseAuth.currentUser;
-    }
 }

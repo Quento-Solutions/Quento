@@ -10,6 +10,7 @@
     overflow-hidden
     :full-screen="!isLargeScreen"
     v-model="userInfoPromptOpen"
+    v-if="AuthUser && UserData"
   >
     <div
       class="con-form md:p-4 lg:p-8 p-2 flex vx-row justify-evenly overflow-x-hidden"
@@ -102,20 +103,22 @@
   </vs-dialog>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { userGuideStore, authStore, windowStore } from '~/store'
 import { SchoolList, School_O } from '~/types/schools'
+import UserMixin from '~/mixins/UserMixin';
 
 import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
 
 import { GradeList, Grade_O, SubjectOptions, Subject_O } from '~/types/subjects'
 
 @Component<UserGuideModal>({ components: { SubjectsDropdown } })
-export default class UserGuideModal extends Vue {
+export default class UserGuideModal extends mixins(UserMixin) {
   readonly GradeList = GradeList.filter((val) => val != 'ALL')
   readonly SchoolList = SchoolList
 
-  get formErrors() {
+  get formErrors() 
+  {
     return this.gradeSelect == '' || this.schoolSelect == ''
   }
   dontShowAgain = false
@@ -125,7 +128,6 @@ export default class UserGuideModal extends Vue {
 
   title = ''
   contents = ''
-  thingOpen = false
 
   get activeUser() {
     return authStore.user
