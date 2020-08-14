@@ -8,3 +8,8 @@ export const firebaseConfig = {
     appId: "1:164745116317:web:9818b7748fa0bac68c3274",
     measurementId: "G-ZSN4CNQTNF"
 };
+
+export const algoliaConfig = {
+    appId : "6T9U0LGE72",
+    apiKey : "f8b123294fdf359532a077b528b917ce"
+}

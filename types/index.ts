@@ -3,3 +3,5 @@ export * as Subjects from './subjects';
 export * as Suggestions from './suggestions'
 export * as User from './user';
 export * as School from './schools';
+export * as Questions from './questions';
+export * as FirebaseTypes from './firebaseTypes';

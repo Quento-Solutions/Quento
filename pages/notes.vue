@@ -10,17 +10,15 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 
-import EditNotesModal from '~/screens/EditNotesModal.vue'
-import PreviewNotesModal from '~/screens/PreviewNotesModal.vue'
-import PostNotesModal from '~/screens/PostNotesModal.vue'
+import EditNotesModal from '~/screens/notes/EditNotesModal.vue'
+import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
+import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 
 
 @Component<NotesGroup>({ components: {
 EditNotesModal, PreviewNotesModal, PostNotesModal
 }, layout: 'main' })
 export default class NotesGroup extends Vue {
-
-
 
 }
 </script>
