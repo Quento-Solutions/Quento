@@ -15,7 +15,7 @@
             </div>
 
             <!-- card actions -->
-            <div class="vx-card__actions w-full" v-if="hasAction">
+            <div class="vx-card__actions " v-if="hasAction">
                 <slot name="actions">
                     <div class="vx-card__action-buttons p-2 m-0 rounded-md" v-if="(actionButtons || collapseAction || refreshContentAction || removeCardAction) && !codeToggler" style="border-style : solid; border-width: 2px;  ">
                         <i @click="toggleContent"  :class="{rotate180: !isContentCollapsed}" class="bx bxs-chevrons-down" style="color : green; font-size : 1.5rem;" v-if="actionButtons || collapseAction" />
@@ -120,7 +120,7 @@ export default class VxCard extends Vue {
     };
 
     get StyleItems() {
-        return { maxHeight: this.maxHeight }
+        return  `maxHeight: ${this.maxHeight}; `
     };
 
     get cardStyles() {
