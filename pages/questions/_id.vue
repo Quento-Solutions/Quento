@@ -8,7 +8,31 @@
           </vs-avatar>
         </div>
       </div>
-      <QuestionCard :question="question" v-if="question"> </QuestionCard>
+      <div v-if="question" class="w-full">
+        <QuestionCard :question="question"> </QuestionCard>
+        <VxCard class="w-full mb-6" title="Post An Answer" collapseAction=true>
+          <div class="vx-row w-full" style="">
+            <VsTextarea
+              placeholder="Leave a response..."
+              v-model="responseContent"
+              class="w-full"
+              height="10rem"
+            ></VsTextarea>
+            <div class="vx-row w-full justify-end p-0" style="padding: 0">
+                <vs-button class="float-right" color="danger" size="large">Cancel</vs-button>
+                <vs-button class="float-right" color="success" size="large" :disabled="!responseContent" @click="PostResponse()">Post</vs-button>
+            </div>
+          </div>
+        </VxCard>
+
+
+        <VxCard class="w-full" :fitContent="true" title="Responses">
+          <div class="vx-row w-full" style="">
+              <ResponseCard v-for="(response, index) in ResponseList" :key="index" :response="response"></ResponseCard>
+          </div>
+      </VxCard>
+      </div>
+      
       <vs-alert color="danger" v-if="docNotFound">
         <template #title>
           Something Went Wrong
@@ -23,11 +47,15 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Question, Question_t_F } from '~/types/questions'
+import {Response} from '~/types/responses';
+
+
 import { questionStore } from '~/store'
-import QuestionCard from '~/components/QuestionCard.vue'
+import QuestionCard from '~/components/QuestionCard.vue';
+import ResponseCard from '~/components/ResponseCard.vue';
 
 @Component<QuestionContentPage>({
-  components: { QuestionCard },
+  components: { QuestionCard, ResponseCard },
   mounted() {
     this.FetchQuestion()
   }
@@ -36,7 +64,12 @@ export default class QuestionContentPage extends Vue {
   question: Question | null = null
   questionId: string | null = null
   docNotFound = false
+  responseContent = ''
 
+  get ResponseList()
+  {
+      return questionStore.ActiveResponses;
+  }
   async FetchQuestion() {
     const loading = this.$vs.loading()
     this.questionId = this.$route.params.id
@@ -53,6 +86,21 @@ export default class QuestionContentPage extends Vue {
       loading.close()
     }
   }
+
+    async PostResponse()
+    {
+        if(!this.questionId) return;
+        const loading = this.$vs.loading();
+        try {
+            await questionStore.PostResponse({ contents : this.responseContent, questionId : this.questionId})
+        }
+        catch(error)
+        {
+            this.$vs.notify({message : error.message, color : "danger"});
+        }
+        loading.close();
+        this.$forceUpdate();
+    }
   goBack() {
     this.$router.push('/questions')
   }

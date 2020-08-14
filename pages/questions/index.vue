@@ -1,6 +1,5 @@
 <template>
   <div>
-    <KeywordSelect label="label"></KeywordSelect>
     <vs-button @click="OpenPostQuestionModal()">Post New Question</vs-button>
     <ais-instant-search-ssr>
       <ais-search-box />
@@ -9,11 +8,11 @@
       <ais-hits>
         <template slot="item" slot-scope="{ item }">
           <nuxt-link :to="`/questions/${item.objectID}`" @click="QuestionClicked(item)">
+            <h3 class="mb-4">
+              <ais-highlight attribute="title" :hit="item" />
+            </h3>
             <p>
               <ais-highlight attribute="contents" :hit="item" />
-            </p>
-            <p>
-              <ais-highlight attribute="title" :hit="item" />
             </p>
           </nuxt-link>
         </template>

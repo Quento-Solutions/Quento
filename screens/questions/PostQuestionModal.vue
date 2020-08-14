@@ -89,8 +89,7 @@
           class="block"
           height="30rem"
           label="QUEstionable Content"
-        >
-        </VsTextarea>
+        ></VsTextarea>
       </div>
     </div>
 
