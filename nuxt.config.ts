@@ -40,7 +40,9 @@ const config : NuxtConfig = {
     routeNameSplitter: '/'
   },
 
-  build: {},
+  build: {
+    transpile : ['vue-instantsearch', 'instantsearch.js/es']
+  },
   buildModules: [
     '@nuxt/typescript-build',
     // '@nuxtjs/stylelint-module',

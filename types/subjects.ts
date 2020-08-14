@@ -91,3 +91,5 @@ export const NestedSubjectList: SubjectGroup[] = Object.entries(
     ]
   }
 })
+
+export type Keyword_O = Subject_O | SubjectGroup_O | Grade_O;
