@@ -6,7 +6,7 @@
     <div class="con-content">
       <p>
         Quento is a growing community of students creating a better platform for
-        online learning. Checkout our
+        online learning. Check out our
         <nuxt-link @click="userGuideStoreOpen = false" to="/notes">Posted Notes</nuxt-link> feature where you can
         use the resources provided by other students. If you have any
         <i class="bx bx-bulb text-xl" /> ideas, please add a new
