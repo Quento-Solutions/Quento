@@ -5,7 +5,19 @@ import { firestore as FirestoreModule } from 'firebase/app'
 import {Question, Question_t_F} from '~/types/questions'
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
+// Modal Logic
+    PostQuestionModalOpen = false;
 
+    @Mutation
+    public SET_POST_MODAL_OPEN(value : boolean)
+    {
+        this.PostQuestionModalOpen = value;
+    }
+
+
+
+
+// Notes Data Logic
     @Action({rawError : true})
     public async CreateQuestion(question : Question)
     {

@@ -113,22 +113,23 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 
-import { suggestionsStore, notesStore, windowStore } from '~/store'
+import { notesStore, windowStore, questionStore } from '~/store'
+import UserMixin from '~/mixins/UserMixin'
+
 import {
   NestedSubjectList,
   SubjectGroup_O,
   Subject_O,
   SubjectIconList,
   Grade_O,
-  GradeList
+  GradeList,
+  Keyword_O
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
-
-import { authStore } from '~/store'
 
 interface imageSrc {
   error: boolean
@@ -144,74 +145,82 @@ interface imageSrc {
     VsUpload
   }
 })
-export default class PostQuestionModal extends mixins(ValidateImage) {
+export default class PostQuestionModal extends mixins(
+  ValidateImage,
+  UserMixin
+) {
+  get active() {
+    return questionStore.PostQuestionModalOpen
+  }
+  set active(value: boolean) {
+    questionStore.SET_POST_MODAL_OPEN(value)
+  }
+
+
+    keywordsSelect : Keyword_O[] = [];
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
   @Watch('IsReset')
-  onResetChanged(value : boolean, oldVal : boolean)
-  {
-    if(value)
-    {
-      this.ClearFields();
-      notesStore.SET_RESET(false);
+  onResetChanged(value: boolean, oldVal: boolean) {
+    if (value) {
+      this.ClearFields()
+      notesStore.SET_RESET(false)
     }
   }
 
-  get IsReset()
-  {
-    return notesStore.IsReset;
+  get IsReset() {
+    return notesStore.IsReset
   }
 
-  readonly GradeList = GradeList.filter(v=>v!=='ALL');
+  readonly GradeList = GradeList.filter((v) => v !== 'ALL')
   Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
   readonly SubjectGroupList = NestedSubjectList
-  get active() {
-    return notesStore.NotesModuleOpen
-  }
-  set active(value: boolean) {
-    notesStore.ToggleNotesModule(value)
-  }
+
   title = ''
   contents = ''
-  ClearFields()
-  {
-    this.title=  this.contents = this.subjectSelect = this.gradeSelect = '';
-    this.srcs?.forEach(src => src.remove = true);
+  ClearFields() {
+    this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
+    this.srcs?.forEach((src) => (src.remove = true))
   }
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
   get imageRefs() {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    }|undefined)?.filesx;
+    return (this.$refs.postImageUpload as
+      | (Vue & {
+          filesx: File[]
+          srcs: imageSrc[]
+          itemRemove: any[]
+        })
+      | undefined)?.filesx
   }
-  get srcs()
-  {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined)?.srcs;
+  get srcs() {
+    return (this.$refs.postImageUpload as
+      | (Vue & {
+          filesx: File[]
+          srcs: imageSrc[]
+          itemRemove: any[]
+        })
+      | undefined)?.srcs
   }
   async PreviewNote() {
-    const refs = this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined
+    const refs = this.$refs.postImageUpload as
+      | (Vue & {
+          filesx: File[]
+          srcs: imageSrc[]
+          itemRemove: any[]
+        })
+      | undefined
     const itemRemove = refs?.itemRemove
     const srcs = refs?.srcs.filter((src) => !src.remove).map((src) => src.src!)
     const postImageUpload = refs?.filesx
-    
+
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -222,9 +231,9 @@ export default class PostQuestionModal extends mixins(ValidateImage) {
 
     const previewNote = new Note({
       title: this.title,
-      uid: authStore.user?.uid!,
-      userDisplayName: authStore.user?.displayName!,
-      userPhotoUrl: authStore.user?.photoURL!,
+      uid: this.AuthUser?.uid!,
+      userDisplayName: this.AuthUser?.displayName!,
+      userPhotoUrl: this.AuthUser?.photoURL!,
       createdAt: new Date(),
       upVotes: 0,
       views: 0,
@@ -234,7 +243,7 @@ export default class PostQuestionModal extends mixins(ValidateImage) {
       images: srcs
     })
 
-    notesStore.SET_UPLOAD_IMAGES(postImageUpload);
+    notesStore.SET_UPLOAD_IMAGES(postImageUpload)
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
   }
@@ -253,11 +262,10 @@ export default class PostQuestionModal extends mixins(ValidateImage) {
       this.subjectSelect == '' ||
       this.gradeSelect == '' ||
       !this.contents ||
-
-      (this.imageRefs && this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
+      (this.imageRefs &&
+        this.imageRefs.filter((image) => this.validateImageType(image)).length <
+          this.imageRefs.length)
     )
   }
 }
 </script>
-
-
