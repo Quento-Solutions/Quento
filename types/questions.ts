@@ -22,6 +22,7 @@ export interface Question_t
     userDisplayName : string;
 }
 
+
 export interface Question_t_F
 {
     createdAt : Date_t_F | Date;
@@ -40,6 +41,10 @@ export interface Question_t_F
     userId : string;
     userDisplayName : string;
 }
+export type Question_t_A = Question_t_F &
+{
+    objectID : string;
+}
 
 export class Question
 {
@@ -54,6 +59,11 @@ export class Question
     {
 
         const obj = {...doc, createdAt : firebaseDate(doc.createdAt as Date_t_F), id};
+        return new Question(obj)
+    }
+    static fromAlgolia = (doc : Question_t_A) =>
+    {
+        const {objectID, ...obj} = {...doc, createdAt : firebaseDate(doc.createdAt as Date_t_F), id : doc.objectID};
         return new Question(obj)
     }
 

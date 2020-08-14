@@ -222,8 +222,7 @@ export default class PostQuestionModal extends mixins(
 
     })
 
-    questionStore.SET_PREVIEW_QUESTION(previewQuestion)
-    console.log(questionStore.PreviewModalOpen);
+    questionStore.SET_PREVIEW_QUESTION(previewQuestion);
   }
 
   get keywords() {
