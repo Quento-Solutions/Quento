@@ -147,7 +147,7 @@ export default class NotesModule extends VuexModule {
     if (this.likedPosts.includes(id)) {
       const updateUser = firestore
         .collection('users')
-        .doc(authStore.CurrentUser?.uid)
+        .doc(authStore.user?.uid)
         .update({
           likedNotes: store.FieldValue.arrayRemove(id)
         })
@@ -161,7 +161,7 @@ export default class NotesModule extends VuexModule {
     } else {
       const updateUser = firestore
         .collection('users')
-        .doc(authStore.CurrentUser?.uid)
+        .doc(authStore.user?.uid)
         .update({
           likedNotes: store.FieldValue.arrayUnion(id)
         })
