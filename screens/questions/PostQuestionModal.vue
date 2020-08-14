@@ -11,86 +11,87 @@
   >
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl"><b>Posted</b> Notes</h4>
+        <h4 class="not-margin text-title text-4xl">Questions</h4>
       </div>
     </template>
 
     <div
       class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
     >
-      <vs-input
-        v-model="title"
-        placeholder="You should sell chocolate"
-        label="Title"
-        class="block mb-6 w-6 mt-6"
-        width="w-6"
-      >
-        <template #icon>
-          <i class="bx bx-highlight" primary></i>
-        </template>
-      </vs-input>
+      <div class="w-full p-6" style="">
+        <vs-input
+          v-model="title"
+          placeholder="You should sell chocolate"
+          label="Title"
+          class="block"
+          width="w-6"
+        >
+          <template #icon>
+            <i class="bx bx-highlight" primary></i>
+          </template>
+        </vs-input>
+      </div>
 
-      <vs-select
-        label="Subject"
-        filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
-        placeholder="Subject"
-        v-model="subjectSelect"
-      >
-        <vs-option-group
-          v-for="(subjectGroup, index) in SubjectGroupList"
-          :key="index"
+      <div class="p-6 w-full lg:w-1/2">
+        <vs-select
+          label="Subject"
+          filter
+          class="block w-full"
+          placeholder="Subject"
+          v-model="subjectSelect"
         >
-          <div slot="title" class="w-full vx-row">
-            <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
-            <div class="font-bold truncate">
-              {{ subjectGroup.name }}
-            </div>
-          </div>
-          <vs-option
-            v-for="(subject, subIndex) in subjectGroup.items"
-            :key="subIndex"
-            :label="subject.name"
-            :value="subject.name"
+          <vs-option-group
+            v-for="(subjectGroup, index) in SubjectGroupList"
+            :key="index"
           >
-            <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-            <div class="font-bold truncate">
-              {{ subject.name }}
+            <div slot="title" class="w-full vx-row">
+              <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
+              <div class="font-bold truncate">
+                {{ subjectGroup.name }}
+              </div>
             </div>
-          </vs-option>
-        </vs-option-group>
-      </vs-select>
-      <vs-select
-        label="Grade"
-        filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
-        placeholder="Grade"
-        v-model="gradeSelect"
-      >
-        <vs-option
-          v-for="(grade, subIndex) in GradeList"
-          :key="subIndex"
-          :label="`Grade ${grade}`"
-          :value="grade"
+            <vs-option
+              v-for="(subject, subIndex) in subjectGroup.items"
+              :key="subIndex"
+              :label="subject.name"
+              :value="subject.name"
+            >
+              <i class="bx text-3xl mr-2" :class="subject.iconClass" />
+              <div class="font-bold truncate">
+                {{ subject.name }}
+              </div>
+            </vs-option>
+          </vs-option-group>
+        </vs-select>
+      </div>
+      <div class="p-6 w-full lg:w-1/2">
+        <vs-select
+          label="Grade"
+          filter
+          class="block w-full"
+          placeholder="Grade"
+          v-model="gradeSelect"
         >
-          <div class="font-bold truncate">Grade {{ grade }}</div>
-        </vs-option>
-      </vs-select>
-      <VsTextarea
-        v-model="contents"
-        placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
-        class="block"
-        height="20rem"
-        label="NOTABLE Content"
-      >
-      </VsTextarea>
-      <VsUpload
-        :show-upload-button="false"
-        multiple
-        text="Upload Image(s)"
-        accept="image/*"
-        ref="postImageUpload"
-      />
+          <vs-option
+            v-for="(grade, subIndex) in GradeList"
+            :key="subIndex"
+            :label="`Grade ${grade}`"
+            :value="grade"
+          >
+            <div class="font-bold truncate">Grade {{ grade }}</div>
+          </vs-option>
+        </vs-select>
+      </div>
+      <div class="w-full p-6 px-10 pt-0">
+        <VsTextarea
+          v-model="contents"
+          placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
+          class="block"
+          height="30rem"
+          label="QUEstionable Content"
+        >
+        </VsTextarea>
+      </div>
     </div>
 
     <template #footer>
@@ -99,10 +100,10 @@
           class="md:w-1/2 w-full"
           warn
           :disabled="formErrors"
-          @click="PreviewNote()"
+          @click="PreviewQuestion()"
         >
           <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            PREVIEW NOTE
+            Preview Question
           </div>
         </vs-button>
       </div>
@@ -130,6 +131,7 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
+import { Question } from '~/types/questions'
 
 interface imageSrc {
   error: boolean
@@ -149,6 +151,9 @@ export default class PostQuestionModal extends mixins(
   ValidateImage,
   UserMixin
 ) {
+
+
+
   get active() {
     return questionStore.PostQuestionModalOpen
   }
@@ -157,7 +162,7 @@ export default class PostQuestionModal extends mixins(
   }
 
 
-    keywordsSelect : Keyword_O[] = [];
+
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
@@ -165,15 +170,15 @@ export default class PostQuestionModal extends mixins(
   onResetChanged(value: boolean, oldVal: boolean) {
     if (value) {
       this.ClearFields()
-      notesStore.SET_RESET(false)
+      questionStore.SET_RESET(false)
     }
   }
 
   get IsReset() {
-    return notesStore.IsReset
+    return questionStore.IsReset
   }
 
-  readonly GradeList = GradeList.filter((v) => v !== 'ALL')
+  readonly GradeList = GradeList
   Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
@@ -183,44 +188,16 @@ export default class PostQuestionModal extends mixins(
 
   title = ''
   contents = ''
+
   ClearFields() {
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
-    this.srcs?.forEach((src) => (src.remove = true))
   }
+
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
-  get imageRefs() {
-    return (this.$refs.postImageUpload as
-      | (Vue & {
-          filesx: File[]
-          srcs: imageSrc[]
-          itemRemove: any[]
-        })
-      | undefined)?.filesx
-  }
-  get srcs() {
-    return (this.$refs.postImageUpload as
-      | (Vue & {
-          filesx: File[]
-          srcs: imageSrc[]
-          itemRemove: any[]
-        })
-      | undefined)?.srcs
-  }
-  async PreviewNote() {
-    const refs = this.$refs.postImageUpload as
-      | (Vue & {
-          filesx: File[]
-          srcs: imageSrc[]
-          itemRemove: any[]
-        })
-      | undefined
-    const itemRemove = refs?.itemRemove
-    const srcs = refs?.srcs.filter((src) => !src.remove).map((src) => src.src!)
-    const postImageUpload = refs?.filesx
-
+  async PreviewQuestion() {
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -229,31 +206,30 @@ export default class PostQuestionModal extends mixins(
       return
     }
 
-    const previewNote = new Note({
+    const previewQuestion = new Question({
       title: this.title,
-      uid: this.AuthUser?.uid!,
+      userId: this.AuthUser?.uid!,
       userDisplayName: this.AuthUser?.displayName!,
       userPhotoUrl: this.AuthUser?.photoURL!,
       createdAt: new Date(),
       upVotes: 0,
       views: 0,
-      subject: this.subjectSelect as Subject_O,
-      grade: this.gradeSelect as Grade_O,
+      responses: 0,
+      keywords: this.keywords,
       contents: this.contents,
-      images: srcs
+      subject : this.subjectSelect as Subject_O,
+      grade : this.gradeSelect as Grade_O,
+
     })
 
-    notesStore.SET_UPLOAD_IMAGES(postImageUpload)
-    notesStore.SetPreviewNote(previewNote)
-    notesStore.TogglePreviewModal(true)
+    questionStore.SET_PREVIEW_QUESTION(previewQuestion)
+    console.log(questionStore.PreviewModalOpen);
   }
 
-  set state(value: boolean) {
-    this.title = this.contents = ''
-    this.active = false
-  }
-  get state() {
-    return this.active
+  get keywords() {
+    return [this.subjectSelect, this.gradeSelect].filter(
+      (v) => v != ''
+    ) as Keyword_O[]
   }
 
   get formErrors() {
@@ -261,10 +237,7 @@ export default class PostQuestionModal extends mixins(
       !this.title ||
       this.subjectSelect == '' ||
       this.gradeSelect == '' ||
-      !this.contents ||
-      (this.imageRefs &&
-        this.imageRefs.filter((image) => this.validateImageType(image)).length <
-          this.imageRefs.length)
+      !this.contents
     )
   }
 }
