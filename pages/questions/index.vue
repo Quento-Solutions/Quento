@@ -1,7 +1,7 @@
 <template>
   <div>
       <KeywordSelect label="label"></KeywordSelect>
-
+    <vs-button @click="OpenPostQuestionModal()">Post New Question</vs-button>
     <ais-instant-search-ssr>
       <ais-search-box />
       <ais-stats />
@@ -36,7 +36,7 @@ import {
 } from 'vue-instantsearch'
 
 import algoliasearch from 'algoliasearch/lite'
-
+import { questionStore } from '~/store'
 const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
 
 @Component<QuestionsPage>({
@@ -48,7 +48,7 @@ const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
     AisSearchBox,
     AisStats,
     AisPagination,
-    KeywordSelect
+    KeywordSelect,
   },
   serverPrefetch() {
     return this.instantsearch
@@ -79,6 +79,10 @@ const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
 export default class QuestionsPage extends mixins(
   createServerRootMixin({ searchClient, indexName: 'dev_questions_index' })
 ) {
-  instantsearch!: any
+  instantsearch!: any;
+  OpenPostQuestionModal()
+  {
+      questionStore.SET_POST_MODAL_OPEN(true);
+  }
 }
 </script>

@@ -1,5 +1,6 @@
 import {Date_t_F, firebaseDate} from './firebaseTypes';
 import type {Keyword_O} from './subjects'
+import type {Subject_O , Grade_O} from './subjects'
 
 export interface Question_t
 {
@@ -8,11 +9,13 @@ export interface Question_t
 
     title : string;
     contents : string;
+    keywords ?: Keyword_O[];
+    subject : Subject_O;
+    grade : Grade_O;
     
     upVotes : number;
     views : number;
     responses : number;
-    keywords ?: Keyword_O[]
     
     userPhotoUrl ?: string;
     userId : string;
@@ -25,6 +28,8 @@ export interface Question_t_F
     
     title : string;
     contents : string;
+    subject : Subject_O;
+    grade : Grade_O;
     
     upVotes : number;
     views : number;
