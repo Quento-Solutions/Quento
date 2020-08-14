@@ -91,18 +91,25 @@ export default class Sidebar extends Vue {
       icon: 'bx bx-home',
       href: '/home'
     },
-    {
-      name: 'Suggestions',
-      id: 'suggestions',
-      icon: 'bx bxs-message-square-edit',
-      href: '/suggestions'
-    },
+
     {
       name : "Notes",
       id : "notes",
       icon : "bx bxs-note",
       href : '/notes'
-    }
+    },
+    {
+      name : "Questions",
+      id : "questions",
+      icon : "bx bxs-comment-checked",
+      href : "/questions"
+    },
+        {
+      name: 'Suggestions',
+      id: 'suggestions',
+      icon: 'bx bxs-message-square-edit',
+      href: '/suggestions'
+    },
   ] as const
 
   ComingSoonGroup = [
