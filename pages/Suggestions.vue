@@ -139,7 +139,8 @@ import SuggestionModal from '~/screens/SuggestionModal.vue'
 })
 export default class SuggestionsPage extends Vue {
   active = false
-  trimText(iText : string) {
+  trimText(iText ?: string) {
+    if(!iText) return;
     const text = iText.trim()
     let getLetters = [text]
     if (text.length > 5) {
