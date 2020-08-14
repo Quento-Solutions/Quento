@@ -1,5 +1,7 @@
 <template>
   <div>
+      <KeywordSelect label="label"></KeywordSelect>
+
     <ais-instant-search-ssr>
       <ais-search-box />
       <ais-stats />
@@ -21,7 +23,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { algoliaConfig } from '~/envars'
-
+import KeywordSelect from '~/components/KeywordSelect.vue'
 import {
   AisInstantSearchSsr,
   AisRefinementList,
@@ -45,7 +47,8 @@ const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
     AisHighlight,
     AisSearchBox,
     AisStats,
-    AisPagination
+    AisPagination,
+    KeywordSelect
   },
   serverPrefetch() {
     return this.instantsearch

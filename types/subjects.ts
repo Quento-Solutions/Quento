@@ -25,10 +25,13 @@ export type SortOptions_O = typeof SortOptionsList[number]['value']
 export type SubjectGroup_O = keyof typeof SubjectGroups
 
 export const GradeList = [9, 10, 11, 12, 'ALL'] as const
-export type Grade_O = typeof GradeList[number]
+export type Grade_O = typeof GradeList[number];
+
 export const SubjectList = Object.entries(SubjectGroups).flatMap(
   (group) => group[1]
 )
+
+export const SubjectGroupList : SubjectGroup_O[] = Object.keys(SubjectGroups) as SubjectGroup_O[];
 
 export const SubjectOptions : {  [index in Subject_O]?: boolean } = SubjectList.reduce((o, key) => ({...o, [key] : false}), {});
 
@@ -93,3 +96,4 @@ export const NestedSubjectList: SubjectGroup[] = Object.entries(
 })
 
 export type Keyword_O = Subject_O | SubjectGroup_O | Grade_O;
+export const KeywordList = [...SubjectList, ...GradeList, ...SubjectGroupList]

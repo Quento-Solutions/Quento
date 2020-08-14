@@ -6,6 +6,7 @@ import auth from '~/store/auth';
 import suggestions from '~/store/suggestions'
 import notes from '~/store/notes';
 import userGuide from '~/store/userGuide';
+import questions from '~/store/questions';
 
 let windowStore : window;
 let navigationStore : navigation;
@@ -13,6 +14,7 @@ let authStore : auth;
 let suggestionsStore : suggestions;
 let notesStore : notes;
 let userGuideStore : userGuide;
+let questionStore : questions;
 
 function initialiseStores(store : Store<any>) : void {
     windowStore = getModule(window, store);
@@ -21,6 +23,7 @@ function initialiseStores(store : Store<any>) : void {
     suggestionsStore = getModule(suggestions, store)
     notesStore = getModule(notes, store);
     userGuideStore = getModule(userGuide, store);
+    questionStore = getModule(questions, store);
 }
 
-export { initialiseStores, windowStore, navigationStore, authStore, suggestionsStore, notesStore, userGuideStore }
+export { initialiseStores, windowStore, navigationStore, authStore, suggestionsStore, notesStore, userGuideStore, questionStore }
