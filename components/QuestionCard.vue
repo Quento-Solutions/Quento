@@ -196,10 +196,11 @@ export default class NotesCard extends Vue {
   }
 
   async toggleLike(id?: string, time?: any) {
-    if (!id || this.disabled) return
-    const a = this.$vs.loading()
-    await notesStore.ToggleLikedNote(id)
-    a.close()
+    return;
+    // if (!id || this.disabled) return
+    // const a = this.$vs.loading()
+    // await notesStore.ToggleLikedNote(id)
+    // a.close()
   }
   vfOptions = {
     autoplay: false,
