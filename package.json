@@ -1,8 +1,16 @@
 {
   "name": "Quento",
-  "description": "Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.",
   "version": "1.0.0",
   "private": false,
+  "description": "Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.",
+  "scripts": {
+    "build": "nuxt-ts build",
+    "dev": "nuxt-ts",
+    "generate": "nuxt-ts build --target static && nuxt-ts export",
+    "start": "nuxt-ts start",
+    "stylelint": "stylelint '**/*.scss'",
+    "test": "jest"
+  },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.5",
     "@innologica/vue-dropdown-menu": "^0.1.3",
@@ -50,21 +58,15 @@
     "vue2-perfect-scrollbar": "^1.4.0",
     "vueperslides": "^2.10.2",
     "vuesax": "^4.0.1-alpha.23",
+    "vuetify": "^2.2.11",
     "vuex-class": "0.3.2"
-  },
-  "scripts": {
-    "dev": "nuxt-ts",
-    "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
-    "generate": "nuxt-ts build --target static && nuxt-ts export",
-    "stylelint": "stylelint '**/*.scss'",
-    "test": "jest"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.0",
     "@nuxt/typescript-build": "^2.0.2",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
+    "@nuxtjs/vuetify": "^1.11.2",
     "@types/jest": "^26.0.9",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
@@ -74,6 +76,7 @@
     "jest": "^26.2.2",
     "node-sass": "^4.14.1",
     "prettier": "2.0.5",
+    "sass": "^1.19.0",
     "sass-loader": "^9.0.2",
     "stylelint": "^13.6.1",
     "stylelint-config-prettier": "^8.0.2",
@@ -81,7 +84,9 @@
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "ts-jest": "^26.1.4",
+    "vue-cli-plugin-vuetify": "~2.0.7",
     "vue-jest": "^3.0.6",
+    "vuetify-loader": "^1.3.0",
     "vuex-module-decorators": "^0.17.0"
   }
 }
