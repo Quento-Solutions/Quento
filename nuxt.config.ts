@@ -1,21 +1,29 @@
-import type {NuxtConfig} from '@nuxt/types';
+import type { NuxtConfig } from '@nuxt/types'
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
-import path from 'path';
-import fs from 'fs';
+import path from 'path'
+import fs from 'fs'
 
 console.log(process.env.BASE_URL, process.env.host, process.env.port)
 
-const config : NuxtConfig = {
+const config: NuxtConfig = {
   env: {
-    baseUrl : process.env.BASE_URL || `${process.env.host}:${process.env.port}` || 'localhost:3000'
+    baseUrl:
+      process.env.BASE_URL ||
+      `${process.env.host}:${process.env.port}` ||
+      'localhost:3000'
   },
   head: {
     title: 'Quento',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.' }
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.'
+      }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
@@ -27,16 +35,14 @@ const config : NuxtConfig = {
     'boxicons/css/boxicons.min.css',
     'video.js/dist/video-js.css',
     'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
-    "~/assets/scss/main.scss",
+    '~/assets/scss/main.scss'
   ],
-  server:
-  {
-
-    port : process.env.port || 3000,
-    host : process.env.host || 'localhost',
+  server: {
+    port: process.env.port || 3000,
+    host: process.env.host || 'localhost'
   },
-  router : {
-    middleware : 'router-auth',
+  router: {
+    middleware: 'router-auth',
     routeNameSplitter: '/'
   },
 
@@ -55,7 +61,8 @@ const config : NuxtConfig = {
     '@nuxtjs/style-resources',
     '@nuxtjs/firebase',
     '@nuxtjs/pwa',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    '@nuxtjs/vuetify'
   ],
   plugins: [
     '@/plugins/vuesax',
@@ -66,20 +73,19 @@ const config : NuxtConfig = {
     '@/plugins/firebaseStorage',
 
     '@/plugins/fireauth',
-    { src: "~/plugins/aos", ssr: false },
-    '@/plugins/globalComponents',
-   
+    { src: '~/plugins/aos', ssr: false },
+    '@/plugins/globalComponents'
   ],
   markdownit: {
     preset: 'default',
     linkify: true,
     breaks: true,
 
-    injected : true
+    injected: true
   },
-  pwa : {
-    meta : false,
-    icon : false,
+  pwa: {
+    meta: false,
+    icon: false,
     workbox: {
       importScripts: [
         // ...
@@ -95,8 +101,8 @@ const config : NuxtConfig = {
     config: firebaseConfig,
     services: {
       auth: {
-        ssr : true
-        },
+        ssr: true
+      },
       firestore: true,
       functions: true,
       storage: true,
