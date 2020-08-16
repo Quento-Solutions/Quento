@@ -18,6 +18,7 @@
             clickable="true"
             :question="(item)"
             :preview="true"
+            :disabled="true"
           >
           </QuestionCard>
         </div>
