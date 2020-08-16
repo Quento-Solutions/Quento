@@ -2,9 +2,9 @@ import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from './index'
-import firebase from '~/plugins/firebase';
+import firebase from '~/plugins/firebase'
 // const a  = firebase.
-import { Suggestion,  } from '~/types/suggestions'
+import { Suggestion } from '~/types/suggestions'
 
 @Module({ stateFactory: true, name: 'suggestions', namespaced: true })
 export default class SuggestionsModule extends VuexModule {
@@ -72,35 +72,26 @@ export default class SuggestionsModule extends VuexModule {
   }
   @Action({ rawError: true })
   public async ToggleLikedSuggestion(id: string) {
+    const batch = firestore.batch()
+    const userRef = firestore.collection('users').doc(authStore.user?.uid)
+    const suggestionRef = firestore.collection('suggestions').doc(id)
+
     if (this.likedSuggestions.includes(id)) {
-      const updateUser = firestore
-        .collection('users')
-        .doc(authStore.user?.uid)
-        .update({
-          likedSuggestions: FirestoreModule.FieldValue.arrayRemove(id)
-        })
-      const updateSuggestion = firestore
-        .collection('suggestions')
-        .doc(id)
-        .update({
-          upVotes: FirestoreModule.FieldValue.increment(-1)
-        })
-      await Promise.all([updateUser, updateSuggestion])
+      batch.update(userRef, {
+        likedSuggestions: FirestoreModule.FieldValue.arrayRemove(id)
+      })
+      batch.update(suggestionRef, {
+        upVotes: FirestoreModule.FieldValue.increment(-1)
+      })
     } else {
-      const updateUser = firestore
-        .collection('users')
-        .doc(authStore.user?.uid)
-        .update({
-          likedSuggestions: FirestoreModule.FieldValue.arrayUnion(id)
-        })
-      const updateSuggestion = firestore
-        .collection('suggestions')
-        .doc(id)
-        .update({
-          upVotes: FirestoreModule.FieldValue.increment(1)
-        })
-      await Promise.all([updateUser, updateSuggestion])
+      batch.update(userRef, {
+        likedSuggestions: FirestoreModule.FieldValue.arrayUnion(id)
+      })
+      batch.update(suggestionRef, {
+        upVotes: FirestoreModule.FieldValue.increment(1)
+      })
     }
+    await batch.commit();
     this.TOGGLE_LIKED_SUGGESTION(id)
     return
   }

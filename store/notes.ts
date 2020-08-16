@@ -135,35 +135,26 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public async ToggleLikedNote(id: string) {
+    const batch = firestore.batch()
+    const userRef = firestore.collection('users').doc(authStore.user?.uid)
+    const noteRef = firestore.collection('notes').doc(id)
+
     if (this.likedPosts.includes(id)) {
-      const updateUser = firestore
-        .collection('users')
-        .doc(authStore.user?.uid)
-        .update({
-          likedNotes: store.FieldValue.arrayRemove(id)
-        })
-      const updateSuggestion = firestore
-        .collection('notes')
-        .doc(id)
-        .update({
-          upVotes: store.FieldValue.increment(-1)
-        })
-      await Promise.all([updateUser, updateSuggestion])
+      batch.update(userRef, {
+        likedNotes: store.FieldValue.arrayRemove(id)
+      })
+      batch.update(noteRef, {
+        upVotes: store.FieldValue.increment(-1)
+      })
     } else {
-      const updateUser = firestore
-        .collection('users')
-        .doc(authStore.user?.uid)
-        .update({
-          likedNotes: store.FieldValue.arrayUnion(id)
-        })
-      const updateSuggestion = firestore
-        .collection('notes')
-        .doc(id)
-        .update({
-          upVotes: store.FieldValue.increment(1)
-        })
-      await Promise.all([updateUser, updateSuggestion])
+      batch.update(userRef, {
+        likedNotes: store.FieldValue.arrayUnion(id)
+      })
+      batch.update(noteRef, {
+        upVotes: store.FieldValue.increment(1)
+      })
     }
+    await batch.commit();
     this.TOGGLE_LIKED_SUGGESTION(id)
     return
   }
