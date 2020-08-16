@@ -91,10 +91,11 @@ export default class PreviewNotesModal extends Vue {
 
       this.$vs.notification({
         color : 'success',
-        title : 'Worked'
+        title : 'Question Posted'
       })
       this.active = false
       await questionStore.ResetPosts();
+       location.reload(); 
       loading.close()
     } catch (error) {
       console.log({error});
