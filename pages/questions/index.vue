@@ -1,24 +1,31 @@
 <template>
-  <div>
+  <div
+    class="vx-row w-full relative justify-evenly"
+    :class="[{ 'show-overlay': bodyOverlay }]"
+    id="notes-screen-container"
+  >
+  <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
     <vs-button @click="OpenPostQuestionModal()">Post New Question</vs-button>
     <ais-instant-search-ssr>
       <ais-search-box />
       <ais-stats />
       <ais-refinement-list attribute="title" />
-      <ais-hits>
-        <template slot="item" slot-scope="{ item }">
-          <nuxt-link :to="`/questions/${item.objectID}`" @click="QuestionClicked(item)">
-            <h3 class="mb-4">
-              <ais-highlight attribute="title" :hit="item" />
-            </h3>
-            <p>
-              <ais-highlight attribute="contents" :hit="item" />
-            </p>
-          </nuxt-link>
-        </template>
+      <ais-hits :transform-items="AlgoliaConvert">
+        <div slot-scope="{ items }">
+          <QuestionCard
+            v-for="(item, index) in items"
+            :key="index"
+            class=""
+            clickable="true"
+            :question="(item)"
+            :preview="true"
+          >
+          </QuestionCard>
+        </div>
       </ais-hits>
       <ais-pagination />
     </ais-instant-search-ssr>
+  </div>
   </div>
 </template>
 <script lang="ts">
@@ -39,6 +46,7 @@ import {
 import algoliasearch from 'algoliasearch/lite'
 import { questionStore } from '~/store'
 import { Question, Question_t_A } from '~/types/questions'
+import QuestionCard from '~/components/QuestionCard.vue'
 const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
 
 @Component<QuestionsPage>({
@@ -50,7 +58,8 @@ const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
     AisSearchBox,
     AisStats,
     AisPagination,
-    KeywordSelect
+    KeywordSelect,
+    QuestionCard
   },
   serverPrefetch() {
     return this.instantsearch
@@ -89,16 +98,17 @@ export default class QuestionsPage extends mixins(
     console.log({ question })
   }
 
-    stringify(item : Question_t_A)
-    {
-        const a = new String(item.title);
-        console.log({a}, a.replaceAll);
-        
-        return encodeURI(a.replaceAll(" ", "-").replaceAll("?", ""));
-    }
-  AlgoliaConvert(item : Question_t_A)
-  {
-      return Question.fromAlgolia(item);
+  stringify(item: Question_t_A) {
+    const a = new String(item.title)
+    console.log({ a }, a.replaceAll)
+
+    return encodeURI(a.replaceAll(' ', '-').replaceAll('?', ''))
+  }
+  AlgoliaConvert(items?: Question_t_A[]) {
+    if (!items) return
+    const qItem = items.map(item => Question.fromAlgolia(item)).filter(v => !!v);
+
+    return qItem
   }
 }
 </script>

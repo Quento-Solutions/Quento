@@ -41,7 +41,7 @@
       </div>
 
       <!-- Action Button -->
-      <div>
+      <!-- <div>
         <vs-navbar-group id="menu-dots" @click.stop.prevent="() => false">
           <vs-avatar
             class="profileIcon icon"
@@ -68,7 +68,7 @@
             </div>
           </template>
         </vs-navbar-group>
-      </div>
+      </div> -->
     </div>
 
     <!-- Category Pills -->
@@ -112,18 +112,7 @@
           id="notes-md"
           class="w-full text-ginger p-2 md-container"
         ></div>
-        <!-- <div
-          style="
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-image: linear-gradient(
-              to bottom,
-              rgba(0, 0, 0, 0) 80%,
-              white 90%
-            );
-          "
-        ></div> -->
+
       </div>
     </div>
 
