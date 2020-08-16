@@ -1,7 +1,7 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { firestore as FirestoreModule } from 'firebase/app'
-import functions from '~/plugins/firebaseFunctions';
+import { auth, firestore as FirestoreModule } from 'firebase/app'
+import functions from '~/plugins/firebaseFunctions'
 
 import { Question, Question_t_F } from '~/types/questions'
 import { Response, Response_t_F } from '~/types/responses'
@@ -80,8 +80,12 @@ export default class QuestionsModule extends VuexModule {
       userId: authStore.user?.uid!,
       userPhotoUrl: authStore.user?.photoURL!,
       views: 0
-    });
-    return await firestore.collection('questions').doc(questionId).collection("responses").add(Response.toFirebase(response));
+    })
+    return await firestore
+      .collection('questions')
+      .doc(questionId)
+      .collection('responses')
+      .add(Response.toFirebase(response))
   }
 
   @Action({ rawError: true })
@@ -101,26 +105,47 @@ export default class QuestionsModule extends VuexModule {
     const question = Question.fromFirebase(questionData, id)
     this.SET_ACTIVE_QUESTION_DATA({ question, responses })
     return question
-  };
+  }
 
   // Response Data Logic
-  @Action({rawError : true})
-  public async ToggleLikedQuestion(questionId : string)
-  {
-    const toggleResponse = await functions.httpsCallable("toggleLikeQuestions")({ questionId });
-    if(toggleResponse.data.status != 200) throw toggleResponse.data;
-    await authStore.refreshUserData();
+  @Action({ rawError: true })
+  public async ToggleLikedQuestion(questionId: string) {
+    await authStore.refreshUserData()
+    const batch = firestore.batch()
+    const userRef = firestore.collection('users').doc(authStore.user?.uid)
+    const questionRef = firestore.collection('questions').doc(questionId)
 
-    return;
+    const userLiked = authStore.userData?.likedQuestions?.includes(questionId)
+    batch.update(userRef, {
+      likedQuestions: userLiked
+        ? FirestoreModule.FieldValue.arrayRemove(questionId)
+        : FirestoreModule.FieldValue.arrayUnion(questionId)
+    })
+    batch.update(questionRef, {
+      upVotes: userLiked
+        ? FirestoreModule.FieldValue.increment(-1)
+        : FirestoreModule.FieldValue.increment(1)
+    })
+    await batch.commit()
+    await authStore.refreshUserData()
+
+    return
   }
-  @Action({rawError : true})
-  public async ToggleLikedResponse({questionId, responseId} : {questionId : string, responseId : string})
-  {
-    const toggleResponse = await functions.httpsCallable("toggleLikeResponses")({ questionId, responseId });
-    if(toggleResponse.data.status != 200) throw toggleResponse.data;
-    await authStore.refreshUserData();
+  @Action({ rawError: true })
+  public async ToggleLikedResponse({
+    questionId,
+    responseId
+  }: {
+    questionId: string
+    responseId: string
+  }) {
+    const toggleResponse = await functions.httpsCallable(
+      'toggleLikeResponses'
+    )({ questionId, responseId })
+    if (toggleResponse.data.status != 200) throw toggleResponse.data
+    await authStore.refreshUserData()
 
-    return;
+    return
   }
 
   @Action({ rawError: true })
@@ -133,5 +158,4 @@ export default class QuestionsModule extends VuexModule {
       })
     return updateViews
   }
-  
 }
