@@ -6,46 +6,31 @@
         center-collapsed
       >
         <template #left>
-          <vs-avatar
-            class="menuIcon icon"
-            v-if="windowSmall"
-            @click.stop="toggleSidenav()"
-          >
+          <vs-avatar class="menuIcon icon" v-if="windowSmall" @click.stop="toggleSidenav()">
             <i class="bx bx-menu" :style="`font-size: 2rem;`" />
           </vs-avatar>
         </template>
 
         <template #right>
-          <div
-            class="vx-row items-center"
-            style="max-width: 50vw; flex-wrap: nowrap;"
-          >
+          <div class="vx-row items-center" style="max-width: 50vw; flex-wrap: nowrap;">
             <h3 class="text-title truncate">{{ userName }}</h3>
 
             <vs-navbar-group id="profile">
               <vs-avatar class="profileIcon icon" badge badge-color="success">
                 <img v-if="photoURL" :src="photoURL" />
-                <i
-                  v-else
-                  class="bx bx-user-circle"
-                  :style="`font-size: 2rem;`"
-                />
+                <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
               </vs-avatar>
               <template #items>
-                <vs-navbar-item>
-                  Profile
-                </vs-navbar-item>
-                <vs-navbar-item>
-                  Settings
-                </vs-navbar-item>
+                <nuxt-link to="/user/profile">
+                  <vs-navbar-item>Profile</vs-navbar-item>
+                </nuxt-link>
+                <vs-navbar-item>Settings</vs-navbar-item>
                 <vs-navbar-item
                   warning
                   @click="SignOut()"
                   class="bg-danger rounded-md text-white"
                   style="color: white;"
-                >
-                  Sign Out
-                </vs-navbar-item>
+                >Sign Out</vs-navbar-item>
               </template>
             </vs-navbar-group>
           </div>
