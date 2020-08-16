@@ -1,7 +1,6 @@
 <template>
   <div
     class="vx-row w-full relative justify-evenly"
-    :class="[{ 'show-overlay': bodyOverlay }]"
     id="notes-screen-container"
   >
   <div class="vx-col lg:w-1/2 md:w-2/3 w-full">

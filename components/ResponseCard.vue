@@ -94,7 +94,7 @@ export default class ResponseCard extends mixins(UserMixin) {
   }
 
   get userLiked() {
-      console.log(this.UserData?.likedResponses, this.response.id);
+
     if (!this.response.id) return;
     return this.UserData?.likedResponses?.includes(this.response.id)
   }
