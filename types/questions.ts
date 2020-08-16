@@ -1,4 +1,4 @@
-import {Date_t_F, firebaseDate} from './firebaseTypes';
+import {Date_t_F, Date_t_A, firebaseDate, algoliaDate} from './firebaseTypes';
 import type {Keyword_O} from './subjects'
 import type {Subject_O , Grade_O} from './subjects'
 
@@ -43,6 +43,7 @@ export interface Question_t_F
 }
 export type Question_t_A = Question_t_F &
 {
+    createdAt : Date_t_A
     objectID : string;
 }
 
@@ -63,7 +64,7 @@ export class Question
     }
     static fromAlgolia = (doc : Question_t_A) =>
     {
-        const {objectID, ...obj} = {...doc, createdAt : firebaseDate(doc.createdAt as Date_t_F), id : doc.objectID};
+        const {objectID, ...obj} = {...doc, createdAt : algoliaDate(doc.createdAt as Date_t_A), id : doc.objectID};
         return new Question(obj)
     }
 
