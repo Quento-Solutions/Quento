@@ -139,10 +139,23 @@ export default class QuestionsModule extends VuexModule {
     questionId: string
     responseId: string
   }) {
-    const toggleResponse = await functions.httpsCallable(
-      'toggleLikeResponses'
-    )({ questionId, responseId })
-    if (toggleResponse.data.status != 200) throw toggleResponse.data
+    await authStore.refreshUserData()
+    const batch = firestore.batch()
+    const userRef = firestore.collection('users').doc(authStore.user?.uid)
+    const responseRef = firestore.collection('questions').doc(questionId).collection("responses").doc(responseId)
+
+    const userLiked = authStore.userData?.likedResponses?.includes(responseId)
+    batch.update(userRef, {
+      likedResponses: userLiked
+        ? FirestoreModule.FieldValue.arrayRemove(responseId)
+        : FirestoreModule.FieldValue.arrayUnion(responseId)
+    })
+    batch.update(responseRef, {
+      upVotes: userLiked
+        ? FirestoreModule.FieldValue.increment(-1)
+        : FirestoreModule.FieldValue.increment(1)
+    })
+    await batch.commit()
     await authStore.refreshUserData()
 
     return
