@@ -31,7 +31,7 @@
           @click="PostNote()"
         >
           <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            POST QUESTION
+            Post Question
           </div>
         </vs-button>
       </div>

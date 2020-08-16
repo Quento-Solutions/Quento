@@ -91,7 +91,7 @@ export default class QuestionsModule extends VuexModule {
       .collection('questions')
       .doc(id)
       .collection('responses')
-      .orderBy('upVotes')
+      .orderBy('upVotes', 'desc')
       .get()
 
     const responses = responseRefs.docs.map((doc) =>
