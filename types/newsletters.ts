@@ -1,17 +1,49 @@
+import { Module } from 'vuex-module-decorators';
+
+
+import {Subject_O , Grade_O} from './subjects'
 
 export interface Newsletter_t
 {
-    id ?: string;
-  title : string;
-  content: string;
-  createdAt: Date;
-}
+    title : string;
+    uid : string;
+    userDisplayName : string;
+    userPhotoUrl ?: string;
 
+    images ?: string[];
+    contents ?: string;
+
+    createdAt : Date;
+    upVotes : number;
+    views : number;
+
+    subject : Subject_O;
+    grade : Grade_O;
+    id ?: string;
+}
+export interface Date_t_F
+{
+    seconds : number;
+    nanoseconds : number
+
+}
 export interface Newsletter_t_F
 {
-    title : string;
     content: string;
-    createdAt: Date;
+
+    title : string;
+    uid : string;
+    userDisplayName : string;
+    userPhotoUrl ?: string;
+
+    images ?: string[];
+    contents ?: string;
+
+    createdAt : Date_t_F | Date;
+    upVotes : number;
+    subject : Subject_O;
+    grade : Grade_O;
+    views : number;
 }
 
 export class Newsletter
@@ -25,12 +57,12 @@ export class Newsletter
 
     static fromFirebase = (doc : Newsletter_t_F, id ?: string) =>
     {
-
-        const obj = {...doc, createdAt : new Date(doc.createdAt), id};
+        const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
+        const obj = {...doc, createdAt, id};
         return new Newsletter(obj)
     }
 
-    toFirebase() : Newsletter_t_F
+    static toFirebase(this: Newsletter) : Newsletter_t_F
     {
         const {id, ...firebaseDoc} = {...this}
         return firebaseDoc
