@@ -101,7 +101,7 @@ export default class Sidebar extends Vue {
     {
       name : "Questions",
       id : "questions",
-      icon : "bx bxs-comment-checked",
+      icon : "bx bx-comment-dots",
       href : "/questions"
     },
         {

@@ -9,7 +9,7 @@
         </div>
       </div>
       <div v-if="question" class="w-full">
-        <QuestionCard :question="question"> </QuestionCard>
+        <QuestionCard :question="question"  v-on:toggle-like="RefreshLikes()"> </QuestionCard>
         <VxCard class="w-full mb-6" title="Post An Answer" collapseAction=true>
           <div class="vx-row w-full" style="">
             <VsTextarea
@@ -30,7 +30,7 @@
           <div class="vx-row w-full" style="">
               <ResponseCard v-for="(response, index) in ResponseList" :key="index" :response="response"></ResponseCard>
           </div>
-      </VxCard>
+        </VxCard>
       </div>
       
       <vs-alert color="danger" v-if="docNotFound">
@@ -45,11 +45,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { Question, Question_t_F } from '~/types/questions'
 import {Response} from '~/types/responses';
-
-
+import UserMixin from '~/mixins/UserMixin';
 import { questionStore } from '~/store'
 import QuestionCard from '~/components/QuestionCard.vue';
 import ResponseCard from '~/components/ResponseCard.vue';
@@ -60,16 +59,30 @@ import ResponseCard from '~/components/ResponseCard.vue';
     this.FetchQuestion()
   }
 })
-export default class QuestionContentPage extends Vue {
+export default class QuestionContentPage extends mixins(UserMixin) {
   question: Question | null = null
   questionId: string | null = null
   docNotFound = false
   responseContent = ''
 
-  get ResponseList()
-  {
-      return questionStore.ActiveResponses;
-  }
+    ResponseList : Response[] = []
+    RefreshLikes()
+    {
+        if(!this.question) return;
+        if(this.UserData?.likedQuestions?.includes(this.questionId || ""))
+        {
+            this.question.upVotes++;
+        } else 
+        {
+
+            this.question.upVotes--;
+        }
+
+    }
+    clone(a : any)
+    {
+        return Object.assign({}, a);
+    }
   async FetchQuestion() {
     const loading = this.$vs.loading()
     this.questionId = this.$route.params.id
@@ -78,7 +91,9 @@ export default class QuestionContentPage extends Vue {
       return
     }
     try {
-      this.question = await questionStore.GetQuestion(this.questionId)
+    await questionStore.GetQuestion(this.questionId)
+      this.question = Object.assign({}, questionStore.ActiveQuestion);
+      this.ResponseList = questionStore.ActiveResponses.map(a => Object.assign({}, a));
       loading.close()
       return
     } catch (error) {
