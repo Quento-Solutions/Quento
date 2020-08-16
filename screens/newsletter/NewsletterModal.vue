@@ -129,6 +129,7 @@ import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 
 import { authStore } from '~/store'
+import firestore from '~/plugins/firestore';
 
 interface imageSrc {
   error: boolean
@@ -154,8 +155,6 @@ export default class PostNotesModal extends mixins(ValidateImage) {
     if(value)
     {
       this.ClearFields();
-      notesStore.SET_RESET(false);
-      newslettersStore.SET_RESET(false);
     }
   }
 
@@ -172,10 +171,10 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   }
   readonly SubjectGroupList = NestedSubjectList
   get active() {
-    return notesStore.NotesModuleOpen
+    return newslettersStore.postNewsletterModalOpen
   }
   set active(value: boolean) {
-    notesStore.ToggleNotesModule(value)
+    newslettersStore.SET_POST_MODAL_OPEN(value)
   }
   title = ''
   contents = ''
@@ -223,21 +222,15 @@ export default class PostNotesModal extends mixins(ValidateImage) {
 
     const previewNote = new Newsletter({
       title: this.title,
-      uid: authStore.user?.uid!,
-      userDisplayName: authStore.user?.displayName!,
-      userPhotoUrl: authStore.user?.photoURL!,
       createdAt: new Date(),
-      upVotes: 0,
       views: 0,
-      subject: this.subjectSelect as Subject_O,
-      grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      images: srcs
-    })
+      backgroundImageUrl : "https://media.discordapp.net/attachments/738198413987938464/744677326499086347/wp5910896.jpg?width=1211&height=681",
+      authorDisplayName : "Quento Team",
+      authorPhotoUrl : "https://cdn.discordapp.com/attachments/737856423278673931/743911056518414406/quetzalcoatlus_joschua-knueppe.png"
+    });
 
-    notesStore.SET_UPLOAD_IMAGES(postImageUpload);
-    notesStore.SetPreviewNote(previewNote)
-    notesStore.TogglePreviewModal(true)
+    await firestore.collection("newsletters").doc("welcome-newsletter").set(Newsletter.toFirebase(previewNote));
   }
 
   set state(value: boolean) {

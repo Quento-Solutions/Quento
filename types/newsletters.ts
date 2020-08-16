@@ -6,19 +6,15 @@ import {Subject_O , Grade_O} from './subjects'
 export interface Newsletter_t
 {
     title : string;
-    uid : string;
-    userDisplayName : string;
-    userPhotoUrl ?: string;
-
-    images ?: string[];
-    contents ?: string;
+    contents : string;
 
     createdAt : Date;
-    upVotes : number;
     views : number;
 
-    subject : Subject_O;
-    grade : Grade_O;
+    backgroundImageUrl : string;
+    authorPhotoUrl : string;
+    authorDisplayName : string;
+
     id ?: string;
 }
 export interface Date_t_F
@@ -29,20 +25,15 @@ export interface Date_t_F
 }
 export interface Newsletter_t_F
 {
-    content: string;
 
     title : string;
-    uid : string;
-    userDisplayName : string;
-    userPhotoUrl ?: string;
+    contents : string;
 
-    images ?: string[];
-    contents ?: string;
+    backgroundImageUrl : string;
+    authorPhotoUrl : string;
+    authorDisplayName : string;
 
-    createdAt : Date_t_F | Date;
-    upVotes : number;
-    subject : Subject_O;
-    grade : Grade_O;
+    createdAt : Date | Date_t_F;
     views : number;
 }
 
@@ -62,9 +53,9 @@ export class Newsletter
         return new Newsletter(obj)
     }
 
-    static toFirebase(this: Newsletter) : Newsletter_t_F
+    static toFirebase(doc: Newsletter) : Newsletter_t_F
     {
-        const {id, ...firebaseDoc} = {...this}
+        const {id, ...firebaseDoc} = {...doc}
         return firebaseDoc
     }
 }
