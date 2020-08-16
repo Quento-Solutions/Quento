@@ -11,7 +11,7 @@
   >
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl">Preview <b>Posted</b> Note</h4>
+        <h4 class="not-margin text-title text-4xl">Preview <b>Question</b></h4>
       </div>
     </template>
 
@@ -31,7 +31,7 @@
           @click="PostNote()"
         >
           <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            POSTED NOTE
+            POST QUESTION
           </div>
         </vs-button>
       </div>
