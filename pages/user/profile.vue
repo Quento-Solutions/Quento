@@ -17,28 +17,29 @@
             </div>
 
             <!-- Information - Col 1 -->
-            <div class="vx-col flex-1 w-full" id="account-info-col-1">
-              <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}</div>
+            <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
+              <div class="vx-row font-bold text-3xl" style>{{ AuthUser.displayName }}</div>
               <div
-                class="vx-row w-full"
+                class="vx-row w-full text-2xl"
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
 
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
-                  <div class="font-bold">3</div>
+                  <div class="font-bold text-base">{{userLevel}}</div>
                 </vs-avatar>
               </div>
 
               <!-- MAKE A PROGRESSION BAR  -->
-              <div class="vx-row w-full mt-4">
+              <div class="vx-row w-full mt-6">
                 <v-progress-linear
                   color="deep-purple accent-4"
                   height="11"
                   value="100%"
                   striped
-                  style="background-color: #32CD32; width:50%; z-index:2"
+                  style="background-color: #32CD32; z-index:2"
+                  :style="`width: ${userExp}%`"
                 ></v-progress-linear>
                 <v-progress-linear
                   color="deep-purple accent-4"
@@ -81,14 +82,14 @@
             <div class="vx-col w-full" style></div>
           </div>
           <!-- /Information - Col 2 -->
-          <div class="vx-col w-full flex" id="account-manage-buttons">
+          <!-- <div class="vx-col w-full flex" id="account-manage-buttons">
             <vs-button class="mr-4" size="large">
               <i class="bx bx-edit" />&nbsp; Edit
             </vs-button>
             <vs-button type="border" color="danger" size="large">
               <i class="bx bx-trash" />&nbsp; Delete
             </vs-button>
-          </div>
+          </div>-->
         </div>
       </VxCard>
 
@@ -111,56 +112,51 @@
             :key="note.uid"
             style="margin-top: 1.5rem;"
           >
-            <v-card
-              class="mx-auto"
-              color="#26c6da"
-              dark
-              max-width="28rem"
-              style="min-width: 11rem;"
-            >
-              <v-card-title>
-                <div
-                  class="vx-row font-bold text-2xl"
-                  style="margin-bottom: -0.75rem;"
-                >{{ note.title }}</div>
-              </v-card-title>
-
-              <v-card-text
-                class="headline font-weight-bold overflow-hidden"
-                style="min-height: 9.8rem; max-height: 9.8rem;"
+            <nuxt-link :to="`/notes/${note.id}`">
+              <v-card
+                class="mx-auto"
+                color="#26c6da"
+                dark
+                max-width="28rem"
+                style="min-width: 11rem;"
               >
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-                werikfjjrweiofjiwejfiowefjweiofjweiofjwefijwefeiowfjweoifjweoijfiowejfiowefjowefijweoifjweiofjweoifje
-              </v-card-text>
+                <v-card-title>
+                  <div
+                    class="vx-row font-bold text-2xl"
+                    style="margin-bottom: -0.75rem;"
+                  >{{ note.title }}</div>
+                </v-card-title>
 
-              <v-card-actions style="margin-left: -0.75rem;">
-                <v-list-item class="grow">
-                  <v-list-item-avatar color="grey darken-3" style="margin-right: 0.5rem;">
-                    <v-img class="elevation-6" :src="AuthUser.photoURL"></v-img>
-                  </v-list-item-avatar>
+                <v-card-text
+                  class="headline font-weight-bold overflow-hidden"
+                  style="min-height: 9.8rem; max-height: 9.8rem;"
+                >{{note.contents}}fewfwefwefewfwefwefwefwefwefwefwefwefwefwe</v-card-text>
 
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{
-                      AuthUser.displayName
-                      }}
-                    </v-list-item-title>
-                  </v-list-item-content>
+                <v-card-actions style="margin-left: -0.75rem;">
+                  <v-list-item class="grow">
+                    <v-list-item-avatar color="grey darken-3" style="margin-right: 0.5rem;">
+                      <v-img class="elevation-6" :src="AuthUser.photoURL"></v-img>
+                    </v-list-item-avatar>
 
-                  <v-row align="center" justify="end" style="margin-right: 0.2rem;">
-                    <v-icon class="mr-1">mdi-heart</v-icon>
-                    <span class="subheading mr-2">{{ note.upVotes }}</span>
-                    <span class="mr-1"></span>
-                    <v-icon class="mr-1">mdi-eye</v-icon>
-                    <span class="subheading">{{ note.views }}</span>
-                  </v-row>
-                </v-list-item>
-              </v-card-actions>
-            </v-card>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{
+                        AuthUser.displayName
+                        }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-row align="center" justify="end" style="margin-right: 0.2rem;">
+                      <v-icon class="mr-1">mdi-heart</v-icon>
+                      <span class="subheading mr-2">{{ note.upVotes }}</span>
+                      <span class="mr-1"></span>
+                      <v-icon class="mr-1">mdi-eye</v-icon>
+                      <span class="subheading">{{ note.views }}</span>
+                    </v-row>
+                  </v-list-item>
+                </v-card-actions>
+              </v-card>
+            </nuxt-link>
           </v-flex>
         </v-layout>
       </VxCard>
@@ -190,6 +186,7 @@ import 'vuesax'
 })
 export default class UserProfile extends mixins(UserMixin) {
   UserNotes: Note[] = []
+  UserEXP: any
   async getUserNotes() {
     if (!this.AuthUser) {
       return
@@ -201,9 +198,10 @@ export default class UserProfile extends mixins(UserMixin) {
       .where('uid', '==', userId)
       .get()
     this.UserNotes = notesCollection.docs.map((doc) =>
-      Note.fromFirebase(doc.data() as Note_t_F)
+      Note.fromFirebase(doc.data() as Note_t_F, doc.id)
     )
-    // console.log('herro')
+
+    console.log(this.UserEXP)
   }
 
   @Watch('AuthUser')
@@ -211,6 +209,15 @@ export default class UserProfile extends mixins(UserMixin) {
     if (value) {
       this.getUserNotes()
     }
+  }
+
+  get userLevel() {
+    return this.UserData?.progressionLevel || 0
+  }
+
+  get userExp() {
+    console.log(this.UserData?.progressionExp)
+    return (this.UserData?.progressionExp || 0) / 200
   }
 
   getIcon(subject: SubjectGroup_O | Subject_O) {
