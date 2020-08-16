@@ -193,7 +193,7 @@ export default class NotesCard extends mixins(UserMixin) {
   }
 
   async toggleLike() {
-    if(!this.question?.id) return;
+    if (!this.question?.id || this.disabled) return
     const loading = this.$vs.loading();
     try 
     {
