@@ -124,7 +124,7 @@ import {
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
-import { Note } from '~/types/notes'
+import { Newsletter } from '~/types/newsletters'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 
@@ -155,6 +155,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
     {
       this.ClearFields();
       notesStore.SET_RESET(false);
+      newslettersStore.SET_RESET(false);
     }
   }
 
@@ -220,7 +221,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       return
     }
 
-    const previewNote = new Note({
+    const previewNote = new Newsletter({
       title: this.title,
       uid: authStore.user?.uid!,
       userDisplayName: authStore.user?.displayName!,
