@@ -122,5 +122,16 @@ export default class QuestionsModule extends VuexModule {
 
     return;
   }
+
+  @Action({ rawError: true })
+  public async IncrementView(id: string) {
+    const updateViews = await firestore
+      .collection('questions')
+      .doc(id)
+      .update({
+        views: FirestoreModule.FieldValue.increment(1)
+      })
+    return updateViews
+  }
   
 }
