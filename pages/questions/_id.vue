@@ -131,10 +131,15 @@ export default class QuestionContentPage extends mixins(UserMixin) {
         questionId: this.questionId
       })
       await this.FetchQuestion();
+      this.$vs.notification({
+          color: "success",
+          title : "Answer Posted!"
+      })
+      this.responseContent = '';
     } catch (error) {
-      this.$vs.notify({ message: error.message, color: 'danger' })
+      this.$vs.notification({ title: error.message, color: 'danger' })
     }
-    loading.close()
+    loading.close();
     this.$forceUpdate()
   }
   goBack() {
