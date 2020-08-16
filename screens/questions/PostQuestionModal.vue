@@ -21,7 +21,7 @@
       <div class="w-full p-6" style="">
         <vs-input
           v-model="title"
-          placeholder="You should sell chocolate"
+          placeholder="Question Title"
           label="Title"
           class="block"
           width="w-6"
@@ -85,10 +85,10 @@
       <div class="w-full p-6 px-10 pt-0">
         <VsTextarea
           v-model="contents"
-          placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
+          placeholder="What do you want to ask?"
           class="block"
           height="30rem"
-          label="QUEstionable Content"
+          label="Question Body"
         ></VsTextarea>
       </div>
     </div>
