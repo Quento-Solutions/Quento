@@ -1,7 +1,7 @@
 <template>
   <VxCard>
     <div class="vx-row w-full">
-      <div class="vx-row w-full justify-between " style="flex-wrap: nowrap">
+      <div class="vx-row w-full justify-between" style="flex-wrap: nowrap;">
         <!-- Profile Picture -->
         <div class="justify-start w-1/2 m-0">
           <div class="vx-row w-full justify-start items-center overflow-hidden">
@@ -29,19 +29,20 @@
                 </div>
               </div>
               <div class="truncate">
-                  {{ response.createdAt.toLocaleString() }}
+                {{ response.createdAt.toLocaleString() }}
               </div>
             </div>
           </div>
         </div>
         <vs-avatar
           class="icon"
-          :color="false ? 'danger' : '#f4f7f8'"
+          :color="userLiked ? 'danger' : '#f4f7f8'"
           badge-color="#7d33ff"
+          @click.stop="toggleLike()"
         >
           <i
             class="bx bx-heart primary"
-            :style="`color : ${false ? 'white' : '#ff4757'}`"
+            :style="`color : ${userLiked ? 'white' : '#ff4757'}`"
           ></i>
           <template #badge>
             {{ response.upVotes }}
@@ -60,11 +61,42 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { Response } from '~/types/responses'
+import { questionStore } from '~/store'
+import UserMixin from '~/mixins/UserMixin'
 
 @Component<ResponseCard>({ components: {} })
-export default class ResponseCard extends Vue {
+export default class ResponseCard extends mixins(UserMixin) {
   @Prop({ required: true }) response!: Response
+
+  async toggleLike() {
+    if (!this.response?.id || !this.response?.questionId) return
+    const loading = this.$vs.loading()
+    try {
+      await questionStore.ToggleLikedResponse({
+        questionId: this.response.questionId,
+        responseId: this.response.id
+      })
+      if(this.userLiked) {
+          this.response.upVotes++;
+          }
+      else {this.response.upVotes--;}
+      this.$emit('toggle-like')
+    } catch (error) {
+      this.$vs.notification({
+        color: 'danger',
+        message: error.message
+      })
+      console.log({ error })
+    }
+    loading.close()
+  }
+
+  get userLiked() {
+      console.log(this.UserData?.likedResponses, this.response.id);
+    if (!this.response.id) return;
+    return this.UserData?.likedResponses?.includes(this.response.id)
+  }
 }
 </script>

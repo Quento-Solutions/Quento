@@ -164,16 +164,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { Question } from '~/types/questions'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
-import { notesStore, authStore } from '~/store'
+import { notesStore, authStore, questionStore } from '~/store'
+
+import UserMixin from '~/mixins/UserMixin';
 
 @Component<NotesCard>({
   // components :
 
 })
-export default class NotesCard extends Vue {
+export default class NotesCard extends mixins(UserMixin) {
   @Prop({ required: true }) question!: Question
   @Prop({ default: false }) clickable!: boolean
   // Loaded full content
@@ -192,16 +194,27 @@ export default class NotesCard extends Vue {
   }
   userLiked(id?: string) {
     if (!id) return false
-    return notesStore.likedPosts.includes(id)
+    return this.UserData?.likedQuestions?.includes(id);
   }
 
-  async toggleLike(id?: string, time?: any) {
-    return;
-    // if (!id || this.disabled) return
-    // const a = this.$vs.loading()
-    // await notesStore.ToggleLikedNote(id)
-    // a.close()
+  async toggleLike() {
+    if(!this.question?.id) return;
+    const loading = this.$vs.loading();
+    try 
+    {
+      await questionStore.ToggleLikedQuestion(this.question.id);
+      this.$emit("toggle-like");
+    } catch (error)
+    {
+      this.$vs.notification({
+        color : "danger",
+        message : error.message
+      })
+      console.log({error});
+    }
+    loading.close();
   }
+  
   vfOptions = {
     autoplay: false,
     allowFullscreen: true

@@ -22,7 +22,9 @@ export interface UserData {
 
     likedSuggestions ?: string[];
     likedNotes ?: string[];
-
+    likedQuestions ?:string[];
+    likedResponses ?: string[];
+    
     userGuideClosed ?: boolean;
     userInformationAdded ?: boolean;
 
