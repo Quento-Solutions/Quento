@@ -132,7 +132,6 @@ export default class NotesSidebar extends Vue {
   }
 
   async filterSubjects() {
-    console.log(this.ActiveSubjectList);
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
       sortSelect : this.sortSelect,
