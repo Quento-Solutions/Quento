@@ -156,9 +156,15 @@
         <template #tooltip> {{ question.views }} Views </template>
       </vs-tooltip>
 
-      <vs-avatar class="icon-small">
-        <i class="bx bx-bookmark"></i>
-      </vs-avatar>
+      <vs-tooltip>
+        <vs-avatar class="icon-small">
+          <i class="bx bx-comment-check"></i>
+          <template #badge>
+            {{ question.responses }}
+          </template>
+        </vs-avatar>
+        <template #tooltip> {{ question.responses }} Responses </template>
+      </vs-tooltip>
     </div>
   </VxCard>
 </template>
@@ -214,7 +220,7 @@ export default class NotesCard extends mixins(UserMixin) {
     }
     loading.close();
   }
-  
+
   vfOptions = {
     autoplay: false,
     allowFullscreen: true
