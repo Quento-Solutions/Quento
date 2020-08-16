@@ -127,8 +127,10 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
+    functions.httpsCallable("algoliaUpdateQuestion")({
+        questionId
+    });
     await authStore.refreshUserData()
-
     return
   }
   @Action({ rawError: true })
