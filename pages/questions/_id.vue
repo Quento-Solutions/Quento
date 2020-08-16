@@ -9,8 +9,13 @@
         </div>
       </div>
       <div v-if="question" class="w-full">
-        <QuestionCard :question="question"  v-on:toggle-like="RefreshLikes()"> </QuestionCard>
-        <VxCard class="w-full mb-6" title="Post An Answer" collapseAction=true>
+        <QuestionCard :question="question" v-on:toggle-like="RefreshLikes()">
+        </QuestionCard>
+        <VxCard
+          class="w-full mb-6"
+          title="Post An Answer"
+          collapseAction="true"
+        >
           <div class="vx-row w-full" style="">
             <VsTextarea
               placeholder="Leave a response..."
@@ -18,21 +23,33 @@
               class="w-full"
               height="10rem"
             ></VsTextarea>
-            <div class="vx-row w-full justify-end p-0" style="padding: 0">
-                <vs-button class="float-right" color="danger" size="large">Cancel</vs-button>
-                <vs-button class="float-right" color="success" size="large" :disabled="!responseContent" @click="PostResponse()">Post</vs-button>
+            <div class="vx-row w-full justify-end p-0" style="padding: 0;">
+              <vs-button class="float-right" color="danger" size="large"
+                >Cancel</vs-button
+              >
+              <vs-button
+                class="float-right"
+                color="success"
+                size="large"
+                :disabled="!responseContent"
+                @click="PostResponse()"
+                >Post</vs-button
+              >
             </div>
           </div>
         </VxCard>
 
-
         <VxCard class="w-full" :fitContent="true" title="Responses">
           <div class="vx-row w-full" style="">
-              <ResponseCard v-for="(response, index) in ResponseList" :key="index" :response="response"></ResponseCard>
+            <ResponseCard
+              v-for="(response, index) in ResponseList"
+              :key="index"
+              :response="response"
+            ></ResponseCard>
           </div>
         </VxCard>
       </div>
-      
+
       <vs-alert color="danger" v-if="docNotFound">
         <template #title>
           Something Went Wrong
@@ -47,11 +64,11 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { Question, Question_t_F } from '~/types/questions'
-import {Response} from '~/types/responses';
-import UserMixin from '~/mixins/UserMixin';
+import { Response } from '~/types/responses'
+import UserMixin from '~/mixins/UserMixin'
 import { questionStore } from '~/store'
-import QuestionCard from '~/components/QuestionCard.vue';
-import ResponseCard from '~/components/ResponseCard.vue';
+import QuestionCard from '~/components/QuestionCard.vue'
+import ResponseCard from '~/components/ResponseCard.vue'
 
 @Component<QuestionContentPage>({
   components: { QuestionCard, ResponseCard },
@@ -65,24 +82,18 @@ export default class QuestionContentPage extends mixins(UserMixin) {
   docNotFound = false
   responseContent = ''
 
-    ResponseList : Response[] = []
-    RefreshLikes()
-    {
-        if(!this.question) return;
-        if(this.UserData?.likedQuestions?.includes(this.questionId || ""))
-        {
-            this.question.upVotes++;
-        } else 
-        {
-
-            this.question.upVotes--;
-        }
-
+  ResponseList: Response[] = []
+  RefreshLikes() {
+    if (!this.question) return
+    if (this.UserData?.likedQuestions?.includes(this.questionId || '')) {
+      this.question.upVotes++
+    } else {
+      this.question.upVotes--
     }
-    clone(a : any)
-    {
-        return Object.assign({}, a);
-    }
+  }
+  clone(a: any) {
+    return Object.assign({}, a)
+  }
   async FetchQuestion() {
     const loading = this.$vs.loading()
     this.questionId = this.$route.params.id
@@ -91,31 +102,40 @@ export default class QuestionContentPage extends mixins(UserMixin) {
       return
     }
     try {
-    await questionStore.GetQuestion(this.questionId)
-      this.question = Object.assign({}, questionStore.ActiveQuestion);
-      this.ResponseList = questionStore.ActiveResponses.map(a => Object.assign({}, a));
+      await questionStore.GetQuestion(this.questionId)
+      questionStore.IncrementView(this.questionId);
+    
+      this.question = Object.assign({}, questionStore.ActiveQuestion)
+      this.ResponseList = questionStore.ActiveResponses.map((a) =>
+        Object.assign({}, a)
+      )
       loading.close()
       return
     } catch (error) {
+        if (!questionStore.ActiveQuestion) {
+        this.docNotFound = true
+        loading.close()
+        return
+      }
       console.log({ error })
       loading.close()
     }
   }
 
-    async PostResponse()
-    {
-        if(!this.questionId) return;
-        const loading = this.$vs.loading();
-        try {
-            await questionStore.PostResponse({ contents : this.responseContent, questionId : this.questionId})
-        }
-        catch(error)
-        {
-            this.$vs.notify({message : error.message, color : "danger"});
-        }
-        loading.close();
-        this.$forceUpdate();
+  async PostResponse() {
+    if (!this.questionId) return
+    const loading = this.$vs.loading()
+    try {
+      await questionStore.PostResponse({
+        contents: this.responseContent,
+        questionId: this.questionId
+      })
+    } catch (error) {
+      this.$vs.notify({ message: error.message, color: 'danger' })
     }
+    loading.close()
+    this.$forceUpdate()
+  }
   goBack() {
     this.$router.push('/questions')
   }
