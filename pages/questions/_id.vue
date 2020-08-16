@@ -130,6 +130,7 @@ export default class QuestionContentPage extends mixins(UserMixin) {
         contents: this.responseContent,
         questionId: this.questionId
       })
+      await this.FetchQuestion();
     } catch (error) {
       this.$vs.notify({ message: error.message, color: 'danger' })
     }
