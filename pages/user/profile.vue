@@ -18,26 +18,38 @@
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full" id="account-info-col-1">
-              <div class="vx-row font-bold text-2xl" style>
-                {{ AuthUser.displayName }}
-              </div>
-              <div class="vx-row w-full" style>
-                Grade {{ UserData.currentGrade }} at {{ UserData.school }}
-              </div>
+              <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}</div>
+              <div
+                class="vx-row w-full"
+                style
+              >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
 
               <div class="vx-row w-full my-2 items-center">
-                <div class="font-bold text-xl mr-2 text-ginger">Level</div>
+                <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
                   <div class="font-bold">3</div>
                 </vs-avatar>
-                <!-- MAKE A PROGRESSION BAR  -->
-                <!-- <vs-progress
-                  :percent="30"
-                  color="rgb(164, 69, 15)"
-                  primary
-                ></vs-progress> -->
+              </div>
+
+              <!-- MAKE A PROGRESSION BAR  -->
+              <div class="vx-row w-full mt-4">
+                <v-progress-linear
+                  color="deep-purple accent-4"
+                  height="11"
+                  value="100%"
+                  striped
+                  style="background-color: #32CD32; width:50%; z-index:2"
+                ></v-progress-linear>
+                <v-progress-linear
+                  color="deep-purple accent-4"
+                  height="11"
+                  value="100%"
+                  striped
+                  style="background-color:gray; width:100%; margin-top: -0.8rem"
+                ></v-progress-linear>
               </div>
             </div>
+
             <!-- <div class="text-title w-full vx-col text-2xl px-10" style="">
               Subjects
             </div>-->
@@ -48,19 +60,14 @@
                 v-for="(subject, index) in UserData.interestedSubjects"
                 :key="index"
               >
-                <i
-                  class="bx text-xl text-white mr-2"
-                  :class="getIcon(subject)"
-                />
+                <i class="bx text-xl text-white mr-2" :class="getIcon(subject)" />
                 {{ subject }}
               </div>
             </div>
             <div class="w-full p-2 md:px-8" style>
               <div
                 class="p-2 rounded-lg border-solid border-gray-400 w-full font-medium"
-              >
-                {{ UserData.bio }}
-              </div>
+              >{{ UserData.bio }}</div>
             </div>
           </div>
           <!-- /Information - Col 1 -->
@@ -85,15 +92,14 @@
         </div>
       </VxCard>
 
+      <!-- User's Notes Card -->
       <VxCard class="mb-base mt-12" v-if="AuthUser && UserData">
         <div class="vx-col flex-1 w-full" id="account-info-col-1">
-          <div class="vx-row font-bold text-2xl" style>
-            {{ AuthUser.displayName }}'s Notes
-          </div>
+          <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}'s Notes</div>
         </div>
         <!-- <div class="vx-col flex-1 w-full" id="account-info-col-1">
           {{ UserNotes }}
-        </div> -->
+        </div>-->
 
         <v-layout row wrap>
           <v-flex
@@ -116,9 +122,7 @@
                 <div
                   class="vx-row font-bold text-2xl"
                   style="margin-bottom: -0.75rem;"
-                >
-                  {{ note.title }}
-                </div>
+                >{{ note.title }}</div>
               </v-card-title>
 
               <v-card-text
@@ -135,27 +139,22 @@
 
               <v-card-actions style="margin-left: -0.75rem;">
                 <v-list-item class="grow">
-                  <v-list-item-avatar
-                    color="grey darken-3"
-                    style="margin-right: 0.5rem;"
-                  >
+                  <v-list-item-avatar color="grey darken-3" style="margin-right: 0.5rem;">
                     <v-img class="elevation-6" :src="AuthUser.photoURL"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title>{{
+                    <v-list-item-title>
+                      {{
                       AuthUser.displayName
-                    }}</v-list-item-title>
+                      }}
+                    </v-list-item-title>
                   </v-list-item-content>
 
-                  <v-row
-                    align="center"
-                    justify="end"
-                    style="margin-right: 0.2rem;"
-                  >
+                  <v-row align="center" justify="end" style="margin-right: 0.2rem;">
                     <v-icon class="mr-1">mdi-heart</v-icon>
                     <span class="subheading mr-2">{{ note.upVotes }}</span>
-                    <span class="mr-1"> </span>
+                    <span class="mr-1"></span>
                     <v-icon class="mr-1">mdi-eye</v-icon>
                     <span class="subheading">{{ note.views }}</span>
                   </v-row>
@@ -185,8 +184,8 @@ import 'vuesax'
   },
   mounted() {
     this.getUserNotes()
-    console.log('hello')
-    console.log(this.UserNotes)
+    // console.log('hello')
+    // console.log(this.UserNotes)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -196,7 +195,7 @@ export default class UserProfile extends mixins(UserMixin) {
       return
     }
     const userId = this.AuthUser?.uid
-    console.log(this.AuthUser)
+    // console.log(this.AuthUser)
     const notesCollection = await firestore
       .collection('notes')
       .where('uid', '==', userId)
@@ -204,7 +203,7 @@ export default class UserProfile extends mixins(UserMixin) {
     this.UserNotes = notesCollection.docs.map((doc) =>
       Note.fromFirebase(doc.data() as Note_t_F)
     )
-    console.log('herro')
+    // console.log('herro')
   }
 
   @Watch('AuthUser')
