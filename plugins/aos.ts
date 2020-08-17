@@ -3,9 +3,7 @@ import 'aos/dist/aos.css'
 import 'aos/dist/aos.css'
 import type { Plugin } from '@nuxt/types'
 const a: Plugin = ({ app }) => {
-  app.AOS = AOS.init({
-    // disableMutationObserver : true,
-  }) // or any other options you need
+  app.AOS = AOS.init({disable: 'mobile'});
 }
 
 export default a
