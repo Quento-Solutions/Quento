@@ -6,6 +6,7 @@
       </div>
    </section>
    <div class="w-full overflow-x-hidden" >
+      <section class="splashContainer">
       <div class="background">
       </div>
       <section>
@@ -29,9 +30,11 @@
             <img style="margin-left:50%;transform:translate(-50%);" src="../assets/images/down.png">
          </div>
       </section>
+      </section>
+      </div>
       <section id="aboutContent" style="background:#f6f9fc;display:flex;flex-direction:column;">
          <div class="w-full firstSection" style="display:flex;flex-direction:row;">
-             <div class="w-1/3 textContent left" style="height:35vw" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+             <div class="w-1/3 textContent left" style="" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
                 <h1 style="color:#0a2540;font-family:ginger-bold;">Schoolwork just got a lot easier</h1>
                <p class="text-ginger" style="color:#42547d;">Be it transcribing handwriting, sharing course notes or requesting mentorship, Quento has got your learning needs covered.
                   <br><br><span><i class='bx bx-brain'></i>Optical character recognition digitizes your pen-and-paper notes in a flash so you can experience the best of both worlds.</span>
@@ -41,15 +44,15 @@
                </p>
                <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#9c44db;color:white;">Start your experience</a>
              </div>
-              <div class="w-2/3" style="display:flex;height:35vw;align-items:flex-end;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+              <div class="w-2/3" style="display:flex;;align-items:flex-end;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
                  <img src="../assets/images/Computer Graphic Quento.png" style="height:80%;">
               </div>
          </div>
          <div class="w-full secondSection" style="display:flex;flex-direction:row;">
-             <div class="w-1/2" style="display:flex;height:35vw;align-items:center;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+             <div class="w-1/2" style="display:flex;;align-items:center;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
              <img src="../assets/images/Phone Graphic Quento 2.png" style="height:80%;">
              </div>
-              <div class="w-1/2 textContent right" style="height:35vw" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+              <div class="w-1/2 textContent right" style="" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
               <h1 style="color:#0a2540;font-family:ginger-bold;">Put the ‘u’ in education</h1>
                <p class="text-ginger" style="color:#42547d;">Stay on top of your schedule and never miss out by having your academic deadlines, club announcements, and other notifications texted right to your phone!
                   <br><br><span><i class='bx bxs-school' ></i>Join your school’s club groups and access a daily newsletter containing the latest scoop on both school-wide and club-specific issues.</span>
@@ -71,7 +74,7 @@
                   </div>
                </div>
                <div class="td2">
-                  <table class="cardsContainer relative" style="height:80%;">
+                  <table class="cardsContainer relative">
                      <tr>
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="0" style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
@@ -126,27 +129,20 @@
             <p>
                Quento is currently in its beta stage and we need YOUR help to make the platform the best it can be. We are actively searching for beta testers and student developers to make Quento’s vision a reality.
                <br><br>
-               <div style="display:flex;flex-direction:row;width:100%;">
-                  <div style="width:45%;">
-                     <b>Become a beta tester</b><br>
-               <span>As a beta tester, you’ll be tasked with using the platform’s features while they are in development and reporting any issues that you face. You’ll also have the opportunity to directly suggest ideas to our development teams through our Discord server. To contribute, signup for a Quento account, join our Discord server, and report any bugs that you find in the #issues channel. 
-               </span>
+               <div class="joinUsContainer">
+                  <div class="contribute" style="width:45%;">
+                     <b>Become a beta tester</b><br><br>
+               As a beta tester, you’ll be tasked with using the platform’s features while they are in development and reporting any issues that you face. You’ll also have the opportunity to directly suggest ideas to our development teams through our Discord server. To contribute, signup for a Quento account, join our Discord server, and report any bugs that you find in the #issues channel. 
+               
                   </div>
-                  <div style="width:45%;margin-left:5%">
-                     <b>Contribute as a developer</b><br>
-               <span>We’re always in need of new members on our development team. Whether you’re ready to squash some pesky bugs or help make a new exciting idea a reality, we welcome you with open arms. 
+                  <div class="contribute section2" style="width:45%;margin-left:5%">
+                     <b>Contribute as a developer</b><br><br>
+               We’re always in need of new members on our development team. Whether you’re ready to squash some pesky bugs or help make a new exciting idea a reality, we welcome you with open arms. 
                <br><br>
                When you’re ready, submit your application using the form to your right; it should include your full name, email address, and Discord handle as well as what you’d like to work on as well and any relevant programming skills.
-               </span>
+               
                   </div>
-               </div>
-               <!-- <ol>
-                  <li>Sign up for a regular Quento account.</li>
-                  <li>Join our Discord server using the button on this page.</li>
-                  <li>Use Quento’s features on a daily basis.</li>
-                  <li>Post your ideas for new features on the suggestion board. </li>
-                  <li>Report any bugs that you find in the #issues channel.</li>
-               </ol> --></p>
+               </div></p>
             </div>
          </div>
          <div class="rightDiv" data-aos="fade-left" data-aos-duration="1000">
@@ -181,7 +177,6 @@
             <button>Join Quento</button>
          </div>
       </section>
-   </div>
 </section>
 </template>
     <script src="https://kit.fontawesome.com/ed68982581.js" crossorigin="anonymous"></script>

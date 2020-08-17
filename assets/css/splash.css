@@ -215,6 +215,10 @@ textarea {
     margin-bottom: 3vw !important;
 }
 
+#aboutContent .firstSection div, #aboutContent .secondSection div {
+    height:35vw;
+}
+
 #aboutContent .textContent{
     width:50%;
    display: flex;
@@ -300,6 +304,7 @@ textarea {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    height:80%;
 }
 #features .cardsContainer .card{
     height:19vw;
@@ -391,7 +396,7 @@ textarea {
    font-family: ginger-normal;
    letter-spacing: -0.05vw;
 }
-#beta .leftDiv .largeContainer span{
+#beta .leftDiv .largeContainer .contribute{
     font-size: 0.9vw;
     font-family: ginger-normal;
     letter-spacing: -0.05vw;
@@ -404,7 +409,9 @@ textarea {
     letter-spacing: -0.05vw;
     color:#0a2540;
 } 
-
+#beta .joinUsContainer {
+    display:flex;flex-direction:row;width:100%;
+}
 #footerContainer {
     overflow-y: hidden;
     z-index: 100;
@@ -538,20 +545,47 @@ textarea {
         margin-top:3vw;
         width:6vw;
    }
+   .splashContainer {
+       height:200vw;
+       overflow-y:hidden;
+   }
     #aboutContent {
         width:100vw;
-        height:240vw;
+        height:auto;
         flex-direction: column;
+        overflow-y: hidden;
    }
-    #aboutContent .textContent{
-        margin-top:10vw;
-        margin-left:10vw;
-        margin-right:10vw;
-   }
+   
+   #aboutContent .firstSection {
+    margin-top: 3vw !important;
+    margin-bottom: 3vw !important;
+    flex-direction: column-reverse !important;
+    overflow-y: hidden;
+}
+
+#aboutContent .secondSection {
+    margin-bottom: 3vw !important;
+    flex-direction: column !important;
+    overflow-y: hidden;
+}
+#aboutContent .firstSection div, #aboutContent .secondSection div {
+    height:90vw;
+    width:100vw;
+    justify-content: center;
+    overflow-y: hidden;
+}
+   #aboutContent .textContent{
+    width:100vw;
+    padding:0 10% !important;
+    margin:0 !important;
+    height: auto !important;
+    overflow-y: hidden;
+}
     #aboutContent .textContent h1{
         font-size:7vw;
         padding-top:3vw;
         letter-spacing:-0.1vw;
+        margin-top: 10vw;
    }
     #aboutContent .textContent h2{
         font-size:4.5vw;
@@ -561,6 +595,17 @@ textarea {
         font-size:3vw;
         padding-top:3vw;
    }
+   #aboutContent .textContent i{
+    font-size:4.5vw;
+    color:#9c44db;
+    margin-right: 1vw;
+}
+#aboutContent .textContent span{
+    font-size:3vw;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-center;
+}
     #aboutContent .textContent a{
         border-radius:6vw;
         padding:0.9vw 6vw;
@@ -586,37 +631,47 @@ textarea {
         margin-top:10vw;
    }
     #features {
-        height:220vw;
+        height:auto;
         width:100vw;
+        margin-top:10vw;
    }
     #features .td1 {
         width:100%;
    }
     #features .td2 {
         width:100%;
-        margin-top:10vw;
    }
     #features .cardsContainer {
-        margin-top:15vw;
         margin-left:50%;
         transform: translateX(-50%);
+        flex-direction: column !important;
+        height:auto;
    }
+   #features .cardsContainer tr {
+       display: flex;
+    flex-direction: column !important;
+   }
+   #features .cardsContainer tr td div .card{
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
     #features .cardsContainer .card{
-        height:55vw;
-       width:30vw;
+        height:60vw;
+       width:45vw;
        border-radius:3vw;
+       margin-bottom:3vw;
        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
    }
     #features .cardsContainer .card h1{
         width:9vw;
        height:9vw;
-       font-size:6vw;
+       font-size:7vw;
        border-radius:30vw;
        padding-top:1vw;
        margin-top:1vw;
    }
     #features .cardsContainer .card h3{
-        font-size:3vw;
+        font-size:3.5vw;
        padding-top:3vw;
    }
     #features .cardsContainer .card p{
@@ -626,7 +681,6 @@ textarea {
    }
     #features .vision {
         width:80vw;
-        margin-left:10vw;
    }
     #features .vision h1 {
         font-size:9vw;
@@ -644,20 +698,26 @@ textarea {
        padding:1vw 6vw;
    }
     #beta {
-        margin-top:15vw;
+        margin-top:5vw;
         flex-direction: column;
+        height: auto !important;
    }
     #beta .leftDiv {
         width:100%;
    }
+   #beta .circleBackground {
+    display: none;
+}
     #beta .rightDiv {
         width:100%;
         margin-top:10vw;
    }
     #beta .leftDiv .largeContainer {
         margin-top:5vw;
-       margin-left:10vw;
-       margin-right:10vw;
+        width: 75%;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
    }
     #beta .leftDiv .largeContainer h1 {
         font-size:7.5vw;
@@ -677,6 +737,31 @@ textarea {
        font-size:3vw;
        margin-top:3vw;
    }
+   #beta .leftDiv .largeContainer .contribute{
+    font-size: 3vw;
+    letter-spacing: -0.05vw;
+    line-height:4vw !important;
+}
+#beta .leftDiv .largeContainer .section2{
+    margin-top:4vw !important;
+}
+
+
+
+#beta .leftDiv .largeContainer b {
+    font-size:4vw;
+    letter-spacing: -0.05vw;
+    margin-bottom: 2vw !important;
+} 
+#beta .joinUsContainer {
+    display:flex;flex-direction:column;width:100%;
+    align-items: center;
+}
+#beta .joinUsContainer div {
+    width:100% !important;
+    margin:0 !important;
+}
+
     #beta .rightDiv h1{
         font-size:7.5vw;
        padding-top:3vw;
@@ -693,19 +778,32 @@ textarea {
         margin-left:6vw;
    }
     #footerContainer {
-        margin-top:15vw;
+        margin-top:5vw;
    }
     #footerContainer .footer {
         width:100vw;
        height:15vw;
    }
-    #footerContainer .footer a {
-        font-size:4vw;
-       left:8vw;
-   }
-    #footerContainer .footer span {
-        font-size:2.5vw 
-   }
+   #footerContainer h1{
+    font-size:6vw;
+    line-height:6vw;
+}
+#footerContainer {
+    background-size: 100% 100%;
+}
+#footerContainer p{
+    margin-top:3vw;
+    font-size:2.5vw;
+    line-height: 3vw;
+    margin-left:10% !important;
+    width: 80%;
+}
+#footerContainer button {
+    font-size:3vw;
+    margin-top:3vw;
+    padding:0.5vw 3vw;
+    height:5vw;
+}
     .textInput {
         border:none;
         padding-left:0.9vw;
@@ -745,10 +843,10 @@ textarea {
    }
     #formArea {
         width:90vw;
-       height:90vw;
+       height:85vw;
    }
     #formSubmitted {
-        width:90vw;
+        width:40vw;
        height:90vw;
        margin-left:5vw;
    }
