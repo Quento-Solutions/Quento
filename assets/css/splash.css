@@ -59,11 +59,13 @@
     color:#42547d;
     background:#f6f9fc;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+    font-family:ginger-normal;
 }
 textarea {
     border:none;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
     padding-left:0.3vw;
+    padding-top:0.3vw;
     width: 30vw;
     height: 12vw;
     font-size: 1vw;
@@ -71,15 +73,16 @@ textarea {
     margin-top: 0;
     color:#42547d;
     background:#f6f9fc;
+    font-family:ginger-normal;
 }
 #submitForm {
-    background-color:#6b3deb;
+    background:rgba(255,255,255,0.3);
     color:white;
     border:none;
     border-radius:2vw;
-    padding:0.3vw;
-    width:20vw;
+    padding:0.3vw 3vw;
     font-family:ginger-normal;
+    font-weight: bold;
     font-size:1vw;
    margin-top:1vw;
     display:inline-block;
@@ -98,14 +101,6 @@ textarea {
     background: url("../images/background2.jpg") no-repeat;
     background-size:100%;
 }
-.diagonal-background {
-    position:absolute;
-    background-image: linear-gradient(to right, #4a45f4, #df43c6);
-    height:50vw;
-    width:130vw;
-    transform: rotate(-8deg);
-    left:-20vw;
-}
 .loadingLogo {
     background: linear-gradient(to right, #4a45f4, #df43c6);
    -webkit-background-clip: text;
@@ -119,8 +114,9 @@ textarea {
     margin-top:1vw;
 }
 #nav .logo {
-    font-size:2vw;
-    left:8vw;
+    width:3vw;
+    height:3vw;
+    left:6vw;
 }
 .navRightContainer {
     right:8vw;
@@ -146,42 +142,48 @@ textarea {
     height:55vw;
 }
 #splash .mainContent {
-    top:12vw;
+    top:14vw;
     left:15vw;
-    width:45vw;
+    width:55vw;
 }
 #splash .mainContent h1{
-    font-size:5vw;
+    font-size:4.5vw;
     letter-spacing:-0.2vw;
-    line-height:5vw;
+    line-height:4.5vw;
+    width:100%;
 }
 #splash .mainContent h2{
-    font-size:2.5vw;
+    margin-top:1.2vw;
+    font-size:1.5vw;
     letter-spacing:-0.1vw;
-    line-height:2.5vw;
+    line-height:2vw;
+    font-family:ginger-normal;
+    width:50%;
 }
 #splash .mainContent .link1{
     font-size:1vw;
-    margin-top:1vw;
+    margin-top:1.2vw;
     border-radius:2vw;
-    padding:0vw 2vw;
-    height:3vw;
+    padding:0vw 1.5vw;
+    height:2.3vw;
     margin-left:1vw;
+    font-weight: bold;
 }
 #splash .mainContent .link1 img{
-    width:2vw;
-    height:2vw;
-    margin-right:1vw;
+    width:1.35vw;
+    height:1.5vw;
+    margin-right:0.5vw;
     display:inline;
 }
 #splash .mainContent .link2{
     font-size:1vw;
     margin-top:1vw;
     border-radius:2vw;
-    padding:0vw 2vw;
-    height:3vw;
-    background:#ff70ab;
-    color:white;
+    padding:0vw 1.5vw;
+    height:2.3vw;
+    background:white;
+    color:#5942f2;
+    font-weight: bold;
 }
 #splash .scrollDown {
     top:85vh;
@@ -196,37 +198,71 @@ textarea {
 }
 #aboutContent {
     width:100vw;
-    height:55vw;
+    height:80vw;
     overflow-x: hidden;
 }
-#aboutContent .leftContent{
-    margin-top:5vw;
-   margin-left:10vw;
+
+#aboutContent div {
+    overflow-y: hidden;
 }
-#aboutContent .leftContent h1{
+
+#aboutContent .firstSection {
+    margin-top: 3vw !important;
+    margin-bottom: 3vw !important;
+}
+
+#aboutContent .secondSection {
+    margin-bottom: 3vw !important;
+}
+
+#aboutContent .textContent{
+    width:50%;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: center;
+}
+
+#aboutContent .left {
+    padding-left: 10%;
+}
+
+#aboutContent .right {
+    padding-right: 10%;
+}
+
+#aboutContent .textContent h1{
     font-size:3vw;
    padding-top:1vw;
    letter-spacing:-0.1vw;
 }
-#aboutContent .leftContent h2{
-    font-size:1.5vw;
-   padding-top:1vw;
-}
-#aboutContent .leftContent p{
+#aboutContent .textContent p{
     font-size:1vw;
    padding-top:1vw;
 }
-#aboutContent .leftContent a{
+#aboutContent .textContent i{
+    font-size:1.6vw;
+    color:#9c44db;
+    margin-right: 1vw;
+}
+#aboutContent .textContent span{
+    font-size:0.9vw;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-center;
+}
+#aboutContent .textContent a{
     border-radius:2vw;
    padding:0.3vw 2vw;
    font-size:1vw;
    margin-top:1vw;
+   font-weight: bold;
 }
-#aboutContent .leftContent h3{
+#aboutContent .textContent h3{
     font-size:2vw;
    padding-top:1vw;
 }
-#aboutContent .leftContent h4{
+#aboutContent .textContent h4{
     margin-top:4vw;
    font-size:1.1vw;
 }
@@ -240,25 +276,38 @@ textarea {
     width:90%;
 }
 #features {
-    height:55vw;
+    height:auto;
     width:100vw;
+    background-color:#f6f9fc;
+    display: flex;
+    flex-direction: row;
 }
 #features .td1 {
-    width:50%;
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #features .td2 {
-    width:50%;
-    margin-top:10vw;
+    width:100%;
+    z-index: 100;
+    position: relative;
+}
+#features .featuresContainer {
+    flex-direction: column;
 }
 #features .cardsContainer {
-    margin-top:5vw;
-    margin-left:8vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 #features .cardsContainer .card{
-    height:17vw;
-   width:12vw;
+    height:19vw;
+   width:17vw;
    border-radius:1vw;
    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+   z-index: 100;
+    position: relative;
 }
 #features .cardsContainer .card h1{
     width:3vw;
@@ -278,15 +327,18 @@ textarea {
 }
 #features .vision {
     width:40vw;
+    text-align: center;
 }
 #features .vision h1 {
     font-size:3vw;
    padding-top:1vw;
    letter-spacing:-0.1vw;
+   color: #0a2540;
 }
 #features .vision p {
     font-size:1vw;
    padding-top:1vw;
+   color: #0a2540;
 }
 #features .vision a{
     margin-top:1vw;
@@ -296,64 +348,105 @@ textarea {
 }
 #beta {
     margin-top:0;
+    height: 40vw;
 }
+
+#beta .circleBackground {
+    background: radial-gradient(#df43c6, #8c3af0);
+    width:90vw;
+    height: 80vw;
+    border-radius: 100%;
+    position: absolute;
+    right:0;
+    z-index: 1;
+    transform:translate(45%, -22%);
+}
+
+
 #beta .leftDiv {
     width:50%;
 }
 #beta .rightDiv {
     width:50%;
     margin-top:10vw;
+    z-index: 100;
 }
 #beta .leftDiv .largeContainer {
-    margin-top:5vw;
    margin-left:10vw;
+   margin-top:5vw;
+   width:60%;
 }
 #beta .leftDiv .largeContainer h1 {
     font-size:2.5vw;
    padding-top:1vw;
    letter-spacing:-0.1vw;
+   color:#0a2540;
+   font-family: ginger-bold;
 }
-#beta .leftDiv .largeContainer .marginTop2 {
-    margin-top:2vw;
-}
+
 #beta .leftDiv .largeContainer p{
     font-size:1vw;
    padding-top:1vw;
+   color:#0a2540;
+   font-family: ginger-normal;
+   letter-spacing: -0.05vw;
 }
-#beta .leftDiv .largeContainer a{
-    border-radius:2vw;
-   padding:0.3vw 2vw;
-   font-size:1vw;
-   margin-top:1vw;
+#beta .leftDiv .largeContainer span{
+    font-size: 0.9vw;
+    font-family: ginger-normal;
+    letter-spacing: -0.05vw;
+    color:#0a2540;
 }
-#beta .rightDiv h1{
-    font-size:2.5vw;
-   padding-top:1vw;
-   letter-spacing:-0.1vw;
-   margin-bottom:2vw;
-}
-#beta .rightDiv .imageContainer{
-    margin-top:3vw;
-}
-#beta .rightDiv .imageContainer img{
-    width:4vw;
-}
-#beta .rightDiv .imageContainer .image2{
-    margin-left:2vw;
-}
+
+#beta .leftDiv .largeContainer b {
+    font-size:1.1vw;
+    font-family: ginger-normal;
+    letter-spacing: -0.05vw;
+    color:#0a2540;
+} 
+
 #footerContainer {
+    overflow-y: hidden;
+    z-index: 100;
+    position: relative;
     margin-top:5vw;
-}
-#footerContainer .footer {
     width:100vw;
-   height:5vw;
+    padding:6vw;
+    background-image: url("../images/footer.png");
+    background-size: 100% auto;
+    text-align:center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 }
-#footerContainer .footer a {
-    font-size:1.3vw;
-   left:8vw;
+#footerContainer h1{
+    font-size:2.5vw;
+    letter-spacing:-0.1vw;
+    line-height:2.5vw;
+    width:100%;
+    font-family: ginger-bold;
+    color:white;
 }
-#footerContainer .footer span {
-    font-size:0.8vw 
+#footerContainer p{
+    margin-top:1.2vw;
+    font-size:1.1vw;
+    letter-spacing:-0.05vw;
+    line-height:1.4vw;
+    font-family:ginger-normal;
+    width:50%;
+    margin-left:25%;
+    color:white;
+}
+#footerContainer button {
+    font-size:1vw;
+    margin-top:1vw;
+    border-radius:2vw;
+    padding:0vw 1.5vw;
+    height:2.3vw;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    font-weight: bold;
 }
 #formArea {
     width:35vw;
@@ -371,7 +464,8 @@ textarea {
         margin-top:5vw;
    }
     #nav .logo {
-        font-size:6vw;
+        width:8vw;
+        height:8vw;
         left:8vw;
    }
     #nav .contact{
@@ -389,7 +483,7 @@ textarea {
    }
     .background {
         height:200vw;
-        background-size:100% 100%;
+        background-size:auto 100%;
    }
     #splash .mainContent {
         top:30vw;
@@ -403,6 +497,13 @@ textarea {
         letter-spacing:-0.2vw;
         line-height:10vw;
    }
+   #splash .mainContent h2{
+    margin-top:3vw;
+    font-size:4vw;
+    letter-spacing:-0.1vw;
+    line-height:5vw;
+    width:70%;
+}
    #splash .mainContent .link1{
     font-size:3vw;
     margin-top:2vw;
@@ -410,19 +511,20 @@ textarea {
     padding:0vw 6vw;
     height:9vw;
     margin-left:0;
-    }
+    margin-top:5vw;
+}
     #splash .mainContent .link2{
         font-size:3vw;
         margin-top:2vw;
         border-radius:6vw;
         padding:0vw 6vw;
         height:9vw;
-        margin-left:0;
-        background:#ff70ab;
-        color:white;
+        margin-left:0;  
+        color: #db43c8;
+        margin-top:5vw;
     }
     #splash .mainContent .link1 img{
-        width:6vw !important;
+        width:5.5vw !important;
         height:6vw !important;
         margin-right:2vw !important;
     }
@@ -441,35 +543,35 @@ textarea {
         height:240vw;
         flex-direction: column;
    }
-    #aboutContent .leftContent{
+    #aboutContent .textContent{
         margin-top:10vw;
         margin-left:10vw;
         margin-right:10vw;
    }
-    #aboutContent .leftContent h1{
+    #aboutContent .textContent h1{
         font-size:7vw;
         padding-top:3vw;
         letter-spacing:-0.1vw;
    }
-    #aboutContent .leftContent h2{
+    #aboutContent .textContent h2{
         font-size:4.5vw;
         padding-top:3vw;
    }
-    #aboutContent .leftContent p{
+    #aboutContent .textContent p{
         font-size:3vw;
         padding-top:3vw;
    }
-    #aboutContent .leftContent a{
+    #aboutContent .textContent a{
         border-radius:6vw;
         padding:0.9vw 6vw;
         font-size:3vw;
         margin-top:3vw;
    }
-    #aboutContent .leftContent h3{
+    #aboutContent .textContent h3{
         font-size:6vw;
        padding-top:3vw;
    }
-    #aboutContent .leftContent h4{
+    #aboutContent .textContent h4{
         margin-top:4vw;
        font-size:3.3vw;
    }
@@ -493,14 +595,6 @@ textarea {
     #features .td2 {
         width:100%;
         margin-top:10vw;
-   }
-    #features .featuresContainer {
-        flex-direction: column;
-   }
-    .diagonal-background {
-        height:225vw;
-        width:150vw;
-        left:-20vw;
    }
     #features .cardsContainer {
         margin-top:15vw;
@@ -643,7 +737,7 @@ textarea {
         border-radius:6vw;
         padding:0.9vw;
         width:60vw;
-        font-family:ginger-normal;
+        font-family:ginger-bold;
         font-size:3vw;
        margin-top:3vw;
         display:inline-block;

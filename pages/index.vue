@@ -10,7 +10,7 @@
       </div>
       <section>
          <div id="nav" data-aos="fade-down" data-aos-duration="1000" class="absolute top-0 left-0 flex items-center" style="transition-delay:4.5s;">
-            <a href="" class="logo absolute text-white text-ginger-b" style="color:white;">Quento</a>      
+            <a href="#" class="logo absolute text-white text-ginger-b" style="color:white;"><img src="../assets/images/quento_logo_white.png"></a>      
             <div class="navRightContainer absolute">
                <button @click="$router.push('/auth/login')" class="contact text-ginger">Sign in</button>
                <a href="#beta" class="contact2 text-ginger" style="display:inline-block;">Contact Us</a>
@@ -19,82 +19,96 @@
       </section>
       <section id="splash">
          <div class="mainContent absolute font-ginger-b font-white">
-            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000"><h1 style="color:white;">School Is Dumb. <span style="color:#ff70ab;">You Don't Have to Be.</span></h1>
-            <h2  style="color:white;" class="mt-4">A learning platform created by <span style="color:#ff70ab;">students</span>, for <span style="color:#ff70ab;">students</span>.</h2></div>
+            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000"><h1 style="color:white;">School is hard.<br>Learning doesn't have to be.</h1>
+            <h2 style="color:white;" class="mt-4">Quento’s suite of tools helps you streamline your studying like never before.</h2></div>
             <button class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;" @click="$router.push('/auth/signup')">Sign up for the BETA</button>
-            <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.gg/pfyFWus" style="color:white;"><img src="../assets/images/discord-white.png">Join us on Discord</a></button>
+            <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.gg/pfyFWus" style="color:white;"><img src="../assets/images/discord_logo.png">Join us on Discord</a></button>
          </div>
          <div class="scrollDown absolute text-center" style="left:50%;transform:translate(-50%);" :class="pageLoaded ? 'animate-flicker' : ''">
             <h1 style="color:white;font-family:ginger-normal;">Scroll Down</h1>
             <img style="margin-left:50%;transform:translate(-50%);" src="../assets/images/down.png">
          </div>
       </section>
-      <section id="aboutContent" style="background:#f6f9fc;display:flex;">
-         <div class="leftDiv">
-            <div class="leftContent">
-               <div data-aos="fade-right" data-aos-duration="1200">
-               <h1 style="color:#0a2540;font-family:ginger-bold;">A Revolutionary platform</h1>
-               <h2 style="color:#9c44db;font-family:ginger-normal;font-weight:bold;">The solution you've been waiting for is here.</h2>
-               <p class="text-ginger" style="color:#42547d;">Have you ever found yourself face-to-face with a task so daunting that you just exclaim,
-                  “Darn, if only there were only an app for that!”<br><br>As the high school students of today, we too-often find ourselves caught in an awkward transition period; one between the slow-to-change world of academia and our current age of rapidly-evolving technology. 
+      <section id="aboutContent" style="background:#f6f9fc;display:flex;flex-direction:column;">
+         <div class="w-full firstSection" style="display:flex;flex-direction:row;">
+             <div class="w-1/3 textContent left" style="height:35vw" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+                <h1 style="color:#0a2540;font-family:ginger-bold;">Schoolwork just got a lot easier</h1>
+               <p class="text-ginger" style="color:#42547d;">Be it transcribing handwriting, sharing course notes or requesting mentorship, Quento has got your learning needs covered.
+                  <br><br><span><i class='bx bx-brain'></i>Optical character recognition digitizes your pen-and-paper notes in a flash so you can experience the best of both worlds.</span>
+                  <br><span><i class='bx bx-paper-plane'></i>Out sick or think you missed something? Check out our extensive course note repository!</span>
+                  <br><span><i class='bx bx-group' ></i>Join Quento’s student community by sharing your course notes, posting video recaps, and providing good advice.</span>
+                  <br>
                </p>
                <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#9c44db;color:white;">Start your experience</a>
-               </div>
-               <div data-aos="fade-right" data-aos-duration="1200" style="margin-top:4vw;">
-               <h1 style="color:#0a2540;font-family:ginger-normal;font-weight:bold;">A fully integrated suite of digital tools</h1>
-               <p class="text-ginger" style="color:#42547d;">Quento is <span style="color:#9c44db;font-weight:bold;">open-source</span>, freely available, and built from the ground up by a passionate community. Acting in the same capacity as a <span style="color:#9c44db;font-weight:bold;">digital pencil case</span>, the platform serves to centralize a wide variety of <span style="color:#9c44db;font-weight:bold;">web tools</span> created by and for <span style="color:#9c44db;font-weight:bold;">Canadian high school students</span>.</p>
-               </div>
-            </div>
+             </div>
+              <div class="w-2/3" style="display:flex;height:35vw;align-items:flex-end;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                 <img src="../assets/images/Computer Graphic Quento.png" style="height:80%;">
+              </div>
          </div>
-         <div data-aos="fade-left" data-aos-duration="1200" class="rightDiv flex items-center justify-center">
-            <img src="../assets/images/laptop.png" style="height:80%;"> 
+         <div class="w-full secondSection" style="display:flex;flex-direction:row;">
+             <div class="w-1/2" style="display:flex;height:35vw;align-items:center;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+             <img src="../assets/images/Phone Graphic Quento 2.png" style="height:80%;">
+             </div>
+              <div class="w-1/2 textContent right" style="height:35vw" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+              <h1 style="color:#0a2540;font-family:ginger-bold;">Put the ‘u’ in education</h1>
+               <p class="text-ginger" style="color:#42547d;">Stay on top of your schedule and never miss out by having your academic deadlines, club announcements, and other notifications texted right to your phone!
+                  <br><br><span><i class='bx bxs-school' ></i>Join your school’s club groups and access a daily newsletter containing the latest scoop on both school-wide and club-specific issues.</span>
+                  <br><span><i class='bx bx-file' ></i>Sign in to your educational platforms of choice and manage how you keep track of things.</span>
+                  <br><span><i class='bx bx-message-rounded-detail' ></i>Get your Quento and academic notifications sent to you on your preferred platform (Discord, Instagram, or SMS).</span>
+                  <br>
+               </p>
+               <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#9c44db;color:white;">Start your experience</a>
+              </div>
          </div>
       </section>
       <section id="features">
-         <div class="diagonal-background"></div>
          <div class="featuresContainer w-full h-full m-0 flex">
-               <div class="td1">
+            <div class="td1">
+                  <div data-aos="fade-up" data-aos-duration="1200" class="vision relative">
+                     <h1 style="font-family:ginger-bold;font-weight:bold;">How it all works</h1>
+                     <p class="text-ginger">We’ve designed Quento to be convenient and easy to use. Simply follow the four simple steps below, and you’ll be well on your way to a more enjoyable student experience!</p>
+                     <a href="#beta" class="inline-block font-ginger" style="color:white;opacity:0.95;background-color:rgba(255, 255, 255,0.3);">Learn how you can help</a>      
+                  </div>
+               </div>
+               <div class="td2">
                   <table class="cardsContainer relative" style="height:80%;">
                      <tr>
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="0" style="padding:2vw;">
-                           <div v-tilt="{reverse:'true', speed:1000,}" class="w-full h-full" style="transform-style:preserve-3d;">
+                           <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">1</h1>
-                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Easily convert written notes into a digital format</h3>
+                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Sign up with your email address or get in with one click using your Google account.</h3>
                               </div>
                            </div>
                            </div>
                         </td>
                         <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200" style="padding:2vw;">
-                           <div v-tilt="{reverse:'true', speed:1000,}" class="w-full h-full" style="transform-style:preserve-3d;">
+                           <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">2</h1>
-                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Forward notifications from supported platforms<span style="color:gold;">*</span> as an SMS, Facebook, or Discord message</h3>
-                                 <p style="color:white;font-family:ginger-normal;"><span style="color:gold">*</span> Managebac, Google Classroom, etc.</p>
+                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Use Quento’s wide range of tools to make your life easier.</h3>
                               </div>
                             </div>
                            </div>
                         </td>
-                     </tr>
-                     <tr>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200" style="padding:2vw;">
-                           <div v-tilt="{reverse:'true', speed:1000,}" class="w-full h-full" style="transform-style:preserve-3d;">
+                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400" style="padding:2vw;">
+                           <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">3</h1>
-                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Create and join groups where you can create class calendars and plot out lessons</h3>
+                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Opt-in to the subscription services that you want.</h3>
                               </div>
                            </div>
                            </div>
                         </td>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400" style="padding:2vw;">
-                           <div v-tilt="{reverse:'true', speed:1000,}" class="w-full h-full" style="transform-style:preserve-3d;">
+                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="600" style="padding:2vw;">
+                           <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
                                  <h1 style="color:#b13edd;background:white;font-family:arial;font-weight:bold;text-align:center;">4</h1>
-                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Suggest feature ideas and provide feedback</h3>
+                                 <h3 style="color:white;font-family:ginger-normal;font-weight:bold;">Have an amazing idea or find a bug? Check out the suggestions board and help us improve the Quento experience!</h3>
                               </div>
                            </div>
                            </div>
@@ -102,28 +116,37 @@
                      </tr>
                   </table>
                </div>
-               <div class="td2">
-                  <div data-aos="fade-left" data-aos-duration="1200" class="vision relative">
-                     <h1 style="color:white;font-family:ginger-bold;font-weight:bold;">Our Vision</h1>
-                     <p class="text-white text-ginger" >Faced with daily dilemmas such as “how should I take notes?” and “how do I stay on top of the ever-increasing workload?”, we established Quento Solutions as a platform to end these “darn!” moments once and for all. But how are we going to achieve this, you might ask? <br><br>Quento is currently in early stages of development. However, we need all the help that we can get. Scroll down below to check out how you can contribute and gain exclusive benefits as one of our earliest members and beta testers!</p>
-                     <a href="#beta" class="inline-block font-ginger" style="color:white;opacity:0.95;background-color:rgba(255, 255, 255,0.3);">Learn how you can help</a>      
-                  </div>
-               </div>
          </div>
       </section>
       <section id="beta" class="flex w-full" style="background:#f6f9fc;">
+         <div class="circleBackground" data-aos="zoom-in" data-aos-duration="1000"></div>
          <div class="leftDiv">
-            <div class="largeContainer">
-               <div data-aos="fade-right" data-aos-duration="1000">
-               <h1 style="color:#0a2540;font-family:ginger-bold;font-weight:bold;">I want to contribute as a Quento <span style="color:#6b3deb">beta tester</span>.</h1>
-               <p style="color:#42547d;font-family:ginger-normal;">Great news! You can sign up for an account and <a href="https://docs.google.com/forms/d/e/1FAIpQLScrpPrTcpq41DJTXsmu1AvLOBXVHjG7vh2s_Q62M8oPx1ibmA/viewform?usp=sf_link" style="color:#6b3deb;font-weight:bold;text-decoration:underline;padding:0;margin:0;">subscribe to our newsletter</a> today through using the forms below. Once you’ve signed in, you’ll have access to the first module that we have completed: a forum where interested users can post the features they want added next and upvote/downvote fellow recommendations! As our development team grows and Quento comes along in its production stages, we’ll pick the highest ranking recommendations to create next.</p>
-               <a href="auth/SignUp.vue" class="border-none inline-block" style="background-color:#6b3deb;color:white;font-family:ginger-normal;">Sign up for the beta</a>
+            <div class="largeContainer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+               <h1>Join us</h1>
+            <p>
+               Quento is currently in its beta stage and we need YOUR help to make the platform the best it can be. We are actively searching for beta testers and student developers to make Quento’s vision a reality.
+               <br><br>
+               <div style="display:flex;flex-direction:row;width:100%;">
+                  <div style="width:45%;">
+                     <b>Become a beta tester</b><br>
+               <span>As a beta tester, you’ll be tasked with using the platform’s features while they are in development and reporting any issues that you face. You’ll also have the opportunity to directly suggest ideas to our development teams through our Discord server. To contribute, signup for a Quento account, join our Discord server, and report any bugs that you find in the #issues channel. 
+               </span>
+                  </div>
+                  <div style="width:45%;margin-left:5%">
+                     <b>Contribute as a developer</b><br>
+               <span>We’re always in need of new members on our development team. Whether you’re ready to squash some pesky bugs or help make a new exciting idea a reality, we welcome you with open arms. 
+               <br><br>
+               When you’re ready, submit your application using the form to your right; it should include your full name, email address, and Discord handle as well as what you’d like to work on as well and any relevant programming skills.
+               </span>
+                  </div>
                </div>
-               <div data-aos="fade-right" data-aos-duration="1000">
-               <h1 class="marginTop2" style="color:#0a2540;font-family:ginger-bold;font-weight:bold;"> I want to contribute to the <span style="color:#6b3deb">development</span> of Quento.</h1>
-               <p style="color:#42547d;font-family:ginger-normal;">So you want to contribute to Quento development even further? Stellar, because our team needs more fellow youth like you! Please join the following Discord link and introduce yourself as well as the skills you bring to the table. Check our Github/Trello board and all open task postings to see if there is something that you can complete or a new feature you’d like to work on, and propose it in the Discord server! </p>
-               <a href="https://github.com/Quento-Solutions" class="border-none inline-block" style="background-color:#6b3deb;color:white;font-family:ginger-normal;">Join the development team</a>
-               </div>
+               <!-- <ol>
+                  <li>Sign up for a regular Quento account.</li>
+                  <li>Join our Discord server using the button on this page.</li>
+                  <li>Use Quento’s features on a daily basis.</li>
+                  <li>Post your ideas for new features on the suggestion board. </li>
+                  <li>Report any bugs that you find in the #issues channel.</li>
+               </ol> --></p>
             </div>
          </div>
          <div class="rightDiv" data-aos="fade-left" data-aos-duration="1000">
@@ -132,7 +155,6 @@
                <img src="../assets/images/quento.png" style="width:100%;height:100%;">
             </div>
             <div id="formArea" :class="formSubmitted ? 'submitted' : ''">
-            <h1 style="text-align:center;color:#6b3deb;font-family:ginger-normal;font-weight:bold;">Get in touch</h1>
             <form id="gform" enctype="text/plain" action="https://docs.google.com/forms/d/e/1FAIpQLSfRH7TjjLrd3SbBLeM4WJvDUruR0iJr61gQPHxkNr17ZXZ5nw/formResponse?usp=pp_url" target="hidden_iframe" @submit="handleFormSubmit">
                <center><input id="entry.527074164" name="entry.527074164" class="textInput" placeholder=" Name" type="text" required></center>
                <br>
@@ -144,17 +166,19 @@
             </form>
                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {}"></iframe>
             </div>
-            <div class="imageContainer flex items-center justify-center">
+            <!-- <div class="imageContainer flex items-center justify-center">
                <a href="https://github.com/Quento-Solutions"><img src="../assets/images/github.png"> </a>
                <a href="https://discord.gg/pfyFWus"><img src="../assets/images/discord.png" class="image2"> </a>
-            </div>
+            </div> -->
                         </center>
 
          </div>
       </section>
       <section id="footerContainer">
-         <div class="footer w-full items-center justify-center flex" style="background-image: linear-gradient(to right, #4a45f4, #df43c6);">
-            <a style="position:absolute;color:white;opacity:0.95;font-family:ginger-light;">Quento &nbsp;<span>2020&nbsp;&nbsp;&nbsp;&nbsp;hello@quento.ca</span></a>
+         <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+            <h1>For students, by students</h1>
+            <p>Every day, youth around the world face the many challenges that come with being a student— from teaching yourself something the teacher glossed over to losing track of what’s due, we totally get what it’s like.<br><br>No worries, Quento’s got your back. As students ourselves, we’ve designed our toolkit to allow you to improve your academic performance while staying on top of your school’s latest happenings. Every single feature of our platform has been built with YOU in mind. What are you waiting for? Join the revolution today!<br><br></p>
+            <button>Join Quento</button>
          </div>
       </section>
    </div>
