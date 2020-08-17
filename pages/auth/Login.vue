@@ -45,7 +45,6 @@
             label="Password"
             class="block w-6"
           >
-          
             <template #icon>
               <i class="bx bx-lock-open-alt"></i>
             </template>
@@ -85,9 +84,9 @@ import { navigationStore } from '~/store'
   layout: 'auth'
 })
 export default class Login extends mixins(Auth) {
-  PushSignUpPage() {
-    // this.$router.go(1)
-    this.$router.push({ path: '/auth/signup' })
+  PushSignUpPage() 
+  {
+    this.$router.push('/auth/Signup')
   }
   email: string = ''
   password: string = ''
@@ -123,7 +122,7 @@ export default class Login extends mixins(Auth) {
 }
 .google {
   margin-top: 0.5vw;
-  background: #DB4437;
+  background: #db4437;
   margin-bottom: 2vw;
   color: white;
   font-family: ginger-normal;
