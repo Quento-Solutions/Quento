@@ -45,6 +45,7 @@
             label="Password"
             class="block w-6"
           >
+          
             <template #icon>
               <i class="bx bx-lock-open-alt"></i>
             </template>
@@ -124,9 +125,9 @@ export default class Login extends mixins(Auth) {
 }
 .google {
   margin-top: 0.5vw;
-  background: #db4437;
+  background: #DB4437;
   margin-bottom: 2vw;
-  color: #f4f7f8;
+  color: white;
   font-family: ginger-normal;
   font-size: 0.8vw;
 }

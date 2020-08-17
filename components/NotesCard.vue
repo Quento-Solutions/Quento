@@ -69,14 +69,14 @@
       class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content"
     >
       <div
-        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
+        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white" style="background-color: #ed8936"
       >
         Grade {{ note.grade }}
       </div>
       <div
-        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2"
+        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2" style="background-color: #9f7aea"
       >
-        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)" />
+        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)" style="background-color:transparent;"/>
         {{ note.subject }}
       </div>
     </div>
