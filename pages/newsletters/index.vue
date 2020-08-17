@@ -65,11 +65,11 @@
         </template>
       </VxCard>
     </div>
-    <vs-button warn @click="toggleNotesModal(true)" class="w-full">
+    <!-- <vs-button warn @click="toggleNotesModal(true)" class="w-full">
       <div class="text-2xl font-ginger-b">
         &nbsp; Post New Note
       </div>
-    </vs-button>
+    </vs-button> -->
   </div>
 </template>
 
@@ -117,11 +117,7 @@ export default class NewslettersPage extends Vue {
 </script>
 
 <style lang="scss">
-.background-cover {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
+
 .md-container {
   font-family: 'Quicksand', sans-serif !important;
   word-wrap: break-word;
