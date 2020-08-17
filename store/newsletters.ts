@@ -14,7 +14,6 @@ import {
   Subject_O,
   SortOptions_O
 } from '~/types/subjects'
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 export interface FilterOptions {
   filterSubjects: Subject_O[]
   filterGrades: Grade_O
@@ -45,7 +44,7 @@ export default class NewslettersModule extends VuexModule {
   public async GetNewsletters() {
     try {
       const query = await firestore.collection('newsletters').orderBy(this.sortBy).get();
-      const items = query.docs.map(doc => Newsletter.fromFirebase(doc.data() as Newsletter_t_F));
+      const items = query.docs.map(doc => Newsletter.fromFirebase(doc.data() as Newsletter_t_F, doc.id));
       this.SET_NEWSLETTER_LIST(items);
       return;
     } catch (error) {
@@ -53,5 +52,7 @@ export default class NewslettersModule extends VuexModule {
     }
     return; 
   }
+
+
 
 }
