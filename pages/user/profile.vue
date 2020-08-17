@@ -4,9 +4,7 @@
       <!-- Profile Card -->
       <VxCard class="mb-base" v-if="AuthUser && UserData">
         <!-- Avatar -->
-        <!-- <div class="vx-row w-full justify-center p-2 font-bold" style>
-          <div class="vx-col flex-1 text-2xl font-bold" id="account-info-col-1">My Profile</div>
-        </div>-->
+
         <div class="vx-row w-full" style>
           <div class="vx-row w-full lg:w-1/2">
             <!-- Avatar Col -->
@@ -82,14 +80,7 @@
             <div class="vx-col w-full" style></div>
           </div>
           <!-- /Information - Col 2 -->
-          <!-- <div class="vx-col w-full flex" id="account-manage-buttons">
-            <vs-button class="mr-4" size="large">
-              <i class="bx bx-edit" />&nbsp; Edit
-            </vs-button>
-            <vs-button type="border" color="danger" size="large">
-              <i class="bx bx-trash" />&nbsp; Delete
-            </vs-button>
-          </div>-->
+
         </div>
       </VxCard>
 
@@ -98,39 +89,32 @@
         <div class="vx-col flex-1 w-full" id="account-info-col-1">
           <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}'s Notes</div>
         </div>
-        <!-- <div class="vx-col flex-1 w-full" id="account-info-col-1">
-          {{ UserNotes }}
-        </div>-->
 
-        <v-layout row wrap>
-          <v-flex
-            xs12
-            sm6
-            md8
-            lg3
+        <div class="vx-row w-full" >
+          <div
+          class="vx-col w-full md:w-1/2 lg:w-1/4"
             v-for="note in UserNotes"
             :key="note.uid"
-            style="margin-top: 1.5rem; margin-left:1.5rem"
           >
             <nuxt-link :to="`/notes/${note.id}`">
               <v-card
-                class="mx-auto"
+                class="my-4 overflow-hidden"
                 id="userCard"
                 color="#26c6da"
                 dark
-                style="min-width: 20vw; max-width:20vw"
+                width="100%"
               >
                 <v-card-title>
                   <div
                     class="vx-row font-bold text-2xl"
-                    style="margin-bottom: -0.75rem;"
                   >{{ note.title }}</div>
                 </v-card-title>
 
                 <v-card-text
-                  class="headline font-weight-bold overflow-hidden"
-                  style="min-height: 7vw; max-height: 7vw;"
-                >{{note.contents}}</v-card-text>
+                  class="overflow-hidden text-white md-container"
+                  v-html="$md.render(note.contents)"
+                style="max-height: 20vh; color : white"
+                ></v-card-text>
 
                 <v-card-actions style="margin-left: -0.75rem;">
                   <v-list-item class="grow">
@@ -157,8 +141,8 @@
                 </v-card-actions>
               </v-card>
             </nuxt-link>
-          </v-flex>
-        </v-layout>
+          </div>
+        </div>
       </VxCard>
     </div>
   </div>
@@ -254,10 +238,4 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 }
 
-@media only screen and (max-width: 768px) {
-  #userCard {
-    min-width: 100vw;
-    max-width: 100vw;
-  }
-}
 </style>
