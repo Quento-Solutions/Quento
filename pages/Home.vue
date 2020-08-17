@@ -17,11 +17,11 @@
                 class="vx-col w-full md:w-1/2 p-8 flex flex-col justify-around"
                 style=""
               >
-                <div class="text-title text-6xl text-black" style="">
-                  Title Content
+                <div class="text-ginger-b text-6xl text-black" style="">
+                  Welcome to Quento
                 </div>
-                <div class="text-title text-4xl text-black my-10" style="">
-                  Title Content
+                <div class="text-body text-2xl text-black my-10" style="">
+                  Our mission is to create a community of like minded students who share, create and use academic resources.
                 </div>
                 <div class="vx-row w-full justify-around" style="">
                   <vs-tooltip
@@ -49,7 +49,21 @@
               </div>
 
               <!-- Newsletter -->
-              <div class="vx-col w-full lg:w-1/4" style=""></div>
+              <div
+                class="vx-col w-full lg:w-1/4 flex flex-col justify-around"
+                style=""
+              >
+                <div
+                  class="w-full text-ginger-b text-black text-4xl my-6"
+                  style=""
+                >
+                  Newsletter
+                </div>
+                <NewsletterCard
+                  :newsletter="featuredNewsletter"
+                  v-if="featuredNewsletter"
+                ></NewsletterCard>
+              </div>
 
               <!-- Videos -->
               <div
@@ -65,7 +79,6 @@
                   :key="$vs.rtl"
                   style="width: 100%; height: 100%;"
                 >
-                
                   <swiper-slide
                     v-for="(item, index) in featuredContent"
                     :key="index"
@@ -104,8 +117,8 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
-import { windowStore, authStore } from '~/store'
-import FooterCard from '~/components/FooterCard.vue'
+import { windowStore, authStore, newslettersStore } from '~/store'
+import NewsletterCard from '~/components/NewsletterCard.vue'
 
 export interface ContactInformation {
   name: string
@@ -121,9 +134,16 @@ export interface ContactInformation {
 
 @Component({
   layout: 'main',
-  components: { FooterCard }
+  components: { NewsletterCard },
+  mounted() {
+    newslettersStore.GetNewsletters()
+  }
 })
 export default class Home extends Vue {
+  get featuredNewsletter() {
+    return newslettersStore?.newsletterList[0]
+  }
+
   pushComingSoon() {
     this.$router.push('/coming-soon')
   }
@@ -143,11 +163,11 @@ export default class Home extends Vue {
     {
       name: 'Instagram',
       imageUrl: require(`~/assets/images/QuentoLogoMain.png`),
+      href: 'https://www.instagram.com/quento.ca/',
       toolTipText: 'Learn More About Quento',
       iconClass: 'bx bxl-instagram',
       backgroundColor: '#e1306c',
-      color: '#FFFFFF',
-      href: '/splash'
+      color: '#FFFFFF'
     },
     {
       name: 'Discord',
@@ -195,17 +215,13 @@ export default class Home extends Vue {
       videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
     },
     {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
+      name: 'Onlines School Explained',
+      videoUrl: 'https://www.youtube.com/embed/tsNHpmlAfO4'
     },
     {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
-    },
-        {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
-    },
+      name: 'Chemistry Fundamentals',
+      videoUrl: 'https://www.youtube.com/embed/7YJvx6dlq6M'
+    }
   ]
 
   pushWebsite(website?: string) {
