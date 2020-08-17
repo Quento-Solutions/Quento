@@ -111,7 +111,6 @@ export default class NewslettersPage extends Vue {
 
     this.loaded = true
     return
-    // console.log(this.note)
   }
 }
 </script>

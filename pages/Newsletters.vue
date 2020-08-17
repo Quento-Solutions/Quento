@@ -33,12 +33,8 @@ export default class NewslettersPage extends Vue
     margin-bottom: 2rem;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 
+  {
     font-family: 'ginger-bold', 'Trebuchet MS', 'Lucida Sans Unicode',
       'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
     font-weight: 200 !important;

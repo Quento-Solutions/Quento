@@ -37,7 +37,7 @@
         <div style="">Github</div>
       </vs-sidebar-item>
 
-      <vs-sidebar-item href="https://discord.gg/pfyFWus">
+      <vs-sidebar-item href="https://discord.gg/vHhtD38">
         <template #icon>
           <i class="sidebar-icon bx bxl-discord"></i>
         </template>
