@@ -23,7 +23,7 @@
             <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="3000"><h1 style="color:white;">School is hard.<br>Learning doesn't have to be.</h1>
             <h2 style="color:white;" class="mt-4">Quento’s suite of tools helps you streamline your studying like never before.</h2></div>
             <button class="link2 text-ginger inline-block" data-aos="fade-right" data-aos-duration="1000" style="transition-delay:4.2s;" @click="$router.push('/auth/signup')">Sign up for the BETA</button>
-            <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.gg/pfyFWus" style="color:white;"><img src="../assets/images/discord_logo.png">Join us on Discord</a></button>
+            <button data-aos="fade-right" data-aos-duration="1000" style="background:rgba(255,255,255,0.3);color:white;transition-delay:4.2s;" class="link1 text-ginger"><a href="https://discord.com/invite/vHhtD38" style="color:white;"><img src="../assets/images/discord_logo.png">Join us on Discord</a></button>
          </div>
          <div class="scrollDown absolute text-center" style="left:50%;transform:translate(-50%);" :class="pageLoaded ? 'animate-flicker' : ''">
             <h1 style="color:white;font-family:ginger-normal;">Scroll Down</h1>
@@ -176,7 +176,7 @@
          <div >
             <h1>For students, by students</h1>
             <p>Every day, youth around the world face the many challenges that come with being a student— from teaching yourself something the teacher glossed over to losing track of what’s due, we totally get what it’s like.<br><br>No worries, Quento’s got your back. As students ourselves, we’ve designed our toolkit to allow you to improve your academic performance while staying on top of your school’s latest happenings. Every single feature of our platform has been built with YOU in mind. What are you waiting for? Join the revolution today!<br><br></p>
-            <button>Join Quento</button>
+            <button @click="footerClicked()">Join Quento</button>
          </div>
       </section>
 </section>
@@ -203,6 +203,10 @@ import AOS from 'aos'
 
 export default class Splash extends Vue {
 
+   footerClicked()
+   {
+      this.$router.push("/auth/Login");
+   }
 
    formSubmitted = false;
    loading = true;

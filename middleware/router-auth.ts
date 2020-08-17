@@ -11,7 +11,8 @@ export default function({store, redirect, route} : Context)
     {
         redirect('/home')
     }
-    if(store.state.auth.user == null && (route.name == null || isAdminRoute(route))) {
+    if(store.state.auth.user == null && (route.name == null || isAdminRoute(route)) && route.name != "auth/Login" && route.name!="auth/Signup") {
+
         redirect('/auth/login')
     };
 }
@@ -22,4 +23,5 @@ function isAdminRoute(route : Route)
     {
         return true
     }
+    return false
 }

@@ -5,7 +5,7 @@ export const SchoolList = [
   'Bell High School',
   'Longfields-Davidson Heights Secondary School',
   'Merivale High School',
-  'John Mccrae Secondary School',
+  'John McCrae Secondary School',
   'Other'
 ] as const
 
