@@ -110,15 +110,15 @@
             lg3
             v-for="note in UserNotes"
             :key="note.uid"
-            style="margin-top: 1.5rem;"
+            style="margin-top: 1.5rem; margin-left:1.5rem"
           >
             <nuxt-link :to="`/notes/${note.id}`">
               <v-card
                 class="mx-auto"
+                id="userCard"
                 color="#26c6da"
                 dark
-                max-width="28rem"
-                style="min-width: 11rem;"
+                style="min-width: 20vw; max-width:20vw"
               >
                 <v-card-title>
                   <div
@@ -129,7 +129,7 @@
 
                 <v-card-text
                   class="headline font-weight-bold overflow-hidden"
-                  style="min-height: 9.8rem; max-height: 9.8rem;"
+                  style="min-height: 7vw; max-height: 7vw;"
                 >{{note.contents}}</v-card-text>
 
                 <v-card-actions style="margin-left: -0.75rem;">
@@ -165,7 +165,6 @@
 </template>
 
 <script lang="ts">
-import userCard from '~/components/userCard.vue'
 import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
 import firestore from '~/plugins/firestore'
@@ -173,7 +172,6 @@ import firestore from '~/plugins/firestore'
 import { SubjectGroup_O, Subject_O, SubjectIconList } from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
-import 'vuesax'
 @Component<UserProfile>({
   components: {
     NotesCard
@@ -186,7 +184,6 @@ import 'vuesax'
 })
 export default class UserProfile extends mixins(UserMixin) {
   UserNotes: Note[] = []
-  UserEXP: any
   async getUserNotes() {
     if (!this.AuthUser) {
       return
@@ -200,8 +197,6 @@ export default class UserProfile extends mixins(UserMixin) {
     this.UserNotes = notesCollection.docs.map((doc) =>
       Note.fromFirebase(doc.data() as Note_t_F, doc.id)
     )
-
-    console.log(this.UserEXP)
   }
 
   @Watch('AuthUser')
@@ -252,30 +247,17 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 }
 
-// #account-info-col-1 {
-//   // flex-grow: 1;
-//   width: 30rem !important;
-//   @media screen and (min-width:1200px) {
-//     & {
-//       flex-grow: unset !important;
-//     }
-//   }
-// }
-
 @media screen and (min-width: 1201px) and (max-width: 1211px),
   only screen and (min-width: 636px) and (max-width: 991px) {
   #account-info-col-1 {
     width: calc(100% - 12rem) !important;
   }
+}
 
-  // #account-manage-buttons {
-  //   width: 12rem !important;
-  //   flex-direction: column;
-
-  //   > button {
-  //     margin-right: 0 !important;
-  //     margin-bottom: 1rem;
-  //   }
-  // }
+@media only screen and (max-width: 768px) {
+  #userCard {
+    min-width: 100vw;
+    max-width: 100vw;
+  }
 }
 </style>
