@@ -71,9 +71,7 @@ const config: NuxtConfig = {
     '@/plugins/firebase',
     '@/plugins/firestore',
     '@/plugins/firebaseStorage',
-
     '@/plugins/fireauth',
-    { src: '~/plugins/aos', ssr: false },
     '@/plugins/globalComponents'
   ],
   markdownit: {

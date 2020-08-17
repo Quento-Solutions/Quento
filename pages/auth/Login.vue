@@ -79,8 +79,6 @@ import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 import FooterCard from '~/components/FooterCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin'
-import AOS from 'aos'
-
 import { navigationStore } from '~/store'
 @Component<Login>({
   components: { FooterCard },

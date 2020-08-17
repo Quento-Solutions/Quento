@@ -33,8 +33,9 @@
       </section>
       </div>
       <section id="aboutContent" style="background:#f6f9fc;display:flex;flex-direction:column;">
+
          <div class="w-full firstSection" style="display:flex;flex-direction:row;">
-             <div class="w-1/3 textContent left" style="" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+             <div class="w-1/3 textContent left" style="">
                 <h1 style="color:#0a2540;font-family:ginger-bold;">Schoolwork just got a lot easier</h1>
                <p class="text-ginger" style="color:#42547d;">Be it transcribing handwriting, sharing course notes or requesting mentorship, Quento has got your learning needs covered.
                   <br><br><span><i class='bx bx-brain'></i>Optical character recognition digitizes your pen-and-paper notes in a flash so you can experience the best of both worlds.</span>
@@ -44,15 +45,15 @@
                </p>
                <a href="auth/login.vue" class="border-none font-ginger inline-block" style="background-color:#9c44db;color:white;">Start your experience</a>
              </div>
-              <div class="w-2/3" style="display:flex;;align-items:flex-end;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+              <div class="w-2/3" style="display:flex;;align-items:flex-end;justify-content:center;" >
                  <img src="../assets/images/Computer Graphic Quento.png" style="height:80%;">
               </div>
          </div>
          <div class="w-full secondSection" style="display:flex;flex-direction:row;">
-             <div class="w-1/2" style="display:flex;;align-items:center;justify-content:center;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+             <div class="w-1/2" style="display:flex;;align-items:center;justify-content:center;">
              <img src="../assets/images/Phone Graphic Quento 2.png" style="height:80%;">
              </div>
-              <div class="w-1/2 textContent right" style="" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+              <div class="w-1/2 textContent right" style="">
               <h1 style="color:#0a2540;font-family:ginger-bold;">Put the ‘u’ in education</h1>
                <p class="text-ginger" style="color:#42547d;">Stay on top of your schedule and never miss out by having your academic deadlines, club announcements, and other notifications texted right to your phone!
                   <br><br><span><i class='bx bxs-school' ></i>Join your school’s club groups and access a daily newsletter containing the latest scoop on both school-wide and club-specific issues.</span>
@@ -67,7 +68,7 @@
       <section id="features">
          <div class="featuresContainer w-full h-full m-0 flex">
             <div class="td1">
-                  <div data-aos="fade-up" data-aos-duration="1200" class="vision relative">
+                  <div class="vision relative">
                      <h1 style="font-family:ginger-bold;font-weight:bold;">How it all works</h1>
                      <p class="text-ginger">We’ve designed Quento to be convenient and easy to use. Simply follow the four simple steps below, and you’ll be well on your way to a more enjoyable student experience!</p>
                      <a href="#beta" class="inline-block font-ginger" style="color:white;opacity:0.95;background-color:rgba(255, 255, 255,0.3);">Learn how you can help</a>      
@@ -76,7 +77,7 @@
                <div class="td2">
                   <table class="cardsContainer relative">
                      <tr>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="0" style="padding:2vw;">
+                        <td style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
@@ -86,7 +87,7 @@
                            </div>
                            </div>
                         </td>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200" style="padding:2vw;">
+                        <td style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
@@ -96,7 +97,7 @@
                             </div>
                            </div>
                         </td>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400" style="padding:2vw;">
+                        <td style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
@@ -106,7 +107,7 @@
                            </div>
                            </div>
                         </td>
-                        <td data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="600" style="padding:2vw;">
+                        <td style="padding:2vw;">
                            <div v-tilt="{reverse:'true', speed:1000, max:15,}" class="w-full h-full" style="transform-style:preserve-3d;">
                            <div class="card" style="background-image:linear-gradient(to top right, #df43c6, #8c3af0);">
                               <div class="container3d">
@@ -122,11 +123,11 @@
          </div>
       </section>
       <section id="beta" class="flex w-full" style="background:#f6f9fc;">
-         <div class="circleBackground" data-aos="zoom-in" data-aos-duration="1000"></div>
+         <div class="circleBackground" ></div>
          <div class="leftDiv">
-            <div class="largeContainer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+            <div class="largeContainer" >
                <h1>Join us</h1>
-            <p>
+
                Quento is currently in its beta stage and we need YOUR help to make the platform the best it can be. We are actively searching for beta testers and student developers to make Quento’s vision a reality.
                <br><br>
                <div class="joinUsContainer">
@@ -142,10 +143,11 @@
                When you’re ready, submit your application using the form to your right; it should include your full name, email address, and Discord handle as well as what you’d like to work on as well and any relevant programming skills.
                
                   </div>
-               </div></p>
+               </div>
+
             </div>
          </div>
-         <div class="rightDiv" data-aos="fade-left" data-aos-duration="1000">
+         <div class="rightDiv">
          <center>
             <div id="formSubmitted" :class="formSubmitted ? 'submitted' : ''">
                <img src="../assets/images/quento.png" style="width:100%;height:100%;">
@@ -160,7 +162,7 @@
                <br>
                <center><input id="submitForm" type="submit" value="Send" :class="formSubmitted ? 'submitted' : ''"></center>
             </form>
-               <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {}"></iframe>
+               <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" ></iframe>
             </div>
             <!-- <div class="imageContainer flex items-center justify-center">
                <a href="https://github.com/Quento-Solutions"><img src="../assets/images/github.png"> </a>
@@ -171,7 +173,7 @@
          </div>
       </section>
       <section id="footerContainer">
-         <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+         <div >
             <h1>For students, by students</h1>
             <p>Every day, youth around the world face the many challenges that come with being a student— from teaching yourself something the teacher glossed over to losing track of what’s due, we totally get what it’s like.<br><br>No worries, Quento’s got your back. As students ourselves, we’ve designed our toolkit to allow you to improve your academic performance while staying on top of your school’s latest happenings. Every single feature of our platform has been built with YOU in mind. What are you waiting for? Join the revolution today!<br><br></p>
             <button>Join Quento</button>
@@ -192,7 +194,7 @@ import AOS from 'aos'
   },
   async mounted()
   {
-   AOS.init();
+     AOS.init();
    this.loading = false;
    window.scrollTo(0,0);
    setTimeout(this.handlePageLoad, 4000);
@@ -204,7 +206,7 @@ export default class Splash extends Vue {
 
    formSubmitted = false;
    loading = true;
-   pageLoaded = false;
+   pageLoaded = true;
    handleFormSubmit() {
       this.$vs.notification({
          color : 'white',
