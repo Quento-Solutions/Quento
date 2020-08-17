@@ -227,7 +227,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       contents: this.contents,
       backgroundImageUrl : "https://media.discordapp.net/attachments/738198413987938464/744677326499086347/wp5910896.jpg?width=1211&height=681",
       authorDisplayName : "Quento Team",
-      authorPhotoUrl : "https://cdn.discordapp.com/attachments/737856423278673931/743911056518414406/quetzalcoatlus_joschua-knueppe.png"
+      authorPhotoUrl : "https://cdn.discordapp.com/attachments/737856336133357669/744956933114691634/quag_but_purple.png"
     });
 
     await firestore.collection("newsletters").doc("welcome-newsletter").set(Newsletter.toFirebase(previewNote));

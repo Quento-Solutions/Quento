@@ -49,7 +49,12 @@
               </div>
 
               <!-- Newsletter -->
-              <div class="vx-col w-full lg:w-1/4" style=""></div>
+              <div class="vx-col w-full lg:w-1/4 flex flex-col justify-around" style="">
+              <div class="w-full text-ginger-b text-black text-4xl my-6" style="">
+                Newsletter
+              </div>
+                <NewsletterCard :newsletter="featuredNewsletter" v-if="featuredNewsletter"></NewsletterCard>
+              </div>
 
               <!-- Videos -->
               <div
@@ -104,8 +109,8 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
-import { windowStore, authStore } from '~/store'
-import FooterCard from '~/components/FooterCard.vue'
+import { windowStore, authStore, newslettersStore } from '~/store'
+import NewsletterCard from '~/components/NewsletterCard.vue'
 
 export interface ContactInformation {
   name: string
@@ -121,9 +126,19 @@ export interface ContactInformation {
 
 @Component({
   layout: 'main',
-  components: { FooterCard }
+  components: { NewsletterCard },
+  mounted()
+  {
+    newslettersStore.GetNewsletters();
+  }
 })
 export default class Home extends Vue {
+
+  get featuredNewsletter()
+  {
+    return newslettersStore?.newsletterList[0];
+  }
+
   pushComingSoon() {
     this.$router.push('/coming-soon')
   }
@@ -195,17 +210,14 @@ export default class Home extends Vue {
       videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
     },
     {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
+      name: 'Onlines School Explained',
+      videoUrl: 'https://www.youtube.com/embed/tsNHpmlAfO4'
     },
     {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
+      name: 'Chemistry Fundamentals',
+      videoUrl: 'https://www.youtube.com/embed/7YJvx6dlq6M'
     },
-        {
-      name: 'Why is Physics so Hard?',
-      videoUrl: 'https://www.youtube.com/embed/qKa9ooHHcNw'
-    },
+
   ]
 
   pushWebsite(website?: string) {
