@@ -4,6 +4,9 @@ import type {Route} from 'vue-router'
 export default function({store, redirect, route} : Context)
 {
     // if(route.name == null) redirect ('/')
+    console.log(route.name);
+    if(route.name == "index") return;
+
     if(store.state.auth.user != null && (route.name == null || route?.name?.split('/').some(record => record == 'auth')))
     {
         redirect('/home')

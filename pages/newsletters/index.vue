@@ -25,11 +25,11 @@
     <div v-if="loaded" class="w-full lg:w-1/2">
      <NewsletterCard v-for="(item, index) in newsletters" :key="index" :newsletter="item"></NewsletterCard>
     </div>
-    <vs-button warn @click="toggleNotesModal(true)" class="w-full">
+    <!-- <vs-button warn @click="toggleNotesModal(true)" class="w-full">
       <div class="text-2xl font-ginger-b">
         &nbsp; Post New Note
       </div>
-    </vs-button>
+    </vs-button> -->
   </div>
 </template>
 
