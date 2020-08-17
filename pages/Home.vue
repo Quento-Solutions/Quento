@@ -17,11 +17,11 @@
                 class="vx-col w-full md:w-1/2 p-8 flex flex-col justify-around"
                 style=""
               >
-                <div class="text-title text-6xl text-black" style="">
-                  Title Content
+                <div class="text-ginger-b text-6xl text-black" style="">
+                  Welcome to Quento
                 </div>
-                <div class="text-title text-4xl text-black my-10" style="">
-                  Title Content
+                <div class="text-body text-2xl text-black my-10" style="">
+                  Our mission is to create a community of like minded students who share, create and use academic resources.
                 </div>
                 <div class="vx-row w-full justify-around" style="">
                   <vs-tooltip
