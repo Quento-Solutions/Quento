@@ -100,7 +100,6 @@
 
       <div class="vx-row w-full">
         
-        
           <vs-button
             class="text-3xl text-ginger-b p-2 w-full filter-button"
             style="font-size: 1.25rem;"
