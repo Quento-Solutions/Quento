@@ -130,7 +130,7 @@
                 <v-card-text
                   class="headline font-weight-bold overflow-hidden"
                   style="min-height: 9.8rem; max-height: 9.8rem;"
-                >{{note.contents}}fewfwefwefewfwefwefwefwefwefwefwefwefwefwe</v-card-text>
+                >{{note.contents}}</v-card-text>
 
                 <v-card-actions style="margin-left: -0.75rem;">
                   <v-list-item class="grow">
