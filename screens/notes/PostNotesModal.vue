@@ -82,15 +82,10 @@
         class="block"
         height="20rem"
         label="NOTABLE Content"
+        ref="textarea"
+        @paste="onPaste"
       >
       </VsTextarea>
-      <VsUpload
-        :show-upload-button="false"
-        multiple
-        text="Upload Image(s)"
-        accept="image/*"
-        ref="postImageUpload"
-      />
     </div>
 
     <template #footer>
@@ -127,6 +122,8 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
+import storage from '~/plugins/firebaseStorage';
+import { v4 } from 'uuid'
 
 import { authStore } from '~/store'
 
@@ -148,6 +145,61 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
+  async onPaste(evt : any)
+  {
+    if(evt.clipboardData.files.length)
+    {
+      const loading = this.$vs.loading();
+      const files = [...evt.clipboardData.files] as File[];
+      console.log({files}, files.map);
+      const uploadRefs = files.map(async (image : File) => {
+        const uid = v4()
+        const fileName = image.name.toLowerCase()
+        const extMatches = fileName.match(/\.([^\.]+)$/)
+        var ext = extMatches ? extMatches[0] : ''
+        const imageName = `${uid}${ext}`
+        const imageRef = storage.ref(imageName)
+        const imageReuploadName = `postedNote@${imageName}`
+        const snapshot = await imageRef.put(image)
+        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
+          snapshot.ref.bucket
+        }/o/${encodeURIComponent(imageReuploadName)}?alt=media`
+        // return await snapshot.ref.;
+        this.insertAtCursor(evt.target, `\n![image](${imageUrl})\n`);
+        this.images.push(imageUrl);
+        return imageUrl
+        // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
+      })
+      await Promise.all(uploadRefs)
+      loading.close();
+    }
+    if(evt.clipboardData.files.length)
+    {
+      console.log("files", evt.clipboardData.files)
+      this.insertAtCursor(evt.target, "\n![image](https://user-images.githubusercontent.com/46302202/90639577-d92f8600-e1fc-11ea-89a2-78bd7be184f9.png)\n");
+    }
+  }
+
+  images : string[] = [];
+
+  get textareaRef()
+  {
+    return this.$refs.textarea as HTMLInputElement
+  }
+  insertAtCursor(myField : HTMLInputElement, myValue : string) {
+      //IE support
+
+      //MOZILLA and others
+      if (myField.selectionStart || myField.selectionStart == 0) {
+          var startPos = myField.selectionStart;
+          var endPos = myField.selectionEnd || myField.selectionStart;
+          this.contents = myField.value.substring(0, startPos)
+              + myValue
+              + myField.value.substring(endPos!, myField.value.length);
+      } else {
+          this.contents+= myValue;
+      }
+  }
   @Watch('IsReset')
   onResetChanged(value : boolean, oldVal : boolean)
   {
@@ -180,37 +232,14 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   contents = ''
   ClearFields()
   {
-    this.title=  this.contents = this.subjectSelect = this.gradeSelect = '';
-    this.srcs?.forEach(src => src.remove = true);
+    this.title = this.contents = this.subjectSelect = this.gradeSelect = '';
   }
+
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
-  get imageRefs() {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    }|undefined)?.filesx;
-  }
-  get srcs()
-  {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined)?.srcs;
-  }
   async PreviewNote() {
-    const refs = this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined
-    const itemRemove = refs?.itemRemove
-    const srcs = refs?.srcs.filter((src) => !src.remove).map((src) => src.src!)
-    const postImageUpload = refs?.filesx
     
     if (this.formErrors) {
       this.$vs.notification({
@@ -231,30 +260,19 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      images: srcs
+      images : this.images
     })
 
-    notesStore.SET_UPLOAD_IMAGES(postImageUpload);
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
-  }
-
-  set state(value: boolean) {
-    this.title = this.contents = ''
-    this.active = false
-  }
-  get state() {
-    return this.active
   }
 
   get formErrors() {
     return (
       !this.title ||
-      this.subjectSelect == '' ||
-      this.gradeSelect == '' ||
-      !this.contents ||
-
-      (this.imageRefs && this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
+      this.subjectSelect === '' ||
+      this.gradeSelect === '' ||
+      !this.contents
     )
   }
 }
