@@ -6,6 +6,7 @@
     :class="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
   >
+  <DeleteNotesModal v-if="!disabled && NoteOwner" :open.sync="deleteNotesOpen" :noteId="note.id"></DeleteNotesModal>
     <!-- Card Header -->
     <div class="vx-row w-full justify-between items-center">
       <!-- Profile Picture -->
@@ -58,6 +59,10 @@
               </div>
               <div @click.stop.prevent="PushNotesPage()" class="w-full px-2 py-1 menu-item rounded-md">
                 Details
+              </div>
+              <div @click.stop.prevent="OpenDeleteModal()" v-if="NoteOwner" class="w-full px-2 py-1 menu-item rounded-md bg-red-600 text-white">
+                <i class="bx bx-trash" style="font-size: 1.25rem;"/>
+                Delete
               </div>
           </template>
         </vs-navbar-group>
@@ -194,9 +199,10 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import { notesStore, authStore } from '~/store'
+import DeleteNotesModal from '~/components/DeleteNotesModal.vue';
 
 @Component<NotesCard>({
-  // components :
+  components : { DeleteNotesModal},
   mounted() {
     if (this.note.images && this.note.images.length) {
       this.image = new Image()
@@ -215,12 +221,20 @@ export default class NotesCard extends Vue {
   // Whether buttons should work or not
   @Prop({ default : false }) disabled !: boolean;
 
+  deleteNotesOpen = false;
+
+  OpenDeleteModal()
+  {
+    this.deleteNotesOpen = true;
+  }
   get NoteOwner() {
     return authStore.user?.uid == this.note.uid
   }
+
   OpenEditingModal() {
     notesStore.SetEditNote(this.note)
   }
+
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
@@ -251,14 +265,16 @@ export default class NotesCard extends Vue {
 <style lang="scss">
 #note-card {
   .vs-navbar__group__items {
-    min-width: 100px;
-    background-color: white !important;
+    min-width: 120px;
+    background-color: white;
     .menu-item:hover
     {
-      background: #f5f5f6
+      opacity: 1;
+      background-color : initial !important;
     }
     .menu-item 
     {
+      opacity: 0.8;
       transition-duration : 0.1s;
       cursor: pointer;
     }

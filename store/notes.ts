@@ -276,4 +276,11 @@ export default class NotesModule extends VuexModule {
   public SetPreviewNote(val: Note | null) {
     this.SET_PREVIEW_NOTE(val)
   }
+  
+  @Action({rawError : true})
+  public async DeleteNote(id : string)
+  {
+    await firestore.collection("notes").doc(id).delete();
+    return await this.ResetPosts();
+  }
 }
