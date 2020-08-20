@@ -21,11 +21,17 @@
                 class="vx-row w-full text-2xl"
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
-
+              <div class="vx-row w-full items-center text-ginger" style>
+                <vs-button class="text-title text-2xl" style="font-size: 1.2rem" color="#7289DA" s @click="linkDiscord()">
+                  <i class="bx bxl-discord text-4xl mr-2"/>
+                  <div v-if="UserData.discordUsername" style="max-width: 40vw" class="truncate">{{ UserData.discordUsername }}</div>
+                  <div v-else>Link Discord</div>
+                </vs-button>
+              </div>
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
-                  <div class="font-bold text-base">{{userLevel}}</div>
+                  <div class="font-bold text-base">{{ userLevel }}</div>
                 </vs-avatar>
               </div>
 
@@ -36,7 +42,7 @@
                   height="11"
                   value="100%"
                   striped
-                  style="background-color: #32CD32; z-index:2"
+                  style="background-color: #32cd32; z-index: 2;"
                   :style="`width: ${userExp}%`"
                 ></v-progress-linear>
                 <v-progress-linear
@@ -44,7 +50,11 @@
                   height="11"
                   value="100%"
                   striped
-                  style="background-color:gray; width:100%; margin-top: -0.8rem"
+                  style="
+                    background-color: gray;
+                    width: 100%;
+                    margin-top: -0.8rem;
+                  "
                 ></v-progress-linear>
               </div>
             </div>
@@ -80,7 +90,6 @@
             <div class="vx-col w-full" style></div>
           </div>
           <!-- /Information - Col 2 -->
-
         </div>
       </VxCard>
 
@@ -90,30 +99,18 @@
           <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}'s Notes</div>
         </div>
 
-        <div class="vx-row w-full" >
-          <div
-          class="vx-col w-full md:w-1/2 lg:w-1/4"
-            v-for="note in UserNotes"
-            :key="note.uid"
-          >
+        <div class="vx-row w-full">
+          <div class="vx-col w-full md:w-1/2 lg:w-1/4" v-for="note in UserNotes" :key="note.uid">
             <nuxt-link :to="`/notes/${note.id}`">
-              <v-card
-                class="my-4 overflow-hidden"
-                id="userCard"
-                color="#26c6da"
-                dark
-                width="100%"
-              >
+              <v-card class="my-4 overflow-hidden" id="userCard" color="#26c6da" dark width="100%">
                 <v-card-title>
-                  <div
-                    class="vx-row font-bold text-2xl"
-                  >{{ note.title }}</div>
+                  <div class="vx-row font-bold text-2xl">{{ note.title }}</div>
                 </v-card-title>
 
                 <v-card-text
                   class="overflow-hidden text-white md-container"
                   v-html="$md.render(note.contents)"
-                style="max-height: 20vh; color : white"
+                  style="max-height: 20vh; color: white;"
                 ></v-card-text>
 
                 <v-card-actions style="margin-left: -0.75rem;">
@@ -123,11 +120,7 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                      <v-list-item-title>
-                        {{
-                        AuthUser.displayName
-                        }}
-                      </v-list-item-title>
+                      <v-list-item-title>{{ AuthUser.displayName }}</v-list-item-title>
                     </v-list-item-content>
 
                     <v-row align="center" justify="end" style="margin-right: 0.2rem;">
@@ -167,6 +160,16 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
+
+  linkDiscord()
+  {
+    const redirect_uri = encodeURIComponent(`${window.location.origin}/user/discord`);
+    console.log({redirect_uri})
+    const discordOauthLink = `https://discord.com/api/oauth2/authorize?client_id=739600929287831685&redirect_uri=${redirect_uri}&response_type=code&scope=identify`
+    // Simulate a mouse click:
+    window.location.href = discordOauthLink;
+  }
+
   UserNotes: Note[] = []
   async getUserNotes() {
     if (!this.AuthUser) {
@@ -237,5 +240,4 @@ export default class UserProfile extends mixins(UserMixin) {
     width: calc(100% - 12rem) !important;
   }
 }
-
 </style>
