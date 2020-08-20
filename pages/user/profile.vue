@@ -198,8 +198,8 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   get userExp() {
-    console.log(this.UserData?.progressionExp)
-    return (this.UserData?.progressionExp || 0) / 200
+    const userExp =  (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    return userExp
   }
 
   getIcon(subject: SubjectGroup_O | Subject_O) {
