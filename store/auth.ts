@@ -127,7 +127,7 @@ export default class AuthModule extends VuexModule implements AuthState {
     return
   }
 
-  @Action({ rawError: true })
+  @Action({ rawError: true }) 
   public async updateUserData(userData: Partial<UserData>) {
     const uid = this.user?.uid
     await firestore.collection('users').doc(uid).update(userData)
