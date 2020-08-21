@@ -42,3 +42,5 @@ tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
   - dev
+timeout: 30s
+
