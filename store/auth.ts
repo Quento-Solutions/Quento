@@ -104,8 +104,8 @@ export default class AuthModule extends VuexModule implements AuthState {
                 console.log('invalid email')
             }
             console.log(error);
-          }).then((userInfo) =>{ userInfo.user.updateProfile({displayName: name})})
-        
+          }).then((userInfo:any) =>{ userInfo.user.updateProfile({displayName: name})})
+        //   .then(firebaseAuth.currentUser.reload()).then(() => {console.log(firebaseAuth.currentUser.displayName)
     }
 
     @Action({rawError : true})
