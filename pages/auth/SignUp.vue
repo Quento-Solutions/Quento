@@ -27,6 +27,32 @@
             </template>
           </vs-input>
         </div>
+         <div class="p-6">
+          <vs-input
+            v-model="firstName"
+            type="name"
+            label="First Name"
+            class="block w-6"
+          >
+            <template #icon>
+              <i class='bx bx-pencil' ></i>
+            </template>
+          </vs-input>
+        </div>
+
+        <div class="p-6" >
+          <vs-input
+            v-model="lastName"
+            type="name"
+            label="Last Name"
+            class="block w-6"
+          >
+            <template #icon>
+              <i class='bx bx-pencil' ></i>
+            </template>
+          </vs-input>
+        </div>
+
         <div class="p-6">
           <vs-input
             v-model="password"
@@ -58,10 +84,11 @@
 
       <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
+
             class="mt-8 ml-6 login"
             color="#6b3deb"
             type="filled"
-            @click="SignUp(email,password,confirm_password)"
+            @click="SignUp(email,(firstName  + ' ' + lastName), password,confirm_password)"
             >Create Account
           </vs-button>
           <button
@@ -93,6 +120,8 @@ import {navigationStore, authStore} from '~/store'
   layout : 'auth'
 })
 export default class SignUp extends mixins(Auth) {
+  firstName: string = '';
+  lastName: string = '';
   email: string = '';
   password: string = '';
   confirm_password : string = '';

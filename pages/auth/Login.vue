@@ -45,6 +45,7 @@
             label="Password"
             class="block w-6"
           >
+          
             <template #icon>
               <i class="bx bx-lock-open-alt"></i>
             </template>
@@ -61,8 +62,7 @@
           </vs-button>
           <button @click="PushSignUpPage()" class="signup">
             Dont have an account yet?<br /><span style="color: #6b3deb;"
-              >Sign Up</span
-            >.
+              >Sign Up</span>.
           </button>
         </vs-col>
         <FooterCard />
@@ -78,15 +78,17 @@ import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 import FooterCard from '~/components/FooterCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin'
+import AOS from 'aos'
+
 import { navigationStore } from '~/store'
 @Component<Login>({
   components: { FooterCard },
   layout: 'auth'
 })
 export default class Login extends mixins(Auth) {
-  PushSignUpPage() 
-  {
-    this.$router.push('/auth/Signup')
+  PushSignUpPage() {
+    // this.$router.go(1)
+    this.$router.push({ path: '/auth/signup' })
   }
   email: string = ''
   password: string = ''
@@ -122,7 +124,7 @@ export default class Login extends mixins(Auth) {
 }
 .google {
   margin-top: 0.5vw;
-  background: #db4437;
+  background: #DB4437;
   margin-bottom: 2vw;
   color: white;
   font-family: ginger-normal;
