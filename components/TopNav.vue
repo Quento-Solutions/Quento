@@ -21,9 +21,8 @@
                 <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
               </vs-avatar>
               <template #items>
-                <nuxt-link to="/user/profile">
-                  <vs-navbar-item>Profile</vs-navbar-item>
-                </nuxt-link>
+                <vs-navbar-item to="/user/edit">Profile</vs-navbar-item>
+
                 <vs-navbar-item>Settings</vs-navbar-item>
                 <vs-navbar-item
                   warning
