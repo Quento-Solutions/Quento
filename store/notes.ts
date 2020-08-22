@@ -225,18 +225,25 @@ export default class NotesModule extends VuexModule {
       const imageUsed = note.contents?.includes(image.imageURL);
       if(!imageUsed)
       {
-        const deleteImage = await storage.ref(image.fileName).delete();
-        return deleteImage;
+        try {
+          const deleteImage = await storage.ref(image.fileName).delete();
+          return deleteImage;
+        } catch(error)
+        {
+          console.log({error});
+          return;
+        }
       }
       return
     })
     await Promise.all(deleteImages || [])
+    const newImages = note.storedImages?.filter(value => note.contents?.includes(value.imageURL));
+    const newNote : Note = Object.assign({}, note, {storedImages : newImages})
     if(note.id)
     {
-      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(note));
-    }   
-    const newNote = Note.toFirebase(note)
-    await firestore.collection('notes').add(newNote)
+      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(newNote));
+    }
+    await firestore.collection('notes').add(Note.toFirebase(newNote));
   }
 
   @Mutation

@@ -49,20 +49,31 @@ export default class QuestionsModule extends VuexModule {
       // Deletes all unused images.
       const imageUsed = question.contents?.includes(image.imageURL)
       if (!imageUsed) {
-        const deleteImage = await storage.ref(image.fileName).delete()
-        return deleteImage
+        try {
+          const deleteImage = await storage.ref(image.fileName).delete()
+          return deleteImage
+        } catch (error) {
+          console.log({ error })
+          return
+        }
       }
       return
     })
     await Promise.all(deleteImages || [])
+    const newImages = question.storedImages?.filter((value) =>
+      question.contents?.includes(value.imageURL)
+    )
+    const newQuestion: Question = Object.assign({}, question, {
+      storedImages: newImages
+    })
     return question.id
       ? await firestore
           .collection('questions')
           .doc(question.id)
-          .update(Question.toFirebase(question))
+          .update(Question.toFirebase(newQuestion))
       : await firestore
           .collection('questions')
-          .add(Question.toFirebase(question))
+          .add(Question.toFirebase(newQuestion))
   }
 
   ActiveQuestion: Question | null = null

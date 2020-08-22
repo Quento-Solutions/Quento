@@ -216,7 +216,7 @@ export default class PostQuestionModal extends mixins(
       storedImages : this.images
     })
 
-    questionStore.SET_PREVIEW_QUESTION(previewQuestion);
+    questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion));
   }
 
   get keywords() {
