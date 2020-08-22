@@ -72,6 +72,7 @@
         class="block"
         ref="textarea"
         expand="true"
+        markdownOptions="true"
         @paste="onPaste"
       ></VsTextarea>
     </div>

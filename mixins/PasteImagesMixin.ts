@@ -51,10 +51,18 @@ export default class PasteImagesMixin extends Vue {
     if (myField.selectionStart || myField.selectionStart == 0) {
       var startPos = myField.selectionStart
       var endPos = myField.selectionEnd || myField.selectionStart
+
       this.contents =
         myField.value.substring(0, startPos) +
         myValue +
-        myField.value.substring(endPos!, myField.value.length)
+        myField.value.substring(endPos!, myField.value.length);
+
+        setTimeout(() => {
+          startPos += myValue.length;
+          myField.selectionStart = myField.selectionEnd = startPos;
+        }, 10);
+      
+      console.log({startPos})
     } else {
       this.contents += myValue
     }
