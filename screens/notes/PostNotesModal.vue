@@ -195,7 +195,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      storedImages : this.images
+      storedImages : [...this.images]
     })
 
     notesStore.SetPreviewNote(previewNote)
