@@ -220,6 +220,17 @@ export default class NotesModule extends VuexModule {
   }
   @Action({ rawError: true })
   public async PostNote({ note }: { note: Note }) {
+    const deleteImages = note.storedImages?.map(async image => {
+      // Delete unused images.
+      const imageUsed = note.contents?.includes(image.imageURL);
+      if(!imageUsed)
+      {
+        const deleteImage = await storage.ref(image.fileName).delete();
+        return deleteImage;
+      }
+      return
+    })
+    await Promise.all(deleteImages || [])
     if(note.id)
     {
       return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(note));
