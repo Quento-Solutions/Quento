@@ -20,9 +20,8 @@
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
-        placeholder="You should sell chocolate"
-        label="Title"
-        class="block mb-6 w-6 mt-6"
+        placeholder="Title"
+        class="block mb-3 w-6 mt-3"
         width="w-6"
       >
         <template #icon>
@@ -31,9 +30,8 @@
       </vs-input>
 
       <vs-select
-        label="Subject"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="subjectSelect"
       >
@@ -54,9 +52,8 @@
         </vs-option-group>
       </vs-select>
       <vs-select
-        label="Grade"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="gradeSelect"
       >
@@ -71,10 +68,9 @@
       </vs-select>
       <VsTextarea
         v-model="contents"
-        placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
+        placeholder="Enter your content here"
         class="block"
         height="20rem"
-        label="NOTABLE Content"
         ref="textarea"
         @paste="onPaste"
       ></VsTextarea>
@@ -212,5 +208,3 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   }
 }
 </script>
-
-
