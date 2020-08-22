@@ -178,7 +178,7 @@ export default class EditNotesModal extends mixins(PasteImage) {
       })
       return
     }
-    this.ActiveNote!.storedImages = this.images;
+    this.ActiveNote!.storedImages = [...this.images];
     notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote));
     notesStore.TogglePreviewModal(true)
   }
