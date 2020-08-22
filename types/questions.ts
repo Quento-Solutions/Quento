@@ -1,6 +1,6 @@
-import {Date_t_F, Date_t_A, firebaseDate, algoliaDate} from './firebaseTypes';
+import {Date_t_F, Date_t_A, firebaseDate, algoliaDate, StoredImage} from './firebaseTypes';
 import type {Keyword_O} from './subjects'
-import type {Subject_O , Grade_O} from './subjects'
+import type {Subject_O , Grade_O,} from './subjects'
 
 export interface Question_t
 {
@@ -12,7 +12,9 @@ export interface Question_t
     keywords ?: Keyword_O[];
     subject : Subject_O;
     grade : Grade_O;
+    storedImages ?: StoredImage[];
     
+
     upVotes : number;
     views : number;
     responses : number;
@@ -36,6 +38,7 @@ export interface Question_t_F
     views : number;
     responses : number;
     keywords ?: Keyword_O[]
+    storedImages ?: StoredImage[];
     
     userPhotoUrl ?: string;
     userId : string;

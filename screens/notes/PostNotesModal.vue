@@ -109,8 +109,8 @@ import {
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
+import PasteImage from '~/mixins/PasteImagesMixin';
 import { Note } from '~/types/notes'
-import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 import storage from '~/plugins/firebaseStorage'
 import functions from '~/plugins/firebaseFunctions'
@@ -129,76 +129,17 @@ interface imageSrc {
 
 @Component<PostNotesModal>({
   components: {
-    VsTextarea,
     VsUpload
   },
   mounted() {
-    this.reader.addEventListener('load', function () {
-      this.result
-    })
   }
 })
-export default class PostNotesModal extends mixins(ValidateImage) {
+export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
-  reader = new FileReader()
+  contents = '';
 
-  async onPaste(evt: any) {
-    if (evt.clipboardData.files.length) {
-      const loading = this.$vs.loading()
-      const files = [...evt.clipboardData.files] as File[]
-      // this.reader.readAsDataURL
-      console.log({ files }, files.map)
-      const uploadRefs = files.map(async (image: File) => {
-        const reader = new FileReader()
-        const promise = new Promise((resolve, reject) => {
-          reader.addEventListener('load', async () => {
-            const base64image = reader.result
-            try {
-              const imageResponse = await functions.httpsCallable(
-                'functionPostImage'
-              )({ name: image.name, image: base64image })
-              const imageUrl = imageResponse.data.imageUrl
-              this.insertAtCursor(evt.target, `\n![image](${imageUrl})\n`)
-              this.images.push(imageUrl)
-              return resolve(imageUrl)
-            } catch (error) {
-              console.log({ error })
-              return reject(error)
-            }
-          })
-        })
-        reader.readAsDataURL(image)
-        return promise
-        // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
-      })
-      const a = await Promise.all(uploadRefs)
-      console.log({ a })
-      loading.close()
-    }
-  }
-
-  images: string[] = []
-
-  get textareaRef() {
-    return this.$refs.textarea as HTMLInputElement
-  }
-  insertAtCursor(myField: HTMLInputElement, myValue: string) {
-    //IE support
-
-    //MOZILLA and others
-    if (myField.selectionStart || myField.selectionStart == 0) {
-      var startPos = myField.selectionStart
-      var endPos = myField.selectionEnd || myField.selectionStart
-      this.contents =
-        myField.value.substring(0, startPos) +
-        myValue +
-        myField.value.substring(endPos!, myField.value.length)
-    } else {
-      this.contents += myValue
-    }
-  }
   @Watch('IsReset')
   onResetChanged(value: boolean, oldVal: boolean) {
     if (value) {
@@ -225,7 +166,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
     notesStore.ToggleNotesModule(value)
   }
   title = ''
-  contents = ''
+  
   ClearFields() {
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
   }
@@ -254,7 +195,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      images: [...this.images]
+      storedImages : this.images
     })
 
     notesStore.SetPreviewNote(previewNote)
