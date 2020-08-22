@@ -3,7 +3,8 @@ export const SubjectGroups = {
   Languages: ['English', 'French', 'Spanish'],
   Arts: ['Visual Arts', 'Music', 'Dance', 'Drama', 'Film'],
   'Social Sciences': ['TOK', 'Geography', 'History', 'Business'],
-  Technology: ['ICS', 'ITGS', 'ComTech']
+  Technology: ['ICS', 'ITGS', 'ComTech'],
+  Other : ["Phys Ed", "General"]
 } as const
 
 export const SortOptionsList = [
@@ -45,6 +46,7 @@ export const SubjectIconList: {
   Arts: 'bx-palette',
   'Social Sciences': 'bx-world',
   Technology: 'bx-server',
+  Other: "bx-list-plus",
 
   Math: 'bx-brain',
   Physics: 'bx-atom',
@@ -64,7 +66,9 @@ export const SubjectIconList: {
   Business: 'bx-briefcase',
   ICS: 'bx-code-alt',
   ITGS: 'bx-data',
-  ComTech: 'bxs-component'
+  ComTech: 'bxs-component',
+  "Phys Ed" : "bxs-basketball",
+  General : "bx-slider-alt"
 } as const
 
 export interface SubjectItem {

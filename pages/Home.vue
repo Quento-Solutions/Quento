@@ -1,7 +1,5 @@
 <template>
   <div id="home-page">
-    <vs-row justify="center">
-      <vs-col class="vx-col w-full">
         <VxCard class="greet-user" content-color="#fff">
           <template slot="no-body">
             <div class="titleContainer vx-row w-full p-8">
@@ -14,7 +12,7 @@
               </div>
 
               <div
-                class="vx-col w-full md:w-1/2 p-8 flex flex-col justify-around"
+                class="vx-col w-full md:w-1/2 p-8 flex flex-col justify-around lg:w-1/2"
                 style=""
               >
                 <div class="text-ginger-b text-6xl text-black" style="">
@@ -50,7 +48,7 @@
 
               <!-- Newsletter -->
               <div
-                class="vx-col w-full lg:w-1/4 flex flex-col justify-around"
+                class="vx-col w-full xl:w-1/4 flex flex-col justify-around"
                 style=""
               >
                 <div
@@ -109,8 +107,6 @@
             </div>
           </template>
         </VxCard>
-      </vs-col>
-    </vs-row>
   </div>
 </template>
 
@@ -241,21 +237,4 @@ export default class Home extends Vue {
   line-height: 1.125;
 }
 
-@media only screen and (max-width: 1200px) {
-  .title {
-    font-family: ginger-bold;
-    font-size: 10rem;
-  }
-  .titleContainer {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .title {
-    font-family: ginger-bold;
-    font-size: 15vw;
-  }
-}
 </style>

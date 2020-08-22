@@ -220,31 +220,30 @@ export default class NotesModule extends VuexModule {
   }
   @Action({ rawError: true })
   public async PostNote({ note }: { note: Note }) {
+    const deleteImages = note.storedImages?.map(async image => {
+      // Delete unused images.
+      const imageUsed = note.contents?.includes(image.imageURL);
+      if(!imageUsed)
+      {
+        try {
+          const deleteImage = await storage.ref(image.fileName).delete();
+          return deleteImage;
+        } catch(error)
+        {
+          console.log({error});
+          return;
+        }
+      }
+      return
+    })
+    await Promise.all(deleteImages || [])
+    const newImages = note.storedImages?.filter(value => note.contents?.includes(value.imageURL));
+    const newNote : Note = Object.assign({}, note, {storedImages : newImages})
     if(note.id)
     {
-      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(note));
-    }    
-    const uploadRefs = this.UploadImages.map(async (image) => {
-      const uid = v4()
-      const fileName = image.name.toLowerCase()
-      const extMatches = fileName.match(/\.([^\.]+)$/)
-      var ext = extMatches ? extMatches[0] : ''
-      const imageName = `${uid}${ext}`
-      const imageRef = storage.ref(imageName)
-      const imageReuploadName = `postedNote@${imageName}`
-      const snapshot = await imageRef.put(image)
-      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
-        snapshot.ref.bucket
-      }/o/${encodeURIComponent(imageReuploadName)}?alt=media`
-      // return await snapshot.ref.;
-      return imageUrl
-      // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
-    })
-    const imageLinks = await Promise.all(uploadRefs)
-    const newNote = Note.toFirebase(note)
-    newNote.images = imageLinks
-
-    await firestore.collection('notes').add(newNote)
+      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(newNote));
+    }
+    await firestore.collection('notes').add(Note.toFirebase(newNote));
   }
 
   @Mutation

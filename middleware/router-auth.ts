@@ -3,6 +3,7 @@ import type {Route} from 'vue-router'
 
 export default function({store, redirect, route} : Context)
 {
+    // return;
     // if(route.name == null) redirect ('/')
     console.log(route.name);
     if(route.name == "index") return;
@@ -11,15 +12,15 @@ export default function({store, redirect, route} : Context)
     {
         redirect('/home')
     }
-    if(store.state.auth.user == null && (route.name == null || isAdminRoute(route)) && route.name != "auth/Login" && route.name!="auth/SignUp") {
-
+    if(store.state.auth.user == null && (route.name == null || isAdminRoute(route)) && route.name != "auth/Login" && route.name!="auth/SignUp") 
+    {
         redirect('/auth/login')
     };
 }
 
 function isAdminRoute(route : Route)
 {
-    if (route.matched.some(record => (record.path == "/Home" || record.path == "/Suggestions" || record.path=="/notes" || record.path=="/questions" || "/newsletters")))
+    if (route.matched.some(record => (record.path == "/Home" || record.path == "/Suggestions" || record.path=="/notes" || record.path=="/questions" || record.path == "/newsletters" || record.path=="/user")))
     {
         return true
     }

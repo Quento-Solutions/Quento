@@ -11,18 +11,17 @@
   >
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl"><b>Posted</b> Notes</h4>
+        <h4 class="not-margin text-title text-4xl">
+          <b>Posted</b> Notes
+        </h4>
       </div>
     </template>
 
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
-    >
+    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
-        placeholder="You should sell chocolate"
-        label="Title"
-        class="block mb-6 w-6 mt-6"
+        placeholder="Title"
+        class="block mb-3 w-6 mt-3"
         width="w-6"
       >
         <template #icon>
@@ -31,21 +30,15 @@
       </vs-input>
 
       <vs-select
-        label="Subject"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="subjectSelect"
       >
-        <vs-option-group
-          v-for="(subjectGroup, index) in SubjectGroupList"
-          :key="index"
-        >
+        <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
             <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
-            <div class="font-bold truncate">
-              {{ subjectGroup.name }}
-            </div>
+            <div class="font-bold truncate">{{ subjectGroup.name }}</div>
           </div>
           <vs-option
             v-for="(subject, subIndex) in subjectGroup.items"
@@ -54,16 +47,13 @@
             :value="subject.name"
           >
             <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-            <div class="font-bold truncate">
-              {{ subject.name }}
-            </div>
+            <div class="font-bold truncate">{{ subject.name }}</div>
           </vs-option>
         </vs-option-group>
       </vs-select>
       <vs-select
-        label="Grade"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="gradeSelect"
       >
@@ -78,32 +68,18 @@
       </vs-select>
       <VsTextarea
         v-model="contents"
-        placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
+        placeholder="Enter your content here"
         class="block"
         height="20rem"
-        label="NOTABLE Content"
-      >
-      </VsTextarea>
-      <VsUpload
-        :show-upload-button="false"
-        multiple
-        text="Upload Image(s)"
-        accept="image/*"
-        ref="postImageUpload"
-      />
+        ref="textarea"
+        @paste="onPaste"
+      ></VsTextarea>
     </div>
 
     <template #footer>
       <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button
-          class="md:w-1/2 w-full"
-          warn
-          :disabled="formErrors"
-          @click="PreviewNote()"
-        >
-          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            PREVIEW NOTE
-          </div>
+        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors" @click="PreviewNote()">
+          <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
         </vs-button>
       </div>
     </template>
@@ -113,7 +89,12 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 
-import { suggestionsStore, notesStore, windowStore, newslettersStore } from '~/store'
+import {
+  suggestionsStore,
+  notesStore,
+  windowStore,
+  newslettersStore
+} from '~/store'
 import {
   NestedSubjectList,
   SubjectGroup_O,
@@ -124,9 +105,13 @@ import {
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
+import PasteImage from '~/mixins/PasteImagesMixin';
 import { Note } from '~/types/notes'
-import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
+import storage from '~/plugins/firebaseStorage'
+import functions from '~/plugins/firebaseFunctions'
+
+import { v4 } from 'uuid'
 
 import { authStore } from '~/store'
 
@@ -140,30 +125,30 @@ interface imageSrc {
 
 @Component<PostNotesModal>({
   components: {
-    VsTextarea,
     VsUpload
+  },
+  mounted() {
   }
 })
-export default class PostNotesModal extends mixins(ValidateImage) {
+export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
+  contents = '';
+
   @Watch('IsReset')
-  onResetChanged(value : boolean, oldVal : boolean)
-  {
-    if(value)
-    {
-      this.ClearFields();
-      notesStore.SET_RESET(false);
+  onResetChanged(value: boolean, oldVal: boolean) {
+    if (value) {
+      this.ClearFields()
+      notesStore.SET_RESET(false)
     }
   }
 
-  get IsReset()
-  {
-    return notesStore.IsReset;
+  get IsReset() {
+    return notesStore.IsReset
   }
 
-  readonly GradeList = GradeList.filter(v=>v!=='ALL');
+  readonly GradeList = GradeList.filter((v) => v !== 'ALL')
   Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
@@ -177,41 +162,16 @@ export default class PostNotesModal extends mixins(ValidateImage) {
     notesStore.ToggleNotesModule(value)
   }
   title = ''
-  contents = ''
-  ClearFields()
-  {
-    this.title=  this.contents = this.subjectSelect = this.gradeSelect = '';
-    this.srcs?.forEach(src => src.remove = true);
+  
+  ClearFields() {
+    this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
   }
+
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
-  get imageRefs() {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    }|undefined)?.filesx;
-  }
-  get srcs()
-  {
-    return (this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined)?.srcs;
-  }
   async PreviewNote() {
-    const refs = this.$refs.postImageUpload as Vue & {
-      filesx: File[]
-      srcs: imageSrc[]
-      itemRemove: any[]
-    } | undefined
-    const itemRemove = refs?.itemRemove
-    const srcs = refs?.srcs.filter((src) => !src.remove).map((src) => src.src!)
-    const postImageUpload = refs?.filesx
-    
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -231,33 +191,20 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      images: srcs
+      storedImages : [...this.images]
     })
 
-    notesStore.SET_UPLOAD_IMAGES(postImageUpload);
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
-  }
-
-  set state(value: boolean) {
-    this.title = this.contents = ''
-    this.active = false
-  }
-  get state() {
-    return this.active
   }
 
   get formErrors() {
     return (
       !this.title ||
-      this.subjectSelect == '' ||
-      this.gradeSelect == '' ||
-      !this.contents ||
-
-      (this.imageRefs && this.imageRefs.filter(image => this.validateImageType(image)).length < this.imageRefs.length)
+      this.subjectSelect === '' ||
+      this.gradeSelect === '' ||
+      !this.contents
     )
   }
 }
 </script>
-
-

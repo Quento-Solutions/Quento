@@ -1,6 +1,6 @@
 
 import {Subject_O , Grade_O} from './subjects'
-import {Date_t_F, firebaseDate} from './firebaseTypes';
+import {Date_t_F, firebaseDate, StoredImage} from './firebaseTypes';
 
 
 export interface Note_t
@@ -12,6 +12,7 @@ export interface Note_t
 
     images ?: string[];
     contents ?: string;
+    storedImages ?: StoredImage[];
 
     createdAt : Date;
     upVotes : number;
@@ -31,6 +32,7 @@ export interface Note_t_F
 
     images ?: string[];
     contents ?: string;
+    storedImages ?: StoredImage[];
 
     createdAt : Date_t_F | Date;
     upVotes : number;
