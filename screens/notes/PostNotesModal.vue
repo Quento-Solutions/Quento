@@ -70,19 +70,18 @@
         v-model="contents"
         placeholder="Enter your content here"
         class="block"
-        height="20rem"
         ref="textarea"
+        expand="true"
         @paste="onPaste"
       ></VsTextarea>
     </div>
-
-    <template #footer>
-      <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
+    <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
         <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors" @click="PreviewNote()">
           <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
         </vs-button>
       </div>
-    </template>
+
+
   </vs-dialog>
 </template>
 

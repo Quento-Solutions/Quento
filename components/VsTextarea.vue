@@ -7,6 +7,8 @@
         v-bind="$attrs"
         v-on="listeners"
         class="vs-textarea border-none w-full h-full"
+        :style="`height : ${inputHeight}px; min-height : 10rem`"
+        ref="input"
       />
       <label class="vs-input__label"></label>
       <div class="vs-input__afects"></div>
@@ -23,10 +25,21 @@ export default class VsTextarea extends Vue {
   @Prop() value!: string
   @Prop({ required: false }) label?: string
   @Prop({ default: 'primary' }) color!: string
-  @Prop({ required: false }) readonly height?: string
-  @Prop({ required: false }) readonly width?: string
+  @Prop({ required: false }) readonly height?: string;
+  @Prop({ required: false }) readonly width?: string;
+  @Prop({default : false}) expand !: boolean;
   isFocus = false
+  inputHeight = 0
 
+    get input()
+    {
+        return (this.$refs.input as HTMLTextAreaElement);
+    }
+  @Watch('value')
+  textAreaAdjust() {
+      if(!this.expand || this.input.scrollHeight == this.input.clientHeight) return;
+        this.inputHeight = this.input.scrollHeight > this.input.clientHeight ? this.input.scrollHeight + 10 : this.input.scrollHeight
+  }
   get style() {
     let style = {
       height: this.height,
@@ -78,6 +91,7 @@ export default class VsTextarea extends Vue {
   padding-bottom: 0;
 }
 .vs-textarea {
+
   resize: none;
   border: none !important;
   background: rgba(var(--vs-gray-2), 1);
@@ -87,6 +101,7 @@ export default class VsTextarea extends Vue {
   padding: 7px 13px;
   border-radius: inherit;
   transition: all 0.25s ease;
+  overflow : hidden;
   padding-left: 10px;
   margin: none;
 }
