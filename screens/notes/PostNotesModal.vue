@@ -11,13 +11,13 @@
   >
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl"><b>Posted</b> Notes</h4>
+        <h4 class="not-margin text-title text-4xl">
+          <b>Posted</b> Notes
+        </h4>
       </div>
     </template>
 
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
-    >
+    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
         placeholder="You should sell chocolate"
@@ -37,15 +37,10 @@
         placeholder="Subject"
         v-model="subjectSelect"
       >
-        <vs-option-group
-          v-for="(subjectGroup, index) in SubjectGroupList"
-          :key="index"
-        >
+        <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
             <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
-            <div class="font-bold truncate">
-              {{ subjectGroup.name }}
-            </div>
+            <div class="font-bold truncate">{{ subjectGroup.name }}</div>
           </div>
           <vs-option
             v-for="(subject, subIndex) in subjectGroup.items"
@@ -54,9 +49,7 @@
             :value="subject.name"
           >
             <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-            <div class="font-bold truncate">
-              {{ subject.name }}
-            </div>
+            <div class="font-bold truncate">{{ subject.name }}</div>
           </vs-option>
         </vs-option-group>
       </vs-select>
@@ -84,21 +77,13 @@
         label="NOTABLE Content"
         ref="textarea"
         @paste="onPaste"
-      >
-      </VsTextarea>
+      ></VsTextarea>
     </div>
 
     <template #footer>
       <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button
-          class="md:w-1/2 w-full"
-          warn
-          :disabled="formErrors"
-          @click="PreviewNote()"
-        >
-          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            PREVIEW NOTE
-          </div>
+        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors" @click="PreviewNote()">
+          <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
         </vs-button>
       </div>
     </template>
@@ -108,7 +93,12 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 
-import { suggestionsStore, notesStore, windowStore, newslettersStore } from '~/store'
+import {
+  suggestionsStore,
+  notesStore,
+  windowStore,
+  newslettersStore
+} from '~/store'
 import {
   NestedSubjectList,
   SubjectGroup_O,
@@ -122,7 +112,9 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
 import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
-import storage from '~/plugins/firebaseStorage';
+import storage from '~/plugins/firebaseStorage'
+import functions from '~/plugins/firebaseFunctions'
+
 import { v4 } from 'uuid'
 
 import { authStore } from '~/store'
@@ -139,83 +131,87 @@ interface imageSrc {
   components: {
     VsTextarea,
     VsUpload
+  },
+  mounted() {
+    this.reader.addEventListener('load', function () {
+      this.result
+    })
   }
 })
 export default class PostNotesModal extends mixins(ValidateImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
-  async onPaste(evt : any)
-  {
-    if(evt.clipboardData.files.length)
-    {
-      const loading = this.$vs.loading();
-      const files = [...evt.clipboardData.files] as File[];
-      console.log({files}, files.map);
-      const uploadRefs = files.map(async (image : File) => {
-        const uid = v4()
-        const fileName = image.name.toLowerCase()
-        const extMatches = fileName.match(/\.([^\.]+)$/)
-        var ext = extMatches ? extMatches[0] : ''
-        const imageName = `${uid}${ext}`
-        const imageRef = storage.ref(imageName)
-        const imageReuploadName = `postedNote@${imageName}`
-        const snapshot = await imageRef.put(image)
-        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
-          snapshot.ref.bucket
-        }/o/${encodeURIComponent(imageReuploadName)}?alt=media`
-        // return await snapshot.ref.;
-        this.insertAtCursor(evt.target, `\n![image](${imageUrl})\n`);
-        this.images.push(imageUrl);
-        return imageUrl
+  reader = new FileReader()
+
+  async onPaste(evt: any) {
+    if (evt.clipboardData.files.length) {
+      const loading = this.$vs.loading()
+      const files = [...evt.clipboardData.files] as File[]
+      // this.reader.readAsDataURL
+      console.log({ files }, files.map)
+      const uploadRefs = files.map(async (image: File) => {
+        const reader = new FileReader()
+        const promise = new Promise((resolve, reject) => {
+          reader.addEventListener('load', async () => {
+            const base64image = reader.result
+            try {
+              const imageResponse = await functions.httpsCallable(
+                'functionPostImage'
+              )({ name: image.name, image: base64image })
+              const imageUrl = imageResponse.data.imageUrl
+              this.insertAtCursor(evt.target, `\n![image](${imageUrl})\n`)
+              this.images.push(imageUrl)
+              return resolve(imageUrl)
+            } catch (error) {
+              console.log({ error })
+              return reject(error)
+            }
+          })
+        })
+        reader.readAsDataURL(image)
+        return promise
         // https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/thumb%40256_e9320c0e-a80e-485d-864d-0fa97d665cff.jpg?alt=media&token=2315a102-391e-48f4-a05b-37ed2fd96fb3
       })
-      await Promise.all(uploadRefs)
-      loading.close();
-    }
-    if(evt.clipboardData.files.length)
-    {
-      console.log("files", evt.clipboardData.files)
-      this.insertAtCursor(evt.target, "\n![image](https://user-images.githubusercontent.com/46302202/90639577-d92f8600-e1fc-11ea-89a2-78bd7be184f9.png)\n");
+      const a = await Promise.all(uploadRefs)
+      console.log({ a })
+      loading.close()
     }
   }
 
-  images : string[] = [];
+  images: string[] = []
 
-  get textareaRef()
-  {
+  get textareaRef() {
     return this.$refs.textarea as HTMLInputElement
   }
-  insertAtCursor(myField : HTMLInputElement, myValue : string) {
-      //IE support
+  insertAtCursor(myField: HTMLInputElement, myValue: string) {
+    //IE support
 
-      //MOZILLA and others
-      if (myField.selectionStart || myField.selectionStart == 0) {
-          var startPos = myField.selectionStart;
-          var endPos = myField.selectionEnd || myField.selectionStart;
-          this.contents = myField.value.substring(0, startPos)
-              + myValue
-              + myField.value.substring(endPos!, myField.value.length);
-      } else {
-          this.contents+= myValue;
-      }
+    //MOZILLA and others
+    if (myField.selectionStart || myField.selectionStart == 0) {
+      var startPos = myField.selectionStart
+      var endPos = myField.selectionEnd || myField.selectionStart
+      this.contents =
+        myField.value.substring(0, startPos) +
+        myValue +
+        myField.value.substring(endPos!, myField.value.length)
+    } else {
+      this.contents += myValue
+    }
   }
   @Watch('IsReset')
-  onResetChanged(value : boolean, oldVal : boolean)
-  {
-    if(value)
-    {
-      this.ClearFields();
-      notesStore.SET_RESET(false);
+  onResetChanged(value: boolean, oldVal: boolean) {
+    if (value) {
+      this.ClearFields()
+      notesStore.SET_RESET(false)
     }
   }
 
-  get IsReset()
-  {
-    return notesStore.IsReset;
+  get IsReset() {
+    return notesStore.IsReset
   }
 
-  readonly GradeList = GradeList.filter(v=>v!=='ALL');
+  readonly GradeList = GradeList.filter((v) => v !== 'ALL')
   Cancel() {}
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
@@ -230,9 +226,8 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   }
   title = ''
   contents = ''
-  ClearFields()
-  {
-    this.title = this.contents = this.subjectSelect = this.gradeSelect = '';
+  ClearFields() {
+    this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
   }
 
   get isLargeScreen() {
@@ -240,7 +235,6 @@ export default class PostNotesModal extends mixins(ValidateImage) {
   }
 
   async PreviewNote() {
-    
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -260,7 +254,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      images : [...this.images]
+      images: [...this.images]
     })
 
     notesStore.SetPreviewNote(previewNote)

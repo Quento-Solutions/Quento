@@ -23,6 +23,7 @@ export default class VsTextarea extends Vue
     @Prop({default : 'primary'}) color !: string;
     @Prop({required : false}) readonly height ?: string;
     @Prop({required : false}) readonly width ?: string;
+    @Prop({default : false}) pasteImages !: boolean;
 
     isFocus = false;
 
