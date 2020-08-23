@@ -6,52 +6,82 @@
     :class="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
   >
-    <DeleteNotesModal v-if="!disabled && NoteOwner" :open.sync="deleteNotesOpen" :noteId="note.id"></DeleteNotesModal>
+  <DeleteNotesModal v-if="!disabled && NoteOwner" :open.sync="deleteNotesOpen" :noteId="note.id"></DeleteNotesModal>
     <!-- Card Header -->
-    <AvatarBar
-      :username="note.userDisplayName"
-      :date="note.createdAt"
-      :photoURL="note.userPhotoUrl"
-      :badge="NoteOwner"
-    >
-      <template #items v-if="!disabled">
-        <div
-          @click.stop.prevent="OpenEditingModal()"
-          v-if="NoteOwner"
-          class="w-full px-2 py-1 menu-item rounded-md"
-        >
-          <i class="bx bx-edit" style="font-size: 1.25rem;" />
-          Edit
+    <div class="vx-row w-full justify-between items-center">
+      <!-- Profile Picture -->
+      <div class="justify-start w-5/6 m-0">
+        <div class="vx-row w-full justify-start items-center">
+          <div class="vx-col">
+            <vs-tooltip class="inline-block">
+              <vs-avatar class="icon">
+                <img v-if="note.userPhotoUrl" :src="note.userPhotoUrl" />
+                <template #text v-else>
+                  {{ note.userDisplayName }}
+                </template>
+              </vs-avatar>
+              <template #tooltip>
+                {{ note.userDisplayName }}
+              </template>
+            </vs-tooltip>
+          </div>
+          <div class="vx-col">
+            <!-- User name -->
+            <div class="text-xl text-ginger-b">
+              <div class="">
+                {{ note.userDisplayName }}
+              </div>
+            </div>
+            <div class="">
+              <div class="">
+                {{ note.createdAt.toLocaleString() }}
+              </div>
+            </div>
+          </div>
         </div>
-        <div
-          @click.stop.prevent="PushNotesPage()"
-          class="w-full px-2 py-1 menu-item rounded-md"
-        >Details</div>
-        <div
-          @click.stop.prevent="OpenDeleteModal()"
-          v-if="NoteOwner"
-          class="w-full px-2 py-1 menu-item rounded-md bg-red-600 text-white"
-        >
-          <i class="bx bx-trash" style="font-size: 1.25rem;" />
-          Delete
-        </div>
-      </template>
-    </AvatarBar>
+      </div>
+
+      <!-- Action Button -->
+      <div>
+        <vs-navbar-group id="menu-dots" @click.stop.prevent="() => false">
+          <vs-avatar
+            class="profileIcon icon"
+            :badge="NoteOwner"
+            badge-color="success"
+            @click.stop.prevent="() => false"
+          >
+            <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
+          </vs-avatar>
+          <template #items v-if="!disabled">
+              <div @click.stop.prevent="OpenEditingModal()" v-if="NoteOwner" class="w-full px-2 py-1 menu-item rounded-md">
+                <i class="bx bx-edit" style="font-size: 1.25rem;" />
+                Edit
+              </div>
+              <div @click.stop.prevent="PushNotesPage()" class="w-full px-2 py-1 menu-item rounded-md">
+                Details
+              </div>
+              <div @click.stop.prevent="OpenDeleteModal()" v-if="NoteOwner" class="w-full px-2 py-1 menu-item rounded-md bg-red-600 text-white">
+                <i class="bx bx-trash" style="font-size: 1.25rem;"/>
+                Delete
+              </div>
+          </template>
+        </vs-navbar-group>
+      </div>
+    </div>
+
     <!-- Category Pills -->
-    <div class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content">
+    <div
+      class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content"
+    >
       <div
-        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
-        style="background-color: #ed8936"
-      >Grade {{ note.grade }}</div>
-      <div
-        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2"
-        style="background-color: #9f7aea"
+        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white" style="background-color: #ed8936"
       >
-        <i
-          class="bx text-xl text-white mr-2"
-          :class="getIcon(note.subject)"
-          style="background-color:transparent;"
-        />
+        Grade {{ note.grade }}
+      </div>
+      <div
+        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2" style="background-color: #9f7aea"
+      >
+        <i class="bx text-xl text-white mr-2" :class="getIcon(note.subject)" style="background-color:transparent;"/>
         {{ note.subject }}
       </div>
     </div>
@@ -60,10 +90,15 @@
     <div
       class="w-4/5 text-ginger-b text-3xl p-4 ml-1/2 title-content"
       style="line-height: 1;"
-    >{{ note.title }}</div>
+    >
+      {{ note.title }}
+    </div>
 
     <!-- Content -->
-    <div class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0" style="margin: 0;">
+    <div
+      class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0"
+      style="margin: 0;"
+    >
       <div
         class="md:w-4/5 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
@@ -119,7 +154,7 @@
               white 90%
             );
           "
-        ></div>-->
+        ></div> -->
       </div>
     </div>
 
@@ -138,14 +173,18 @@
           class="bx bx-heart primary"
           :style="`color : ${userLiked(note.id) ? 'white' : '#ff4757'}`"
         ></i>
-        <template #badge>{{ note.upVotes }}</template>
+        <template #badge>
+          {{ note.upVotes }}
+        </template>
       </vs-avatar>
       <vs-tooltip>
         <vs-avatar class="icon-small">
           <i class="bx bx-show"></i>
-          <template #badge>{{ note.views }}</template>
+          <template #badge>
+            {{ note.views }}
+          </template>
         </vs-avatar>
-        <template #tooltip>{{ note.views }} Views</template>
+        <template #tooltip> {{ note.views }} Views </template>
       </vs-tooltip>
 
       <vs-avatar class="icon-small">
@@ -160,32 +199,33 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import { notesStore, authStore } from '~/store'
-import DeleteNotesModal from '~/components/DeleteNotesModal.vue'
-import AvatarBar from '~/components/AvatarBar.vue'
+import DeleteNotesModal from '~/components/DeleteNotesModal.vue';
 
 @Component<NotesCard>({
-  components: { DeleteNotesModal, AvatarBar },
+  components : { DeleteNotesModal},
   mounted() {
     if (this.note.images && this.note.images.length) {
       this.image = new Image()
       this.image.src = this.note.images[0]
-      // this.note.userP
       this.hasImage = true
     }
   }
-})
+}
+)
+
 export default class NotesCard extends Vue {
   @Prop({ required: true }) note!: Note
   @Prop({ default: false }) clickable!: boolean
   // Loaded full content
   @Prop({ default: false }) preview!: boolean
   // Whether buttons should work or not
-  @Prop({ default: false }) disabled!: boolean
+  @Prop({ default : false }) disabled !: boolean;
 
-  deleteNotesOpen = false
+  deleteNotesOpen = false;
 
-  OpenDeleteModal() {
-    this.deleteNotesOpen = true
+  OpenDeleteModal()
+  {
+    this.deleteNotesOpen = true;
   }
   get NoteOwner() {
     return authStore.user?.uid == this.note.uid
@@ -216,6 +256,7 @@ export default class NotesCard extends Vue {
   vfTransitions = ['swipe']
   PushNotesPage() {
     if (this.clickable) return this.$router.push(`/notes/${this.note.id}`)
+
   }
   hasImage = false
   image?: HTMLImageElement
@@ -226,13 +267,15 @@ export default class NotesCard extends Vue {
   .vs-navbar__group__items {
     min-width: 120px;
     background-color: white;
-    .menu-item:hover {
+    .menu-item:hover
+    {
       opacity: 1;
-      background-color: initial !important;
+      background-color : initial !important;
     }
-    .menu-item {
+    .menu-item 
+    {
       opacity: 0.8;
-      transition-duration: 0.1s;
+      transition-duration : 0.1s;
       cursor: pointer;
     }
   }
@@ -286,7 +329,7 @@ export default class NotesCard extends Vue {
 }
 .flux-image {
   background-position: 0px 0px !important;
-  background-size: auto 100% !important;
+  background-size:auto 100% !important;
   background-color: black;
   background-position: center !important;
 }

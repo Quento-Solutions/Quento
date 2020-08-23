@@ -7,11 +7,69 @@
     @click="PushQuestionsPage()"
   >
     <!-- Card Header -->
-    <AvatarBar
-      :username="question.userDisplayName"
-      :date="question.createdAt"
-      :photoURL="question.userPhotoUrl"
-    ></AvatarBar>
+    <div class="vx-row w-full justify-between items-center">
+      <!-- Profile Picture -->
+      <div class="justify-start w-5/6 m-0">
+        <div class="vx-row w-full justify-start items-center">
+          <div class="vx-col">
+            <vs-tooltip class="inline-block">
+              <vs-avatar class="icon">
+                <img v-if="question.userPhotoUrl" :src="question.userPhotoUrl" />
+                <template #text v-else>
+                  {{ question.userDisplayName }}
+                </template>
+              </vs-avatar>
+              <template #tooltip>
+                {{ question.userDisplayName }}
+              </template>
+            </vs-tooltip>
+          </div>
+          <div class="vx-col">
+            <!-- User name -->
+            <div class="text-xl text-ginger-b">
+              <div class="">
+                {{ question.userDisplayName }}
+              </div>
+            </div>
+            <div class="">
+              <div class="">
+                {{ question.createdAt.toLocaleString() }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <!-- <div>
+        <vs-navbar-group id="menu-dots" @click.stop.prevent="() => false">
+          <vs-avatar
+            class="profileIcon icon"
+            :badge="QuestionOwner"
+            badge-color="success"
+            @click.stop.prevent="() => false"
+          >
+            <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
+          </vs-avatar>
+          <template #items v-if="!disabled">
+            <div
+              @click.stop.prevent="OpenEditingModal()"
+              v-if="QuestionOwner"
+              class="w-full px-2 py-1 menu-item rounded-md"
+            >
+              <i class="bx bx-edit" style="font-size: 1.25rem;" />
+              Edit
+            </div>
+            <div
+              @click.stop.prevent="PushQuestionsPage()"
+              class="w-full px-2 py-1 menu-item rounded-md"
+            >
+              Details
+            </div>
+          </template>
+        </vs-navbar-group>
+      </div> -->
+    </div>
 
     <!-- Category Pills -->
     <div
@@ -102,23 +160,17 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
-
 import { Question } from '~/types/questions'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import { notesStore, authStore, questionStore } from '~/store'
 
 import UserMixin from '~/mixins/UserMixin';
-import AvatarBar from '~/components/AvatarBar.vue'
 
-
-@Component<QuestionCard>({
-  components : 
-  {
-    AvatarBar
-  }
+@Component<NotesCard>({
+  // components :
 
 })
-export default class QuestionCard extends mixins(UserMixin) {
+export default class NotesCard extends mixins(UserMixin) {
   @Prop({ required: true }) question!: Question
   @Prop({ default: false }) clickable!: boolean
   // Loaded full content
