@@ -1,8 +1,8 @@
 <template>
-  <div class="vs-input-parent" :style="style" style="background-color : #f4f7f8">
-    <vs-navbar v-if="markdownOptions" class="rounded-lg" id="markdown-options" style>
+  <div class="vs-input-parent" :style="style" style="background-color : #f4f7f8;position:relative;">
+    <vs-navbar v-if="markdownOptions" class="rounded-lg mt-2" id="markdown-options" style="position:absolute;background:none;pointer-events: none;">
       <template #right>
-        <div class="vx-row rounded-full bg-white px-2" style="">
+        <div class="vx-row rounded-full bg-white px-2" style="pointer-events: auto;">
           <vs-navbar-item class="bg-white markdown-option p-1" @click="insertHeader()">H</vs-navbar-item>
           <vs-navbar-item class="bg-white markdown-option p-1" @click="insertBold()"><b>B</b></vs-navbar-item>
           <vs-navbar-item class="bg-white markdown-option p-1" @click="insertItalics()"><i>I</i></vs-navbar-item>        
