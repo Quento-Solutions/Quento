@@ -89,6 +89,7 @@
           class="block"
           height="30rem"
           label="Question Body"
+          markdownOptions="true"
           @paste="onPaste"
         ></VsTextarea>
       </div>
