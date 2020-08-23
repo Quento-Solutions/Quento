@@ -108,7 +108,6 @@ export default class AuthenticationMixin extends Vue {
     try {
       await authStore.signUpWithEmail({ email, password });
       this.$vs.notification({title:"accountCreated", color: "success"})
-
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
       this.stopLoading();
