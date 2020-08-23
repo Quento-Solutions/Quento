@@ -69,7 +69,7 @@
       <VsTextarea
         v-model="contents"
         placeholder="Enter your content here"
-        class="block"
+        class="block rounded-lg pl-1"
         ref="textarea"
         expand="true"
         markdownOptions="true"

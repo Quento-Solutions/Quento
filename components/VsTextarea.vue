@@ -1,11 +1,27 @@
 <template>
   <div class="vs-input-parent" :style="style" style="background-color : #f4f7f8;position:relative;">
-    <vs-navbar v-if="markdownOptions" class="rounded-lg mt-2" id="markdown-options" style="position:absolute;background:none;pointer-events: none;">
-      <template #right>
-        <div class="vx-row rounded-full bg-white px-2" style="pointer-events: auto;">
+    <vs-navbar v-if="markdownOptions" class="rounded-lg mt-4" id="markdown-options" style="background:none;pointer-events: none;">
+      <template #left>
+        <div class="vx-row rounded-full bg-white mb-3" style="pointer-events: auto;flex-wrap: nowrap;margin-left:-0.25rem">
           <vs-navbar-item class="bg-white markdown-option p-1" @click="insertHeader()">H</vs-navbar-item>
-          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertBold()"><b>B</b></vs-navbar-item>
-          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertItalics()"><i>I</i></vs-navbar-item>        
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertBold()">
+            <b>B</b>
+          </vs-navbar-item>
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertItalics()">
+            <i>I</i>
+          </vs-navbar-item>
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertIndent()">
+            <i class="bx bx-left-indent" />
+          </vs-navbar-item>
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertUl()">
+            <i class="bx bx-list-ul" />
+          </vs-navbar-item>
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertCodeblock()">
+            <i class="bx bx-code" />
+          </vs-navbar-item>
+          <vs-navbar-item class="bg-white markdown-option p-1" @click="insertLink()">
+            <i class="bx bx-link" />
+          </vs-navbar-item>
         </div>
       </template>
     </vs-navbar>
@@ -19,6 +35,7 @@
         class="vs-textarea border-none w-full h-full"
         :style="`height : ${inputHeight}px; min-height : 10rem`"
         ref="input"
+        @keydown="keydownHandler"
       />
       <label class="vs-input__label"></label>
       <div class="vs-input__afects"></div>
@@ -56,45 +73,66 @@ export default class VsTextarea extends Vue {
         : this.input.scrollHeight
   }
 
-  insertHeader()
-  {
-    this.insertText("\n## ", "Header Text");
+  keydownHandler(e: any) {
+    var keyCode = e.keyCode || e.which
+
+    if (keyCode == 9) {
+      e.preventDefault()
+      this.insertText('\t')
+    }
   }
-  insertBold()
-  {
-    this.insertText("**", "Bold Text", "**");
+  insertLink() {
+    this.insertText('[', 'Link Text', '](url)')
   }
-  insertItalics()
-  {
-    this.insertText("_", "Italic Text", "_");
+  insertCodeblock() {
+    this.insertText(' ` ', 'Code block text', ' `')
+  }
+  insertIndent() {
+    this.insertText('\n> ', 'Indented Text', '\n')
+  }
+  insertUl() {
+    this.insertText('\n- ', 'List Item')
+  }
+  insertHeader() {
+    this.insertText('\n## ', 'Header Text')
+  }
+  insertBold() {
+    this.insertText('**', 'Bold Text', '**')
+  }
+  insertItalics() {
+    this.insertText('_', 'Italic Text', '_')
   }
 
-  set contents(value : string)
-  {
-    this.$emit("input", value);
+  set contents(value: string) {
+    this.$emit('input', value)
   }
-  get contents()
-  {
+  get contents() {
     return this.value
   }
 
-  insertText(beforeText : string, highlightText : string = "", afterText : string = "")
-  {
+  insertText(
+    beforeText: string,
+    highlightText: string = '',
+    afterText: string = ''
+  ) {
     if (this.input.selectionStart || this.input.selectionStart == 0) {
       var startPos = this.input.selectionStart
       var endPos = this.input.selectionEnd || this.input.selectionStart
-      console.log({startPos, endPos});
+      console.log({ startPos, endPos })
 
       this.contents =
         this.contents.substring(0, startPos) +
-        beforeText + highlightText + afterText +
-        this.contents.substring(endPos!);
-
-        setTimeout(() => {
-          this.input.focus();
-          startPos += beforeText.length;
-          this.input.setSelectionRange(startPos, startPos + highlightText.length);
-        }, 10);
+        beforeText +
+        highlightText +
+        afterText +
+        this.contents.substring(endPos!)
+      // This is dumb code don't do this at home.
+      setTimeout(() => {
+        this.input.focus()
+        startPos += beforeText.length
+        this.input.setSelectionRange(startPos, startPos + highlightText.length)
+        this.textAreaAdjust()
+      }, 10)
     } else {
       this.contents += beforeText + highlightText + afterText
     }
@@ -137,11 +175,11 @@ export default class VsTextarea extends Vue {
 #markdown-options {
   position: relative;
   min-height: auto !important;
-  background-color : #f4f7f8;
+  background-color: #f4f7f8;
   .markdown-option {
-    opacity : 1;
+    opacity: 1;
     font-size: 1.2rem !important;
-    font-weight : normal !important;
+    font-weight: normal !important;
     padding: 8px !important;
   }
 }

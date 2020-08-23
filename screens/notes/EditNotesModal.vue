@@ -83,6 +83,7 @@
         class="block"
         height="20rem"
         label="NOTABLE Content"
+        markdownOptions="true"
         @paste="onPaste"
       >
       </VsTextarea>
