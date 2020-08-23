@@ -1,4 +1,36 @@
-
+#note-card {
+  .vs-navbar__group__items {
+    min-width: 100px;
+    background-color: white !important;
+    .menu-item:hover {
+      background: #f5f5f6;
+    }
+    .menu-item {
+      transition-duration: 0.1s;
+      cursor: pointer;
+    }
+  }
+  .icon {
+    width: 4rem !important;
+    height: 4rem !important;
+    max-width: 10vw;
+    max-height: 10vw;
+  }
+  .icon-small {
+    width: 3rem !important;
+    height: 3rem !important;
+    max-width: 8vw;
+    max-height: 8vw;
+  }
+  #profile {
+    .vs-navbar__group__items {
+      min-width: 0 !important;
+      // max-width : 100%;
+      width: 150%;
+      transform: translate(-25%, 90%);
+    }
+  }
+}
 .previewClickable {
   :hover {
     background-color: #f5f5f6;
