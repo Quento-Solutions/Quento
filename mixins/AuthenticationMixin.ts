@@ -1,4 +1,5 @@
 import { Component, Vue } from 'nuxt-property-decorator'
+import routerAuth from '~/middleware/router-auth'
 import { authStore } from '~/store'
 
 @Component
@@ -65,6 +66,7 @@ export default class AuthenticationMixin extends Vue {
       await authStore.signUpWithEmail({ email, password, name });
       loading.close();
       this.$vs.notification({title:"accountCreated", color: "success"})
+      location.reload();
       console.log("bananan");
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
