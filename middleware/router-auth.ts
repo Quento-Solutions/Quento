@@ -3,7 +3,6 @@ import type {Route} from 'vue-router'
 
 export default function({store, redirect, route} : Context)
 {
-    return;
     // if(route.name == null) redirect ('/')
     console.log(route.name);
     if(route.name == "index") return;
