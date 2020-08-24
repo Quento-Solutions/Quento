@@ -55,6 +55,7 @@
     "vue-prism-component": "^1.2.0",
     "vue-runtime-helpers": "^1.1.2",
     "vue-select": "^3.10.7",
+    "vue-textarea-autosize": "^1.1.1",
     "vue-tilt.js": "^1.1.1",
     "vue-video-player": "^5.0.2",
     "vue2-perfect-scrollbar": "^1.4.0",

@@ -2,6 +2,7 @@ import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { auth, firestore as FirestoreModule } from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
+import storage from '~/plugins/firebaseStorage'
 
 import { Question, Question_t_F } from '~/types/questions'
 import { Response, Response_t_F } from '~/types/responses'
@@ -44,8 +45,35 @@ export default class QuestionsModule extends VuexModule {
   // Question Data Logic
   @Action({ rawError: true })
   public async CreateQuestion(question: Question) {
-    await firestore.collection('questions').add(Question.toFirebase(question))
-    return
+    const deleteImages = question.storedImages?.map(async (image) => {
+      // Deletes all unused images.
+      const imageUsed = question.contents?.includes(image.imageURL)
+      if (!imageUsed) {
+        try {
+          const deleteImage = await storage.ref(image.fileName).delete()
+          return deleteImage
+        } catch (error) {
+          console.log({ error })
+          return
+        }
+      }
+      return
+    })
+    await Promise.all(deleteImages || [])
+    const newImages = question.storedImages?.filter((value) =>
+      question.contents?.includes(value.imageURL)
+    )
+    const newQuestion: Question = Object.assign({}, question, {
+      storedImages: newImages
+    })
+    return question.id
+      ? await firestore
+          .collection('questions')
+          .doc(question.id)
+          .update(Question.toFirebase(newQuestion))
+      : await firestore
+          .collection('questions')
+          .add(Question.toFirebase(newQuestion))
   }
 
   ActiveQuestion: Question | null = null
@@ -127,9 +155,9 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
-    functions.httpsCallable("algoliaUpdateQuestion")({
-        questionId
-    });
+    functions.httpsCallable('algoliaUpdateQuestion')({
+      questionId
+    })
     await authStore.refreshUserData()
     return
   }
@@ -144,7 +172,11 @@ export default class QuestionsModule extends VuexModule {
     await authStore.refreshUserData()
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
-    const responseRef = firestore.collection('questions').doc(questionId).collection("responses").doc(responseId)
+    const responseRef = firestore
+      .collection('questions')
+      .doc(questionId)
+      .collection('responses')
+      .doc(responseId)
 
     const userLiked = authStore.userData?.likedResponses?.includes(responseId)
     batch.update(userRef, {

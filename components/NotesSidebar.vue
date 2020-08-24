@@ -8,63 +8,50 @@
   >
     <div>
       <div class="vx-row w-full justify-center p-4">
-
         <vs-button danger @click="open = false" class="w-full close-menu">
-        <i class="bx bx-x text-4xl" />
-        <div class="text-2xl font-ginger-b">
-          &nbsp;Close Menu
-        </div>
-      </vs-button> 
+          <i class="bx bx-x text-4xl" />
+          <div class="text-2xl font-ginger-b">&nbsp;Close Menu</div>
+        </vs-button>
 
-      <vs-button warn @click="toggleNotesModal(true)" class="w-full">
-        <i class="bx bxs-plus-square text-4xl" />
-        <div class="text-2xl font-ginger-b">
-          &nbsp; Post New Note 
-        </div>
-      </vs-button>
+        <vs-button warn @click="toggleNotesModal(true)" class="w-full">
+          <i class="bx bxs-plus-square text-4xl" />
+          <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
+        </vs-button>
       </div>
     </div>
     <div class="sidebar-content p-6 pt-0 w-full">
-<!-- Filters -->
+      <!-- Filters -->
       <div class="filter-options">
-      <vs-sidebar-group
-      color="#9331e1"
-        v-for="(subjectGroup, groupIndex) in subjectGroups"
-        :key="groupIndex + 4"
-      >
-        <template #header>
-          <vs-sidebar-item arrow>
-            <div class="vx-row w-full">
-            <!-- <vs-button /> -->
-              <i class="bx text-3xl" :class="subjectGroup.iconClass" />
-
-
-              <div class="font-bold truncate ml-4">
-                {{ subjectGroup.name }}
-              </div>
-            </div>
-          </vs-sidebar-item>
-        </template>
-
-        <vs-sidebar-item
-          v-for="(subject, index) in subjectGroup.items"
-          :key="index"
+        <vs-sidebar-group
+          color="#9331e1"
+          v-for="(subjectGroup, groupIndex) in subjectGroups"
+          :key="groupIndex + 4"
         >
-          <vs-checkbox
-            color="#4D7C8A"
-            v-model="SubjectDict[subject.name]"
-            @click="subjectClicked(subject.name)"
-          >
-            <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-            <div class="font-bold truncate">
-              {{ subject.name }}
-            </div>
-          </vs-checkbox>
-        </vs-sidebar-item>
-      </vs-sidebar-group>
+          <template #header>
+            <vs-sidebar-item arrow>
+              <div class="vx-row w-full">
+                <!-- <vs-button /> -->
+                <i class="bx text-3xl" :class="subjectGroup.iconClass" />
+
+                <div class="font-bold truncate ml-4">{{ subjectGroup.name }}</div>
+              </div>
+            </vs-sidebar-item>
+          </template>
+
+          <vs-sidebar-item v-for="(subject, index) in subjectGroup.items" :key="index">
+            <vs-checkbox
+              color="#4D7C8A"
+              v-model="SubjectDict[subject.name]"
+              @click="subjectClicked(subject.name)"
+            >
+              <i class="bx text-3xl mr-2" :class="subject.iconClass" />
+              <div class="font-bold truncate">{{ subject.name }}</div>
+            </vs-checkbox>
+          </vs-sidebar-item>
+        </vs-sidebar-group>
       </div>
 
-        <vs-select
+      <vs-select
         label="Grade"
         filter
         class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
@@ -81,7 +68,7 @@
         </vs-option>
       </vs-select>
 
-        <vs-select
+      <vs-select
         label="Sort By"
         filter
         class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
@@ -99,24 +86,21 @@
       </vs-select>
 
       <div class="vx-row w-full">
-        
-          <vs-button
-            class="text-3xl text-ginger-b p-2 w-full filter-button"
-            style="font-size: 1.25rem;"
-            size="lg"
-            color="#99b8d1"
-            @click="clearFilter()"
-            >CLEAR FILTERS</vs-button
-          >
+        <vs-button
+          class="text-3xl text-ginger-b p-2 w-full filter-button"
+          style="font-size: 1.25rem;"
+          size="lg"
+          color="#99b8d1"
+          @click="clearFilter()"
+        >CLEAR FILTERS</vs-button>
 
-          <vs-button
-            class="text-3xl text-ginger-b p-2 w-full filter-button"
-            style="font-size: 1.25rem;"
-            size="lg"
-            color="#b553ea"
-            @click="filterSubjects()"
-            >FILTER</vs-button
-          >
+        <vs-button
+          class="text-3xl text-ginger-b p-2 w-full filter-button"
+          style="font-size: 1.25rem;"
+          size="lg"
+          color="#b553ea"
+          @click="filterSubjects()"
+        >FILTER</vs-button>
       </div>
     </div>
   </vs-sidebar>
@@ -137,59 +121,50 @@ import {
   SortOptions_O
 } from '~/types/subjects'
 
-  let s: {
-    [index in Subject_O]?: boolean
-  } = {}
-  SubjectList.forEach((subject) => (s[subject] = false))
-    const g: {
-    [index in SubjectGroup_O] : boolean
-  } = {
-    Sciences : false,
-    Arts : false,
-    Languages : false,
-    "Social Sciences" : false,
-    Technology : false,
-  }
+let s: {
+  [index in Subject_O]?: boolean
+} = {}
+SubjectList.forEach((subject) => (s[subject] = false))
 
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
   GradeList = GradeList
-  SortOptions = SortOptionsList;
+  SortOptions = SortOptionsList
   gradeSelect: Grade_O = notesStore.ActiveGrade
   allGradesSelected = true
-  sortSelect : SortOptions_O = notesStore.SortSelect;
+  sortSelect: SortOptions_O = notesStore.SortSelect
 
-  subjectClicked(name : Subject_O, clicked = true, value =!this.SubjectDict[name])
-  {
-    this.allSelected = false;
-    if(value === true && !this.ActiveSubjectList.includes(name))
-    {
-      this.ActiveSubjectList.unshift(name);
-      if(this.ActiveSubjectList.length > 10)
-      {
-        const removedSubject = this.ActiveSubjectList.pop()!;
-        this.SubjectDict[removedSubject] = false;
+  subjectClicked(
+    name: Subject_O,
+    clicked = true,
+    value = !this.SubjectDict[name]
+  ) {
+    this.allSelected = false
+    if (value === true && !this.ActiveSubjectList.includes(name)) {
+      this.ActiveSubjectList.unshift(name)
+      if (this.ActiveSubjectList.length > 10) {
+        const removedSubject = this.ActiveSubjectList.pop()!
+        this.SubjectDict[removedSubject] = false
       }
+    } else {
+      this.ActiveSubjectList = this.ActiveSubjectList.filter(
+        (val) => val !== name
+      )
     }
-    else 
-    {
-      this.ActiveSubjectList = this.ActiveSubjectList.filter(val => val !== name);
-    }
-    if(!clicked) this.SubjectDict[name] = value;
+    if (!clicked) this.SubjectDict[name] = value
   }
 
-  subjectGroupClicked(name : SubjectGroup_O)
-  {
-    SubjectGroups[name].forEach((subject : Subject_O)=> this.subjectClicked(subject, false, true));
+  subjectGroupClicked(name: SubjectGroup_O) {
+    SubjectGroups[name].forEach((subject: Subject_O) =>
+      this.subjectClicked(subject, false, true)
+    )
   }
-
-
 
   toggleNotesModal(val: boolean) {
     notesStore.ToggleNotesModule(val)
   }
-  SubjectDict = s;
-  ActiveSubjectList :Subject_O[] = [];
+  SubjectDict = s
+  ActiveSubjectList: Subject_O[] = []
 
   currentSubjects = NestedSubjectList.flatMap((value) =>
     value.items.map((v2) => v2.name)
@@ -200,7 +175,7 @@ export default class NotesSidebar extends Vue {
   selectAllSubjects() {
     if (!this.allSelected) {
       SubjectList.forEach((subject) => (this.SubjectDict[subject] = false))
-      this.ActiveSubjectList = [];
+      this.ActiveSubjectList = []
       this.allSelected = true
     } else {
       this.currentSubjects = []
@@ -213,12 +188,11 @@ export default class NotesSidebar extends Vue {
   activeStars = 3
 
   clearFilter() {
-    if(!this.allSelected)
-    {
-      this.selectAllSubjects();
+    if (!this.allSelected) {
+      this.selectAllSubjects()
     }
-    this.gradeSelect = 'ALL';
-    this.sortSelect = "createdAt";
+    this.gradeSelect = 'ALL'
+    this.sortSelect = 'createdAt'
   }
   setFilter() {
     this.activeStars = this.hoverStars = this.filterStars
@@ -250,11 +224,11 @@ export default class NotesSidebar extends Vue {
   async filterSubjects() {
     const loading = this.$vs.loading()
     notesStore.SetActiveFilter({
-      sortSelect : this.sortSelect,
-      filterSubjects : this.ActiveSubjectList,
-      filterGrades : this.gradeSelect,
-    });
-    await notesStore.GetMoreNotes();
+      sortSelect: this.sortSelect,
+      filterSubjects: this.ActiveSubjectList,
+      filterGrades: this.gradeSelect
+    })
+    await notesStore.GetMoreNotes()
     loading.close()
   }
 
@@ -280,7 +254,7 @@ export default class NotesSidebar extends Vue {
   padding-left: 30px !important;
 }
 .filter-options {
-  padding:0 10px !important;
+  padding: 0 10px !important;
 }
 .vs-sidebar__item__arrow {
   margin-right: 50px !important;
@@ -295,11 +269,11 @@ export default class NotesSidebar extends Vue {
   letter-spacing: 0.1rem;
 }
 .close-menu {
-  display:none;
+  display: none;
 }
 @media only screen and (max-width: 991px) {
   .close-menu {
-  display:block;
+    display: block;
   }
 }
 </style>

@@ -83,6 +83,8 @@
         class="block"
         height="20rem"
         label="NOTABLE Content"
+        markdownOptions="true"
+        @paste="onPaste"
       >
       </VsTextarea>
     </div>
@@ -118,34 +120,28 @@ import {
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
+import PasteImage from '~/mixins/PasteImagesMixin'
 import { Note } from '~/types/notes'
-import VsTextarea from '~/components/VsTextarea.vue'
-import VsUpload from '~/components/VsUpload.vue'
-
 import { authStore } from '~/store'
-
-interface imageSrc {
-  error: boolean
-  orientation: 'w' | 'l'
-  percent: number | string | null
-  remove: boolean | null
-  src: string | null
-}
-
 @Component<EditNotesModal>({
-  components: {
-    VsTextarea,
-    VsUpload
-  }
+
 })
-export default class EditNotesModal extends mixins(ValidateImage) {
+export default class EditNotesModal extends mixins(PasteImage) {
 
   ActiveNote : Note | null = null;
-
+  get contents()
+  {
+    return this.ActiveNote?.contents || ''
+  }
+  set contents(value)
+  {
+    this.ActiveNote? this.ActiveNote.contents = value : '';
+  }
   @Watch('StoreEditNotes')
   onStoreEditNoteChanged(value : Note | null, oldVal : Note | null)
   {
     this.ActiveNote = Object.assign({}, value);
+    this.images = value?.storedImages ? [...value.storedImages] : [];
     // console.log(value, this.ActiveNote);
   }
 
@@ -183,8 +179,8 @@ export default class EditNotesModal extends mixins(ValidateImage) {
       })
       return
     }
-
-    notesStore.SetPreviewNote(this.ActiveNote);
+    this.ActiveNote!.storedImages = [...this.images];
+    notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote));
     notesStore.TogglePreviewModal(true)
   }
 

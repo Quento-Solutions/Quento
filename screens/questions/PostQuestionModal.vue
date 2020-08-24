@@ -89,6 +89,8 @@
           class="block"
           height="30rem"
           label="Question Body"
+          markdownOptions="true"
+          @paste="onPaste"
         ></VsTextarea>
       </div>
     </div>
@@ -126,10 +128,9 @@ import {
   Keyword_O
 } from '~/types/subjects'
 
-import ValidateImage from '~/mixins/ValidateImageMixin'
 import { Note } from '~/types/notes'
-import VsTextarea from '~/components/VsTextarea.vue'
-import VsUpload from '~/components/VsUpload.vue'
+import PasteImage from '~/mixins/PasteImagesMixin'
+
 import { Question } from '~/types/questions'
 
 interface imageSrc {
@@ -142,17 +143,13 @@ interface imageSrc {
 
 @Component<PostQuestionModal>({
   components: {
-    VsTextarea,
-    VsUpload
   }
 })
 export default class PostQuestionModal extends mixins(
-  ValidateImage,
+  PasteImage,
   UserMixin
 ) {
-
-
-
+  
   get active() {
     return questionStore.PostQuestionModalOpen
   }
@@ -187,7 +184,6 @@ export default class PostQuestionModal extends mixins(
 
   title = ''
   contents = ''
-
   ClearFields() {
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
   }
@@ -218,10 +214,10 @@ export default class PostQuestionModal extends mixins(
       contents: this.contents,
       subject : this.subjectSelect as Subject_O,
       grade : this.gradeSelect as Grade_O,
-
+      storedImages : this.images
     })
 
-    questionStore.SET_PREVIEW_QUESTION(previewQuestion);
+    questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion));
   }
 
   get keywords() {
