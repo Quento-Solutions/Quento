@@ -5,7 +5,11 @@ export default function({store, redirect, route} : Context)
 {
     // if(route.name == null) redirect ('/')
     console.log(route.name);
-    if(route.name == "index") return;
+    if(route.name == "index" )
+    {
+        store.state.auth.user == null ? redirect("/splash") : redirect("/home");
+        // Redirect to either home or splash page
+    }
 
     if(store.state.auth.user != null && (route.name == null || route?.name?.split('/').some(record => record == 'auth')))
     {
