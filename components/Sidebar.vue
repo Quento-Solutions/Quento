@@ -7,6 +7,7 @@
       v-model="active"
       :open.sync="open"
       style="z-index: 100000;"
+      color="#9f7aea"
     >
       <template #logo>
         <vs-sidebar-item>
