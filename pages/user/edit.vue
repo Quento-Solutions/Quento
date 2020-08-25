@@ -41,8 +41,8 @@
                     <option>11</option>
                     <option>12</option>
                   </select>
-                </form>at
-                <vs-select v-model="ActiveSchool" style="background-color: #E8E8E8;">
+                </form>at &nbsp;
+                <vs-select v-model="UserInfo.school" style="background-color: #E8E8E8;">
                   <!-- <option selected>Select School</option> -->
                   <vs-option
                     v-for="(item, index) in SchoolList"
@@ -88,7 +88,7 @@
               <div
                 class="rounded-full px-3 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
                 :style="`background-color: #${randomColor()}`"
-                v-for="(subject, index) in ActiveSubjectList"
+                v-for="(subject, index) in UserInfo.interestedSubjects"
                 :key="index"
               >
                 <i class="bx text-xl text-white mr-2" :class="getIcon(subject)" />
@@ -104,7 +104,7 @@
               <div
                 class="p-2 mb-2 rounded-lg border-solid border-gray-400 w-full text-2xl font-semibold"
               >Biography</div>
-              <v-textarea filled :placeholder="UserData.bio"></v-textarea>
+              <v-textarea filled :placeholder="UserInfo.bio"></v-textarea>
               <vs-button
                 color="success"
                 type="filled"
@@ -146,13 +146,8 @@ import { authStore } from '~/store'
   mounted() {
     this.getUserNotes()
     this.loadSchools()
-    this.ActiveSubjectList = [...this.UserData?.interestedSubjects!]
-    this.ActiveSchool = this.UserData?.school!
-    // this.UserData?.interestedSubjects!.forEach((element) => {
-    //   this.SubjectDict[element] = true
-    // })
-    // console.log(contentss)
-    // console.log(this.UserNotes)
+    this.UserInfo = Object.assign({}, this.UserData);
+
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -188,6 +183,13 @@ export default class UserProfile extends mixins(UserMixin) {
     )
   }
 
+  @Watch('UserData')
+  onUserData(value: any, oldValue: any) {
+    if (value) {
+      this.UserInfo = Object.assign({}, this.UserData);
+    }
+  }
+
   @Watch('AuthUser')
   onAuthChange(value: any, oldValue: any) {
     if (value) {
@@ -212,7 +214,7 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   removeSubject(subject: Subject_O) {
-    this.ActiveSubjectList = this.ActiveSubjectList.filter(
+    this.UserInfo.interestedSubjects = this.UserInfo.interestedSubjects?.filter(
       (value) => value != subject
     )
   }
