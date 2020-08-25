@@ -36,11 +36,22 @@
           </div>
         </template>
       </VxCard>
-      <div class="vx-row w-full bg-white rounded-md lg:w-1/2" style="">
+      <div class="vx-col">
+         <div class="vx-row justify-center w-full">
+        <div class="vx-row mb-4 w-full lg:w-1/2 xs:bg-white rounded-md p-2">
+          <vs-avatar class="icon-small float-right" @click="goBack()">
+            <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
+          </vs-avatar>
+        </div>
+         </div>
+        <div class="vx-row justify-center w-full">
+      <div class="vx-row w-full bg-white rounded-md lg:w-1/2" >
         <div
           class="md-container p-4 md:p-6 lg:p-8"
           v-html="$md.render(newsletter.contents)"
         ></div>
+      </div>
+        </div>
       </div>
     </div>
 
@@ -93,6 +104,9 @@ export default class NewsletterContentPage extends Vue {
       console.log({ error })
       loading.close()
     }
+  }
+  goBack() {
+    this.$router.push('/newsletters')
   }
 }
 </script>
