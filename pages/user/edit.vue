@@ -10,7 +10,7 @@
             <!-- Avatar Col -->
             <div class="vx-col" id="avatar-col">
               <div class="img-container mb-4 container2">
-                <img :src="AuthUser.photoURL" class="rounded-lg w-full" id="changePhoto" />
+                <img :src="UserData.photoURL" class="rounded-lg w-full" id="changePhoto" />
                 <i
                   class="bx bx-pencil"
                   id="pencilImage"
@@ -21,7 +21,7 @@
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <vs-input v-model="value" state="dark" placeholder="Username" />
+              <vs-input v-model="value" state="dark" :placeholder="UserData.displayName" />
               <div class="w-full vx-row p-2 items-center text-lg mt-2" style>
                 Grade
                 <form
@@ -42,20 +42,16 @@
                     <option>12</option>
                   </select>
                 </form>at
-                <form
-                  style="background-color: #E8E8E8; margin-left:0.5rem; margin-right:0.5rem; width: 13rem;
-                  font-size: 0.7rem; height: 2rem; text-align: center; align-items: center; overflow:hidden;
-                  border-radius: 0.6rem;
-                  "
-                >
-                  <select
-                    style="-webkit-appearance: menulist; color: #B2B2B2;vertical-align: middle; margin-top:0.5rem;"
-                    value="school"
-                    id="states"
-                  >
-                    <option selected>Select School</option>
-                  </select>
-                </form>
+                <vs-select v-model="ActiveSchool" style="background-color: #E8E8E8;">
+                  <!-- <option selected>Select School</option> -->
+                  <vs-option
+                    v-for="(item, index) in SchoolList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                    class="pb-4"
+                  >{{item}}</vs-option>
+                </vs-select>
               </div>
 
               <div class="vx-row w-full my-2 items-center">
@@ -92,7 +88,7 @@
               <div
                 class="rounded-full px-3 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
                 :style="`background-color: #${randomColor()}`"
-                v-for="(subject, index) in UserData.interestedSubjects"
+                v-for="(subject, index) in ActiveSubjectList"
                 :key="index"
               >
                 <i class="bx text-xl text-white mr-2" :class="getIcon(subject)" />
@@ -100,6 +96,7 @@
                 <i
                   class="bx bx-x-circle text-xl text-white mr-2"
                   id="remove_icon"
+                  @click="removeSubject(subject)"
                 />
               </div>
             </div>
@@ -107,8 +104,13 @@
               <div
                 class="p-2 mb-2 rounded-lg border-solid border-gray-400 w-full text-2xl font-semibold"
               >Biography</div>
-              <v-textarea filled></v-textarea>
-              <vs-button color="success" type="filled" size="large">Save Changes</vs-button>
+              <v-textarea filled :placeholder="UserData.bio"></v-textarea>
+              <vs-button
+                color="success"
+                type="filled"
+                size="large"
+                @click="saveChanges('Vonesh')"
+              >Save Changes</vs-button>
             </div>
           </div>
         </div>
@@ -122,30 +124,53 @@ import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
 import firestore from '~/plugins/firestore'
 
-import { SubjectGroup_O, Subject_O, SubjectIconList } from '~/types/subjects'
+import {
+  SubjectGroup_O,
+  Subject_O,
+  SubjectIconList,
+  SubjectOptions
+} from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
 import { School_O, SchoolList } from '~/types/schools'
+import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
+import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase'
+import { UserData } from '~/types/user'
+import { authStore } from '~/store'
+
 @Component<UserProfile>({
   components: {
-    NotesCard
+    NotesCard,
+    SubjectsDropdown
   },
   mounted() {
     this.getUserNotes()
     this.loadSchools()
+    this.ActiveSubjectList = [...this.UserData?.interestedSubjects!]
+    this.ActiveSchool = this.UserData?.school!
+    // this.UserData?.interestedSubjects!.forEach((element) => {
+    //   this.SubjectDict[element] = true
+    // })
     // console.log(contentss)
     // console.log(this.UserNotes)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
   UserNotes: Note[] = []
+  SubjectDict = Object.assign({}, SubjectOptions)
+  ActiveSubjectList: Subject_O[] = []
+  SchoolList = [...SchoolList]
+  ActiveSchool: string | null = ''
+
+  UserInfo: Partial<UserData> = {}
+
   loadSchools() {
     var contentss = '<option selected>Select School</option>'
     for (var i = 0; i < SchoolList.length; i++) {
       contentss +=
         "<option value='" + SchoolList[i] + "'>" + SchoolList[i] + '</option>'
     }
-    document.getElementById('states').innerHTML = contentss
+    // document.getElementById('states').innerHTML = contents
   }
 
   async getUserNotes() {
@@ -185,12 +210,33 @@ export default class UserProfile extends mixins(UserMixin) {
   randomColor() {
     return Math.floor(Math.random() * 16777215).toString(16)
   }
+
+  removeSubject(subject: Subject_O) {
+    this.ActiveSubjectList = this.ActiveSubjectList.filter(
+      (value) => value != subject
+    )
+  }
+
+  async saveChanges(userName: string) {
+    const loading = this.$vs.loading()
+
+    try {
+      const newUserData: Partial<UserData> = {
+        displayName: userName
+      }
+      await authStore.updateUserData(newUserData)
+      this.$vs.notification({
+        title: 'Changes Saved',
+        color: 'success'
+      })
+    } catch (error) {
+      // notify
+    }
+    loading.close()
+  }
 }
 </script>
 <style lang="scss">
-select::-ms-expand {
-  display: block;
-}
 #avatar-col {
   width: 10rem;
 }

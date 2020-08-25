@@ -10,13 +10,13 @@
             <!-- Avatar Col -->
             <div class="vx-col" id="avatar-col">
               <div class="img-container mb-4">
-                <img :src="AuthUser.photoURL" class="rounded-lg w-full" />
+                <img :src="UserData.photoURL" class="rounded-lg w-full" />
               </div>
             </div>
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <div class="vx-row font-bold text-3xl" style>{{ AuthUser.displayName }}</div>
+              <div class="vx-row font-bold text-3xl" style>{{ UserData.displayName }}</div>
               <div
                 class="vx-row w-full text-2xl"
                 style
@@ -96,7 +96,7 @@
       <!-- User's Notes Card -->
       <VxCard class="mb-base mt-12" v-if="AuthUser && UserData">
         <div class="vx-col flex-1 w-full" id="account-info-col-1">
-          <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}'s Notes</div>
+          <div class="vx-row font-bold text-2xl" style>{{ UserData.displayName }}'s Notes</div>
         </div>
 
         <div class="vx-row w-full">
@@ -116,11 +116,15 @@
                 <v-card-actions style="margin-left: -0.75rem;">
                   <v-list-item class="grow">
                     <v-list-item-avatar color="grey darken-3" style="margin-right: 0.5rem;">
-                      <v-img class="elevation-6" :src="AuthUser.photoURL"></v-img>
+                      <v-img class="elevation-6" :src="UserData.photoURL"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                      <v-list-item-title>{{ AuthUser.displayName }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{
+                        UserData.displayName
+                        }}
+                      </v-list-item-title>
                     </v-list-item-content>
 
                     <v-row align="center" justify="end" style="margin-right: 0.2rem;">

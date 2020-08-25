@@ -52,10 +52,10 @@ export default class TopNav extends Vue {
     windowStore.SetSidenavState(true)
   }
   get userName() {
-    return authStore.user?.displayName
+    return authStore.userData?.displayName
   }
   get photoURL() {
-    return authStore.user?.photoURL
+    return authStore.userData?.photoURL
   }
   async SignOut() {
     try {

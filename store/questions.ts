@@ -104,9 +104,9 @@ export default class QuestionsModule extends VuexModule {
       questionId,
       createdAt: new Date(),
       upVotes: 0,
-      userDisplayName: authStore.user?.displayName!,
+      userDisplayName: authStore.userData?.displayName!,
       userId: authStore.user?.uid!,
-      userPhotoUrl: authStore.user?.photoURL!,
+      userPhotoUrl: authStore.userData?.photoURL!,
       views: 0
     })
     return await firestore
