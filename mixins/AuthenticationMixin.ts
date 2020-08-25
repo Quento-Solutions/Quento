@@ -94,9 +94,9 @@ export default class AuthenticationMixin extends Vue {
     }
   }
 
-  async SignUp(email: string, password: string, confirm_password: string) {
+  async SignUp(email: string, displayName: string, password: string, confirm_password: string) {
     this.resetError()
-    if (!email || !password || !confirm_password) {
+    if (!email || !password || !confirm_password || !displayName) {
       this.errorMessage = 'All Fields Must Be Filled In'
       return
     }
@@ -106,10 +106,11 @@ export default class AuthenticationMixin extends Vue {
     }
     this.startLoading()
     try {
-      await authStore.signUpWithEmail({ email, password });
-      this.$vs.notification({title:"accountCreated", color: "success"})
+      await authStore.signUpWithEmail({ email, password, displayName });
+      this.$vs.notification({title: "Account Created Successfully", color: "success"});
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
+      this.$vs.notification({color: 'danger', title: "Email Invalid/In Use"});
       this.stopLoading();
       this.error = error;
       return;

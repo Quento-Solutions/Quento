@@ -87,19 +87,19 @@ export default class AuthModule extends VuexModule implements AuthState {
     }
   }
 
-  @Action({ rawError: true })
-  public async signUpWithEmail({
-    email,
-    password
-  }: {
-    email: string
-    password: string
-  }) {
-    try {
-      return await firebaseAuth.createUserWithEmailAndPassword(email, password)
-    } catch (error) {
-      throw error
-    }
+  @Action({rawError : true})
+  public async signUpWithEmail({email, password, displayName} : {email : string, password: string, displayName:string})
+  {
+      await firebaseAuth.createUserWithEmailAndPassword(email, password).catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+              console.log('in use')
+          }
+      
+          else if (error.code === 'auth/invalid-email') {
+              console.log('invalid email')
+          }
+          console.log(error);
+        }).then((userInfo:any) =>{ userInfo.user.updateProfile({displayName: displayName})})
   }
 
   @Action({ rawError: true })
