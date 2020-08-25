@@ -11,7 +11,7 @@
   >
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl">Questions</h4>
+        <h4 class="not-margin text-title text-4xl">Post A Question</h4>
       </div>
     </template>
 
@@ -21,8 +21,7 @@
       <div class="w-full p-6" style="">
         <vs-input
           v-model="title"
-          placeholder="Question Title"
-          label="Title"
+          placeholder="Title"
           class="block"
           width="w-6"
         >
@@ -34,7 +33,6 @@
 
       <div class="p-6 w-full lg:w-1/2">
         <vs-select
-          label="Subject"
           filter
           class="block w-full"
           placeholder="Subject"
@@ -66,7 +64,6 @@
       </div>
       <div class="p-6 w-full lg:w-1/2">
         <vs-select
-          label="Grade"
           filter
           class="block w-full"
           placeholder="Grade"
@@ -85,10 +82,9 @@
       <div class="w-full p-6 px-10 pt-0">
         <VsTextarea
           v-model="contents"
-          placeholder="What do you want to ask?"
+          placeholder="Content"
           class="block"
           height="30rem"
-          label="Question Body"
           markdownOptions="true"
           @paste="onPaste"
         ></VsTextarea>

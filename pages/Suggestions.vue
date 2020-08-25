@@ -28,7 +28,7 @@
               <vs-button
                 size="xl"
                 type="filled"
-                color="primary"
+                color="#9f7aea"
                 class="vx-col shadow-md ml-4 text-bold float-right"
                 style="font-weight: bold;"
                 @click="active = !active"
