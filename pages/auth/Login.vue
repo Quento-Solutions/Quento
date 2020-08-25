@@ -78,7 +78,6 @@ import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
 import FooterCard from '~/components/FooterCard.vue'
 
 import Auth from '~/mixins/AuthenticationMixin'
-import AOS from 'aos'
 
 import { navigationStore } from '~/store'
 @Component<Login>({
@@ -87,7 +86,6 @@ import { navigationStore } from '~/store'
 })
 export default class Login extends mixins(Auth) {
   PushSignUpPage() {
-    // this.$router.go(1)
     this.$router.push({ path: '/auth/signup' })
   }
   email: string = ''

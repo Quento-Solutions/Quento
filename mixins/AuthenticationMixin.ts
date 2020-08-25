@@ -1,5 +1,4 @@
 import { Component, Vue } from 'nuxt-property-decorator'
-import routerAuth from '~/middleware/router-auth'
 import { authStore } from '~/store'
 
 @Component
@@ -50,9 +49,9 @@ export default class AuthenticationMixin extends Vue {
     }
   }
 
-  async SignUp(email: string, name: string, password: string, confirm_password: string) {
+  async SignUp(email: string, displayName: string, password: string, confirm_password: string) {
     this.resetError()
-    if (!email || !password || !confirm_password || !name) {
+    if (!email || !password || !confirm_password || !displayName) {
       this.errorMessage = 'All Fields Must Be Filled In'
       return
     }
@@ -63,15 +62,17 @@ export default class AuthenticationMixin extends Vue {
     const loading = this.$vs.loading()
     try {
       this.$router.push("/auth/login");
-      await authStore.signUpWithEmail({ email, password, name });
+      await authStore.signUpWithEmail({ email, password, displayName });
+      console.log('banan')
       loading.close();
-      this.$vs.notification({title:"accountCreated", color: "success"})
       location.reload();
-      console.log("bananan");
+      this.$vs.notification({title: "Account Created Successfully", color: "success"});
+
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
+      this.$router.push("/auth/signup");
+      this.$vs.notification({color: 'danger', title: "Email Invalid/In Use"});
       loading.close();
-      this.error = error;
       return;
     }
   }
