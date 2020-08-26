@@ -21,9 +21,9 @@
                 <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
               </vs-avatar>
               <template #items>
-                <vs-navbar-item to="/user/edit">Profile</vs-navbar-item>
+                <vs-navbar-item to="/user/profile">Profile</vs-navbar-item>
 
-                <vs-navbar-item>Settings</vs-navbar-item>
+                <vs-navbar-item to="/user/edit">Settings</vs-navbar-item>
                 <vs-navbar-item
                   warning
                   @click="SignOut()"

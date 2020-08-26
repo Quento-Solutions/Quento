@@ -1,8 +1,15 @@
 <template>
   <div id="user-profile-view">
+    <input
+      type="file"
+      class="hidden"
+      ref="imageUpload"
+      accept="image/png, image/jpeg"
+      @change="fileUploaded()"
+    />
     <div id="user-view">
       <!-- Profile Card -->
-      <VxCard class="mb-base" v-if="AuthUser && UserData">
+      <VxCard class="mb-base" v-if="AuthUser && UserData && UserInfo">
         <!-- Avatar -->
 
         <div class="vx-row w-full" style>
@@ -10,39 +17,46 @@
             <!-- Avatar Col -->
             <div class="vx-col" id="avatar-col">
               <div class="img-container mb-4 container2">
-                <img :src="UserData.photoURL" class="rounded-lg w-full" id="changePhoto" />
+                <img
+                  :src="UserInfo.photoURL"
+                  class="rounded-lg w-full"
+                  id="changePhoto"
+                  style="width:11rem; height:8rem; overflow:hidden"
+                />
                 <i
                   class="bx bx-pencil"
                   id="pencilImage"
                   style="position:absolute;top:3.4rem;left:4.6rem;z-index:1000;color:white;font-size:4rem"
+                  @click="imageUploadClick()"
                 ></i>
               </div>
             </div>
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <vs-input v-model="value" state="dark" :placeholder="UserData.displayName" />
+              <vs-input v-model="UserInfo.displayName" state="dark" />
               <div class="w-full vx-row p-2 items-center text-lg mt-2" style>
                 Grade
-                <form
-                  style="background-color: #E8E8E8; margin-left:0.5rem; margin-right:0.5rem; width: 6.5rem;
-                  font-size: 0.7rem; height: 2rem; text-align: center; align-items: center; overflow:hidden;
-                  border-radius: 0.6rem;
-                  "
+                <vs-select
+                  v-model="UserInfo.currentGrade"
+                  style="margin-left:0.5rem; max-width:4.75rem; margin-right:0.5rem"
+                  state="dark"
                   id="gradeBreakLine"
                 >
-                  <select
-                    style="-webkit-appearance: menulist; color: #B2B2B2;vertical-align: middle; margin-top:0.5rem;"
-                    value="school"
-                  >
-                    <option selected>Select Grade</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                  </select>
-                </form>at &nbsp;
-                <vs-select v-model="UserInfo.school" style="background-color: #E8E8E8;">
+                  <!-- <option selected>Select School</option> -->
+                  <vs-option
+                    v-for="(item, index) in ['9','10','11','12']"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                    class="pb-4"
+                  >{{item}}</vs-option>
+                </vs-select>at
+                <vs-select
+                  v-model="UserInfo.school"
+                  style="min-width:15.5rem;margin-left:0.75rem"
+                  state="dark"
+                >
                   <!-- <option selected>Select School</option> -->
                   <vs-option
                     v-for="(item, index) in SchoolList"
@@ -54,40 +68,18 @@
                 </vs-select>
               </div>
 
-              <div class="vx-row w-full my-2 items-center">
+              <!-- <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
                   <div class="font-bold text-base">{{userLevel}}</div>
                 </vs-avatar>
-              </div>
-
-              <!-- MAKE A PROGRESSION BAR  -->
-              <!-- <div class="vx-row w-full mt-6">
-                <v-progress-linear
-                  color="deep-purple accent-4"
-                  height="11"
-                  value="100%"
-                  striped
-                  style="background-color: #32CD32; z-index:2"
-                  :style="`width: ${userExp}%`"
-                ></v-progress-linear>
-                <v-progress-linear
-                  color="deep-purple accent-4"
-                  height="11"
-                  value="100%"
-                  striped
-                  style="background-color:gray; width:100%; margin-top: -0.8rem"
-                ></v-progress-linear>
               </div>-->
             </div>
 
-            <!-- <div class="text-title w-full vx-col text-2xl px-10" style="">
-              Subjects
-            </div>-->
             <div class="w-full vx-row p-2 items-center text-sm">
               <div
                 class="rounded-full px-3 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
-                :style="`background-color: #${randomColor()}`"
+                :style="`background-color: #9745D4`"
                 v-for="(subject, index) in UserInfo.interestedSubjects"
                 :key="index"
               >
@@ -99,17 +91,48 @@
                   @click="removeSubject(subject)"
                 />
               </div>
+              <div
+                class="rounded-full px-3 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
+                style="background-color:#46C93A"
+              >
+                <i
+                  class="bx bx-plus-circle text-xl text-white mr-2"
+                  id="remove_icon"
+                  @click="activateModal()"
+                />
+
+                <!-- Modal for selecting un-selected subjects -->
+                <vs-dialog v-model="activeModel">
+                  <template #header>
+                    <h4 class="not-margin">
+                      <b>
+                        Add new
+                        Subejcts
+                      </b>
+                    </h4>
+                  </template>
+
+                  <div>
+                    <vs-checkbox
+                      :val="subject"
+                      v-for="(subject,index) in AllSubjectList"
+                      :key="index"
+                      v-model="UserInfo.interestedSubjects"
+                    >{{ subject }}</vs-checkbox>
+                  </div>
+                </vs-dialog>
+              </div>
             </div>
             <div class="w-full p-2 md:px-8" style>
               <div
                 class="p-2 mb-2 rounded-lg border-solid border-gray-400 w-full text-2xl font-semibold"
               >Biography</div>
-              <v-textarea filled :placeholder="UserInfo.bio"></v-textarea>
+              <v-textarea filled v-model="UserInfo.bio"></v-textarea>
               <vs-button
                 color="success"
                 type="filled"
                 size="large"
-                @click="saveChanges('Vonesh')"
+                @click="saveChanges()"
               >Save Changes</vs-button>
             </div>
           </div>
@@ -128,7 +151,8 @@ import {
   SubjectGroup_O,
   Subject_O,
   SubjectIconList,
-  SubjectOptions
+  SubjectOptions,
+  AllSubjectList
 } from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
@@ -137,6 +161,9 @@ import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase'
 import { UserData } from '~/types/user'
 import { authStore } from '~/store'
+import ValidateImageMixin from '~/mixins/ValidateImageMixin'
+import functions from '~/plugins/firebaseFunctions'
+import storage from '~/plugins/firebaseStorage'
 
 @Component<UserProfile>({
   components: {
@@ -145,28 +172,20 @@ import { authStore } from '~/store'
   },
   mounted() {
     this.getUserNotes()
-    this.loadSchools()
-    this.UserInfo = Object.assign({}, this.UserData);
-
+    this.UserInfo = JSON.parse(JSON.stringify({ ...this.UserData }))
   }
 })
-export default class UserProfile extends mixins(UserMixin) {
+export default class UserProfile extends mixins(UserMixin, ValidateImageMixin) {
   UserNotes: Note[] = []
   SubjectDict = Object.assign({}, SubjectOptions)
-  ActiveSubjectList: Subject_O[] = []
   SchoolList = [...SchoolList]
-  ActiveSchool: string | null = ''
+  newImageUpload = false
+  newDisplayName: any = ''
+  activeModel = false
+  AllSubjectList = [...AllSubjectList]
+  notInterestedSubjects: string[] = []
 
-  UserInfo: Partial<UserData> = {}
-
-  loadSchools() {
-    var contentss = '<option selected>Select School</option>'
-    for (var i = 0; i < SchoolList.length; i++) {
-      contentss +=
-        "<option value='" + SchoolList[i] + "'>" + SchoolList[i] + '</option>'
-    }
-    // document.getElementById('states').innerHTML = contents
-  }
+  UserInfo: Partial<UserData> | null = null
 
   async getUserNotes() {
     if (!this.AuthUser) {
@@ -186,8 +205,11 @@ export default class UserProfile extends mixins(UserMixin) {
   @Watch('UserData')
   onUserData(value: any, oldValue: any) {
     if (value) {
-      this.UserInfo = Object.assign({}, this.UserData);
+      this.UserInfo = JSON.parse(JSON.stringify({ ...this.UserData }))
     }
+    this.newImageUpload = false
+    ;(this.$refs.imageUpload as HTMLInputElement).files = null
+    console.log('reset user data')
   }
 
   @Watch('AuthUser')
@@ -195,6 +217,31 @@ export default class UserProfile extends mixins(UserMixin) {
     if (value) {
       this.getUserNotes()
     }
+  }
+
+  async fileUploaded() {
+    const files = (this.$refs.imageUpload as HTMLInputElement)?.files
+    if (!files) return
+    const imageFile = files[0]
+    if (!imageFile) return
+    if (!this.validateImageType(imageFile)) return
+
+    const reader = new FileReader()
+    reader.addEventListener('load', () => {
+      if (!this.UserInfo) return
+
+      const base64Image = reader.result
+      console.log(base64Image?.slice(10))
+      this.UserInfo.photoURL = base64Image as string
+      this.newImageUpload = true
+    })
+    console.log('function trigger')
+    reader.readAsDataURL(imageFile)
+  }
+
+  imageUploadClick() {
+    ;(this.$refs.imageUpload as HTMLInputElement).click()
+    return
   }
 
   get userLevel() {
@@ -214,19 +261,40 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   removeSubject(subject: Subject_O) {
+    if (!this.UserInfo) return
     this.UserInfo.interestedSubjects = this.UserInfo.interestedSubjects?.filter(
       (value) => value != subject
     )
   }
 
-  async saveChanges(userName: string) {
-    const loading = this.$vs.loading()
+  activateModal() {
+    console.log('hello')
+    this.activeModel = true
+  }
+
+  async saveChanges() {
+    if (!this.UserInfo) return
+    const loading = this.$vs.loading({
+      text: 'Processing Changes',
+      type: 'circles'
+    })
 
     try {
-      const newUserData: Partial<UserData> = {
-        displayName: userName
+      if (this.newImageUpload) {
+        const base64image = this.UserInfo.photoURL
+
+        const newImageUrl = await functions.httpsCallable('functionPostImage')({
+          image: base64image,
+          name: 'bruh'
+        })
+        if (this.UserInfo?.photoFileName) {
+          await storage.ref(this.UserInfo.photoFileName).delete()
+        }
+        this.UserInfo.photoURL = newImageUrl.data.imageURL
+        this.UserInfo.photoFileName = newImageUrl.data.fileName as string
       }
-      await authStore.updateUserData(newUserData)
+
+      await authStore.updateUserData(this.UserInfo)
       this.$vs.notification({
         title: 'Changes Saved',
         color: 'success'
@@ -235,6 +303,7 @@ export default class UserProfile extends mixins(UserMixin) {
       // notify
     }
     loading.close()
+    this.$router.push('/user/profile')
   }
 }
 </script>
@@ -293,7 +362,7 @@ export default class UserProfile extends mixins(UserMixin) {
 
 @media only screen and (max-width: 600px) {
   #gradeBreakLine {
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 }
 </style>

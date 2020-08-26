@@ -41,4 +41,5 @@ export interface UserData {
 
   discordId ?: string;
   discordUsername ?: string;
+  photoFileName?: string | null
 }

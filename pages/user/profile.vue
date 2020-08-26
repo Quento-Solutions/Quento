@@ -89,6 +89,9 @@
           <div class="vx-row w-full lg:w-1/2" style>
             <div class="vx-col w-full" style></div>
           </div>
+          <div class="w-full p-2 md:px-8" style>
+            <vs-button color="warn" type="filled" size="large" to="/user/edit">Edit Profile</vs-button>
+          </div>
           <!-- /Information - Col 2 -->
         </div>
       </VxCard>

@@ -1,6 +1,6 @@
-import firebase from './firebase';
-import 'firebase/functions';
+import firebase from './firebase'
+import 'firebase/functions'
 
-const functions = firebase.functions();
+const functions = firebase.functions()
 
-export default functions;
+export default functions
