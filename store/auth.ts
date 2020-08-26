@@ -60,7 +60,7 @@ export default class AuthModule extends VuexModule implements AuthState {
             isAnonymous : firebaseUser.isAnonymous,
             uid : firebaseUser.uid
         }
-
+        console.log("authStateChange")
         this.context.commit('SET_USER', (user));
         await this.refreshUserData();
         this.context.commit('SET_LOADING', (false));

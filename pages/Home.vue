@@ -111,10 +111,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, mixins } from 'nuxt-property-decorator'
 
 import { windowStore, authStore, newslettersStore } from '~/store'
 import NewsletterCard from '~/components/NewsletterCard.vue'
+import Analytics from '~/mixins/AnalyticsMixin';
 
 export interface ContactInformation {
   name: string
@@ -131,11 +132,14 @@ export interface ContactInformation {
 @Component({
   layout: 'main',
   components: { NewsletterCard },
-  mounted() {
-    newslettersStore.GetNewsletters()
-  }
+  mounted() 
+  {
+    newslettersStore.GetNewsletters();
+  },
+  name : "Home"
 })
-export default class Home extends Vue {
+export default class Home extends mixins(Analytics) {
+  logPage = true;
   get featuredNewsletter() {
     return newslettersStore?.newsletterList[0]
   }
