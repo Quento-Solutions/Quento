@@ -16,7 +16,7 @@
         </h4>
       </div>
     </template>
-
+<vs-alert v-if="contents.length >= characterLimit" danger>Error: Your note cannot exceed 5000 characters</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
@@ -74,6 +74,7 @@
         expand="true"
         markdownOptions="true"
         @paste="onPaste"
+        @input="checkLength"
       ></VsTextarea>
     </div>
     <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
@@ -133,8 +134,15 @@ interface imageSrc {
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
+  characterLimit = 5000
 
   contents = '';
+
+  checkLength() {
+    if (this.contents.length > this.characterLimit) {
+      this.contents =  this.contents.slice(0,5000);
+    }
+  }
 
   @Watch('IsReset')
   onResetChanged(value: boolean, oldVal: boolean) {
