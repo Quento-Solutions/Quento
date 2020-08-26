@@ -108,22 +108,8 @@
           id="notes-md"
           class="w-full text-ginger p-2 md-container"
         ></div>
-        <div
-          style="
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-image: linear-gradient(
-              to bottom,
-              rgba(0, 0, 0, 0) 80%,
-              white 90%
-            );
-          "
-        ></div>
       </div>
     </div>
-
-    <div class="vx-row w-full"></div>
 
     <!-- Footer -->
 
