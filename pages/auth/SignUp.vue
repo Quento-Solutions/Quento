@@ -52,13 +52,14 @@
             </template>
           </vs-input>
         </div>
-
+<!-- class="block w-6 " -->
+<!-- :class='{valid:passwordValidation.valid}' -->
         <div class="p-6">
           <vs-input
             v-model="password"
             type="password"
             label="Password"
-            class="block w-6"
+            class = 'block w-6'
           >
             <template #icon>
               <i class="bx bx-lock-open-alt"></i>
@@ -81,7 +82,12 @@
             </template>
           </vs-input>
         </div>
-
+        <!-- <transition name="hint" appear>
+          <div v-if='errors.length > 0' class='hints'>
+            <h2>Hints</h2>
+            <p v-for='error in errors' :key = "error">{{error}}</p>
+          </div>
+        </transition> -->
       <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
 
@@ -125,6 +131,37 @@ export default class SignUp extends mixins(Auth) {
   email: string = '';
   password: string = '';
   confirm_password : string = '';
+  // errors = [];
+  // rules: any = [
+  //     { message:'One lowercase letter required.', regex:/[a-z]+/ },
+  //     { message:"One uppercase letter required.",  regex:/[A-Z]+/ },
+  //     { message:"8 characters minimum.", regex:/.{8,}/ },
+  //     { message:"One number required.", regex:/[0-9]+/ }
+  // ];
+  // notSamePasswords () {
+  //       if (this.passwordsFilled()) {
+  //           return (this.password !== this.confirm_password)
+  //       } else {
+  //           return false
+  //       }
+  //   };
+  //   passwordsFilled () {
+  //       return (this.password !== '' && this.confirm_password !== '')
+  //   };
+  //   passwordValidation () {
+  //       // let errors = []
+  //       console.log(this.errors.length)
+  //       for (let condition of this.rules) {
+  //           if (!condition.regex.test(this.password)) {
+  //               this.errors.push(condition.message)
+  //           }
+  //       }
+  //       if (this.errors.length === 0) {
+  //           return { valid:true}
+  //       } else {
+  //           return { valid:false }
+  //       }
+  //   }
 
   PushLoginPage()
   {
