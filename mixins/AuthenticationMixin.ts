@@ -1,15 +1,34 @@
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { authStore } from '~/store'
+import type {User, UserData} from '~/types/user'
 
 @Component
 export default class AuthenticationMixin extends Vue {
   errorMessage = ''
   errorCode: number | null = null
+  get AuthUser()
+  {
+    return authStore.user;
+  }
+
+  @Watch("AuthUser")
+  onAuthUserChange(val : User, oldVal : any)
+  {
+    // If Auth User changes and the user is valid, will automatically redirect to homepage
+    if(val)
+    {
+      if(val.emailVerified)
+      {
+        this.sendToHome();
+      }
+    }
+  }
 
   get validEmail() {
     return (email: string) =>
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
   }
+
   get error()
   {
     return this.errorMessage;
@@ -32,11 +51,19 @@ export default class AuthenticationMixin extends Vue {
   {
     setTimeout(() => {
       loading.close();
-      this.$router.push('/home');
+      this.sendToHome();
     }, 500)
   }
 
-  async LoginGoogle() {
+  sendToHome()
+  {
+    // Will redirect to the proper link, not just home every single time
+    const redirectPath = (typeof this.$route.query.redirect === "string") ? decodeURIComponent(this.$route.query.redirect) : "/home"; 
+    this.$router.push(redirectPath);
+  }
+
+  async LoginGoogle() 
+  {
     const loading = this.$vs.loading()
     this.resetError()
     try {
