@@ -16,7 +16,7 @@
         </h4>
       </div>
     </template>
-<vs-alert v-if="contents.length >= characterLimit" danger>Error: Your note cannot exceed 5000 characters</vs-alert>
+<vs-alert v-if="contents.length >= characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
