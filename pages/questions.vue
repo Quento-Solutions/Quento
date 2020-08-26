@@ -6,13 +6,18 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import PostQuestionModal from '~/screens/questions/PostQuestionModal.vue'
 import PreviewQuestionModal from '~/screens/questions/PreviewQuestionModal.vue'
 
 import { questionStore } from '~/store'
-@Component<QuestionsGroup>({ components: {  PostQuestionModal, PreviewQuestionModal }, layout: 'main' })
-export default class QuestionsGroup extends Vue {
-
+import AnalyticsMixin from '~/mixins/AnalyticsMixin'
+@Component<QuestionsGroup>({
+  components: { PostQuestionModal, PreviewQuestionModal },
+  layout: 'main',
+  name : "QuestionsGroup"
+})
+export default class QuestionsGroup extends mixins(AnalyticsMixin) {
+  logPage = true
 }
 </script>

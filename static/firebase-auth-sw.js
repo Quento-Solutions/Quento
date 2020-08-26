@@ -6,7 +6,7 @@ importScripts(
 importScripts(
   'https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js'
 )
-firebase.initializeApp({"apiKey":"AIzaSyDSQxtPPZA9QH8iExKXhMFPl-YQunI2rl0","authDomain":"supplant-44e15.firebaseapp.com","databaseURL":"https:\u002F\u002Fsupplant-44e15.firebaseio.com","projectId":"supplant-44e15","storageBucket":"supplant-44e15.appspot.com","messagingSenderId":"164745116317","appId":"1:164745116317:web:9818b7748fa0bac68c3274","measurementId":"G-ZSN4CNQTNF"})
+firebase.initializeApp({"apiKey":"AIzaSyDSQxtPPZA9QH8iExKXhMFPl-YQunI2rl0","authDomain":"supplant-44e15.firebaseapp.com","databaseURL":"https:\u002F\u002Fsupplant-44e15.firebaseio.com","projectId":"supplant-44e15","storageBucket":"supplant-44e15.appspot.com","messagingSenderId":"164745116317","appId":"1:164745116317:web:9818b7748fa0bac68c3274","measurementId":"G-EPMZNE5SS1"})
 
 /**
  * Returns a promise that resolves with an ID token if available.
