@@ -22,9 +22,19 @@
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
               <div class="vx-row w-full items-center text-ginger" style>
-                <vs-button class="text-title text-2xl" style="font-size: 1.2rem" color="#7289DA" s @click="linkDiscord()">
-                  <i class="bx bxl-discord text-4xl mr-2"/>
-                  <div v-if="UserData.discordUsername" style="max-width: 40vw" class="truncate">{{ UserData.discordUsername }}</div>
+                <vs-button
+                  class="text-title text-2xl"
+                  style="font-size: 1.2rem"
+                  color="#7289DA"
+                  s
+                  @click="linkDiscord()"
+                >
+                  <i class="bx bxl-discord text-4xl mr-2" />
+                  <div
+                    v-if="UserData.discordUsername"
+                    style="max-width: 40vw"
+                    class="truncate"
+                  >{{ UserData.discordUsername }}</div>
                   <div v-else>Link Discord</div>
                 </vs-button>
               </div>
@@ -36,7 +46,7 @@
               </div>
 
               <!-- MAKE A PROGRESSION BAR  -->
-              <div class="vx-row w-full mt-6">
+              <div class="vx-row w-full mt-4 mb-2">
                 <v-progress-linear
                   color="deep-purple accent-4"
                   height="11"
@@ -167,14 +177,14 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
-
-  linkDiscord()
-  {
-    const redirect_uri = encodeURIComponent(`${window.location.origin}/user/discord`);
-    console.log({redirect_uri})
+  linkDiscord() {
+    const redirect_uri = encodeURIComponent(
+      `${window.location.origin}/user/discord`
+    )
+    console.log({ redirect_uri })
     const discordOauthLink = `https://discord.com/api/oauth2/authorize?client_id=739600929287831685&redirect_uri=${redirect_uri}&response_type=code&scope=identify`
     // Simulate a mouse click:
-    window.location.href = discordOauthLink;
+    window.location.href = discordOauthLink
   }
 
   UserNotes: Note[] = []
@@ -205,7 +215,7 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   get userExp() {
-    const userExp =  (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    const userExp = (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
     return userExp
   }
 
