@@ -11,17 +11,14 @@
       :username="question.userDisplayName"
       :date="question.createdAt"
       :photoURL="question.userPhotoUrl"
+      :userId="question.userId"
     ></AvatarBar>
 
     <!-- Category Pills -->
-    <div
-      class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content"
-    >
+    <div class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content">
       <div
         class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
-      >
-        Grade {{ question.grade }}
-      </div>
+      >Grade {{ question.grade }}</div>
       <div
         class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2"
       >
@@ -34,27 +31,20 @@
     <div
       class="w-4/5 text-ginger-b text-3xl p-4 ml-1/2 title-content"
       style="line-height: 1;"
-    >
-      {{ question.title }}
-    </div>
+    >{{ question.title }}</div>
 
     <!-- Content -->
-    <div
-      class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0"
-      style="margin: 0;"
-    >
+    <div class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0" style="margin: 0;">
       <div
         class="md:w-4/5 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
         :style="
           preview ? 'max-height: 200px' : ''"
       >
-
         <div
           v-html="$md.render(question.contents)"
           id="notes-md"
           class="w-full text-ginger p-2 md-container"
         ></div>
-
       </div>
     </div>
 
@@ -73,28 +63,22 @@
           class="bx bx-heart primary"
           :style="`color : ${userLiked(question.id) ? 'white' : '#ff4757'}`"
         ></i>
-        <template #badge>
-          {{ question.upVotes }}
-        </template>
+        <template #badge>{{ question.upVotes }}</template>
       </vs-avatar>
       <vs-tooltip>
         <vs-avatar class="icon-small">
           <i class="bx bx-show"></i>
-          <template #badge>
-            {{ question.views }}
-          </template>
+          <template #badge>{{ question.views }}</template>
         </vs-avatar>
-        <template #tooltip> {{ question.views }} Views </template>
+        <template #tooltip>{{ question.views }} Views</template>
       </vs-tooltip>
 
       <vs-tooltip>
         <vs-avatar class="icon-small">
           <i class="bx bx-comment-check"></i>
-          <template #badge>
-            {{ question.responses }}
-          </template>
+          <template #badge>{{ question.responses }}</template>
         </vs-avatar>
-        <template #tooltip> {{ question.responses }} Responses </template>
+        <template #tooltip>{{ question.responses }} Responses</template>
       </vs-tooltip>
     </div>
   </VxCard>
@@ -107,16 +91,13 @@ import { Question } from '~/types/questions'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import { notesStore, authStore, questionStore } from '~/store'
 
-import UserMixin from '~/mixins/UserMixin';
+import UserMixin from '~/mixins/UserMixin'
 import AvatarBar from '~/components/AvatarBar.vue'
 
-
 @Component<QuestionCard>({
-  components : 
-  {
+  components: {
     AvatarBar
   }
-
 })
 export default class QuestionCard extends mixins(UserMixin) {
   @Prop({ required: true }) question!: Question
@@ -137,25 +118,23 @@ export default class QuestionCard extends mixins(UserMixin) {
   }
   userLiked(id?: string) {
     if (!id) return false
-    return this.UserData?.likedQuestions?.includes(id);
+    return this.UserData?.likedQuestions?.includes(id)
   }
 
   async toggleLike() {
     if (!this.question?.id || this.disabled) return
-    const loading = this.$vs.loading();
-    try 
-    {
-      await questionStore.ToggleLikedQuestion(this.question.id);
-      this.$emit("toggle-like");
-    } catch (error)
-    {
+    const loading = this.$vs.loading()
+    try {
+      await questionStore.ToggleLikedQuestion(this.question.id)
+      this.$emit('toggle-like')
+    } catch (error) {
       this.$vs.notification({
-        color : "danger",
-        message : error.message
+        color: 'danger',
+        message: error.message
       })
-      console.log({error});
+      console.log({ error })
     }
-    loading.close();
+    loading.close()
   }
 
   vfOptions = {
@@ -164,12 +143,12 @@ export default class QuestionCard extends mixins(UserMixin) {
   }
   vfTransitions = ['swipe']
   PushQuestionsPage() {
-    if (this.clickable) return this.$router.push(`/questions/${this.question.id}`)
+    if (this.clickable)
+      return this.$router.push(`/questions/${this.question.id}`)
   }
   hasImage = false
   image?: HTMLImageElement
 }
 </script>
 <style lang="scss">
-
 </style>
