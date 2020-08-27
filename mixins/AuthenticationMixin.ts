@@ -113,6 +113,7 @@ export default class AuthenticationMixin extends Vue {
       this.$vs.notification({color: 'danger', title: "Email Invalid/In Use"});
       this.stopLoading();
       this.error = error;
+      console.error(error);
       return;
     }
   }
