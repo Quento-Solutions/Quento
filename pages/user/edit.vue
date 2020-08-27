@@ -16,14 +16,19 @@
           <div class="vx-row w-full lg:w-1/2">
             <!-- Avatar Col -->
             <div class="vx-col" id="avatar-col">
-              <div class="img-container mb-4 container2" id="fullImage">
+              <div class="img-container mb-4 container2">
                 <img
                   :src="UserInfo.photoURL"
                   class="rounded-lg w-full"
                   id="changePhoto"
                   style="width:11rem; height:8rem; overflow:hidden"
-                  @click="imageUploadClick()"
                 />
+                <i
+                  class="bx bx-pencil"
+                  id="pencilImage"
+                  style="position:absolute;top:3.4rem;left:4.6rem;z-index:1000;color:white;font-size:4rem"
+                  @click="imageUploadClick()"
+                ></i>
               </div>
             </div>
 
@@ -97,7 +102,7 @@
                 />
 
                 <!-- Modal for selecting un-selected subjects -->
-                <vs-dialog v-model="subjectModalActive">
+                <vs-dialog v-model="activeModel">
                   <template #header>
                     <h4 class="not-margin">
                       <b>
@@ -160,7 +165,7 @@ import ValidateImageMixin from '~/mixins/ValidateImageMixin'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
-@Component<UserSettings>({
+@Component<UserProfile>({
   components: {
     NotesCard,
     SubjectsDropdown
@@ -170,16 +175,15 @@ import storage from '~/plugins/firebaseStorage'
     this.UserInfo = JSON.parse(JSON.stringify({ ...this.UserData }))
   }
 })
-export default class UserSettings extends mixins(
-  UserMixin,
-  ValidateImageMixin
-) {
+export default class UserProfile extends mixins(UserMixin, ValidateImageMixin) {
   UserNotes: Note[] = []
   SubjectDict = Object.assign({}, SubjectOptions)
   SchoolList = [...SchoolList]
   newImageUpload = false
-  subjectModalActive = false
+  newDisplayName: any = ''
+  activeModel = false
   AllSubjectList = [...AllSubjectList]
+  notInterestedSubjects: string[] = []
 
   UserInfo: Partial<UserData> | null = null
 
@@ -188,6 +192,7 @@ export default class UserSettings extends mixins(
       return
     }
     const userId = this.AuthUser?.uid
+    // console.log(this.AuthUser)
     const notesCollection = await firestore
       .collection('notes')
       .where('uid', '==', userId)
@@ -204,6 +209,7 @@ export default class UserSettings extends mixins(
     }
     this.newImageUpload = false
     ;(this.$refs.imageUpload as HTMLInputElement).files = null
+    console.log('reset user data')
   }
 
   @Watch('AuthUser')
@@ -225,15 +231,26 @@ export default class UserSettings extends mixins(
       if (!this.UserInfo) return
 
       const base64Image = reader.result
+      console.log(base64Image?.slice(10))
       this.UserInfo.photoURL = base64Image as string
       this.newImageUpload = true
     })
+    console.log('function trigger')
     reader.readAsDataURL(imageFile)
   }
 
   imageUploadClick() {
     ;(this.$refs.imageUpload as HTMLInputElement).click()
     return
+  }
+
+  get userLevel() {
+    return this.UserData?.progressionLevel || 0
+  }
+
+  get userExp() {
+    console.log(this.UserData?.progressionExp)
+    return (this.UserData?.progressionExp || 0) / 200
   }
 
   getIcon(subject: SubjectGroup_O | Subject_O) {
@@ -251,7 +268,8 @@ export default class UserSettings extends mixins(
   }
 
   activateModal() {
-    this.subjectModalActive = true
+    console.log('hello')
+    this.activeModel = true
   }
 
   async saveChanges() {
@@ -282,10 +300,7 @@ export default class UserSettings extends mixins(
         color: 'success'
       })
     } catch (error) {
-      this.$vs.notification({
-        title: 'An Error Occured',
-        color: 'warn'
-      })
+      // notify
     }
     loading.close()
     this.$router.push('/user/profile')
@@ -297,26 +312,16 @@ export default class UserSettings extends mixins(
   width: 10rem;
 }
 
-#changePhoto:hover {
-  cursor: pointer;
+#changePhoto {
   filter: brightness(50%);
 }
 
-#changePhoto:hover ~ #pencilImage {
-  filter: opacity(100);
-}
-
-#pencilImage:hover {
-  filter: opacity(100);
+#changePhoto:hover {
   cursor: pointer;
 }
 
-#pencilImage {
-  filter: opacity(0);
-}
-
-#pencilImage:hover ~ #changePhoto {
-  filter: brightness(20%);
+#pencilImage:hover {
+  cursor: pointer;
 }
 
 #remove_icon {
