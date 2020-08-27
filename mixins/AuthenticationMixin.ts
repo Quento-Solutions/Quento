@@ -2,10 +2,36 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { authStore } from '~/store'
 import type {User, UserData} from '~/types/user'
 
-@Component
+@Component<AuthenticationMixin>({
+  mounted()
+  {
+    if(this.AuthUser && this.AuthUser.emailVerified) this.sendToHome();
+  }
+})
 export default class AuthenticationMixin extends Vue {
   errorMessage = ''
-  errorCode: number | null = null
+  errorCode: number | null = null;
+  loading : { close : () => void} | null = null;
+
+  
+  stopLoading()
+  {
+
+    if(this.loading && this.loading.close)
+    {
+      this.loading.close();
+      this.loading = null;
+    }
+  }
+
+  startLoading()
+  {
+    if(!this.loading)
+    {
+      this.loading= this.$vs.loading();
+    }
+  }
+
   get AuthUser()
   {
     return authStore.user;
@@ -17,6 +43,7 @@ export default class AuthenticationMixin extends Vue {
     // If Auth User changes and the user is valid, will automatically redirect to homepage
     if(val)
     {
+      this.stopLoading();
       if(val.emailVerified)
       {
         this.sendToHome();
@@ -47,14 +74,6 @@ export default class AuthenticationMixin extends Vue {
     this.errorCode = null
   }
 
-  delayedSendToHome(loading : any)
-  {
-    setTimeout(() => {
-      loading.close();
-      this.sendToHome();
-    }, 500)
-  }
-
   sendToHome()
   {
     // Will redirect to the proper link, not just home every single time
@@ -64,13 +83,12 @@ export default class AuthenticationMixin extends Vue {
 
   async LoginGoogle() 
   {
-    const loading = this.$vs.loading()
+    this.startLoading();
     this.resetError()
     try {
       await authStore.signInWithGoogle()
-      this.delayedSendToHome(loading);
     } catch (error) {
-      loading.close();
+      this.stopLoading();
       this.error = error;
       return;
     }
@@ -86,13 +104,12 @@ export default class AuthenticationMixin extends Vue {
       this.errorMessage = 'Confirm Password Must Match'
       return
     }
-    const loading = this.$vs.loading()
+    this.startLoading()
     try {
       await authStore.signUpWithEmail({ email, password });
-      this.delayedSendToHome(loading);
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
-      loading.close();
+      this.stopLoading();
       this.error = error;
       return;
     }
@@ -104,17 +121,15 @@ export default class AuthenticationMixin extends Vue {
       this.errorMessage = 'All Fields Must Be Filled In'
       return
     }
-    const loading = this.$vs.loading()
+    this.startLoading()
     try {
       await authStore.signInWithEmail({ email, password })
-      this.delayedSendToHome(loading);
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
 
       // For some reason if you do `this.error = error` before `loading.close();` with no return statement,
       // the loading never closes, I'm not sure why.
-      
-      loading.close();
+      this.stopLoading();
       this.error = error;
       return;
     }
