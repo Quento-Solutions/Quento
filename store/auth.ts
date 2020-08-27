@@ -99,14 +99,7 @@ export default class AuthModule extends VuexModule implements AuthState {
         }
         catch(error)
         {
-            if (error.code === 'auth/email-already-in-use') {
-                console.log('in use')
-            }
-        
-            else if (error.code === 'auth/invalid-email') {
-                console.log('invalid email')
-            }
-            console.log(error);
+            console.error(error);
             throw(error);
         }
     }
