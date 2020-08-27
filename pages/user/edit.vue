@@ -62,13 +62,6 @@
                   >{{item}}</vs-option>
                 </vs-select>
               </div>
-
-              <!-- <div class="vx-row w-full my-2 items-center">
-                <div class="font-bold text-xl mr-2 text-green">Level</div>
-                <vs-avatar warn size="25">
-                  <div class="font-bold text-base">{{userLevel}}</div>
-                </vs-avatar>
-              </div>-->
             </div>
 
             <div class="w-full vx-row p-2 items-center text-sm">
@@ -102,7 +95,7 @@
                     <h4 class="not-margin">
                       <b>
                         Add new
-                        Subejcts
+                        Subjects
                       </b>
                     </h4>
                   </template>
