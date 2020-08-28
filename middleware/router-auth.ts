@@ -3,19 +3,25 @@ import type { Route } from 'vue-router'
 
 export default function ({ store, redirect, route }: Context) {
     // if(route.name == null) redirect ('/')
+
+    const validUser = (store.state.auth.user != null && store.state.auth.user.emailVerified)
     console.log(route.name);
     if (route.name == "index") {
-        store.state.auth.user == null ? redirect("/splash") : redirect("/home");
+        return validUser ? redirect("/splash") : redirect("/home");
     }
 
-    if (store.state.auth.user != null && (route.name == null || route?.name?.split('/').some(record => record == 'auth'))) {
-        redirect('/home')
+    if ((validUser) && (route.name == null || route?.name?.split('/').some(record => record == 'auth'))) {
+        return redirect('/home')
     }
-    if(store.state.auth.user == null && (route.name == null || isAdminRoute(route)) && route.name != "auth/Login" && route.name!="auth/SignUp") 
+    if(!validUser && (route.name == null || isAdminRoute(route)))
     {
+        if(store.state.auth.user && !store.state.auth.user.emailVerified)
+        {
+            return redirect("/auth/verify-email")
+        }
         const redirectPath = route.fullPath;
         // Records the proper link
-        redirect(`/auth/login?redirect=${encodeURIComponent(redirectPath)}`)
+        return redirect(`/auth/login?redirect=${encodeURIComponent(redirectPath)}`)
     };
 }
 

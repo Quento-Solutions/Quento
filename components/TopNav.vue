@@ -251,7 +251,6 @@ export default class TopNav extends mixins(UserMixin) {
   async SignOut() {
     try {
       await authStore.signOut()
-      this.$router.push('/auth/Login')
     } catch (error) {}
   }
 }
