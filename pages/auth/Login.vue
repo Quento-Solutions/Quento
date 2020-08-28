@@ -30,12 +30,6 @@
             <template #icon>
               <i class="bx bx-user"></i>
             </template>
-            <template v-if="validEmail(email)" #message-success>
-              Email Valid
-            </template>
-            <template v-if="!validEmail(email) && email !== ''" #message-danger>
-              Email Invalid
-            </template>
           </vs-input>
         </div>
         <div class="p-6">

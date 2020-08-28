@@ -17,6 +17,7 @@
           <vs-input
             v-model="email"
             label="Email"
+            type="email"
             color="primary"
             placeholder="studentEmail@ocdsb.ca"
             class="block"

@@ -96,6 +96,7 @@ export default class AuthModule extends VuexModule implements AuthState {
             if(firebaseAuth.currentUser != null){
                 await firebaseAuth.currentUser.updateProfile({displayName: displayName});
             }
+            await this.signOut();
         }
         catch(error)
         {
