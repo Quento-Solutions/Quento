@@ -13,5 +13,5 @@ export interface StoredImage
     fileName : string;
     imageURL : string;
 }
-export const firebaseDate = (date : Date_t_F) => new Date(date.seconds * 1000);
+export const firebaseDate = (date : Date_t_F) => date ? new Date(date.seconds * 1000) : new Date(0);
 export const algoliaDate = (date : Date_t_A) => new Date(date._seconds * 1000);

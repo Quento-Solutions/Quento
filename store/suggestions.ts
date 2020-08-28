@@ -2,7 +2,6 @@ import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from './index'
-import firebase from '~/plugins/firebase'
 import { Suggestion } from '~/types/suggestions'
 
 @Module({ stateFactory: true, name: 'suggestions', namespaced: true })

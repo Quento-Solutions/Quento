@@ -1,5 +1,5 @@
 <template>
-  <div>
+
     <vs-sidebar
       fixed
       :hover-expand="hover"
@@ -8,6 +8,7 @@
       :open.sync="open"
       style="z-index: 100000;"
       color="#9f7aea"
+      id="sidebar"
     >
       <template #logo>
         <vs-sidebar-item>
@@ -69,7 +70,6 @@
 
       <template #footer> </template>
     </vs-sidebar>
-  </div>
 </template>
 
 <script lang="ts">
