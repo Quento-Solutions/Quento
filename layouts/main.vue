@@ -129,6 +129,8 @@ import UserInfoModal from '~/screens/UserInformationModal.vue';
 
 import themeConfig from '~/utils/themeConfig'
 import sidebarItems from '~/utils/sidebarItems'
+import analytics from '~/plugins/fireanalytics';
+
 // import TheCustomizer from "@/layouts/components/customizer/TheCustomizer.vue"
 import { windowStore } from '~/store'
 
@@ -149,6 +151,7 @@ import { windowStore } from '~/store'
     }
   },
   mounted() {
+    analytics?.setAnalyticsCollectionEnabled(true);
     window.addEventListener('resize', windowStore.handleResize)
     windowStore.handleResize()
   },
