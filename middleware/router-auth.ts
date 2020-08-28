@@ -8,7 +8,6 @@ export default function({store, redirect, route} : Context)
     if(route.name == "index" )
     {
         store.state.auth.user == null ? redirect("/splash") : redirect("/home");
-        // Redirect to either home or splash page
     }
 
     if(store.state.auth.user != null && (route.name == null || route?.name?.split('/').some(record => record == 'auth')))
@@ -17,7 +16,9 @@ export default function({store, redirect, route} : Context)
     }
     if(store.state.auth.user == null && (route.name == null || isAdminRoute(route)) && route.name != "auth/Login" && route.name!="auth/SignUp") 
     {
-        redirect('/auth/login')
+        const redirectPath = route.fullPath;
+        // Records the proper link
+        redirect(`/auth/login?redirect=${encodeURIComponent(redirectPath)}`)
     };
 }
 
