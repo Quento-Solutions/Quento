@@ -17,14 +17,16 @@ export type User = {
 export interface UserData {
   email: string
 
-  likedSuggestions ?: string[];
-  likedNotes ?: string[];
-  likedQuestions ?:string[];
-  likedResponses ?: string[];
-    
-  userGuideClosed ?: boolean;
-  userInformationAdded ?: boolean;
+  likedSuggestions?: string[]
+  likedNotes?: string[]
+  likedQuestions?: string[]
+  likedResponses?: string[]
 
+  userGuideClosed?: boolean
+  userInformationAdded?: boolean
+
+  displayName?: string | null
+  photoURL?: string | null
   currentGrade?: Grade_O
   interestedSubjects?: Subject_O[]
   bio?: string
@@ -39,4 +41,5 @@ export interface UserData {
 
   discordId ?: string;
   discordUsername ?: string;
+  photoFileName?: string | null
 }

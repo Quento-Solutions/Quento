@@ -1,5 +1,5 @@
-import type {Context, } from '@nuxt/types'
-import type {Route} from 'vue-router'
+import type { Context } from '@nuxt/types'
+import type { Route } from 'vue-router'
 
 export default function({store, redirect, route} : Context)
 {

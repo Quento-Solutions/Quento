@@ -21,10 +21,9 @@
                 <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
               </vs-avatar>
               <template #items>
-                <nuxt-link to="/user/profile">
-                  <vs-navbar-item>Profile</vs-navbar-item>
-                </nuxt-link>
-                <vs-navbar-item>Settings</vs-navbar-item>
+                <vs-navbar-item to="/user/profile">Profile</vs-navbar-item>
+
+                <vs-navbar-item to="/user/edit">Settings</vs-navbar-item>
                 <vs-navbar-item
                   warning
                   @click="SignOut()"
@@ -53,10 +52,10 @@ export default class TopNav extends Vue {
     windowStore.SetSidenavState(true)
   }
   get userName() {
-    return authStore.user?.displayName
+    return authStore.userData?.displayName
   }
   get photoURL() {
-    return authStore.user?.photoURL
+    return authStore.userData?.photoURL
   }
   async SignOut() {
     try {

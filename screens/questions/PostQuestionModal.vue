@@ -15,10 +15,8 @@
       </div>
     </template>
 
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
-    >
-      <div class="w-full p-6" style="">
+    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
+      <div class="w-full p-6" style>
         <vs-input
           v-model="title"
           placeholder="Title"
@@ -38,15 +36,10 @@
           placeholder="Subject"
           v-model="subjectSelect"
         >
-          <vs-option-group
-            v-for="(subjectGroup, index) in SubjectGroupList"
-            :key="index"
-          >
+          <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
             <div slot="title" class="w-full vx-row">
               <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
-              <div class="font-bold truncate">
-                {{ subjectGroup.name }}
-              </div>
+              <div class="font-bold truncate">{{ subjectGroup.name }}</div>
             </div>
             <vs-option
               v-for="(subject, subIndex) in subjectGroup.items"
@@ -55,9 +48,7 @@
               :value="subject.name"
             >
               <i class="bx text-3xl mr-2" :class="subject.iconClass" />
-              <div class="font-bold truncate">
-                {{ subject.name }}
-              </div>
+              <div class="font-bold truncate">{{ subject.name }}</div>
             </vs-option>
           </vs-option-group>
         </vs-select>
@@ -93,15 +84,8 @@
 
     <template #footer>
       <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button
-          class="md:w-1/2 w-full"
-          warn
-          :disabled="formErrors"
-          @click="PreviewQuestion()"
-        >
-          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            Preview Question
-          </div>
+        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors" @click="PreviewQuestion()">
+          <div class="text-xl p-2 font-bold lg:text-2xl" style>Preview Question</div>
         </vs-button>
       </div>
     </template>
@@ -153,8 +137,6 @@ export default class PostQuestionModal extends mixins(
     questionStore.SET_POST_MODAL_OPEN(value)
   }
 
-
-
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
 
@@ -200,8 +182,8 @@ export default class PostQuestionModal extends mixins(
     const previewQuestion = new Question({
       title: this.title,
       userId: this.AuthUser?.uid!,
-      userDisplayName: this.AuthUser?.displayName!,
-      userPhotoUrl: this.AuthUser?.photoURL!,
+      userDisplayName: this.UserData?.displayName!,
+      userPhotoUrl: this.UserData?.photoURL!,
       createdAt: new Date(),
       upVotes: 0,
       views: 0,

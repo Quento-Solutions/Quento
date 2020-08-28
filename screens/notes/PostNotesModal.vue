@@ -183,8 +183,8 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
     const previewNote = new Note({
       title: this.title,
       uid: authStore.user?.uid!,
-      userDisplayName: authStore.user?.displayName!,
-      userPhotoUrl: authStore.user?.photoURL!,
+      userDisplayName: authStore.userData?.displayName!,
+      userPhotoUrl: authStore.userData?.photoURL!,
       createdAt: new Date(),
       upVotes: 0,
       views: 0,

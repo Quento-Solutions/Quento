@@ -10,21 +10,31 @@
             <!-- Avatar Col -->
             <div class="vx-col" id="avatar-col">
               <div class="img-container mb-4">
-                <img :src="AuthUser.photoURL" class="rounded-lg w-full" />
+                <img :src="UserData.photoURL" class="rounded-lg w-full" />
               </div>
             </div>
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <div class="vx-row font-bold text-3xl" style>{{ AuthUser.displayName }}</div>
+              <div class="vx-row font-bold text-3xl" style>{{ UserData.displayName }}</div>
               <div
                 class="vx-row w-full text-2xl"
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
               <div class="vx-row w-full items-center text-ginger" style>
-                <vs-button class="text-title text-2xl" style="font-size: 1.2rem" color="#7289DA" s @click="linkDiscord()">
-                  <i class="bx bxl-discord text-4xl mr-2"/>
-                  <div v-if="UserData.discordUsername" style="max-width: 40vw" class="truncate">{{ UserData.discordUsername }}</div>
+                <vs-button
+                  class="text-title text-2xl"
+                  style="font-size: 1.2rem"
+                  color="#7289DA"
+                  s
+                  @click="linkDiscord()"
+                >
+                  <i class="bx bxl-discord text-4xl mr-2" />
+                  <div
+                    v-if="UserData.discordUsername"
+                    style="max-width: 40vw"
+                    class="truncate"
+                  >{{ UserData.discordUsername }}</div>
                   <div v-else>Link Discord</div>
                 </vs-button>
               </div>
@@ -36,7 +46,7 @@
               </div>
 
               <!-- MAKE A PROGRESSION BAR  -->
-              <div class="vx-row w-full mt-6">
+              <div class="vx-row w-full mt-4 mb-2">
                 <v-progress-linear
                   color="deep-purple accent-4"
                   height="11"
@@ -89,6 +99,9 @@
           <div class="vx-row w-full lg:w-1/2" style>
             <div class="vx-col w-full" style></div>
           </div>
+          <div class="w-full p-2 md:px-8" style>
+            <vs-button color="warn" type="filled" size="large" to="/user/edit">Edit Profile</vs-button>
+          </div>
           <!-- /Information - Col 2 -->
         </div>
       </VxCard>
@@ -96,7 +109,7 @@
       <!-- User's Notes Card -->
       <VxCard class="mb-base mt-12" v-if="AuthUser && UserData">
         <div class="vx-col flex-1 w-full" id="account-info-col-1">
-          <div class="vx-row font-bold text-2xl" style>{{ AuthUser.displayName }}'s Notes</div>
+          <div class="vx-row font-bold text-2xl" style>{{ UserData.displayName }}'s Notes</div>
         </div>
 
         <div class="vx-row w-full">
@@ -116,11 +129,15 @@
                 <v-card-actions style="margin-left: -0.75rem;">
                   <v-list-item class="grow">
                     <v-list-item-avatar color="grey darken-3" style="margin-right: 0.5rem;">
-                      <v-img class="elevation-6" :src="AuthUser.photoURL"></v-img>
+                      <v-img class="elevation-6" :src="UserData.photoURL"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                      <v-list-item-title>{{ AuthUser.displayName }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{
+                        UserData.displayName
+                        }}
+                      </v-list-item-title>
                     </v-list-item-content>
 
                     <v-row align="center" justify="end" style="margin-right: 0.2rem;">
@@ -160,14 +177,14 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
-
-  linkDiscord()
-  {
-    const redirect_uri = encodeURIComponent(`${window.location.origin}/user/discord`);
-    console.log({redirect_uri})
+  linkDiscord() {
+    const redirect_uri = encodeURIComponent(
+      `${window.location.origin}/user/discord`
+    )
+    console.log({ redirect_uri })
     const discordOauthLink = `https://discord.com/api/oauth2/authorize?client_id=739600929287831685&redirect_uri=${redirect_uri}&response_type=code&scope=identify`
     // Simulate a mouse click:
-    window.location.href = discordOauthLink;
+    window.location.href = discordOauthLink
   }
 
   UserNotes: Note[] = []
@@ -198,7 +215,7 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   get userExp() {
-    const userExp =  (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    const userExp = (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
     return userExp
   }
 
