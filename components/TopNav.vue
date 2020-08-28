@@ -60,7 +60,6 @@ export default class TopNav extends Vue {
   async SignOut() {
     try {
       await authStore.signOut()
-      this.$router.push('/auth/Login')
     } catch (error) {}
   }
 }

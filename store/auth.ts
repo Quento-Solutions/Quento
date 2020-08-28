@@ -87,23 +87,29 @@ export default class AuthModule extends VuexModule implements AuthState {
     }
   }
 
-    @Action({rawError : true})
-    public async signUpWithEmail({email, password, displayName} : {email : string, password: string, displayName:string})
-    {
-        try
-        {
-            await firebaseAuth.createUserWithEmailAndPassword(email, password);
-            if(firebaseAuth.currentUser != null){
-                await firebaseAuth.currentUser.updateProfile({displayName: displayName});
-            }
-            await this.signOut();
-        }
-        catch(error)
-        {
-            console.error(error);
-            throw(error);
-        }
+  @Action({ rawError: true })
+  public async signUpWithEmail({
+    email,
+    password,
+    displayName
+  }: {
+    email: string
+    password: string
+    displayName: string
+  }) {
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(email, password)
+      if (firebaseAuth.currentUser != null) {
+        await firebaseAuth.currentUser.updateProfile({
+          displayName: displayName
+        })
+      }
+      await this.sendVerifyEmail();
+    } catch (error) {
+      console.error(error)
+      throw error
     }
+  }
 
   @Action({ rawError: true })
   public async signOut() {
@@ -130,11 +136,19 @@ export default class AuthModule extends VuexModule implements AuthState {
     return
   }
 
-  @Action({ rawError: true }) 
+  @Action({ rawError: true })
   public async updateUserData(userData: Partial<UserData>) {
     const uid = this.user?.uid
     await firestore.collection('users').doc(uid).update(userData)
     await this.refreshUserData()
     return
+  }
+
+  @Action({ rawError: true })
+  public async sendVerifyEmail() {
+    const redirect_uri = `${window.location.origin}/auth/verify-email?verified=true`
+    await firebaseAuth.currentUser?.sendEmailVerification({
+      url: redirect_uri
+    })
   }
 }

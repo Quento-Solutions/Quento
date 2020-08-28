@@ -3,7 +3,8 @@ import { authStore } from '~/store'
 import type { User, UserData } from '~/types/user'
 
 @Component<AuthenticationMixin>({
-  mounted() {
+  mounted() 
+  {
     this.onAuthUserChange(this.AuthUser, null);
   }
 })
@@ -37,6 +38,9 @@ export default class AuthenticationMixin extends Vue {
       if (val.emailVerified) 
       {
         this.sendToHome()
+      } else 
+      {
+        this.$router.push("/auth/verify-email")
       }
     }
   }
@@ -107,7 +111,7 @@ export default class AuthenticationMixin extends Vue {
       this.$router.push("/auth/Login");
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
-      this.$vs.notification({ color: 'danger', title: 'Email Invalid/In Use' })
+      this.$vs.notification({ color: 'danger', title: 'Email Invalid/In Use' }) 
       this.stopLoading()
       this.error = error
       console.error(error)

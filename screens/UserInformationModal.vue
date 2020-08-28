@@ -1,8 +1,6 @@
 <template>
   <vs-dialog
     not-center
-    prevent-close
-    not-close
     id="userInfoPopup"
     class="content-popup no-footer"
     style="z-index: 1000000000;"
@@ -130,10 +128,7 @@ export default class UserGuideModal extends mixins(UserMixin) {
   }
 
   set userInfoPromptOpen(value: boolean) {
-    if (!value && this.dontShowAgain) {
-      userGuideStore.SetUserGuideClosed(true)
-    }
-    userGuideStore.SET_GUIDE_CLOSED(!value)
+    userGuideStore.SET_INFO_OPEN(value);
   }
 
   async submitUserInfo() {
