@@ -115,7 +115,8 @@
               <div
                 class="p-2 mb-2 rounded-lg border-solid border-gray-400 w-full text-2xl font-semibold"
               >Biography</div>
-              <v-textarea filled v-model="UserInfo.bio"></v-textarea>
+              <vs-textarea v-model="UserInfo.bio" class="my-2"></vs-textarea>
+              <vs-checkbox v-model="UserInfo.notifications" class="my-2">Enable Notifications</vs-checkbox>
               <vs-button
                 color="success"
                 type="filled"
@@ -142,6 +143,7 @@ import {
   SubjectOptions,
   AllSubjectList
 } from '~/types/subjects'
+
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
 import { School_O, SchoolList } from '~/types/schools'
@@ -159,8 +161,8 @@ import storage from '~/plugins/firebaseStorage'
     SubjectsDropdown
   },
   mounted() {
+    this.cloneUserInfo();
     this.getUserNotes()
-    this.UserInfo = JSON.parse(JSON.stringify({ ...this.UserData }))
   }
 })
 export default class UserSettings extends mixins(
@@ -176,6 +178,12 @@ export default class UserSettings extends mixins(
 
   UserInfo: Partial<UserData> | null = null
 
+
+  cloneUserInfo()
+  {
+    if(!this.UserData) return;
+    this.UserInfo = JSON.parse(JSON.stringify({ notifications : false, ...this.UserData }))
+  }
   async getUserNotes() {
     if (!this.AuthUser) {
       return
@@ -192,9 +200,7 @@ export default class UserSettings extends mixins(
 
   @Watch('UserData')
   onUserData(value: any, oldValue: any) {
-    if (value) {
-      this.UserInfo = JSON.parse(JSON.stringify({ ...this.UserData }))
-    }
+    this.cloneUserInfo();
     this.newImageUpload = false
     ;(this.$refs.imageUpload as HTMLInputElement).files = null
   }
@@ -269,7 +275,7 @@ export default class UserSettings extends mixins(
         this.UserInfo.photoFileName = newImageUrl.data.fileName as string
       }
 
-      await authStore.updateUserData(this.UserInfo)
+      await authStore.updateUserData(this.UserInfo);
       this.$vs.notification({
         title: 'Changes Saved',
         color: 'success'

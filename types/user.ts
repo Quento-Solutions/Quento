@@ -41,5 +41,7 @@ export interface UserData {
 
   discordId ?: string;
   discordUsername ?: string;
-  photoFileName?: string | null
+  photoFileName?: string | null;
+
+    notifications ?: boolean;
 }

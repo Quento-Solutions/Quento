@@ -81,6 +81,8 @@
           label="Bio (Optional)"
         ></VsTextarea>
       </div>
+                    <vs-checkbox v-model="notifications" class="my-2">Enable Notifications</vs-checkbox>
+
     </div>
     <div class="vx-col w-full px-16">
       <vs-button
@@ -109,6 +111,8 @@ import { GradeList, Grade_O, SubjectOptions, Subject_O } from '~/types/subjects'
 export default class UserGuideModal extends mixins(UserMixin) {
   readonly GradeList = GradeList.filter((val) => val != 'ALL')
   readonly SchoolList = SchoolList
+
+notifications = true;
 
   get formErrors() {
     return this.gradeSelect == '' || this.schoolSelect == ''
@@ -145,7 +149,8 @@ export default class UserGuideModal extends mixins(UserMixin) {
         interestedSubjects: this.ActiveSubjectList,
         currentGrade: this.gradeSelect,
         school: this.schoolSelect,
-        bio: this.contents
+        bio: this.contents,
+        notifications : this.notifications
       })
       loading.close()
     } catch (error) {
