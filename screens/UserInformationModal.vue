@@ -12,20 +12,18 @@
     v-model="userInfoPromptOpen"
     v-if="AuthUser && UserData"
   >
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex vx-row justify-evenly overflow-x-hidden"
-    >
-      <div
-        class="vx-row items-center w-full p-4 flex-no-wrap"
-        style="flex-wrap: nowrap;"
-      >
-        <div class="vx-col" style="">
+    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row justify-evenly overflow-x-hidden">
+      <div class="vx-row items-center w-full p-4 flex-no-wrap" style="flex-wrap: nowrap;">
+        <div class="vx-col" style>
           <vs-avatar size="70" badge badge-color="success">
-            <img v-if="activeUser.photoURL" :src="activeUser.photoURL" />
+            <img v-if="UserData.photoURL" :src="UserData.photoURL" />
             <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
           </vs-avatar>
         </div>
-        <div class="text-body text-xl p-2 " style="line-height : 1.25">Hi <b>{{ activeUser.displayName }}!</b> Tell us a bit about yourself!</div>
+        <div class="text-body text-xl p-2" style="line-height : 1.25">
+          Hi
+          <b>{{ UserData.displayName }}!</b> Tell us a bit about yourself!
+        </div>
       </div>
 
       <div class="mb-6 p-4 w-full lg:w-1/2">
@@ -69,25 +67,19 @@
       <!-- Interested Subjects -->
 
       <div class="filter-options vx-col w-full">
-        <h2 class="text-title mb-8">
-          What Subjects Are You Interested In? (Optional)
-        </h2>
-        <SubjectsDropdown
-          :value.sync="SubjectDict"
-          :list.sync="ActiveSubjectList"
-        ></SubjectsDropdown>
+        <h2 class="text-title mb-8">What Subjects Are You Interested In? (Optional)</h2>
+        <SubjectsDropdown :value.sync="SubjectDict" :list.sync="ActiveSubjectList"></SubjectsDropdown>
       </div>
 
       <!-- Description  -->
-      <div class="vx-col w-full mt-6" style="">
+      <div class="vx-col w-full mt-6" style>
         <VsTextarea
           v-model="contents"
           placeholder="Hi! Welcome to Quento"
           class="block"
           height="20rem"
           label="Bio (Optional)"
-        >
-        </VsTextarea>
+        ></VsTextarea>
       </div>
     </div>
     <div class="vx-col w-full px-16">
@@ -97,7 +89,8 @@
         size="xl"
         :disabled="false && formErrors"
       >
-        NEXT &nbsp;<i class="bx bxs-rocket text-xl" />
+        NEXT &nbsp;
+        <i class="bx bxs-rocket text-xl" />
       </vs-button>
     </div>
   </vs-dialog>
@@ -106,20 +99,18 @@
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import { userGuideStore, authStore, windowStore } from '~/store'
 import { SchoolList, School_O } from '~/types/schools'
-import UserMixin from '~/mixins/UserMixin';
+import UserMixin from '~/mixins/UserMixin'
 
 import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
 
 import { GradeList, Grade_O, SubjectOptions, Subject_O } from '~/types/subjects'
-
 
 @Component<UserGuideModal>({ components: { SubjectsDropdown } })
 export default class UserGuideModal extends mixins(UserMixin) {
   readonly GradeList = GradeList.filter((val) => val != 'ALL')
   readonly SchoolList = SchoolList
 
-  get formErrors() 
-  {
+  get formErrors() {
     return this.gradeSelect == '' || this.schoolSelect == ''
   }
   dontShowAgain = false
@@ -130,12 +121,6 @@ export default class UserGuideModal extends mixins(UserMixin) {
   title = ''
   contents = ''
 
-  get activeUser() {
-    return authStore.user
-  }
-  get userData() {
-    return authStore.userData
-  }
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }

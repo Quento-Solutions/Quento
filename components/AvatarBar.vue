@@ -3,7 +3,7 @@
     <!-- Profile Picture -->
     <div class="justify-start w-5/6 m-0 vx-row items-center" style="flex-wrap: nowrap">
       <div>
-        <vs-avatar class="icon">
+        <vs-avatar class="icon" @click.stop="$router.push(`/user/view/${userId}`)">
           <img v-if="photoURL" :src="photoURL" />
           <template slot="text" v-else>{{ username }}</template>
         </vs-avatar>
@@ -27,7 +27,7 @@
           <i class="bx bx-dots-horizontal" style="font-size: 1.25rem;" />
         </vs-avatar>
         <template #items>
-            <slot name="items"></slot>
+          <slot name="items"></slot>
         </template>
       </vs-navbar-group>
     </div>
@@ -43,18 +43,17 @@ export default class AvatarBar extends Vue {
   @Prop({ type: Date, required: false }) date!: Date | null
   @Prop({ required: false }) photoURL!: string
   @Prop({ default: false }) badge!: boolean
+  @Prop({ required: true }) userId!: string
 
-  get hasActions()
-  {
-      return this.$slots.items;
+  get hasActions() {
+    return this.$slots.items
   }
 
-    formatDate(date ?: Date)
-    {
-        if(!date) return;
-        const dateString = date.toDateString();
-        return dateString.slice(4, 10) + "," + dateString.slice(10);
-    }
+  formatDate(date?: Date) {
+    if (!date) return
+    const dateString = date.toDateString()
+    return dateString.slice(4, 10) + ',' + dateString.slice(10)
+  }
 }
 </script>
 
@@ -64,8 +63,8 @@ export default class AvatarBar extends Vue {
     padding: 0 !important;
   }
   .vs-navbar__group__items {
-    left : auto !important;
-    right : 0 !important;
+    left: auto !important;
+    right: 0 !important;
   }
 }
 </style>

@@ -74,15 +74,14 @@
           <h3 class="text-title truncate hidden sm:block">{{ userName }}</h3>
 
           <vs-navbar-group id="profile">
-            <vs-avatar class="profileIcon icon" badge badge-color="success" circle>
+            <vs-avatar class="profileIcon icon" badge badge-color="success">
               <img v-if="photoURL" :src="photoURL" />
               <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
             </vs-avatar>
             <template #items>
-              <nuxt-link to="/user/profile">
-                <vs-navbar-item>Profile</vs-navbar-item>
-              </nuxt-link>
-              <vs-navbar-item>Settings</vs-navbar-item>
+              <vs-navbar-item to="/user/profile">Profile</vs-navbar-item>
+
+              <vs-navbar-item to="/user/edit">Settings</vs-navbar-item>
               <vs-navbar-item
                 warning
                 @click="SignOut()"
@@ -125,27 +124,28 @@ export default class TopNav extends mixins(UserMixin) {
     switch (ntf.dataType) {
       case 'QUESTION':
         return `/questions/${ntf.docId}`
-      case "NEWSLETTER":
+      case 'NEWSLETTER':
         return `/newsletters/${ntf.docId}`
-      case "NOTE":
+      case 'NOTE':
         return `/notes/${ntf.docId}`
-      case "RESPONSE":
-        return `/questions/${(ntf as Notification<"RESPONSE">).docData.questionId}`
-
+      case 'RESPONSE':
+        return `/questions/${
+          (ntf as Notification<'RESPONSE'>).docData.questionId
+        }`
     }
   }
   getIcon(dataType: NotificationData_O) {
     switch (dataType) {
       case 'QUESTION':
         return 'bx-question-mark'
-      case "RESPONSE":
-        return "bx-comment-detail"
-      case "NEWSLETTER":
-        return "bx-news"
-      case "NOTE" :
-        return "bx-note"
-      default :
-        return "bx-notification"
+      case 'RESPONSE':
+        return 'bx-comment-detail'
+      case 'NEWSLETTER':
+        return 'bx-news'
+      case 'NOTE':
+        return 'bx-note'
+      default:
+        return 'bx-notification'
     }
   }
 
@@ -153,10 +153,10 @@ export default class TopNav extends mixins(UserMixin) {
     switch (actionType) {
       case 'POST':
         return 'primary'
-      case "RESPONSE":
-        return "warning"
-      case "POPULAR":
-        return "danger"
+      case 'RESPONSE':
+        return 'warning'
+      case 'POPULAR':
+        return 'danger'
     }
   }
 
@@ -210,28 +210,29 @@ export default class TopNav extends mixins(UserMixin) {
     }
   }
 
-  async readNotification(id : string)
-  {
+  async readNotification(id: string) {
     try {
-      await firestore.collection("users").doc(this.AuthUser?.uid).collection('notifications').doc(id).update({
-        read : true
-      })
-      await notificationStore.getNotifications();
-    } catch(error)
-    {
+      await firestore
+        .collection('users')
+        .doc(this.AuthUser?.uid)
+        .collection('notifications')
+        .doc(id)
+        .update({
+          read: true
+        })
+      await notificationStore.getNotifications()
+    } catch (error) {
       this.$vs.notification({
-        title : error.message,
-        color : "danger"
-      });
-      console.log(error);
+        title: error.message,
+        color: 'danger'
+      })
+      console.log(error)
     }
-    this.notificationsVisible = false;
+    this.notificationsVisible = false
   }
 
-
-  get notifications() 
-  {
-    return notificationStore.notifications.filter(ntf => !ntf.read)
+  get notifications() {
+    return notificationStore.notifications.filter((ntf) => !ntf.read)
   }
 
   get windowSmall() {
@@ -241,10 +242,10 @@ export default class TopNav extends mixins(UserMixin) {
     windowStore.SetSidenavState(true)
   }
   get userName() {
-    return authStore.user?.displayName
+    return authStore.userData?.displayName
   }
   get photoURL() {
-    return authStore.user?.photoURL
+    return authStore.userData?.photoURL
   }
 
   async SignOut() {
@@ -258,7 +259,7 @@ export default class TopNav extends mixins(UserMixin) {
 
 <style lang="scss">
 #navbar-wrapper {
-  z-index : 41000;
+  z-index: 41000;
   #topnav {
     z-index: 100;
     top: 20px;
@@ -294,19 +295,19 @@ export default class TopNav extends mixins(UserMixin) {
         // overflow: hidden;
         padding: 0;
         // max-width : 100%;
-        position : fixed;
-        transform : none;
-        top : 80px;
-        width : 90vw;
-        left : 5vw;
-        bottom : auto;
+        position: fixed;
+        transform: none;
+        top: 80px;
+        width: 90vw;
+        left: 5vw;
+        bottom: auto;
         @media only screen and (min-width: 400px) {
           transform: translate(-75%, 90%);
           width: 350px;
-          position : absolute;
-          bottom : 0;
-          left : auto;
-          top : auto;
+          position: absolute;
+          bottom: 0;
+          left: auto;
+          top: auto;
         }
       }
 
@@ -338,7 +339,6 @@ export default class TopNav extends mixins(UserMixin) {
       box-sizing: border-box;
       @media only screen and (min-width: 400px) {
         right: 60px;
-
       }
       right: 30vw;
     }
