@@ -38,13 +38,13 @@ export default class UserGuideModule extends VuexModule {
   }
 
     @Action({ rawError: true })
-    public async SetUserInformation({ interestedSubjects, currentGrade, school, bio }:
-    {interestedSubjects: Subject_O[], currentGrade: Grade_O, school: School_O, bio: string })
+    public async SetUserInformation({ interestedSubjects, currentGrade, school, bio, notifications }:
+    {interestedSubjects: Subject_O[], currentGrade: Grade_O, school: School_O, bio: string, notifications : boolean})
  
     {
         const userId = authStore.user?.uid
         await firestore.collection('users').doc(userId).update({ 
-            interestedSubjects, currentGrade, school, bio, userInformationAdded : true
+            interestedSubjects, currentGrade, school, bio, userInformationAdded : true, notifications
         });
         return await authStore.refreshUserData();
     }
