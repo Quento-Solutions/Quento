@@ -38,9 +38,8 @@
                   state="dark"
                   id="gradeBreakLine"
                 >
-                  <!-- <option selected>Select School</option> -->
                   <vs-option
-                    v-for="(item, index) in ['9','10','11','12']"
+                    v-for="(item, index) in GradeList"
                     :key="index"
                     :label="item"
                     :value="item"
@@ -140,7 +139,8 @@ import {
   Subject_O,
   SubjectIconList,
   SubjectOptions,
-  AllSubjectList
+  AllSubjectList,
+  GradeList
 } from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
@@ -152,6 +152,7 @@ import { authStore } from '~/store'
 import ValidateImageMixin from '~/mixins/ValidateImageMixin'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
+
 
 @Component<UserSettings>({
   components: {
@@ -173,6 +174,7 @@ export default class UserSettings extends mixins(
   newImageUpload = false
   subjectModalActive = false
   AllSubjectList = [...AllSubjectList]
+  GradeList = GradeList.filter(v => v!= "ALL");
 
   UserInfo: Partial<UserData> | null = null
 

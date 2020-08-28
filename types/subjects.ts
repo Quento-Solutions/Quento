@@ -47,7 +47,7 @@ export const SortOptionsList = [
 export type SortOptions_O = typeof SortOptionsList[number]['value']
 export type SubjectGroup_O = keyof typeof SubjectGroups
 
-export const GradeList = [9, 10, 11, 12, 'ALL'] as const
+export const GradeList = [7, 8, 9, 10, 11, 12, 'ALL'] as const
 export type Grade_O = typeof GradeList[number]
 
 export const SubjectList = Object.entries(SubjectGroups).flatMap(
