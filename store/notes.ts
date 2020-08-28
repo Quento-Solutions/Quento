@@ -11,7 +11,6 @@ import { firestore as store } from 'firebase/app'
 import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
-import firebase from '~/plugins/firebase'
 
 // Fix the googl
 import {

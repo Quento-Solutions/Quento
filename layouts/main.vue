@@ -19,11 +19,12 @@
     <div
       id="content-area"
       :class="[contentAreaClass, { 'show-overlay': bodyOverlay }]"
-      style="float: right; width: 95%;"
+      :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
     >
       <div id="content-overlay"></div>
 
       <div class="content-wrapper">
+        
         <TopNav
           :navbarColor="navbarColor"
           :class="[
@@ -177,11 +178,17 @@ export default class MainLayout extends Vue {
   hideScrollToTop = themeConfig.hideScrollToTop
   disableThemeTour = themeConfig.disableThemeTour
 
+
   handleFocus()
   {
   }
   handleFocusOut()
   {
+  }
+
+  get sidebarOpen()
+  {
+    return !windowStore.isSmallScreen
   }
   get isAppPage() {
     // if(this.$route.path.includes('/apps/')) return true
