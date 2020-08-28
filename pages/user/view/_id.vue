@@ -163,7 +163,6 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
   async mounted() {
     await this.fetchUser()
     await this.getUserNotes()
-    this.userDataInfo()
   }
 })
 export default class UserPage extends Vue {
@@ -176,7 +175,6 @@ export default class UserPage extends Vue {
 
     try {
       this.userId = this.$route.params.id
-      console.log(this.userId)
       const doc = await firestore.doc(`users/${this.userId}`).get()
       if (!doc.exists) {
         this.docNotFound = true
@@ -187,12 +185,11 @@ export default class UserPage extends Vue {
 
       this.userInfo = Object.assign({}, userData2)
       loading.close()
-      console.log(this.userInfo)
       return
     } catch (error) {
       this.docNotFound = true
       loading.close()
-      console.log({ error })
+      console.error({ error })
       return
     }
   }
@@ -201,7 +198,6 @@ export default class UserPage extends Vue {
     if (!this.userInfo) {
       return
     }
-    // console.log(this.AuthUser)
     const notesCollection = await firestore
       .collection('notes')
       .where('uid', '==', this.userId)
@@ -209,10 +205,6 @@ export default class UserPage extends Vue {
     this.UserNotes = notesCollection.docs.map((doc) =>
       Note.fromFirebase(doc.data() as Note_t_F, doc.id)
     )
-  }
-
-  userDataInfo() {
-    console.log(this.userInfo)
   }
 
   get userLevel() {

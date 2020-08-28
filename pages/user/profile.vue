@@ -172,8 +172,6 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
   },
   mounted() {
     this.getUserNotes()
-    // console.log('hello')
-    // console.log(this.UserNotes)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -181,7 +179,6 @@ export default class UserProfile extends mixins(UserMixin) {
     const redirect_uri = encodeURIComponent(
       `${window.location.origin}/user/discord`
     )
-    console.log({ redirect_uri })
     const discordOauthLink = `https://discord.com/api/oauth2/authorize?client_id=739600929287831685&redirect_uri=${redirect_uri}&response_type=code&scope=identify`
     // Simulate a mouse click:
     window.location.href = discordOauthLink
@@ -193,7 +190,6 @@ export default class UserProfile extends mixins(UserMixin) {
       return
     }
     const userId = this.AuthUser?.uid
-    // console.log(this.AuthUser)
     const notesCollection = await firestore
       .collection('notes')
       .where('uid', '==', userId)
