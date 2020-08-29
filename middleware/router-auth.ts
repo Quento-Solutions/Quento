@@ -7,7 +7,7 @@ export default function ({ store, redirect, route }: Context) {
     const validUser = (store.state.auth.user != null && store.state.auth.user.emailVerified)
     console.log(route.name);
     if (route.name == "index") {
-        return validUser ? redirect("/splash") : redirect("/home");
+        return !validUser ? redirect("/splash") : redirect("/home");
     }
 
     if ((validUser) && (route.name == null || route?.name?.split('/').some(record => record == 'auth'))) {
