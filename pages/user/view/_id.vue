@@ -29,7 +29,7 @@
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
-                  <div class="font-bold text-base">{{ userInfo.progressionLevel }}</div>
+                  <div class="font-bold text-base">{{ userLevel }}</div>
                 </vs-avatar>
               </div>
 
