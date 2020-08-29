@@ -156,7 +156,7 @@ export default class Home extends mixins(Analytics) {
       href: 'https://github.com/Quento-Solutions/Quento',
       imageUrl: require(`~/assets/images/github-logo.png`),
       iconClass: 'bx bxl-github',
-      toolTipText: 'https://github.com/Quento-Solutions/Quento',
+      toolTipText: 'Quento Github',
       backgroundColor: '#000000',
       color: 'white'
     },

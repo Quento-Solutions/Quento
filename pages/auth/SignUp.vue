@@ -218,7 +218,7 @@ export default class SignUp extends mixins(Auth) {
   }
 
   PushLoginPage() {
-    this.$router.replace('/auth/login')
+    this.$router.push('/auth/login')
   }
 }
 </script>

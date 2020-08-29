@@ -39,9 +39,9 @@ export interface UserData {
   progressionExp?: number
   progressionLevel?: number
 
-  discordId ?: string;
-  discordUsername ?: string;
-  photoFileName?: string | null;
+  discordId?: string
+  discordUsername?: string
+  photoFileName?: string | null
 
-    notifications ?: boolean;
+  notifications?: boolean
 }
