@@ -207,11 +207,11 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   get userLevel() {
-    return this.UserData?.progressionLevel || 0
+    return Math.floor((this.UserData?.totalExp || 0) / 200)
   }
 
   get userExp() {
-    const userExp = (this.UserData?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    const userExp = ((this.UserData?.totalExp || 0) % 200) / 2 // 200 exp points per level, its in percentage so multiply by 100.
     return userExp
   }
 
