@@ -15,7 +15,7 @@
         <h4 class="not-margin text-title text-4xl"><b>Posted</b> Notes</h4>
       </div>
     </template>
-    <vs-alert v-if="contents.length >= characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
+    <vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
         <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="ActiveNote.title"
@@ -80,7 +80,6 @@
         expand="true"
         markdownOptions="true"
         @paste="onPaste"
-        @input="checkLength"
       >
       </VsTextarea>
     </div>
@@ -90,7 +89,7 @@
         <vs-button
           class="md:w-1/2 w-full"
           warn
-          :disabled="formErrors"
+          :disabled="formErrors || contents.length > characterLimit"
           @click="PreviewNote()"
         >
           <div class="text-xl p-2 font-bold lg:text-2xl" style="">
@@ -127,12 +126,6 @@ export default class EditNotesModal extends mixins(PasteImage) {
   ActiveNote : Note | null = null;
    characterLimit = 5000
 
-
-  checkLength() {
-    if (this.ActiveNote.contents.length > this.characterLimit) {
-      this.ActiveNote.contents =  this.ActiveNote.contents.slice(0,5000);
-    }
-  }
   get contents()
   {
     return this.ActiveNote?.contents || ''
