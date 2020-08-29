@@ -72,7 +72,10 @@ const config: NuxtConfig = {
     '@/plugins/firestore',
     '@/plugins/firebaseStorage',
     '@/plugins/fireauth',
-    '@/plugins/globalComponents'
+    '@/plugins/globalComponents',
+    '@/plugins/messyPlugins',
+    { src: '@/plugins/fireanalytics', mode: 'client' },
+
   ],
   markdownit: {
     preset: 'default',

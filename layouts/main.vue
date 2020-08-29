@@ -19,11 +19,12 @@
     <div
       id="content-area"
       :class="[contentAreaClass, { 'show-overlay': bodyOverlay }]"
-      style="float: right; width: 95%;"
+      :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
     >
       <div id="content-overlay"></div>
 
       <div class="content-wrapper">
+        
         <TopNav
           :navbarColor="navbarColor"
           :class="[
@@ -120,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue, mixins, Watch } from 'nuxt-property-decorator'
 
 import Sidebar from '~/components/Sidebar.vue'
 import TopNav from '~/components/TopNav.vue'
@@ -129,8 +130,12 @@ import UserInfoModal from '~/screens/UserInformationModal.vue';
 
 import themeConfig from '~/utils/themeConfig'
 import sidebarItems from '~/utils/sidebarItems'
+import analytics from '~/plugins/fireanalytics';
+
 // import TheCustomizer from "@/layouts/components/customizer/TheCustomizer.vue"
 import { windowStore } from '~/store'
+import UserMixin from '~/mixins/UserMixin';
+import { User } from '~/types/user';
 
 @Component<MainLayout>({
   components: {
@@ -149,6 +154,8 @@ import { windowStore } from '~/store'
     }
   },
   mounted() {
+    this.CheckUserLoggedIn(this.AuthUser, null);
+    analytics?.setAnalyticsCollectionEnabled(true);
     window.addEventListener('resize', windowStore.handleResize)
     windowStore.handleResize()
   },
@@ -161,7 +168,20 @@ import { windowStore } from '~/store'
     }
   },
 })
-export default class MainLayout extends Vue {
+export default class MainLayout extends mixins(UserMixin) {
+  @Watch("AuthUser")
+  CheckUserLoggedIn(user : User, oldUser : User)
+  {
+    if(!user)
+    {
+      return this.$router.push("/auth/login");
+    }
+    if(!user.emailVerified)
+    {
+      return this.$router.push("/auth/verify-email")
+    }
+  }
+
   navbarType = themeConfig.navbarType || 'floating'
   navbarColor = themeConfig.navbarColor || '#fff'
   footerType = themeConfig.footerType || 'static'
@@ -174,11 +194,17 @@ export default class MainLayout extends Vue {
   hideScrollToTop = themeConfig.hideScrollToTop
   disableThemeTour = themeConfig.disableThemeTour
 
+
   handleFocus()
   {
   }
   handleFocusOut()
   {
+  }
+
+  get sidebarOpen()
+  {
+    return !windowStore.isSmallScreen
   }
   get isAppPage() {
     // if(this.$route.path.includes('/apps/')) return true

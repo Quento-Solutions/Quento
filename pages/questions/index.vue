@@ -4,7 +4,7 @@
     id="notes-screen-container"
   >
   <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
-    <vs-button @click="OpenPostQuestionModal()">Post New Question</vs-button>
+    <vs-button @click="OpenPostQuestionModal()" color="#9f7aea">Post New Question</vs-button>
     <ais-instant-search-ssr>
       <ais-search-box />
       <ais-stats />

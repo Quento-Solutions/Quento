@@ -7,10 +7,12 @@ import { School_O } from '~/types/schools'
 @Module({ stateFactory: true, name: 'userGuide', namespaced: true })
 export default class UserGuideModule extends VuexModule {
   UserGuideClosed = false
+  UserInfoOpen = true
 
   public get userInfoPromptOpen() {
-    return !!authStore.user && !!authStore.userData && !authStore.userData.userInformationAdded
+    return this.UserInfoOpen && !!authStore.user && !!authStore.userData && !authStore.userData.userInformationAdded
   }
+
   public get showUserGuide() {
     // Dont show if user info prompt is still up.
     return (
@@ -23,7 +25,10 @@ export default class UserGuideModule extends VuexModule {
   public SET_GUIDE_CLOSED(val: boolean) {
     this.UserGuideClosed = val
   }
-
+  @Mutation
+  public SET_INFO_OPEN(val: boolean) {
+    this.UserInfoOpen = val
+  }
   @Action({ rawError: true })
   public async SetUserGuideClosed(value: boolean) {
     await firestore.collection('users').doc(authStore.user?.uid).update({
@@ -33,13 +38,13 @@ export default class UserGuideModule extends VuexModule {
   }
 
     @Action({ rawError: true })
-    public async SetUserInformation({ interestedSubjects, currentGrade, school, bio }:
-    {interestedSubjects: Subject_O[], currentGrade: Grade_O, school: School_O, bio: string })
+    public async SetUserInformation({ interestedSubjects, currentGrade, school, bio, notifications }:
+    {interestedSubjects: Subject_O[], currentGrade: Grade_O, school: School_O, bio: string, notifications : boolean})
  
     {
         const userId = authStore.user?.uid
         await firestore.collection('users').doc(userId).update({ 
-            interestedSubjects, currentGrade, school, bio, userInformationAdded : true
+            interestedSubjects, currentGrade, school, bio, userInformationAdded : true, notifications
         });
         return await authStore.refreshUserData();
     }
