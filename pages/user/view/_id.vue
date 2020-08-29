@@ -208,11 +208,11 @@ export default class UserPage extends Vue {
   }
 
   get userLevel() {
-    return this.userInfo?.progressionLevel || 0
+    return Math.floor((this.userInfo?.totalExp || 0) / 200)
   }
 
   get userExp() {
-    const userExp = (this.userInfo?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    const userExp = ((this.userInfo?.totalExp || 0) % 200) / 2 // 200 exp points per level, its in percentage so multiply by 100.
     return userExp
   }
 
