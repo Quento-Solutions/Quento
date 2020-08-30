@@ -41,6 +41,10 @@ export const SortOptionsList = [
   {
     name: 'Recent',
     value: 'createdAt'
+  },
+  {
+    name : "Popular",
+    value : "magicRank"
   }
 ] as const
 
