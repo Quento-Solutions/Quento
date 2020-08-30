@@ -1,8 +1,3 @@
-import { Module } from 'vuex-module-decorators';
-
-
-import {Subject_O , Grade_O} from './subjects'
-
 export interface Newsletter_t
 {
     title : string;
