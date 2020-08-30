@@ -5,7 +5,7 @@
     class="footer-card px-6 py-2"
     style=""
   >
-    <vs-tooltip v-for="(item, index) in contactInformation" :key="index">
+    <VxTooltip v-for="(item, index) in contactInformation" :key="index">
       <vs-avatar
         class="bottomIcon"
         :color="item.backgroundColor"
@@ -21,7 +21,7 @@
       <template #tooltip>
         {{ item.toolTipText }}
       </template>
-    </vs-tooltip>
+    </VxTooltip>
   </vs-row>
 </template>
 

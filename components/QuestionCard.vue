@@ -65,21 +65,21 @@
         ></i>
         <template #badge>{{ question.upVotes }}</template>
       </vs-avatar>
-      <vs-tooltip>
+      <VxTooltip>
         <vs-avatar class="icon-small">
           <i class="bx bx-show"></i>
           <template #badge>{{ question.views }}</template>
         </vs-avatar>
         <template #tooltip>{{ question.views }} Views</template>
-      </vs-tooltip>
+      </VxTooltip>
 
-      <vs-tooltip>
+      <VxTooltip>
         <vs-avatar class="icon-small">
           <i class="bx bx-comment-check"></i>
           <template #badge>{{ question.responses }}</template>
         </vs-avatar>
         <template #tooltip>{{ question.responses }} Responses</template>
-      </vs-tooltip>
+      </VxTooltip>
     </div>
   </VxCard>
 </template>
