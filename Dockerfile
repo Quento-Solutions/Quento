@@ -7,7 +7,7 @@ EXPOSE 80
 WORKDIR /usr/src/
 RUN mkdir /usr/src/content
 COPY package*.json ./
-
+RUN git pull --recurse-submodules
 RUN npm install
 
 COPY . .
