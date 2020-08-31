@@ -35,7 +35,6 @@ const config: NuxtConfig = {
     'boxicons/css/boxicons.min.css',
     'video.js/dist/video-js.css',
     'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
-    '~/assets/scss/main.scss'
   ],
   server: {
     port: process.env.port || 3000,
@@ -97,7 +96,6 @@ const config: NuxtConfig = {
       dev: false
     }
   },
-  content: {},
   firebase: {
     config: firebaseConfig,
     services: {
@@ -112,7 +110,7 @@ const config: NuxtConfig = {
     }
   },
   styleResources: {
-    scss: ['./assets/scss/*.scss']
+    scss: ['./assets/scss/main.scss']
   },
   axios: {}
 }

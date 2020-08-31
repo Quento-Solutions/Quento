@@ -15,15 +15,12 @@
         <h4 class="not-margin text-title text-4xl"><b>Posted</b> Notes</h4>
       </div>
     </template>
-
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden"
-    >
+    <vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
+        <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="ActiveNote.title"
-        placeholder="You should sell chocolate"
-        label="Title"
-        class="block mb-6 w-6 mt-6"
+        placeholder="Title"
+        class="block mb-3 w-6 mt-3"
         width="w-6"
       >
         <template #icon>
@@ -32,9 +29,8 @@
       </vs-input>
 
       <vs-select
-        label="Subject"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="ActiveNote.subject"
       >
@@ -62,9 +58,8 @@
         </vs-option-group>
       </vs-select>
       <vs-select
-        label="Grade"
         filter
-        class="block mb-6 w-6 mt-6 w-full lg:w-1/2"
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="ActiveNote.grade"
       >
@@ -79,10 +74,10 @@
       </vs-select>
       <VsTextarea
         v-model="ActiveNote.contents"
-        placeholder="Sourced from Switzerland, shipped and packaged in Columbia, distributed and sold in the U.S."
-        class="block"
-        height="20rem"
-        label="NOTABLE Content"
+        placeholder="Enter your content here"
+        class="block rounded-lg pl-1"
+        ref="textarea"
+        expand="true"
         markdownOptions="true"
         @paste="onPaste"
       >
@@ -94,7 +89,7 @@
         <vs-button
           class="md:w-1/2 w-full"
           warn
-          :disabled="formErrors"
+          :disabled="formErrors || contents.length > characterLimit"
           @click="PreviewNote()"
         >
           <div class="text-xl p-2 font-bold lg:text-2xl" style="">
@@ -129,6 +124,8 @@ import { authStore } from '~/store'
 export default class EditNotesModal extends mixins(PasteImage) {
 
   ActiveNote : Note | null = null;
+   characterLimit = 5000
+
   get contents()
   {
     return this.ActiveNote?.contents || ''

@@ -6,6 +6,12 @@
   >
     <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-2/5 m-4">
       <VxCard>
+        <div class="vx-row mb-4 w-full lg:w-1/2 xs:bg-white rounded-md p-2">
+          <vs-avatar class="icon-small float-right" @click="goBack()">
+            <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
+          </vs-avatar>
+        </div>
+
         <div class="vx-card__title mb-6">
           <h2 class="text-center" v-if="AuthUser && AuthUser.displayName">
             Hi
@@ -59,6 +65,17 @@ import { authStore } from '~/store'
   }
 })
 export default class VerifyEmail extends mixins(UserMixin) {
+  async goBack()
+  {
+    if(this.AuthUser)
+    {
+      const loading = this.$vs.loading();
+      await authStore.signOut();
+      loading.close();
+    }
+    this.$router.push("/auth/login");
+  }
+
   @Watch('AuthUser')
   async AuthUserChange(val: User, oldVal: User) {
     if (val?.emailVerified) {
@@ -72,15 +89,14 @@ export default class VerifyEmail extends mixins(UserMixin) {
           await authStore.updateUserData({
             displayName: val.displayName
           })
-        } 
-        catch (error) {
+        } catch (error) {
           this.$vs.notification({
             title: error.message,
             color: 'danger'
           })
           console.error(error)
         }
-        loading.close();
+        loading.close()
       }
       this.$router.push('/home')
     }
@@ -91,7 +107,7 @@ export default class VerifyEmail extends mixins(UserMixin) {
     return this.AuthUser?.email || ''
   }
   async sendVerificationEmail() {
-    await authStore.sendVerifyEmail();
+    await authStore.sendVerifyEmail()
     this.$vs.notification({
       title: 'Email Sent',
       color: 'success'

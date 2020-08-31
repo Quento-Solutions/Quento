@@ -21,6 +21,14 @@ export interface Note_t
     subject : Subject_O;
     grade : Grade_O;
     id ?: string;
+
+    magicRank ?: number;
+    magicStats ?: 
+    {
+        timeRank : number;
+        viewRank : number;
+        likesRank : number
+    }
 }
 export interface Note_t_F
 // How the data is stored in firebase
@@ -39,6 +47,14 @@ export interface Note_t_F
     subject : Subject_O;
     grade : Grade_O;
     views : number;
+
+    magicRank ?: number;
+    magicStats ?: 
+    {
+        timeRank : number;
+        viewRank : number;
+        likesRank : number
+    }
 }
 
 export class Note
@@ -54,14 +70,16 @@ export class Note
     {
 
         const createdAt = firebaseDate(doc.createdAt as Date_t_F)
+
         const obj = {...doc, createdAt, id};
         return new Note(obj)
     }
 
     static toFirebase = (note : Note) : Note_t_F =>
     {
+        
         const {id, ...firebaseDoc} = {...note}
-        return firebaseDoc
+        return {...firebaseDoc}
     }
 }
 export interface Note extends Note_t {}

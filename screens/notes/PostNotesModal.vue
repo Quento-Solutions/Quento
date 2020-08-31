@@ -16,7 +16,7 @@
         </h4>
       </div>
     </template>
-
+<vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
@@ -77,7 +77,7 @@
       ></VsTextarea>
     </div>
     <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors" @click="PreviewNote()">
+        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors || contents.length > characterLimit" @click="PreviewNote()">
           <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
         </vs-button>
       </div>
@@ -133,6 +133,7 @@ interface imageSrc {
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
+  characterLimit = 5000
 
   contents = '';
 
