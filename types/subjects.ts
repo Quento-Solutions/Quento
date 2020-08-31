@@ -26,7 +26,8 @@ export const AllSubjectList = [
   'Business',
   'ICS',
   'ITGS',
-  'ComTech'
+  'ComTech',
+  "Phys Ed"
 ]
 
 export const SortOptionsList = [
