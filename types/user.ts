@@ -17,14 +17,16 @@ export type User = {
 export interface UserData {
   email: string
 
-  likedSuggestions ?: string[];
-  likedNotes ?: string[];
-  likedQuestions ?:string[];
-  likedResponses ?: string[];
-    
-  userGuideClosed ?: boolean;
-  userInformationAdded ?: boolean;
+  likedSuggestions?: string[]
+  likedNotes?: string[]
+  likedQuestions?: string[]
+  likedResponses?: string[]
 
+  userGuideClosed?: boolean
+  userInformationAdded?: boolean
+
+  displayName?: string | null
+  photoURL?: string | null
   currentGrade?: Grade_O
   interestedSubjects?: Subject_O[]
   bio?: string
@@ -36,7 +38,11 @@ export interface UserData {
   newsletter?: boolean
   progressionExp?: number
   progressionLevel?: number
+  totalExp : number;
 
-  discordId ?: string;
-  discordUsername ?: string;
+  discordId?: string
+  discordUsername?: string
+  photoFileName?: string | null
+
+  notifications?: boolean
 }

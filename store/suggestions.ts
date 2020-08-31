@@ -2,7 +2,6 @@ import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from './index'
-import firebase from '~/plugins/firebase'
 import { Suggestion } from '~/types/suggestions'
 
 @Module({ stateFactory: true, name: 'suggestions', namespaced: true })
@@ -90,7 +89,7 @@ export default class SuggestionsModule extends VuexModule {
         upVotes: FirestoreModule.FieldValue.increment(1)
       })
     }
-    await batch.commit();
+    await batch.commit()
     this.TOGGLE_LIKED_SUGGESTION(id)
     return
   }
@@ -145,8 +144,8 @@ export default class SuggestionsModule extends VuexModule {
     contents: string
   }) {
     const createdAt = new Date()
-    const { uid, displayName } = authStore.user!
-
+    const { uid } = authStore.user!
+    const { displayName } = authStore.userData!
     const docData = new Suggestion({
       title,
       contents,
