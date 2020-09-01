@@ -37,7 +37,7 @@
         color="warn"
         class="vx-col shadow-md m-4 text-bold float-right"
         style="font-weight: bold;"
-        id="buttonLoadMore"
+        id="buttonLoadMoreNotes"
         @click="LoadMoreNotes()"
         :disabled="endOfList"
         >Load More &nbsp;
@@ -48,12 +48,12 @@
 </template>
 
 <script lang="ts">
-function clickLoadMore(){
-  if (document.getElementById("buttonLoadMore")){
-    document.getElementById("buttonLoadMore")!.click()
+function clickLoadMoreNotes(){
+  if (document.getElementById("buttonLoadMoreNotes")){
+    document.getElementById("buttonLoadMoreNotes")!.click()
   }
 }
-setInterval(clickLoadMore, 500)
+setInterval(clickLoadMoreNotes, 500)
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 
 import { Note } from '~/types/notes'
