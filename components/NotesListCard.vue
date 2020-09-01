@@ -82,16 +82,12 @@ export default class NotesCard extends Vue {
   // Whether buttons should work or not
   @Prop({ default: false }) disabled!: boolean
 
-  deleteNotesOpen = false
-
   formatDate(date?: Date) {
     if (!date) return
     const dateString = date.toDateString()
     return dateString.slice(4, 10) + ',' + dateString.slice(10)
   }
-  OpenDeleteModal() {
-    this.deleteNotesOpen = true
-  }
+
   get NoteOwner() {
     return authStore.user?.uid == this.note.uid
   }

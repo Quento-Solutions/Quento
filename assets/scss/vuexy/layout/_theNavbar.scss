@@ -22,15 +22,14 @@
 }
 
 .vx-navbar-wrapper {
-  background: linear-gradient(to bottom, rgba(248, 248, 248, 0.95) 44%, rgba(248, 248, 248, 0.46) 73%, rgba(255, 255, 255, 0) 100%);
-  background-repeat-x: repeat;
   z-index: 41001;
   width: 100%;
+  background-position-y: 0;
   height: 103px;
-  background-repeat-y: no-repeat;
+  // transition-duration: 1s;
   // position: fixed;
   top: 0;
-  // transition: all .5s;
+  transition: all .5s ease;
 
   .vx-navbar {
     .vs-con-items {
@@ -65,10 +64,6 @@
   .vx-navbar-wrapper {
     width: calc(100% - 80px);
   }
-}
-
-.show-overlay .vx-navbar-wrapper {
-  background: linear-gradient(to bottom, rgba(44, 48, 60, 0.9) 44%, rgba(44, 48, 60, 0.43) 73%, rgba(44, 48, 60, 0) 100%);
 }
 
 

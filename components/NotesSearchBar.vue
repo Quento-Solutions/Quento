@@ -1,14 +1,11 @@
 <template>
-  <div style class="relative w-full">
-      <div class="" style="height : 50px; width : 100%">
-      </div>
-    <div class="absolute w-full" style="z-index: 1000; top: 0">
+  <div style="max-width: 100%" class="w-full relative">
       <ais-instant-search-ssr>
         <ais-search-box />
         <ais-configure :hits-per-page.camel="6"></ais-configure>
         <ais-refinement-list attribute="title" />
         <ais-hits>
-          <div slot-scope="{ items }">
+          <div slot-scope="{ items }" class="absolute w-full">
             <NotesListCard v-for="(item, index) in items" :key="index" :note="fromAlgolia(item)">
               <template #title>
                 <ais-highlight attribute="title" :hit="item" class="md:text-xl text-ginger-b truncate text-sm"></ais-highlight>
@@ -17,7 +14,6 @@
           </div>
         </ais-hits>
       </ais-instant-search-ssr>
-    </div>
   </div>
 </template>
 

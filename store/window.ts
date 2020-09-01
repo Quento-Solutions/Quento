@@ -11,7 +11,6 @@ export default class WindowModule extends VuexModule {
 
     readonly screenDimensions = [1356 , 898] as const;
 
-
     @Mutation
     private UPDATE_WINDOW_SIZE(a : {height : number , width : number})
     {
@@ -92,6 +91,13 @@ export default class WindowModule extends VuexModule {
     public get sidebarOpen()
     {
         return !this.isSmallScreen || this.sidenavIsOpen;
+    }
+
+    overlayVisible = false;
+    @Mutation
+    public SET_OVERLAY_VISIBLE(val : boolean)
+    {
+        this.overlayVisible = val;
     }
 
 }

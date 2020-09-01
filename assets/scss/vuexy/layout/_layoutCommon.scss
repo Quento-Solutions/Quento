@@ -81,6 +81,10 @@ body {
     z-index: 41001;
     opacity: 1;
   }
+  .show-lower-overlay & {
+    z-index: 40999;
+    opacity: 1;
+  }
 }
 
 .the-footer {
