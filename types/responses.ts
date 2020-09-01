@@ -1,6 +1,4 @@
 import {Date_t_F, firebaseDate} from './firebaseTypes';
-import type {Keyword_O} from './subjects'
-import type {Subject_O , Grade_O} from './subjects'
 
 export interface Response_t
 {

@@ -3,7 +3,7 @@
     <!-- Profile Picture -->
     <div class="justify-start w-5/6 m-0 vx-row items-center" style="flex-wrap: nowrap">
       <div>
-        <vs-avatar class="icon" @click.stop="$router.push(`/user/view/${userId}`)">
+        <vs-avatar class="icon" @click.stop="$router.push(`/user/view/${userId}`)" >
           <img v-if="photoURL" :src="photoURL" />
           <template slot="text" v-else>{{ username }}</template>
         </vs-avatar>
@@ -19,6 +19,7 @@
     <div v-if="hasActions">
       <vs-navbar-group id="menu-dots" @click.stop.prevent="() => false">
         <vs-avatar
+        :interactivity="true"
           class="profileIcon icon"
           :badge="badge"
           badge-color="success"

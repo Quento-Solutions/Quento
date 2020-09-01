@@ -24,12 +24,12 @@
     </vs-dialog>
     <vs-col
       w="10"
-      class="p-6 h-full border-solid"
+      class="h-full border-solid"
       justify="center"
       align="center"
       style="border-style: solid;"
     >
-      <VxCard class="mt-6 p-4 px-8 card">
+       <VxCard class="mt-6 p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/2 xl:w-5/12 relative">
         <div class="p-6">
           <h1 class="title">SIGN UP</h1>
           <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>
@@ -241,9 +241,6 @@ export default class SignUp extends mixins(Auth) {
 .card {
   width: 30vw;
   height: auto;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .title {
   font-family: ginger-bold;

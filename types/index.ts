@@ -5,5 +5,6 @@ export * as User from './user';
 export * as School from './schools';
 export * as Questions from './questions';
 export * as Responses from './responses';
+export * as Newsletter from './newsletters';
 
 export * as FirebaseTypes from './firebaseTypes';

@@ -18,12 +18,15 @@
 
     <div
       id="content-area"
+
       :class="[contentAreaClass, { 'show-overlay': bodyOverlay }]"
       :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
+
     >
       <div id="content-overlay"></div>
 
-      <div class="content-wrapper">
+      <div class="content-wrapper" 
+      >
         
         <TopNav
           :navbarColor="navbarColor"
@@ -36,6 +39,7 @@
         <div class="router-view">
           <div
             class="router-content"
+            
             :class="{ 'mt-0': navbarType == 'hidden' }"
           >
             <transition :name="routerTransition">

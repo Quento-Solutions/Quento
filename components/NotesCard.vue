@@ -129,17 +129,20 @@
         ></i>
         <template #badge>{{ note.upVotes }}</template>
       </vs-avatar>
-      <vs-tooltip>
+      <VxTooltip :interactivity="true">
         <vs-avatar class="icon-small">
           <i class="bx bx-show"></i>
           <template #badge>{{ note.views }}</template>
         </vs-avatar>
         <template #tooltip>{{ note.views }} Views</template>
-      </vs-tooltip>
+      </VxTooltip>
 
-      <vs-avatar class="icon-small">
-        <i class="bx bx-bookmark"></i>
-      </vs-avatar>
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small">
+          <i class="bx bx-bookmark"></i>
+        </vs-avatar>
+        <template #tooltip>Bookmark</template>
+      </VxTooltip>
     </div>
   </VxCard>
 </template>

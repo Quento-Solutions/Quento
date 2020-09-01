@@ -22,3 +22,4 @@ coverage
 
 # Service worker stuff
 static/sw.js
+firebase-auth-sw.js
