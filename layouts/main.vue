@@ -19,7 +19,7 @@
     <div
       id="content-area"
 
-      :class="[contentAreaClass, { 'show-overlay': bodyOverlay }]"
+      :class="[contentAreaClass, { 'show-overlay': bodyOverlay, 'show-lower-overlay' : lowerOverlay }]"
       :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
 
     >
@@ -198,7 +198,10 @@ export default class MainLayout extends mixins(UserMixin) {
   hideScrollToTop = themeConfig.hideScrollToTop
   disableThemeTour = themeConfig.disableThemeTour
 
-
+  get lowerOverlay()
+  {
+    return windowStore.overlayVisible;
+  }
   handleFocus()
   {
   }
