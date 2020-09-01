@@ -19,12 +19,14 @@ import {
   Subject_O,
   SortOptions_O
 } from '~/types/subjects'
+import { School_O } from '~/types/schools'
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 export interface FilterOptions {
   filterSubjects: Subject_O[]
   filterGrades: Grade_O
-  sortSelect: SortOptions_O
+  filterSchools : School_O | "All Schools"
+  sortSelect: SortOptions_O,
 }
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
@@ -41,6 +43,7 @@ export default class NotesModule extends VuexModule {
   UploadImages: File[] = []
   likedPosts: string[] = []
   ActiveGrade: Grade_O = 'ALL'
+  ActiveSchool : School_O | "All Schools" = "All Schools"
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
   SortSelect: SortOptions_O = 'magicRank'
@@ -93,12 +96,14 @@ export default class NotesModule extends VuexModule {
   private SET_FILTER({
     filterGrades,
     filterSubjects,
-    sortSelect
+    filterSchools,
+    sortSelect,
   }: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
     this.ActiveSubjects = [...filterSubjects]
     this.ActiveGrade = filterGrades
+    this.ActiveSchool = filterSchools
     this.SortSelect = sortSelect
     this.EndOfList = false
   }
@@ -191,6 +196,10 @@ export default class NotesModule extends VuexModule {
 
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
+    }
+    console.log(this.ActiveSchool);
+    if ((this.ActiveSchool !== 'All Schools')) {
+      query = query.where('school', '==', this.ActiveSchool)
     }
     if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))

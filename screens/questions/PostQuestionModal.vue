@@ -14,16 +14,11 @@
         <h4 class="not-margin text-title text-4xl">Post A Question</h4>
       </div>
     </template>
-<vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
+    <vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
 
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
       <div class="w-full p-6" style>
-        <vs-input
-          v-model="title"
-          placeholder="Title"
-          class="block"
-          width="w-6"
-        >
+        <vs-input v-model="title" placeholder="Title" class="block" width="w-6">
           <template #icon>
             <i class="bx bx-highlight" primary></i>
           </template>
@@ -31,12 +26,7 @@
       </div>
 
       <div class="p-6 w-full lg:w-1/2">
-        <vs-select
-          filter
-          class="block w-full"
-          placeholder="Subject"
-          v-model="subjectSelect"
-        >
+        <vs-select filter class="block w-full" placeholder="Subject" v-model="subjectSelect">
           <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
             <div slot="title" class="w-full vx-row">
               <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
@@ -55,12 +45,7 @@
         </vs-select>
       </div>
       <div class="p-6 w-full lg:w-1/2">
-        <vs-select
-          filter
-          class="block w-full"
-          placeholder="Grade"
-          v-model="gradeSelect"
-        >
+        <vs-select filter class="block w-full" placeholder="Grade" v-model="gradeSelect">
           <vs-option
             v-for="(grade, subIndex) in GradeList"
             :key="subIndex"
@@ -71,16 +56,33 @@
           </vs-option>
         </vs-select>
       </div>
+      <div class="px-6 pb-6 w-full">
+        <vs-select
+          filter
+          class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+          placeholder="School"
+          v-model="schoolSelect"
+        >
+          <vs-option
+            v-for="(school, subIndex) in SchoolList"
+            :key="subIndex"
+            :label="school"
+            :value="school"
+          >
+            <div class="font-bold truncate">{{ school }}</div>
+          </vs-option>
+        </vs-select>
+      </div>
       <div class="w-full p-6 px-10 pt-0">
         <VsTextarea
-        v-model="contents"
-        placeholder="Enter your content here"
-        class="block rounded-lg pl-1"
-        ref="textarea"
-        expand="true"
-        markdownOptions="true"
-        @paste="onPaste"
-      ></VsTextarea>
+          v-model="contents"
+          placeholder="Enter your content here"
+          class="block rounded-lg pl-1"
+          ref="textarea"
+          expand="true"
+          markdownOptions="true"
+          @paste="onPaste"
+        ></VsTextarea>
       </div>
     </div>
 
@@ -92,9 +94,7 @@
           :disabled="formErrors || contents.length > characterLimit"
           @click="PreviewQuestion()"
         >
-          <div class="text-xl p-2 font-bold lg:text-2xl" style="">
-            Preview Question
-          </div>
+          <div class="text-xl p-2 font-bold lg:text-2xl" style>Preview Question</div>
         </vs-button>
       </div>
     </template>
@@ -121,6 +121,7 @@ import { Note } from '~/types/notes'
 import PasteImage from '~/mixins/PasteImagesMixin'
 
 import { Question } from '~/types/questions'
+import { SchoolList, School_O } from '~/types/schools'
 
 interface imageSrc {
   error: boolean
@@ -131,14 +132,12 @@ interface imageSrc {
 }
 
 @Component<PostQuestionModal>({
-  components: {
-  }
+  components: {}
 })
-export default class PostQuestionModal extends mixins(
-  PasteImage,
-  UserMixin
-) {
+export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
   characterLimit = 5000
+  readonly SchoolList = ['All Schools', ...SchoolList]
+  schoolSelect: School_O | 'All Schools' = 'All Schools'
   get active() {
     return questionStore.PostQuestionModalOpen
   }
@@ -197,14 +196,15 @@ export default class PostQuestionModal extends mixins(
       upVotes: 0,
       views: 0,
       responses: 0,
+      school : this.schoolSelect != "All Schools" ? this.schoolSelect : undefined,
       keywords: this.keywords,
       contents: this.contents,
-      subject : this.subjectSelect as Subject_O,
-      grade : this.gradeSelect as Grade_O,
-      storedImages : this.images
+      subject: this.subjectSelect as Subject_O,
+      grade: this.gradeSelect as Grade_O,
+      storedImages: this.images
     })
 
-    questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion));
+    questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion))
   }
 
   get keywords() {

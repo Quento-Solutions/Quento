@@ -67,6 +67,22 @@
           <div class="font-bold truncate">Grade {{ grade }}</div>
         </vs-option>
       </vs-select>
+            <vs-select
+        label="School"
+        filter
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
+        placeholder="School"
+        v-model="schoolSelect"
+      >
+        <vs-option
+          v-for="(school, subIndex) in SchoolList"
+          :key="subIndex"
+          :label="school"
+          :value="school"
+        >
+          <div class="font-bold truncate">{{ school }}</div>
+        </vs-option>
+      </vs-select>
 
       <vs-select
         label="Sort By"
@@ -120,6 +136,7 @@ import {
   SortOptionsList,
   SortOptions_O
 } from '~/types/subjects'
+import { SchoolList, School_O } from '~/types/schools'
 
 let s: {
   [index in Subject_O]?: boolean
@@ -131,6 +148,9 @@ export default class NotesSidebar extends Vue {
   GradeList = GradeList
   SortOptions = [...SortOptionsList]
   gradeSelect: Grade_O = notesStore.ActiveGrade
+  readonly SchoolList = ['All Schools', ...SchoolList]
+  schoolSelect: School_O | 'All Schools' = 'All Schools'
+  
   allGradesSelected = true
   sortSelect = notesStore.SortSelect
 
@@ -186,6 +206,10 @@ export default class NotesSidebar extends Vue {
     if (!this.allSelected) {
       this.selectAllSubjects()
     }
+    this.gradeSelect = "ALL";
+    this.schoolSelect = "All Schools";
+    this.sortSelect = "magicRank";
+
   }
 
   async filterSubjects() {
@@ -193,7 +217,8 @@ export default class NotesSidebar extends Vue {
     notesStore.SetActiveFilter({
       sortSelect: this.sortSelect,
       filterSubjects: this.ActiveSubjectList,
-      filterGrades: this.gradeSelect
+      filterGrades: this.gradeSelect,
+      filterSchools : this.schoolSelect
     })
     await notesStore.GetMoreNotes()
     loading.close()
