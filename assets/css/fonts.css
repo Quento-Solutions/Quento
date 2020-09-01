@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@500&display=swap');
-
+@import "../font/Helvetica/helveticaSheet.css";
+@import "../font/Quicksand/quicksandSheet.css";
+@import "../font/Source Code Pro/sourceCodeProSheet.css";
 
 
 @font-face {
@@ -44,3 +46,12 @@
 .text-ginger {
 font-family: "ginger-normal", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
+
+
+
+
+
+
+
