@@ -1,36 +1,31 @@
 <template>
-  <div
-    class="vx-row w-full relative justify-evenly"
-    id="notes-screen-container"
-  >
-  <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
-    <vs-button @click="OpenPostQuestionModal()" color="#9f7aea">Post New Question</vs-button>
-    <ais-instant-search-ssr>
-      <ais-search-box />
-      <ais-stats />
-      <ais-refinement-list attribute="title" />
-      <ais-hits :transform-items="AlgoliaConvert">
-        <div slot-scope="{ items }">
-          <QuestionCard
-            v-for="(item, index) in items"
-            :key="index"
-            class=""
-            clickable="true"
-            :question="(item)"
-            :preview="true"
-            :disabled="true"
-          >
-          </QuestionCard>
-        </div>
-      </ais-hits>
-      <ais-pagination />
-    </ais-instant-search-ssr>
-  </div>
+  <div class="vx-row w-full relative justify-evenly" id="notes-screen-container">
+    <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
+      <vs-button @click="OpenPostQuestionModal()" color="#9f7aea">Post New Question</vs-button>
+      <ais-instant-search-ssr>
+        <ais-search-box />
+        <ais-stats />
+        <ais-refinement-list attribute="title" />
+        <ais-hits :transform-items="AlgoliaConvert">
+          <div slot-scope="{ items }">
+            <QuestionCard
+              v-for="(item, index) in items"
+              :key="index"
+              class
+              clickable="true"
+              :question="(item)"
+              :preview="true"
+              :disabled="true"
+            ></QuestionCard>
+          </div>
+        </ais-hits>
+        <ais-pagination />
+      </ais-instant-search-ssr>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
-import { algoliaConfig } from '~/envars'
 import KeywordSelect from '~/components/KeywordSelect.vue'
 import {
   AisInstantSearchSsr,
@@ -43,11 +38,11 @@ import {
   createServerRootMixin
 } from 'vue-instantsearch'
 
-import algoliasearch from 'algoliasearch/lite'
+import searchClient from '~/plugins/algolia'
+
 import { questionStore } from '~/store'
 import { Question, Question_t_A } from '~/types/questions'
 import QuestionCard from '~/components/QuestionCard.vue'
-const searchClient = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey)
 
 @Component<QuestionsPage>({
   components: {
@@ -106,7 +101,9 @@ export default class QuestionsPage extends mixins(
   }
   AlgoliaConvert(items?: Question_t_A[]) {
     if (!items) return
-    const qItem = items.map(item => Question.fromAlgolia(item)).filter(v => !!v);
+    const qItem = items
+      .map((item) => Question.fromAlgolia(item))
+      .filter((v) => !!v)
 
     return qItem
   }
