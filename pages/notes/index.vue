@@ -23,8 +23,7 @@
         :note="note"
         :clickable="true"
         :preview="true"
-      >
-      </NotesCard>
+      />
       <vs-alert color="danger" v-if="noNotesFound">
         <template #title>
           No Notes Found For This Search

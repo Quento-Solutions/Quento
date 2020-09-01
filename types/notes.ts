@@ -54,6 +54,7 @@ export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {
   objectID: string
 }
 
+
 export class Note {
   constructor(opts: Note_t) {
     return Object.assign(this, opts)
