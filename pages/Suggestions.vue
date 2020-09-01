@@ -211,16 +211,18 @@ export default class SuggestionsPage extends Vue {
   }
 
   async LoadMoreSuggestions() {
-    const loading = this.$vs.loading()
-    try {
-      const suggestions = suggestionsStore.GetNextPage()
-      await Promise.all([suggestions])
-      loading.close()
-    } catch (error) {
-      console.error({ error })
-      loading.close()
+    if (document.body.scrollTop >= document.body.scrollHeight - 650){
+      const loading = this.$vs.loading()
+      try {
+        const suggestions = suggestionsStore.GetNextPage()
+        await Promise.all([suggestions])
+        loading.close()
+      } catch (error) {
+        console.error({ error })
+        loading.close()
+      }
+      return
     }
-    return
   }
   async GetSuggestions() {
     const loading = this.$vs.loading()
