@@ -104,6 +104,7 @@
                   color="warn"
                   class="vx-col shadow-md m-4 text-bold float-right"
                   style="font-weight: bold;"
+                  id="buttonLoadMoreSuggestions"
                   @click="LoadMoreSuggestions()"
                   >Load More &nbsp;
                   <i class="bx bx-loader-circle text-2xl" />
@@ -118,6 +119,12 @@
 </template>
 
 <script lang="ts">
+function clickLoadMoreSuggestions(){
+  if (document.getElementById("buttonLoadMoreSuggestions")){
+    document.getElementById("buttonLoadMoreSuggestions")!.click()
+  }
+}
+setInterval(clickLoadMoreSuggestions, 500)
 import { Vue, Component } from 'nuxt-property-decorator'
 
 import { windowStore, authStore, suggestionsStore } from '~/store'
