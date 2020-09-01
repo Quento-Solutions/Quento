@@ -78,9 +78,11 @@ export default class NotesPage extends Vue {
   }
   async LoadMoreNotes()
   {
-    const loading = this.$vs.loading()
-    await notesStore.GetMoreNotes()
-    loading.close();
+    if (document.body.scrollTop >= document.body.scrollHeight - 650){
+      const loading = this.$vs.loading()
+      await notesStore.GetMoreNotes()
+      loading.close();
+    }
   }
 
   get endOfList()
