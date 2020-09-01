@@ -16,7 +16,7 @@ export interface Note_t {
   userPhotoUrl?: string
 
   images?: string[]
-  contents?: string
+  contents : string
   storedImages?: StoredImage[]
 
   createdAt: Date
@@ -35,7 +35,7 @@ export interface Note_t_F {
   userPhotoUrl?: string
 
   images?: string[]
-  contents?: string
+  contents : string
   storedImages?: StoredImage[]
 
   createdAt: Date_t_F

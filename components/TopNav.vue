@@ -8,7 +8,7 @@
         </vs-avatar>
       </template>
       <div class="w-full" v-if="searchActive" v-click-outside="searchOff">
-        <NotesSearchBar></NotesSearchBar>
+        <NotesSearchBar @close="searchOff()"></NotesSearchBar>
       </div>
       <template #right v-if="!searchActive">
         <div class="vx-row items-center justify-end" style="flex-wrap: nowrap;">
