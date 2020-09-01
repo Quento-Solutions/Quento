@@ -129,10 +129,10 @@ SubjectList.forEach((subject) => (s[subject] = false))
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
   GradeList = GradeList
-  SortOptions = SortOptionsList
+  SortOptions = [...SortOptionsList]
   gradeSelect: Grade_O = notesStore.ActiveGrade
   allGradesSelected = true
-  sortSelect: SortOptions_O = notesStore.SortSelect
+  sortSelect = notesStore.SortSelect
 
   subjectClicked(
     name: Subject_O,
@@ -182,43 +182,10 @@ export default class NotesSidebar extends Vue {
       this.allSelected = false
     }
   }
-
-  hoverStars = 3
-  filterStars = 3
-  activeStars = 3
-
   clearFilter() {
     if (!this.allSelected) {
       this.selectAllSubjects()
     }
-    this.gradeSelect = 'ALL'
-    this.sortSelect = 'createdAt'
-  }
-  setFilter() {
-    this.activeStars = this.hoverStars = this.filterStars
-  }
-
-  get clearDisabled() {
-    return this.activeStars == 0
-  }
-  get buttonDisabled() {
-    return this.activeStars == this.filterStars
-  }
-
-  starColored(index: number) {
-    if (index <= this.hoverStars) return 'color : orange;'
-  }
-
-  hoverStar(index: number) {
-    this.hoverStars = index
-  }
-
-  unhoverStar() {
-    this.hoverStars = this.filterStars
-  }
-
-  setStarsFilter(index: number) {
-    this.hoverStars = this.filterStars = index
   }
 
   async filterSubjects() {

@@ -6,7 +6,7 @@
         <div class="justify-start w-1/2 m-0">
           <div class="vx-row w-full justify-start items-center overflow-hidden">
             <div class="vx-col">
-              <vs-tooltip class="inline-block">
+              <VxTooltip class="inline-block">
                 <vs-avatar class="icon">
                   <img
                     v-if="response.userPhotoUrl"
@@ -19,7 +19,7 @@
                 <template #tooltip>
                   {{ response.userDisplayName }}
                 </template>
-              </vs-tooltip>
+              </VxTooltip>
             </div>
             <div class="vx-col">
               <!-- User name -->

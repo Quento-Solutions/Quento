@@ -26,7 +26,8 @@ export const AllSubjectList = [
   'Business',
   'ICS',
   'ITGS',
-  'ComTech'
+  'ComTech',
+  "Phys Ed"
 ]
 
 export const SortOptionsList = [
@@ -41,6 +42,10 @@ export const SortOptionsList = [
   {
     name: 'Recent',
     value: 'createdAt'
+  },
+  {
+    name : "Popular",
+    value : "magicRank"
   }
 ] as const
 

@@ -29,7 +29,7 @@
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
-                  <div class="font-bold text-base">{{ userInfo.progressionLevel }}</div>
+                  <div class="font-bold text-base">{{ userLevel }}</div>
                 </vs-avatar>
               </div>
 
@@ -208,11 +208,11 @@ export default class UserPage extends Vue {
   }
 
   get userLevel() {
-    return this.userInfo?.progressionLevel || 0
+    return Math.floor((this.userInfo?.totalExp || 0) / 200)
   }
 
   get userExp() {
-    const userExp = (this.userInfo?.progressionExp || 0) / 2 // 200 exp points per level, its in percentage so multiply by 100.
+    const userExp = ((this.userInfo?.totalExp || 0) % 200) / 2 // 200 exp points per level, its in percentage so multiply by 100.
     return userExp
   }
 
