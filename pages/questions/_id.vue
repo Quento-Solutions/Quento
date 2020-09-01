@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 import { Question, Question_t_F } from '~/types/questions'
 import { Response } from '~/types/responses'
 import UserMixin from '~/mixins/UserMixin'
@@ -71,7 +71,16 @@ export default class QuestionContentPage extends mixins(UserMixin) {
   questionId: string | null = null
   docNotFound = false
   responseContent = ''
-
+    get QuestionId()
+  {
+    return this.$route.params.id;
+  }
+  @Watch("QuestionId")
+  QuestionIdChange(value : string, oldValue : string)
+  {
+    // This is to update the page when going from notes/note1 -> notes/note2
+    this.FetchQuestion();
+  }
   ResponseList: Response[] = []
   RefreshLikes() {
     if (!this.question) return
