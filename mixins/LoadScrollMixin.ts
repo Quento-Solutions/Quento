@@ -15,6 +15,6 @@ export default class LoadScrollMixin extends Vue {
     this.totalHeight = document.body.scrollHeight
   }
   get IsScrolledDown() {
-    return this.scrollHeight >= this.totalHeight - 650
+    return this.scrollHeight >= this.totalHeight - window.innerHeight * 1.2
   }
 }
