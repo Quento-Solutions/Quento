@@ -208,7 +208,7 @@ export default class UserProfile extends mixins(UserMixin) {
   
   cmyk(color : number) {
     const minBlack = 10;
-    const maxBlack = 90;
+    const maxBlack = 50;
     return 255 * (1 - (color / 100)) * (1 - (Math.floor(Math.random() * (maxBlack - minBlack)) + minBlack) / 100)
   }
   
