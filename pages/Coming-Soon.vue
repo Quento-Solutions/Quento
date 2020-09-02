@@ -66,8 +66,5 @@ export default {
       value1: ''
     }
   },
-  components: {
-    VxCard
-  }
 }
 </script>

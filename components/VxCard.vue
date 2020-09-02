@@ -1,10 +1,10 @@
  <template>
-    <div class="vx-card" ref="card" :class="[
+    <div ref="card" :class="[
         {'overflow-hidden': tempHidden},
         {'no-shadow': noShadow},
         {'rounded-none': noRadius},
         {'card-border': cardBorder},
-        cardClasses ]" :style="cardStyles"
+        cardClasses ]" :style="cardStyles" class="vx-card w-full"
         v-on="$listeners">
         <div class="vx-card__header" v-if="hasHeader">
 

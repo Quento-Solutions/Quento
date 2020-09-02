@@ -11,7 +11,6 @@ import { firestore as store } from 'firebase/app'
 import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
-import firebase from '~/plugins/firebase'
 
 // Fix the googl
 import {
@@ -20,8 +19,6 @@ import {
   Subject_O,
   SortOptions_O
 } from '~/types/subjects'
-
-type QueryType = store.Query<store.DocumentData>
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 export interface FilterOptions {
@@ -46,7 +43,7 @@ export default class NotesModule extends VuexModule {
   ActiveGrade: Grade_O = 'ALL'
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
-  SortSelect: SortOptions_O = 'createdAt'
+  SortSelect: SortOptions_O = 'magicRank'
 
   NotesPerPage = 5
   EndOfList = false
@@ -184,7 +181,7 @@ export default class NotesModule extends VuexModule {
     this.ActiveNotes.push(...notes)
   }
 
-  @Action({})
+  @Action({rawError : true})
   public async GetMoreNotes() {
     if (this.EndOfList) {
       return
@@ -200,11 +197,12 @@ export default class NotesModule extends VuexModule {
     }
 
     query = query.orderBy(this.SortSelect, 'desc')
-    query = query.limit(this.NotesPerPage)
 
     if (LastVisible) {
       query = query.startAfter(LastVisible)
     }
+
+    query = query.limit(this.NotesPerPage)
     try {
       const snapshot = await query.get()
       const notes = snapshot.docs.map((doc) =>

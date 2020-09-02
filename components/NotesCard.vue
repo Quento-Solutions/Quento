@@ -13,6 +13,7 @@
       :date="note.createdAt"
       :photoURL="note.userPhotoUrl"
       :badge="NoteOwner"
+      :userId="note.uid"
     >
       <template #items v-if="!disabled">
         <div
@@ -38,7 +39,9 @@
       </template>
     </AvatarBar>
     <!-- Category Pills -->
-    <div class="w-4/5 vx-row p-2 items-start md:items-center text-sm mt-2 flex-col md:flex-row title-content">
+    <div
+      class="w-4/5 vx-row p-2 items-start md:items-center text-sm mt-2 flex-col md:flex-row title-content"
+    >
       <div
         class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
         style="background-color: #ed8936"
@@ -108,22 +111,8 @@
           id="notes-md"
           class="w-full text-ginger p-2 md-container"
         ></div>
-        <div
-          style="
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-image: linear-gradient(
-              to bottom,
-              rgba(0, 0, 0, 0) 80%,
-              white 90%
-            );
-          "
-        ></div>
       </div>
     </div>
-
-    <div class="vx-row w-full"></div>
 
     <!-- Footer -->
 
@@ -140,17 +129,20 @@
         ></i>
         <template #badge>{{ note.upVotes }}</template>
       </vs-avatar>
-      <vs-tooltip>
+      <VxTooltip :interactivity="true">
         <vs-avatar class="icon-small">
           <i class="bx bx-show"></i>
           <template #badge>{{ note.views }}</template>
         </vs-avatar>
         <template #tooltip>{{ note.views }} Views</template>
-      </vs-tooltip>
+      </VxTooltip>
 
-      <vs-avatar class="icon-small">
-        <i class="bx bx-bookmark"></i>
-      </vs-avatar>
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small">
+          <i class="bx bx-bookmark"></i>
+        </vs-avatar>
+        <template #tooltip>Bookmark</template>
+      </VxTooltip>
     </div>
   </VxCard>
 </template>

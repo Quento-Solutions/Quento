@@ -2,11 +2,7 @@ import { Module, VuexModule, MutationAction,Mutation, Action } from 'vuex-module
 
 import firestore from '~/plugins/firestore'
 import {Newsletter, Newsletter_t_F, Newsletter_t} from '~/types/newsletters'
-import { authStore } from './index'
-import { firestore as store } from 'firebase/app'
-import { v4 } from 'uuid'
-import storage from '~/plugins/firebaseStorage'
-import firebase from '~/plugins/firebase'
+
 
 import {
   Grade_O,

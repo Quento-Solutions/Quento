@@ -2,12 +2,12 @@
   <vs-row class="w-full" justify="center" style="height: 100%;">
     <vs-col
       w="10"
-      class="p-6 h-full border-solid"
+      class="h-full border-solid"
       justify="center"
       align="center"
       style="border-style: solid;"
     >
-      <VxCard class="mt-6 p-4 px-8 card">
+      <VxCard class="mt-6 p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/2 xl:w-5/12 relative">
         <div class="p-6">
           <h1 class="title">SIGN IN</h1>
           <vs-alert v-if="errorMessage" danger
@@ -30,12 +30,6 @@
             <template #icon>
               <i class="bx bx-user"></i>
             </template>
-            <template v-if="validEmail(email)" #message-success>
-              Email Valid
-            </template>
-            <template v-if="!validEmail(email) && email !== ''" #message-danger>
-              Email Invalid
-            </template>
           </vs-input>
         </div>
         <div class="p-6">
@@ -53,7 +47,7 @@
 
         <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
-            class="mt-8 ml-6 login"
+            class="mt-8 ml-6 login p-6"
             color="#6b3deb"
             type="filled"
             @click="LoginEmailPassword(email, password)"
@@ -110,9 +104,6 @@ export default class Login extends mixins(Auth) {
 .card {
   width: 30vw;
   height: auto;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .title {
   font-family: ginger-bold;
@@ -135,24 +126,33 @@ export default class Login extends mixins(Auth) {
 }
 
 .login {
-  width: 60%;
   font-family: ginger-normal;
   font-size: 0.8vw;
   border-radius: 2vw;
+  min-width: 30%;
 }
 .signup {
-  width: 60%;
   font-family: ginger-normal;
   font-size: 1vw;
   border-radius: 2vw;
   margin-top: 2vw;
 }
 @media only screen and (max-width: 1200px) {
-  .card {
-    width: 40vw;
-  }
   .google {
     margin-bottom: 5vw;
+    font-size: 1.7vw;
+  }
+  .google i {
+    font-size: 2vw;
+    padding-right: 1vw;
+  }
+  .login {
+    font-size: 2vw;
+    border-radius: 5vw;
+  }
+  .signup {
+    font-size: 2vw;
+    margin-top: 2vw;
   }
 }
 
@@ -182,7 +182,6 @@ export default class Login extends mixins(Auth) {
     margin-top: 2vw;
   }
 }
-
 @media only screen and (max-width: 520px) {
   .card {
     width: 80vw;
