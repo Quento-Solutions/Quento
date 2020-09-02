@@ -164,148 +164,148 @@
 </template>
 
 <script lang="ts">
-  // Imports
-  import { Component, Vue, Prop } from 'nuxt-property-decorator'
-  import { Note } from '~/types/notes'
-  import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
-  import { notesStore, authStore } from '~/store'
-  import DeleteNotesModal from '~/components/DeleteNotesModal.vue'
-  import AvatarBar from '~/components/AvatarBar.vue'
+// Imports
+import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Note } from '~/types/notes'
+import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
+import { notesStore, authStore } from '~/store'
+import DeleteNotesModal from '~/components/DeleteNotesModal.vue'
+import AvatarBar from '~/components/AvatarBar.vue'
 
-  @Component<NotesCard>({
-    components: { DeleteNotesModal, AvatarBar },
-    mounted() {
-      if (this.note.images && this.note.images.length) {
-        this.image = new Image()
-        this.image.src = this.note.images[0]
-        // this.note.userP
-        this.hasImage = true
-      }
+@Component<NotesCard>({
+  components: { DeleteNotesModal, AvatarBar },
+  mounted() {
+    if (this.note.images && this.note.images.length) {
+      this.image = new Image()
+      this.image.src = this.note.images[0]
+      // this.note.userP
+      this.hasImage = true
     }
-  })
-  
-  // OUTPUT
-  export default class NotesCard extends Vue {
-    @Prop({ required: true }) note!: Note
-    @Prop({ default: false }) clickable!: boolean
-    // Loaded full content
-    @Prop({ default: false }) preview!: boolean
-    // Whether buttons should work or not
-    @Prop({ default: false }) disabled!: boolean
-
-    deleteNotesOpen = false
-
-    OpenDeleteModal() {
-      this.deleteNotesOpen = true
-    }
-
-    get NoteOwner() {
-      return authStore.user?.uid == this.note.uid
-    }
-
-    OpenEditingModal() {
-      notesStore.SetEditNote(this.note)
-    }
-
-    getIcon(subject: SubjectGroup_O | Subject_O) {
-      return SubjectIconList[subject]
-    }
-
-    userLiked(id?: string) {
-      if (!id) return false
-      return notesStore.likedPosts.includes(id)
-    }
-
-    async toggleLike(id?: string, time?: any) {
-      if (!id || this.disabled) return
-      const a = this.$vs.loading()
-      await notesStore.ToggleLikedNote(id)
-      a.close()
-    }
-
-    vfOptions = {
-      autoplay: false,
-      allowFullscreen: true
-    }
-
-    vfTransitions = ['swipe']
-
-    PushNotesPage() {
-      if (this.clickable) return this.$router.push(`/notes/${this.note.id}`)
-    }
-
-
-    hasImage = false
-    image?: HTMLImageElement
   }
+})
+
+// OUTPUT
+export default class NotesCard extends Vue {
+  @Prop({ required: true }) note!: Note
+  @Prop({ default: false }) clickable!: boolean
+  // Loaded full content
+  @Prop({ default: false }) preview!: boolean
+  // Whether buttons should work or not
+  @Prop({ default: false }) disabled!: boolean
+
+  deleteNotesOpen = false
+
+  OpenDeleteModal() {
+    this.deleteNotesOpen = true
+  }
+
+  get NoteOwner() {
+    return authStore.user?.uid == this.note.uid
+  }
+
+  OpenEditingModal() {
+    notesStore.SetEditNote(this.note)
+  }
+
+  getIcon(subject: SubjectGroup_O | Subject_O) {
+    return SubjectIconList[subject]
+  }
+
+  userLiked(id?: string) {
+    if (!id) return false
+    return notesStore.likedPosts.includes(id)
+  }
+
+  async toggleLike(id?: string, time?: any) {
+    if (!id || this.disabled) return
+    const a = this.$vs.loading()
+    await notesStore.ToggleLikedNote(id)
+    a.close()
+  }
+
+  vfOptions = {
+    autoplay: false,
+    allowFullscreen: true
+  }
+
+  vfTransitions = ['swipe']
+
+  PushNotesPage() {
+    if (this.clickable) return this.$router.push(`/notes/${this.note.id}`)
+  }
+
+
+  hasImage = false
+  image?: HTMLImageElement
+}
 </script>
 <style lang="scss">
-  #note-card {
+#note-card {
+  .vs-navbar__group__items {
+    min-width: 120px;
+    background-color: white;
+    .menu-item:hover {
+      opacity: 1;
+      background-color: initial !important;
+    }
+    .menu-item {
+      opacity: 0.8;
+      transition-duration: 0.1s;
+      cursor: pointer;
+    }
+  }
+  .icon {
+    width: 4rem !important;
+    height: 4rem !important;
+    max-width: 10vw;
+    max-height: 10vw;
+  }
+  .icon-small {
+    width: 3rem !important;
+    height: 3rem !important;
+    max-width: 8vw;
+    max-height: 8vw;
+  }
+  #profile {
     .vs-navbar__group__items {
-      min-width: 120px;
-      background-color: white;
-      .menu-item:hover {
-        opacity: 1;
-        background-color: initial !important;
-      }
-      .menu-item {
-        opacity: 0.8;
-        transition-duration: 0.1s;
-        cursor: pointer;
-      }
-    }
-    .icon {
-      width: 4rem !important;
-      height: 4rem !important;
-      max-width: 10vw;
-      max-height: 10vw;
-    }
-    .icon-small {
-      width: 3rem !important;
-      height: 3rem !important;
-      max-width: 8vw;
-      max-height: 8vw;
-    }
-    #profile {
-      .vs-navbar__group__items {
-        min-width: 0 !important;
-        // max-width : 100%;
-        width: 150%;
-        transform: translate(-25%, 90%);
-      }
+      min-width: 0 !important;
+      // max-width : 100%;
+      width: 150%;
+      transform: translate(-25%, 90%);
     }
   }
-  .previewClickable {
-    :hover {
-      background-color: #f5f5f6;
-    }
-    transition-duration: 100ms !important;
+}
+.previewClickable {
+  :hover {
+    background-color: #f5f5f6;
   }
-  ::-webkit-scrollbar {
-    height: 10px;
-  }
+  transition-duration: 100ms !important;
+}
+::-webkit-scrollbar {
+  height: 10px;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: rgba(90, 90, 90, 0.5);
-    border-radius: 15px !important;
-  }
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90, 0.5);
+  border-radius: 15px !important;
+}
 
-  ::-webkit-scrollbar-track {
-    background: rgba(90, 90, 90, 0.1);
-    border-radius: 15px !important;
-  }
+::-webkit-scrollbar-track {
+  background: rgba(90, 90, 90, 0.1);
+  border-radius: 15px !important;
+}
+.title-content {
+  margin-left: 10%;
+}
+@media only screen and (max-width: 768px) {
   .title-content {
-    margin-left: 10%;
+    margin-left: 0%;
   }
-  @media only screen and (max-width: 768px) {
-    .title-content {
-      margin-left: 0%;
-    }
-  }
-  .flux-image {
-    background-position: 0px 0px !important;
-    background-size: auto 100% !important;
-    background-color: black;
-    background-position: center !important;
-  }
+}
+.flux-image {
+  background-position: 0px 0px !important;
+  background-size: auto 100% !important;
+  background-color: black;
+  background-position: center !important;
+}
 </style>
