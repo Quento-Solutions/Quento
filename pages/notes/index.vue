@@ -8,6 +8,7 @@
     <NotesSidebar />
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
+
       <div class="vx-col w-full inline-flex lg:hidden" style="">
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openNotesSidebar()">
@@ -22,8 +23,7 @@
         :note="note"
         :clickable="true"
         :preview="true"
-      >
-      </NotesCard>
+      />
       <vs-alert color="danger" v-if="noNotesFound">
         <template #title>
           No Notes Found For This Search
@@ -54,9 +54,10 @@ import { Note } from '~/types/notes'
 import { windowStore, notesStore } from '~/store'
 import NotesSidebar from '~/components/NotesSidebar.vue'
 import NotesCard from '~/components/NotesCard.vue'
+import NotesSearchBar from '~/components/NotesSearchBar.vue';
 
 @Component<NotesPage>({
-  components: { NotesCard, NotesSidebar },
+  components: { NotesCard, NotesSidebar, NotesSearchBar },
   async mounted() {
     const loading = this.$vs.loading()
     const notes = notesStore.GetMoreNotes()

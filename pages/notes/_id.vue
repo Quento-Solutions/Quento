@@ -20,7 +20,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, Watch } from 'nuxt-property-decorator'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note, Note_t_F } from '~/types/notes'
 import firestore from '~/plugins/firestore'
@@ -36,6 +36,18 @@ export default class NotesContentPage extends Vue {
   note: Note | null = null
   noteId: string | null = null
   docNotFound = false
+  
+  get NoteId()
+  {
+    return this.$route.params.id;
+  }
+  @Watch("NoteId")
+  noteIdChange(value : string, oldValue : string)
+  {
+    // This is to update the page when going from notes/note1 -> notes/note2
+    this.fetchNotes();
+  }
+
   async fetchNotes() {
     const loading = this.$vs.loading();
     this.noteId = this.$route.params.id;

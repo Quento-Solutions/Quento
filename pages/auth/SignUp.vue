@@ -251,19 +251,6 @@ export default class SignUp extends mixins(Auth) {
 
 
 <style scoped>
-@font-face {
-  font-family: 'ginger-bold';
-  src: url('../../assets/font/HelveticaNowText-Bold.woff');
-}
-@font-face {
-  font-family: 'ginger-normal';
-  src: url('../../assets/font/HelveticaNowText-Regular.woff');
-}
-@font-face {
-  font-family: 'ginger-light';
-  src: url('../../assets/font/HelveticaNowText-Light.woff');
-}
-
 .card {
   width: 30vw;
   height: auto;
