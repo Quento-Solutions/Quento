@@ -6,10 +6,32 @@ import storage from '~/plugins/firebaseStorage'
 
 import { Question, Question_t_F } from '~/types/questions'
 import { Response, Response_t_F } from '~/types/responses'
+import {
+  Grade_O,
+  SubjectList,
+  Subject_O,
+  SortOptions_O,
+  FilterOptions
+} from '~/types/subjects'
 
 import { authStore } from '~/store'
+import { School_O } from '~/types/schools'
+import { firestore as store } from 'firebase/app'
+
+let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
+  likedPosts: string[] = []
+  ActiveGrade: Grade_O = 'ALL'
+  ActiveSchool: School_O | 'All Schools' = 'All Schools'
+  ActiveSubjects: Subject_O[] = [...SubjectList]
+  ActiveItems: Question[] = []
+  SortSelect: SortOptions_O = 'magicRank'
+
+  ItemsPerPage = 5
+  EndOfList = false
+
   // Modal Logic
 
   // Global Logic
@@ -27,6 +49,33 @@ export default class QuestionsModule extends VuexModule {
     this.PostQuestionModalOpen = value
   }
 
+  @Mutation
+  public RESET_ITEMS() {
+    this.ActiveItems = []
+    LastVisible = null
+    this.EndOfList = false
+  }
+
+  @Mutation
+  public SET_FILTER({
+    filterGrades,
+    filterSubjects,
+    filterSchools,
+    sortSelect
+  }: FilterOptions) {
+    this.ActiveItems = []
+    LastVisible = null
+    this.ActiveSubjects = [...filterSubjects]
+    this.ActiveGrade = filterGrades
+    this.ActiveSchool = filterSchools
+    this.SortSelect = sortSelect
+    this.EndOfList = false
+  }
+
+  @Mutation
+  private SET_LIKED_ITEMS(items?: string[]) {
+    this.likedPosts = items || []
+  }
   // Preview Modal
   PreviewQuestion: Question | null = null
   PreviewModalOpen = false
@@ -41,6 +90,59 @@ export default class QuestionsModule extends VuexModule {
     this.SET_POST_MODAL_OPEN(false)
     this.SET_PREVIEW_QUESTION(null)
     this.SET_RESET(true)
+  }
+
+  @Mutation
+  private PUSH_QUESTIONS(questions: Question[]) {
+    if (questions.length < this.ItemsPerPage) {questions
+      this.EndOfList = true
+    }
+    this.ActiveItems.push(...questions)
+  }
+  @Action({ rawError: true })
+  public async GetLikedQuestions() {
+    const likedQuestions = authStore.userData?.likedQuestions;
+    this.SET_LIKED_ITEMS(likedQuestions);
+  }
+
+  
+  @Action({rawError : true})
+  public async GetMoreQuestions() {
+    if (this.EndOfList) {
+      return
+    }
+    let query: store.Query<store.DocumentData> = firestore.collection('questions')
+    // Do query filtering things
+
+    if (!(this.ActiveGrade === 'ALL')) {
+      query = query.where('grade', '==', this.ActiveGrade)
+    }
+    console.log(this.ActiveSchool);
+    if ((this.ActiveSchool !== 'All Schools')) {
+      query = query.where('school', '==', this.ActiveSchool)
+    }
+    if (this.ActiveSubjects.length != 0) {
+      query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
+    }
+
+    query = query.orderBy(this.SortSelect, 'desc')
+
+    if (LastVisible) {
+      query = query.startAfter(LastVisible)
+    }
+
+    query = query.limit(this.ItemsPerPage)
+    try {
+      const snapshot = await query.get()
+      const notes = snapshot.docs.map((doc) =>
+        Question.fromFirebase(doc.data() as Question_t_F, doc.id)
+      )
+      LastVisible = snapshot.docs[snapshot.docs.length - 1]
+      this.PUSH_QUESTIONS(notes)
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
   }
   // Question Data Logic
   @Action({ rawError: true })

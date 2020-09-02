@@ -12,22 +12,18 @@ import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
 
-// Fix the googl
+// Fix the google
 import {
   Grade_O,
   SubjectList,
   Subject_O,
-  SortOptions_O
-} from '~/types/subjects'
+  SortOptions_O,
+  FilterOptions
+} from '~/types/subjects';
+
 import { School_O } from '~/types/schools'
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
-export interface FilterOptions {
-  filterSubjects: Subject_O[]
-  filterGrades: Grade_O
-  filterSchools : School_O | "All Schools"
-  sortSelect: SortOptions_O,
-}
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
@@ -41,6 +37,7 @@ export default class NotesModule extends VuexModule {
   IsReset = false
 
   UploadImages: File[] = []
+
   likedPosts: string[] = []
   ActiveGrade: Grade_O = 'ALL'
   ActiveSchool : School_O | "All Schools" = "All Schools"
@@ -86,14 +83,9 @@ export default class NotesModule extends VuexModule {
     this.SET_EDIT_NOTE(null);
     return await this.GetMoreNotes()
   }
-
-  @Action({ rawError: true })
-  public async SetActiveFilter(Options: FilterOptions) {
-    this.SET_FILTER(Options)
-  }
-
+  
   @Mutation
-  private SET_FILTER({
+  public SET_FILTER({
     filterGrades,
     filterSubjects,
     filterSchools,
