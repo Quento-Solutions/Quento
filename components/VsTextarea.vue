@@ -136,8 +136,7 @@ export default class VsTextarea extends Vue {
         afterText +
         this.contents.substring(endPos)
     }
-
-    // This is dumb code don't do this at home.
+    
     setTimeout(() => {
         this.input.focus()
         startPos += beforeText.length
