@@ -138,19 +138,7 @@ export default class EditNotesModal extends mixins(PasteImage) {
   set contents(value) {
     this.ActiveNote ? (this.ActiveNote.contents = value) : ''
   }
-  // get activeSchool() {
-  //   return this.ActiveNote?.school || 'All Schools'
-  // }
-  // set activeSchool(school: typeof EditNotesModal.prototype.SchoolList[number]) {
-  //   if (this.ActiveNote) {
-  //     if (school != 'All Schools' && this.ActiveNote) {
-  //       this.ActiveNote.school = school
-  //       return
-  //     }
-  //     this.ActiveNote.school = undefined
-  //   }
-  //   console.log(this.activeSchool);
-  // }
+  
   activeSchool : "All Schools" | School_O = "All Schools";
   @Watch('StoreEditNotes')
   onStoreEditNoteChanged(value: Note | null, oldVal: Note | null) {
