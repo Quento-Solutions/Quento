@@ -7,10 +7,7 @@
         <VxCard class="text-center greet-user p-8" content-color="black">
           <template slot="no-body">
             <div class="vx-row justify-center px-8">
-              <h1 class="mb-12 text-title text-5xl mr-2">
-                Suggestions
-              </h1>
-              &nbsp; &nbsp;
+              <h1 class="mb-12 text-title text-5xl mr-2">Suggestions</h1>&nbsp; &nbsp;
             </div>
             <div class="vx-row w-full justify-around">
               <div>
@@ -20,9 +17,7 @@
                     :value="item.value"
                     v-for="(item, index) in sortByOptions"
                     :key="index"
-                  >
-                    {{ item.label }}
-                  </vs-option>
+                  >{{ item.label }}</vs-option>
                 </vs-select>
               </div>
               <vs-button
@@ -32,7 +27,8 @@
                 class="vx-col shadow-md ml-4 text-bold float-right"
                 style="font-weight: bold;"
                 @click="active = !active"
-                >Post Suggestion &nbsp;
+              >
+                Post Suggestion &nbsp;
                 <i class="bx bx-highlight text-2xl" />
               </vs-button>
             </div>
@@ -49,21 +45,13 @@
                         <h4
                           class="text-title truncate"
                           style="font-size: 1.5rem; min-width: 0;"
-                        >
-                          {{ item.title }}
-                        </h4>
-                        <h6 class="truncated mt-2">
-                          Posted {{ parseDate(item.createdAt.seconds) }}
-                        </h6>
+                        >{{ item.title }}</h4>
+                        <h6 class="truncated mt-2">Posted {{ parseDate(item.createdAt.seconds) }}</h6>
                       </div>
 
                       <vs-tooltip class="float-right">
-                        <vs-avatar>
-                          {{trimText(item.userDisplayName)}}
-                        </vs-avatar>
-                        <template #tooltip>
-                          {{ item.userDisplayName }}
-                        </template>
+                        <vs-avatar>{{trimText(item.userDisplayName)}}</vs-avatar>
+                        <template #tooltip>{{ item.userDisplayName }}</template>
                       </vs-tooltip>
                     </div>
                   </template>
@@ -72,9 +60,7 @@
                       class="vx-row text-base p-4 justify-start"
                       style="min-height: 100px; text-align: left;"
                     >
-                      <div class="shadow-md p-2 w-full rounded-md">
-                        {{ item.contents }}
-                      </div>
+                      <div class="shadow-md p-2 w-full rounded-md">{{ item.contents }}</div>
                     </div>
 
                     <div class="float-right my-4" style="border: 0;">
@@ -89,27 +75,13 @@
                             userLiked(item.id) ? 'white' : '#ff4757'
                           }`"
                         ></i>
-                        <template #badge>
-                          {{ item.upVotes }}
-                        </template>
+                        <template #badge>{{ item.upVotes }}</template>
                       </vs-avatar>
                     </div>
                   </div>
                 </VxCard>
               </div>
-              <div class="vx-col w-full">
-                <vs-button
-                  size="xl"
-                  type="filled"
-                  color="warn"
-                  class="vx-col shadow-md m-4 text-bold float-right"
-                  style="font-weight: bold;"
-                  id="buttonLoadMoreSuggestions"
-                  @click="LoadMoreSuggestions()"
-                  >Load More &nbsp;
-                  <i class="bx bx-loader-circle text-2xl" />
-                </vs-button>
-              </div>
+              <div class="vx-col w-full"></div>
             </div>
           </template>
         </VxCard>
@@ -119,35 +91,35 @@
 </template>
 
 <script lang="ts">
-function clickLoadMoreSuggestions(){
-  if (document.getElementById("buttonLoadMoreSuggestions")){
-    document.getElementById("buttonLoadMoreSuggestions")!.click()
-  }
-}
-setInterval(clickLoadMoreSuggestions, 500)
-import { Vue, Component } from 'nuxt-property-decorator'
+
+import { Vue, Component, Watch, mixins } from 'nuxt-property-decorator'
 
 import { windowStore, authStore, suggestionsStore } from '~/store'
 import VsTextarea from '~/components/VsTextarea.vue'
 
 import SuggestionModal from '~/screens/SuggestionModal.vue'
-// import VxCard from '~/components/VxCard.vue'
+import LoadScroll from '~/mixins/LoadScrollMixin'
 
 @Component<SuggestionsPage>({
   layout: 'main',
   components: { VsTextarea, SuggestionModal },
   mounted() {
-    // Add vs loading
-    // Date.
     if (suggestionsStore.suggestions.length == 0) {
       this.GetSuggestions()
     }
-  }
+  },
 })
-export default class SuggestionsPage extends Vue {
+export default class SuggestionsPage extends mixins(LoadScroll) {
   active = false
-  trimText(iText ?: string) {
-    if(!iText) return;
+  @Watch('IsScrolledDown')
+  PageHeightChange(val: boolean, oldVal: boolean) {
+    if (val) {
+      this.LoadMoreSuggestions()
+    }
+  }
+
+  trimText(iText?: string) {
+    if (!iText) return
     const text = iText.trim()
     let getLetters = [text]
     if (text.length > 5) {
@@ -155,9 +127,8 @@ export default class SuggestionsPage extends Vue {
         return item[0]
       })
     }
-    if(getLetters.length > 5)
-    {
-      [...getLetters] = getLetters[0]
+    if (getLetters.length > 5) {
+      ;[...getLetters] = getLetters[0]
     }
     return getLetters.join('')
   }
@@ -178,7 +149,7 @@ export default class SuggestionsPage extends Vue {
     { value: 'createdAt', label: 'Created At' },
     { value: 'upVotes', label: 'Up Votes' }
   ] as const
-  //   sortBy: 'createdAt' | 'upVotes' = 'createdAt'
+
   async GetLikedSuggestions() {
     if (suggestionsStore.likedSuggestions.length == 0) {
       const loading = this.$vs.loading()
@@ -211,7 +182,8 @@ export default class SuggestionsPage extends Vue {
   }
 
   async LoadMoreSuggestions() {
-    if (document.body.scrollTop >= document.body.scrollHeight - 650){
+
+    if (this.IsScrolledDown) {
       const loading = this.$vs.loading()
       try {
         const suggestions = suggestionsStore.GetNextPage()

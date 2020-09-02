@@ -19,42 +19,22 @@
       <NotesCard
         v-for="(note, index) in notesList"
         :key="index"
-        class=""
+        class
         :note="note"
         :clickable="true"
         :preview="true"
       />
       <vs-alert color="danger" v-if="noNotesFound">
-        <template #title>
-          No Notes Found For This Search
-        </template>
+        <template #title>No Notes Found For This Search</template>
         <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
         Again.
       </vs-alert>
-      <vs-button
-        size="xl"
-        type="filled"
-        color="warn"
-        class="vx-col shadow-md m-4 text-bold float-right"
-        style="font-weight: bold;"
-        id="buttonLoadMoreNotes"
-        @click="LoadMoreNotes()"
-        :disabled="endOfList"
-        >Load More &nbsp;
-        <i class="bx bx-loader-circle text-2xl" />
-      </vs-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-function clickLoadMoreNotes(){
-  if (document.getElementById("buttonLoadMoreNotes")){
-    document.getElementById("buttonLoadMoreNotes")!.click()
-  }
-}
-setInterval(clickLoadMoreNotes, 500)
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, Watch, mixins } from 'nuxt-property-decorator'
 
 import { Note } from '~/types/notes'
 
@@ -62,6 +42,7 @@ import { windowStore, notesStore } from '~/store'
 import NotesSidebar from '~/components/NotesSidebar.vue'
 import NotesCard from '~/components/NotesCard.vue'
 import NotesSearchBar from '~/components/NotesSearchBar.vue';
+import LoadScroll from '~/mixins/LoadScrollMixin';
 
 @Component<NotesPage>({
   components: { NotesCard, NotesSidebar, NotesSearchBar },
@@ -73,22 +54,26 @@ import NotesSearchBar from '~/components/NotesSearchBar.vue';
     loading.close()
   }
 })
-export default class NotesPage extends Vue {
+export default class NotesPage extends mixins(LoadScroll) {
   get noNotesFound() {
     return notesStore.EndOfList && this.notesList.length == 0
   }
-  async LoadMoreNotes()
-  {
-    if (document.body.scrollTop >= document.body.scrollHeight - 650){
-      const loading = this.$vs.loading()
-      await notesStore.GetMoreNotes()
-      loading.close();
+  @Watch('IsScrolledDown')
+  PageHeightChange(val: boolean, oldVal: boolean) {
+    console.log(val, "SCROLL DOWN")
+    if (val) {
+      this.LoadMoreNotes()
     }
   }
 
-  get endOfList()
-  {
-    return notesStore.EndOfList;
+  async LoadMoreNotes() {
+    const loading = this.$vs.loading()
+    await notesStore.GetMoreNotes()
+    loading.close()
+  }
+
+  get endOfList() {
+    return notesStore.EndOfList
   }
   get bodyOverlay() {
     return windowStore.notesSidebarOpen && windowStore.isSmallScreen
@@ -117,5 +102,4 @@ export default class NotesPage extends Vue {
 </script>
 
 <style lang="scss">
-
 </style>
