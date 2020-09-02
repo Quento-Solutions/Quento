@@ -9,12 +9,14 @@ import userGuide from '~/store/userGuide';
 import questions from '~/store/questions';
 import newsletters from '~/store/newsletters'
 import NotificationsModule from '~/store/notifications';
+import groups from '~/store/groups';
 
 let windowStore : window;
 let navigationStore : navigation;
 let authStore : auth;
 let suggestionsStore : suggestions;
 let newslettersStore : newsletters;
+let groupsStore: groups;
 let notesStore : notes;
 let userGuideStore : userGuide;
 let questionStore : questions;
@@ -30,6 +32,7 @@ function initialiseStores(store : Store<any>) : void {
     questionStore = getModule(questions, store);
     newslettersStore = getModule(newsletters, store);
     notificationStore = getModule(NotificationsModule, store)
+    groupsStore = getModule(groups, store)
 }
 
-export { initialiseStores, windowStore, navigationStore, authStore, suggestionsStore, notesStore, userGuideStore, questionStore, newslettersStore, notificationStore }
+export { initialiseStores, windowStore, navigationStore, authStore, suggestionsStore, notesStore, userGuideStore, questionStore, newslettersStore, notificationStore, groupsStore }

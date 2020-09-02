@@ -71,6 +71,31 @@
             <template v-if="lastNameErrors.length == 0" #message-success>Last Name Valid</template>
           </vs-input>
         </div>
+         <div class="p-6">
+          <vs-input
+            v-model="firstName"
+            type="name"
+            label="First Name"
+            class="block w-6"
+          >
+            <template #icon>
+              <i class='bx bx-pencil' ></i>
+            </template>
+          </vs-input>
+        </div>
+
+        <div class="p-6" >
+          <vs-input
+            v-model="lastName"
+            type="name"
+            label="Last Name"
+            class="block w-6"
+          >
+            <template #icon>
+              <i class='bx bx-pencil' ></i>
+            </template>
+          </vs-input>
+        </div>
 
         <div class="p-6">
           <vs-input v-model="password" type="password" label="Password" class="block w-6">
@@ -110,6 +135,7 @@
 
         <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
+
             class="mt-8 ml-6 login"
             color="#6b3deb"
             type="filled"
