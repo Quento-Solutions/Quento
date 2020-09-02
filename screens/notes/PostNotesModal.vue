@@ -16,14 +16,9 @@
         </h4>
       </div>
     </template>
-<vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
+    <vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
-      <vs-input
-        v-model="title"
-        placeholder="Title"
-        class="block mb-3 w-6 mt-3"
-        width="w-6"
-      >
+      <vs-input v-model="title" placeholder="Title" class="block mb-3 w-6 mt-3" width="w-6">
         <template #icon>
           <i class="bx bx-highlight" primary></i>
         </template>
@@ -66,6 +61,22 @@
           <div class="font-bold truncate">Grade {{ grade }}</div>
         </vs-option>
       </vs-select>
+            <vs-select
+        filter
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="School"
+        v-model="schoolSelect"
+      >
+        <vs-option
+          v-for="(school, subIndex) in SchoolList"
+          :key="subIndex"
+          :label="school"
+          :value="school"
+        >
+          <div class="font-bold truncate">{{ school }}</div>
+        </vs-option>
+        
+      </vs-select>
       <VsTextarea
         v-model="contents"
         placeholder="Enter your content here"
@@ -77,12 +88,15 @@
       ></VsTextarea>
     </div>
     <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button class="md:w-1/2 w-full" warn :disabled="formErrors || contents.length > characterLimit" @click="PreviewNote()">
-          <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
-        </vs-button>
-      </div>
-
-
+      <vs-button
+        class="md:w-1/2 w-full"
+        warn
+        :disabled="formErrors || contents.length > characterLimit"
+        @click="PreviewNote()"
+      >
+        <div class="text-xl p-2 font-bold lg:text-2xl" style>PREVIEW NOTE</div>
+      </vs-button>
+    </div>
   </vs-dialog>
 </template>
 
@@ -105,7 +119,7 @@ import {
 } from '~/types/subjects'
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
-import PasteImage from '~/mixins/PasteImagesMixin';
+import PasteImage from '~/mixins/PasteImagesMixin'
 import { Note } from '~/types/notes'
 import VsUpload from '~/components/VsUpload.vue'
 import storage from '~/plugins/firebaseStorage'
@@ -114,6 +128,7 @@ import functions from '~/plugins/firebaseFunctions'
 import { v4 } from 'uuid'
 
 import { authStore } from '~/store'
+import { School_O, SchoolList } from '~/types/schools'
 
 interface imageSrc {
   error: boolean
@@ -127,15 +142,16 @@ interface imageSrc {
   components: {
     VsUpload
   },
-  mounted() {
-  }
+  mounted() {}
 })
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
+  readonly SchoolList = [ "All Schools", ...SchoolList];
+  schoolSelect : School_O | "All Schools" = "All Schools"
   characterLimit = 5000
 
-  contents = '';
+  contents = ''
 
   @Watch('IsReset')
   onResetChanged(value: boolean, oldVal: boolean) {
@@ -163,9 +179,10 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
     notesStore.ToggleNotesModule(value)
   }
   title = ''
-  
+
   ClearFields() {
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
+    this.schoolSelect = "All Schools";
   }
 
   get isLargeScreen() {
@@ -192,9 +209,10 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      storedImages : [...this.images]
-    })
-
+      storedImages: [...this.images]
+    })  
+    if(this.schoolSelect != "All Schools") previewNote.school = this.schoolSelect;
+    
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
   }

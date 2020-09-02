@@ -43,11 +43,11 @@
       class="w-4/5 vx-row p-2 items-start md:items-center text-sm mt-2 flex-col md:flex-row title-content"
     >
       <div
-        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
+        class="rounded-full p-2 px-4 cursor-pointer vx-row items-center text-ginger text-white"
         style="background-color: #ed8936"
       >Grade {{ note.grade }}</div>
       <div
-        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-0 mt-2 md:mt-0 md:mx-2"
+        class="rounded-full p-2 px-4 cursor-pointer vx-row items-center text-ginger text-white mx-0 mt-2 md:mt-0 md:mx-2"
         style="background-color: #9f7aea"
       >
         <i
@@ -57,6 +57,13 @@
         />
         {{ note.subject }}
       </div>
+      <VxTooltip v-if="note.school">
+        <div
+          class="rounded-full p-2 px-4 cursor-pointer vx-row items-center text-ginger text-white truncate"
+          style="background-color: #6398de; max-width : 150px"
+        >{{note.school}}</div>
+        <template #tooltip>{{note.school}}</template>
+      </VxTooltip>
     </div>
 
     <!-- Title -->
