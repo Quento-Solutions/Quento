@@ -90,7 +90,7 @@
         expand="true"
         markdownOptions="true"
         @paste="onPaste"
-      ></VsTextarea>
+      />
     </div>
 
     <template #footer>
