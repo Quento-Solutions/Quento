@@ -65,7 +65,7 @@
             <div class="w-full vx-row p-2 items-center text-sm">
               <div
                 class="rounded-full px-4 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
-                :style="`background-color: #${randomColor()}`"
+                :style="`background-color: ${randomColor()}`"
                 v-for="(subject, index) in UserData.interestedSubjects"
                 :key="index"
               >
@@ -205,8 +205,15 @@ export default class UserProfile extends mixins(UserMixin) {
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
+  
+  cmyk(color : number) {
+    const minBlack = 10;
+    const maxBlack = 90;
+    return 255 * (1 - (color / 100)) * (1 - (Math.floor(Math.random() * (maxBlack - minBlack)) + minBlack) / 100)
+  }
+  
   randomColor() {
-    return Math.floor(Math.random() * 16777215).toString(16)
+    return "rgb(" + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ")"
   }
 }
 </script>
