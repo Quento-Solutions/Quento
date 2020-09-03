@@ -1,5 +1,5 @@
 <template>
-  <VxCard class="my-2">
+  <VxCard class="my-2 p-6 mt-6">
     <div class="vx-row w-full">
       <div class="vx-row w-full justify-between" style="flex-wrap: nowrap;">
         <!-- Profile Picture -->
