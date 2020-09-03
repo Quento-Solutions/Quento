@@ -18,8 +18,8 @@
       </vs-button>
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
-      <div class="vx-col w-full inline-flex lg:hidden" style>
+    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
+      <div class="vx-col w-full inline-flex lg:hidden" style="">
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
             <i class="bx bx-menu" style="font-size: 1.25rem;" />

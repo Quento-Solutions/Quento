@@ -7,13 +7,14 @@
     @click="PushQuestionsPage()"
   >
     <!-- Card Header -->
+    <div class="p-6">
     <AvatarBar
       :username="question.userDisplayName"
       :date="question.createdAt"
       :photoURL="question.userPhotoUrl"
       :userId="question.userId"
     ></AvatarBar>
-
+    </div>
     <!-- Category Pills -->
     <div class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content">
       <div
