@@ -9,12 +9,13 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 })
 export default class LoadScrollMixin extends Vue {
   scrollHeight = 0
-  totalHeight = 651
+  totalHeight = window.innerHeight * 1.2
   handleScroll() {
     this.scrollHeight = document.documentElement.scrollTop
     this.totalHeight = document.body.scrollHeight
   }
-  get IsScrolledDown() {
+  get IsScrolledDown() 
+  {
     return this.scrollHeight >= this.totalHeight - window.innerHeight * 1.2
   }
 }

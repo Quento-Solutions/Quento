@@ -47,21 +47,26 @@ import LoadScroll from '~/mixins/LoadScrollMixin';
 @Component<NotesPage>({
   components: { NotesCard, NotesSidebar, NotesSearchBar },
   async mounted() {
+    window.scrollTo(0,0);
+    
     const loading = this.$vs.loading()
+
     const notes = notesStore.GetMoreNotes()
     const likes = notesStore.GetLikedNotes()
     await Promise.all([notes, likes])
+    this.loaded = true;
+
     loading.close()
-  }
+  },
 })
 export default class NotesPage extends mixins(LoadScroll) {
   get noNotesFound() {
     return notesStore.EndOfList && this.notesList.length == 0
   }
+  loaded = false;
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
-    console.log(val, "SCROLL DOWN")
-    if (val) {
+    if (val && this.loaded) {
       this.LoadMoreNotes()
     }
   }
