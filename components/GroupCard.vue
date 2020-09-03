@@ -7,18 +7,19 @@
           :style="backgroundGradient(group.backgroundImageUrl)"
           style="min-height: 25vw;"
         >
+          <!-- MAIN INSIDE CARD -->
+
+
           <div
             class="text-white mb-4 text-ginger-b text-4xl w-full p-4"
             style="line-height: 1.125;"
           >
             {{ group.title }}
           </div>
+
           <div class="vx-row w-full py-6" style="">
             <vs-avatar class="icon">
-              <img
-                v-if="group.authorPhotoUrl"
-                :src="group.authorPhotoUrl"
-              />
+              <img v-if="group.authorPhotoUrl" :src="group.authorPhotoUrl"/>
               <template #text v-else>
                 {{ group.authorDisplayName }}
               </template>
@@ -32,6 +33,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </nuxt-link>
     </template>
@@ -39,15 +41,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import { Group } from '~/types/groups'
+  import { Component, Vue, Prop } from 'nuxt-property-decorator'
+  import { Group } from '~/types/groups'
 
-@Component<GroupCard>({ components: {} })
-export default class GroupCard extends Vue {
-  @Prop({ required: true }) group!: Group
+  @Component<GroupCard>({ components: {} })
+  export default class GroupCard extends Vue {
+    @Prop({ required: true }) group!: Group
 
-  backgroundGradient(imageUrl: string) {
-    return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+    backgroundGradient(imageUrl: string) {
+      return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+    }
   }
-}
 </script>

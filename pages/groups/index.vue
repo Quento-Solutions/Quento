@@ -1,5 +1,6 @@
 <template>
   <div class="vx-row w-full ml-8" id="newsletter-container">
+    <!-- TITLE AND CREATE CARDS? -->
     <span class="h-15 w-full mr-8 mb-4">
       <div class = 'inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4'>
         YOUR GROUPS
@@ -18,14 +19,10 @@
       </vs-button>
     </span>
 
-    <div v-if="loaded" class="w-full lg:w-1/2" id="groupCard">
+    <!-- CARDS -->
+    <div v-if="loaded" class="flex flex-row bg-gray-200" id="groupCard">
       <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
     </div>
-    <!-- <vs-button warn @click="toggleNotesModal(true)" class="w-full">
-      <div class="text-2xl font-ginger-b">
-        &nbsp; Post New Note
-      </div>
-    </vs-button>-->
   </div>
 </template>
 

@@ -23,11 +23,13 @@
       :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
 
     >
+      <!-- CONTENT? -->
       <div id="content-overlay"></div>
 
       <div class="content-wrapper" 
       >
         
+        <!-- NAVBAR -->
         <TopNav
           :navbarColor="navbarColor"
           :class="[
@@ -110,8 +112,10 @@
                     </vs-dropdown-item>
                   </vs-dropdown-menu>
                 </vs-dropdown>
+                
               </div>
             </transition>
+
             <div class="content-area__content">
               <transition :name="routerTransition" mode="out-in">
                 <nuxt />

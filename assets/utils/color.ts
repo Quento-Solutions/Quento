@@ -1,11 +1,9 @@
-
-
-
 export default {
     darken(color : any, percent : any) {
       var f=color.split(","),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=parseInt(f[0].slice(4)),G=parseInt(f[1]),B=parseInt(f[2]);
       return "rgb("+(Math.round((t-R)*p)+R)+","+(Math.round((t-G)*p)+G)+","+(Math.round((t-B)*p)+B)+")";
     },
+
     getColor(colorx : any, alphax = 1, defaultx = true){
       // change color hex to RGB
       if(/^[#]/.test(colorx)){
@@ -35,16 +33,19 @@ export default {
       }
       return colorx
     },
+
     isColor(colorx : any){
       let vscolors = ['primary','secondary','success','danger','warning','dark', 'light']
       return vscolors.includes(colorx)
     },
+
     RandomColor(){
       function getRandomInt(min : any, max : any) {
         return Math.floor(Math.random() * (max - min)) + min;
       }
       return `rgb(${getRandomInt(0,255)},${getRandomInt(0,255)},${getRandomInt(0,255)})`
     },
+
     rColor(colorx : any,opacity=1){
       if(/^[#]/.test(colorx)){
         let c = this.hexToRgb(colorx)
@@ -76,6 +77,7 @@ export default {
         return `rgba(var(--primary),${opacity})`
       }
     },
+
     contrastColor(elementx : any) {
       let c = elementx
       if(/[#]/g.test(elementx)){
@@ -90,11 +92,13 @@ export default {
         return false
       }
     },
+
     setCssVariable(propertyName : any, value : any) {
       if(typeof window !== 'undefined'){
         document.documentElement.style.setProperty(propertyName, value);
       }
     },
+
     hexToRgb(hex : any) {
       // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
       var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -110,9 +114,11 @@ export default {
       } : 
       {};
     },
+
     getVariable(styles : any, propertyName : any) {
       return String(styles.getPropertyValue(propertyName)).trim();
     },
+
     changeColor(colorInicial : any) {
       let colores = ['primary','success','danger','warning','dark']
       let colorx
