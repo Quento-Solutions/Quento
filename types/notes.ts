@@ -4,10 +4,10 @@ import {
   Date_t_A,
   firebaseDate,
   StoredImage,
-  algoliaDate
+  algoliaDate,
 } from './firebaseTypes'
 import { firestore } from 'firebase/app'
-
+import {School_O} from './schools'
 
 export interface Note_t {
   title: string
@@ -16,8 +16,9 @@ export interface Note_t {
   userPhotoUrl?: string
 
   images?: string[]
-  contents?: string
+  contents : string
   storedImages?: StoredImage[]
+  school ?: School_O;
 
   createdAt: Date
   upVotes: number
@@ -35,12 +36,14 @@ export interface Note_t_F {
   userPhotoUrl?: string
 
   images?: string[]
-  contents?: string
+  contents : string
   storedImages?: StoredImage[]
 
   createdAt: Date_t_F
+  
   upVotes: number
   subject: Subject_O
+  school ?: School_O;
   grade: Grade_O
   views: number
 }
@@ -50,6 +53,7 @@ export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {
   gradeName: string
   objectID: string
 }
+
 
 export class Note {
   constructor(opts: Note_t) {

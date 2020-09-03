@@ -34,7 +34,7 @@ export default class UserGuideModule extends VuexModule {
     await firestore.collection('users').doc(authStore.user?.uid).update({
       userGuideClosed: value
     })
-    return await authStore.refreshUserData()
+    return
   }
 
     @Action({ rawError: true })
@@ -46,6 +46,6 @@ export default class UserGuideModule extends VuexModule {
         await firestore.collection('users').doc(userId).update({ 
             interestedSubjects, currentGrade, school, bio, userInformationAdded : true, notifications
         });
-        return await authStore.refreshUserData();
+        return;
     }
 }

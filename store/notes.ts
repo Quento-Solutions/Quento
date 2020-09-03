@@ -12,20 +12,18 @@ import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
 
-// Fix the googl
+// Fix the google
 import {
   Grade_O,
   SubjectList,
   Subject_O,
-  SortOptions_O
-} from '~/types/subjects'
+  SortOptions_O,
+  FilterOptions
+} from '~/types/subjects';
+
+import { School_O } from '~/types/schools'
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
-export interface FilterOptions {
-  filterSubjects: Subject_O[]
-  filterGrades: Grade_O
-  sortSelect: SortOptions_O
-}
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
@@ -39,14 +37,20 @@ export default class NotesModule extends VuexModule {
   IsReset = false
 
   UploadImages: File[] = []
-  likedPosts: string[] = []
+
   ActiveGrade: Grade_O = 'ALL'
+  ActiveSchool : School_O | "All Schools" = "All Schools"
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
   SortSelect: SortOptions_O = 'magicRank'
 
   NotesPerPage = 5
   EndOfList = false
+
+  get likedPosts()
+  {
+    return authStore.userData?.likedNotes
+  }
 
   @Mutation
   public SET_RESET(val: boolean) {
@@ -83,35 +87,21 @@ export default class NotesModule extends VuexModule {
     this.SET_EDIT_NOTE(null);
     return await this.GetMoreNotes()
   }
-
-  @Action({ rawError: true })
-  public async SetActiveFilter(Options: FilterOptions) {
-    this.SET_FILTER(Options)
-  }
-
+  
   @Mutation
-  private SET_FILTER({
+  public SET_FILTER({
     filterGrades,
     filterSubjects,
-    sortSelect
+    filterSchools,
+    sortSelect,
   }: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
     this.ActiveSubjects = [...filterSubjects]
     this.ActiveGrade = filterGrades
+    this.ActiveSchool = filterSchools
     this.SortSelect = sortSelect
     this.EndOfList = false
-  }
-
-  @Mutation
-  private SET_LIKED_NOTES(likedSuggestions?: string[]) {
-    this.likedPosts = likedSuggestions || []
-  }
-
-  @Action({ rawError: true })
-  public async GetLikedNotes() {
-    const likedNotes = authStore.userData?.likedNotes;
-    this.SET_LIKED_NOTES(likedNotes);
   }
 
   @Action({ rawError: true })
@@ -135,8 +125,8 @@ export default class NotesModule extends VuexModule {
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const noteRef = firestore.collection('notes').doc(id)
-
-    if (this.likedPosts.includes(id)) {
+    console.log(this.likedPosts);
+    if (this.likedPosts?.includes(id)) {
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayRemove(id)
       })
@@ -158,15 +148,16 @@ export default class NotesModule extends VuexModule {
 
   @Mutation
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
-    var index = this.likedPosts.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex(
+    if(!authStore.userData) return;
+    const {likedNotes} = authStore.userData
+    console.log(likedNotes);
+    var index = likedNotes?.indexOf(suggestionId)
+    const suggestionIndex = this.ActiveNotes.findIndex( 
       (doc) => doc.id! == suggestionId
     )!
-    if (index === -1) {
-      this.likedPosts.push(suggestionId)
+    if (index !== -1) {
       this.ActiveNotes[suggestionIndex].upVotes++
     } else {
-      this.likedPosts.splice(index, 1)
       this.ActiveNotes[suggestionIndex].upVotes != 0
         ? this.ActiveNotes[suggestionIndex].upVotes--
         : ''
@@ -191,6 +182,10 @@ export default class NotesModule extends VuexModule {
 
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
+    }
+    console.log(this.ActiveSchool);
+    if ((this.ActiveSchool !== 'All Schools')) {
+      query = query.where('school', '==', this.ActiveSchool)
     }
     if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))

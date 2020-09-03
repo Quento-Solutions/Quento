@@ -1,0 +1,126 @@
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro ExtraLight'), local('SourceCodePro-ExtraLight'),
+        url('SourceCodePro-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Black'), local('SourceCodePro-Black'),
+        url('SourceCodePro-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro ExtraLight Italic'), local('SourceCodePro-ExtraLightIt'),
+        url('SourceCodePro-ExtraLightIt.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Bold Italic'), local('SourceCodePro-BoldIt'),
+        url('SourceCodePro-BoldIt.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Black Italic'), local('SourceCodePro-BlackIt'),
+        url('SourceCodePro-BlackIt.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'),
+        url('SourceCodePro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Light Italic'), local('SourceCodePro-LightIt'),
+        url('SourceCodePro-LightIt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Light'), local('SourceCodePro-Light'),
+        url('SourceCodePro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Medium'), local('SourceCodePro-Medium'),
+        url('SourceCodePro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Medium Italic'), local('SourceCodePro-MediumIt'),
+        url('SourceCodePro-MediumIt.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Italic'), local('SourceCodePro-It'),
+        url('SourceCodePro-It.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro'), local('SourceCodePro-Regular'),
+        url('SourceCodePro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Semibold Italic'), local('SourceCodePro-SemiboldIt'),
+        url('SourceCodePro-SemiboldIt.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: local('Source Code Pro Semibold'), local('SourceCodePro-Semibold'),
+        url('SourceCodePro-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+

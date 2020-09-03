@@ -26,6 +26,13 @@
         <i class="bx text-xl text-white mr-2" :class="getIcon(question.subject)" />
         {{ question.subject }}
       </div>
+      <VxTooltip v-if="question.school">
+        <div
+          class="rounded-full p-2 px-4 cursor-pointer vx-row items-center text-ginger text-white truncate"
+          style="background-color: #6398de; max-width : 150px"
+        >{{question.school}}</div>
+        <template #tooltip>{{question.school}}</template>
+      </VxTooltip>
     </div>
 
     <!-- Title -->
