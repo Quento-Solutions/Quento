@@ -22,7 +22,10 @@ let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
-  likedPosts: string[] = []
+  get likedPosts()
+  {
+    return authStore.userData?.likedQuestions
+  }
   ActiveGrade: Grade_O = 'ALL'
   ActiveSchool: School_O | 'All Schools' = 'All Schools'
   ActiveSubjects: Subject_O[] = [...SubjectList]
@@ -71,11 +74,6 @@ export default class QuestionsModule extends VuexModule {
     this.SortSelect = sortSelect
     this.EndOfList = false
   }
-
-  @Mutation
-  private SET_LIKED_ITEMS(items?: string[]) {
-    this.likedPosts = items || []
-  }
   // Preview Modal
   PreviewQuestion: Question | null = null
   PreviewModalOpen = false
@@ -99,12 +97,6 @@ export default class QuestionsModule extends VuexModule {
     }
     this.ActiveItems.push(...questions)
   }
-  @Action({ rawError: true })
-  public async GetLikedQuestions() {
-    const likedQuestions = authStore.userData?.likedQuestions;
-    this.SET_LIKED_ITEMS(likedQuestions);
-  }
-
   
   @Action({rawError : true})
   public async GetMoreQuestions() {
@@ -240,7 +232,6 @@ export default class QuestionsModule extends VuexModule {
   // Response Data Logic
   @Action({ rawError: true })
   public async ToggleLikedQuestion(questionId: string) {
-    await authStore.refreshUserData()
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const questionRef = firestore.collection('questions').doc(questionId)
@@ -257,10 +248,6 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
-    functions.httpsCallable('algoliaUpdateQuestion')({
-      questionId
-    })
-    await authStore.refreshUserData()
     return
   }
   @Action({ rawError: true })
@@ -271,7 +258,6 @@ export default class QuestionsModule extends VuexModule {
     questionId: string
     responseId: string
   }) {
-    await authStore.refreshUserData()
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const responseRef = firestore
@@ -292,8 +278,6 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
-    await authStore.refreshUserData()
-
     return
   }
 

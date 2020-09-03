@@ -70,9 +70,7 @@ import { School_O } from '~/types/schools'
   components: { QuestionCard, FilterSidebar },
   async mounted() {
     const loading = this.$vs.loading()
-    const questions = questionStore.GetMoreQuestions()
-    const likes = questionStore.GetLikedQuestions()
-    await Promise.all([questions, likes])
+    await questionStore.GetMoreQuestions()
     loading.close()
   }
 })
