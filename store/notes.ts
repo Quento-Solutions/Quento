@@ -19,7 +19,7 @@ import {
   Subject_O,
   SortOptions_O,
   FilterOptions
-} from '~/types/subjects';
+} from '~/types/subjects'
 
 import { School_O } from '~/types/schools'
 
@@ -39,7 +39,7 @@ export default class NotesModule extends VuexModule {
   UploadImages: File[] = []
 
   ActiveGrade: Grade_O = 'ALL'
-  ActiveSchool : School_O | "All Schools" = "All Schools"
+  ActiveSchool: School_O | 'All Schools' = 'All Schools'
   ActiveSubjects: Subject_O[] = [...SubjectList]
   ActiveNotes: Note[] = []
   SortSelect: SortOptions_O = 'magicRank'
@@ -47,8 +47,7 @@ export default class NotesModule extends VuexModule {
   NotesPerPage = 5
   EndOfList = false
 
-  get likedPosts()
-  {
+  get likedPosts() {
     return authStore.userData?.likedNotes
   }
 
@@ -59,7 +58,6 @@ export default class NotesModule extends VuexModule {
 
   @Mutation
   public RESET_NOTES() {
-    
     this.ActiveNotes = []
     LastVisible = null
     this.EndOfList = false
@@ -67,7 +65,7 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public SetEditNote(note: Note | null) {
-    console.log({note});
+    console.log({ note })
     this.SET_EDIT_NOTE(note)
   }
 
@@ -79,21 +77,20 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public async ResetPosts() {
-
     this.RESET_NOTES()
     this.SET_RESET(true)
     this.TOGGLE_PREVIEW_MODAL(false)
     this.TOGGLE_NOTES_MODULE(false)
-    this.SET_EDIT_NOTE(null);
+    this.SET_EDIT_NOTE(null)
     return await this.GetMoreNotes()
   }
-  
+
   @Mutation
   public SET_FILTER({
     filterGrades,
     filterSubjects,
     filterSchools,
-    sortSelect,
+    sortSelect
   }: FilterOptions) {
     this.ActiveNotes = []
     LastVisible = null
@@ -116,8 +113,8 @@ export default class NotesModule extends VuexModule {
   }
 
   @Mutation
-  public SET_UPLOAD_IMAGES(images ?: File[]) {
-    this.UploadImages = images || [];
+  public SET_UPLOAD_IMAGES(images?: File[]) {
+    this.UploadImages = images || []
   }
 
   @Action({ rawError: true })
@@ -125,7 +122,7 @@ export default class NotesModule extends VuexModule {
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const noteRef = firestore.collection('notes').doc(id)
-    console.log(this.likedPosts);
+    console.log(this.likedPosts)
     if (this.likedPosts?.includes(id)) {
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayRemove(id)
@@ -141,18 +138,18 @@ export default class NotesModule extends VuexModule {
         upVotes: store.FieldValue.increment(1)
       })
     }
-    await batch.commit();
+    await batch.commit()
     this.TOGGLE_LIKED_SUGGESTION(id)
     return
   }
 
   @Mutation
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
-    if(!authStore.userData) return;
-    const {likedNotes} = authStore.userData
-    console.log(likedNotes);
+    if (!authStore.userData) return
+    const { likedNotes } = authStore.userData
+    console.log(likedNotes)
     var index = likedNotes?.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex( 
+    const suggestionIndex = this.ActiveNotes.findIndex(
       (doc) => doc.id! == suggestionId
     )!
     if (index !== -1) {
@@ -172,19 +169,19 @@ export default class NotesModule extends VuexModule {
     this.ActiveNotes.push(...notes)
   }
 
-  @Action({rawError : true})
-  public async GetMoreNotes() {
+  @Action({ rawError: true })
+  public async GetMoreNotes(max ?: number) {
     if (this.EndOfList) {
       return
     }
+    if (max && max <= this.ActiveNotes.length) return;
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
 
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
     }
-    console.log(this.ActiveSchool);
-    if ((this.ActiveSchool !== 'All Schools')) {
+    if (this.ActiveSchool !== 'All Schools') {
       query = query.where('school', '==', this.ActiveSchool)
     }
     if (this.ActiveSubjects.length != 0) {
@@ -200,9 +197,12 @@ export default class NotesModule extends VuexModule {
     query = query.limit(this.NotesPerPage)
     try {
       const snapshot = await query.get()
-      const notes = snapshot.docs.map((doc) =>
-        Note.fromFirebase(doc.data() as Note_t_F, doc.id)
-      )
+      const notes = snapshot.docs.map((doc) => {
+        doc.ref.update({
+          deteriorate: store.FieldValue.increment(1)
+        })
+        return Note.fromFirebase(doc.data() as Note_t_F, doc.id)
+      })
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
@@ -213,30 +213,32 @@ export default class NotesModule extends VuexModule {
   }
   @Action({ rawError: true })
   public async PostNote({ note }: { note: Note }) {
-    const deleteImages = note.storedImages?.map(async image => {
+    const deleteImages = note.storedImages?.map(async (image) => {
       // Delete unused images.
-      const imageUsed = note.contents?.includes(image.imageURL);
-      if(!imageUsed)
-      {
+      const imageUsed = note.contents?.includes(image.imageURL)
+      if (!imageUsed) {
         try {
-          const deleteImage = await storage.ref(image.fileName).delete();
-          return deleteImage;
-        } catch(error)
-        {
-          console.log({error});
-          return;
+          const deleteImage = await storage.ref(image.fileName).delete()
+          return deleteImage
+        } catch (error) {
+          console.log({ error })
+          return
         }
       }
       return
     })
     await Promise.all(deleteImages || [])
-    const newImages = note.storedImages?.filter(value => note.contents?.includes(value.imageURL));
-    const newNote : Note = Object.assign({}, note, {storedImages : newImages})
-    if(note.id)
-    {
-      return await firestore.collection('notes').doc(note.id).update(Note.toFirebase(newNote));
+    const newImages = note.storedImages?.filter((value) =>
+      note.contents?.includes(value.imageURL)
+    )
+    const newNote: Note = Object.assign({}, note, { storedImages: newImages })
+    if (note.id) {
+      return await firestore
+        .collection('notes')
+        .doc(note.id)
+        .update(Note.toFirebase(newNote))
     }
-    await firestore.collection('notes').add(Note.toFirebase(newNote));
+    await firestore.collection('notes').add(Note.toFirebase(newNote))
   }
 
   @Mutation
@@ -268,11 +270,10 @@ export default class NotesModule extends VuexModule {
   public SetPreviewNote(val: Note | null) {
     this.SET_PREVIEW_NOTE(val)
   }
-  
-  @Action({rawError : true})
-  public async DeleteNote(id : string)
-  {
-    await firestore.collection("notes").doc(id).delete();
-    return await this.ResetPosts();
+
+  @Action({ rawError: true })
+  public async DeleteNote(id: string) {
+    await firestore.collection('notes').doc(id).delete()
+    return await this.ResetPosts()
   }
 }

@@ -46,6 +46,7 @@ export interface Note_t_F {
   school ?: School_O;
   grade: Grade_O
   views: number
+  magicRank?: number
 }
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {

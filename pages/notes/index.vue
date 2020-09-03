@@ -71,7 +71,7 @@ import { School_O } from '~/types/schools'
   components: { NotesCard, FilterSidebar, NotesSearchBar },
   async mounted() {
     const loading = this.$vs.loading()
-    const notes = notesStore.GetMoreNotes()
+    const notes = notesStore.GetMoreNotes(5)
     await Promise.all([notes])
     console.log(notesStore.likedPosts);
     loading.close()
