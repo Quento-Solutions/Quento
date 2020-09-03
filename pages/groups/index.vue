@@ -1,10 +1,10 @@
 <template>
   <div class="vx-row w-full ml-8" id="newsletter-container">
     <span class="h-15 w-full mr-8 mb-4">
-      <div class = 'text-white mb-4 text-ginger-b text-4xl w-full p-4'>
+      <div class = 'inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4'>
         YOUR GROUPS
       </div>
-      <vs-button circle flat success animation-type="vertical" class="float-right mr-10 w-20">
+      <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
         <div class="text-lg text-xs font-ginger-b">Join</div>
         <template #animate>
           <i class="bx bx-plus text-2xl"></i>
