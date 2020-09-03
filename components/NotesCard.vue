@@ -72,8 +72,7 @@
     <div class="vx-row w-full justify-start p-4 pt-0 m-0 pt-0 pl-0" style="margin: 0;">
       <div
         class="md:w-full w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1 pb-0"
-        :style="
-          preview ? 'max-height: 150px' : ''"
+        :class="preview? 'content-max-height':''"
       >
         <vue-flux
           :options="vfOptions"
@@ -143,21 +142,15 @@
     </div>
   </div>
   </div>
-  <div class="image-container" :style="preview ? '' : 'display:none;'">
-            <img
-          :src="note.images[0]"
-          v-if="hasImage && preview"  
-          style="position:absolute;object-fit: cover;min-height:100%"
-        />
-        <img
-          src="../assets/images/Quento_Physics_Filler.png"
-          v-if="!hasImage && preview"  
-          style="position:absolute;object-fit: cover;min-height:100%"
-        />
-
-
-
-        
+  <div class="image-container" :style="preview ? '' : 'display:none;'" :class="preview && !hasImage?'default-image':''">
+    <img
+      :src="note.images[0]"
+      v-if="hasImage && preview"  
+      style="position:absolute;object-fit: cover;min-height:100%"/>
+    <img
+      src="../assets/images/Quento_Notes_Filler.png"
+      v-if="!hasImage && preview" 
+      style="position:absolute;object-fit: cover;min-height:100%"/>
   </div>
   </div>
   </VxCard>
@@ -234,9 +227,16 @@ export default class NotesCard extends Vue {
 .vx-card__body {
   padding:0 !important;
 }
+.vs-navbar__group__items {
+  background:white !important;
+}
 </style>
 
 <style lang="scss" scoped>
+
+.content-max-height {
+  max-height: 150px;
+}
 .card-content {
     flex-direction:row;
     display:flex;
@@ -310,6 +310,12 @@ export default class NotesCard extends Vue {
 }
 
 @media only screen and (max-width: 1024px) {
+  .content-max-height {
+  max-height: 100px !important;
+}
+  .default-image{
+    display:none !important;
+  }
   .card-content {
     flex-direction:column-reverse;
 }
