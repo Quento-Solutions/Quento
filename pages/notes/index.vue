@@ -72,8 +72,8 @@ import { School_O } from '~/types/schools'
   async mounted() {
     const loading = this.$vs.loading()
     const notes = notesStore.GetMoreNotes()
-    const likes = notesStore.GetLikedNotes()
-    await Promise.all([notes, likes])
+    await Promise.all([notes])
+    console.log(notesStore.likedPosts);
     loading.close()
   }
 })

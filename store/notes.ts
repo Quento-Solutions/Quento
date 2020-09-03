@@ -38,7 +38,6 @@ export default class NotesModule extends VuexModule {
 
   UploadImages: File[] = []
 
-  likedPosts: string[] = []
   ActiveGrade: Grade_O = 'ALL'
   ActiveSchool : School_O | "All Schools" = "All Schools"
   ActiveSubjects: Subject_O[] = [...SubjectList]
@@ -47,6 +46,11 @@ export default class NotesModule extends VuexModule {
 
   NotesPerPage = 5
   EndOfList = false
+
+  get likedPosts()
+  {
+    return authStore.userData?.likedNotes
+  }
 
   @Mutation
   public SET_RESET(val: boolean) {
@@ -100,17 +104,6 @@ export default class NotesModule extends VuexModule {
     this.EndOfList = false
   }
 
-  @Mutation
-  private SET_LIKED_NOTES(likedSuggestions?: string[]) {
-    this.likedPosts = likedSuggestions || []
-  }
-
-  @Action({ rawError: true })
-  public async GetLikedNotes() {
-    const likedNotes = authStore.userData?.likedNotes;
-    this.SET_LIKED_NOTES(likedNotes);
-  }
-
   @Action({ rawError: true })
   public async IncrementView(id: string) {
     const updateViews = await firestore
@@ -132,8 +125,8 @@ export default class NotesModule extends VuexModule {
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const noteRef = firestore.collection('notes').doc(id)
-
-    if (this.likedPosts.includes(id)) {
+    console.log(this.likedPosts);
+    if (this.likedPosts?.includes(id)) {
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayRemove(id)
       })
@@ -155,15 +148,16 @@ export default class NotesModule extends VuexModule {
 
   @Mutation
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
-    var index = this.likedPosts.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex(
+    if(!authStore.userData) return;
+    const {likedNotes} = authStore.userData
+    console.log(likedNotes);
+    var index = likedNotes?.indexOf(suggestionId)
+    const suggestionIndex = this.ActiveNotes.findIndex( 
       (doc) => doc.id! == suggestionId
     )!
-    if (index === -1) {
-      this.likedPosts.push(suggestionId)
+    if (index !== -1) {
       this.ActiveNotes[suggestionIndex].upVotes++
     } else {
-      this.likedPosts.splice(index, 1)
       this.ActiveNotes[suggestionIndex].upVotes != 0
         ? this.ActiveNotes[suggestionIndex].upVotes--
         : ''
