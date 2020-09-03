@@ -1,3 +1,5 @@
+import { School_O } from './schools'
+
 export const SubjectGroups = {
   Sciences: ['Physics', 'Chemistry', 'Biology', 'Math'],
   Languages: ['English', 'French', 'Spanish'],
@@ -6,6 +8,13 @@ export const SubjectGroups = {
   Technology: ['ICS', 'ITGS', 'ComTech'],
   Other : ["Phys Ed", "General"]
 } as const
+
+export interface FilterOptions {
+  filterSubjects: Subject_O[]
+  filterGrades: Grade_O
+  filterSchools: School_O | 'All Schools'
+  sortSelect: SortOptions_O
+}
 
 export const AllSubjectList = [
   'Physics',

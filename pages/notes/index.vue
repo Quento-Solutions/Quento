@@ -5,13 +5,23 @@
     id="notes-screen-container"
   >
     <div id="notes-content-overlay"></div>
-    <NotesSidebar />
+    <FilterSidebar
+      :sort.sync="sort"
+      :subjects.sync="subjects"
+      :school.sync="school"
+      :grade.sync="grade"
+      @filter="filter()"
+    >
+      <vs-button warn @click="notesModalActive = true" class="w-full">
+        <i class="bx bxs-plus-square text-4xl" />
+        <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
+      </vs-button>
+    </FilterSidebar>
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
-
-      <div class="vx-col w-full inline-flex lg:hidden" style="">
+      <div class="vx-col w-full inline-flex lg:hidden" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
-          <vs-avatar class="icon-small float-right" @click="openNotesSidebar()">
+          <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
             <i class="bx bx-menu" style="font-size: 1.25rem;" />
           </vs-avatar>
         </div>
@@ -39,31 +49,43 @@ import { Component, Vue, Prop, Watch, mixins } from 'nuxt-property-decorator'
 import { Note } from '~/types/notes'
 
 import { windowStore, notesStore } from '~/store'
-import NotesSidebar from '~/components/NotesSidebar.vue'
+import FilterSidebar from '~/components/FilterSidebar.vue'
 import NotesCard from '~/components/NotesCard.vue'
-import NotesSearchBar from '~/components/NotesSearchBar.vue';
-import LoadScroll from '~/mixins/LoadScrollMixin';
+import LoadScroll from '~/mixins/LoadScrollMixin'
+import { Subject_O, Grade_O } from '~/types/subjects'
+import { School_O } from '~/types/schools'
 
 @Component<NotesPage>({
-  components: { NotesCard, NotesSidebar, NotesSearchBar },
+  components: { NotesCard, FilterSidebar },
   async mounted() {
-    window.scrollTo(0,0);
-    
     const loading = this.$vs.loading()
 
     const notes = notesStore.GetMoreNotes()
-    const likes = notesStore.GetLikedNotes()
-    await Promise.all([notes, likes])
     this.loaded = true;
-
+    await Promise.all([notes])
     loading.close()
-  },
+  }
 })
 export default class NotesPage extends mixins(LoadScroll) {
   get noNotesFound() {
     return notesStore.EndOfList && this.notesList.length == 0
   }
-  loaded = false;
+  sort: typeof notesStore.SortSelect = 'magicRank'
+  subjects: Subject_O[] = []
+  grade: Grade_O = 'ALL'
+  school: School_O | 'All Schools' = 'All Schools'
+
+  async filter() {
+    const loading = this.$vs.loading()
+    notesStore.SET_FILTER({
+      sortSelect: this.sort,
+      filterSubjects: this.subjects,
+      filterGrades: this.grade,
+      filterSchools: this.school
+    })
+    await notesStore.GetMoreNotes()
+    loading.close()
+  }
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
     if (val && this.loaded) {
@@ -81,7 +103,7 @@ export default class NotesPage extends mixins(LoadScroll) {
     return notesStore.EndOfList
   }
   get bodyOverlay() {
-    return windowStore.notesSidebarOpen && windowStore.isSmallScreen
+    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
   }
   get previewModalActive() {
     return notesStore.PreviewModalOpen
@@ -96,8 +118,8 @@ export default class NotesPage extends mixins(LoadScroll) {
   set notesModalActive(value: boolean) {
     notesStore.ToggleNotesModule(value)
   }
-  openNotesSidebar() {
-    windowStore.SetNotesState(true)
+  openFilterSidebar() {
+    windowStore.SetFilterSidebar(true)
   }
 
   get notesList() {
