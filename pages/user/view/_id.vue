@@ -227,6 +227,7 @@ export default class UserPage extends mixins(UserMixin) {
           displayName: this.UserData?.displayName,
           photoURL: this.UserData?.photoURL,
           createdAt: new Date(),
+          uid: this.AuthUser?.uid,
           accepted: false
         })
 
@@ -234,6 +235,7 @@ export default class UserPage extends mixins(UserMixin) {
     } catch (error) {
       console.log(error)
     }
+    loading.close()
   }
 
   async getUserNotes() {

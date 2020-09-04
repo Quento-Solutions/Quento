@@ -105,26 +105,73 @@
           <!-- /Information - Col 2 -->
 
           <!-- Modal -->
-          <vs-dialog v-model="subjectModalActive" style="min-width:100%">
+          <vs-dialog
+            scroll
+            auto-width
+            overflow-hidden
+            v-model="subjectModalActive"
+            style=" max-width: 100%;"
+          >
             <template #header>
               <h2 class="not-margin mt-3">
-                <b>My Friends</b>
+                <b>My Followers</b>
               </h2>
             </template>
 
             <div
-              class="justify-start w-5/6 m-0 vx-row items-center ml-16 mb-4"
-              style="flex-wrap: nowrap"
+              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+              v-for="person in followers"
+              :key="person.name"
             >
               <div>
-                <vs-avatar size="75" class="icon" @click.stop="$router.push(`/user/view/_id`)">
-                  <img v-if="UserData.photoURL" :src="UserData.photoURL" />
-                  <template slot="text" v-else>Vansh Sethi</template>
+                <vs-avatar
+                  size="75"
+                  class="icon"
+                  @click.stop="$router.push(`/user/view/${person.uid}`)"
+                >
+                  <img v-if="person.photoURL" :src="person.photoURL" />
+                  <template slot="text" v-else>{{ person.displayName }}</template>
                 </vs-avatar>
               </div>
               <div class style=" min-width: 100%">
                 <!-- User name -->
-                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">Vansh Sethi</div>
+                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.displayName}}</div>
+
+                <div v-if="person.accepted == false" class="pl-2 vx-row">
+                  <vs-button
+                    color="success"
+                    size="medium"
+                    @click="acceptFriend(person.uid, person.displayName, person.photoURL)"
+                  >Accept</vs-button>
+                  <vs-button color="danger" size="medium" @click="declineFriend(person.uid)">Decline</vs-button>
+                </div>
+                <div v-if="person.accepted == true" class="pl-2 vx-row">
+                  <vs-button color="success" type="filled" size="medium">Following</vs-button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Requested Follow Field -->
+            <div
+              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+              v-for="person in following"
+              :key="person.name"
+            >
+              <div>
+                <vs-avatar
+                  size="75"
+                  class="icon"
+                  @click.stop="$router.push(`/user/view/${person.uid}`)"
+                >
+                  <img v-if="person.photoURL" :src="person.photoURL" />
+                  <template slot="text" v-else>{{ person.name }}</template>
+                </vs-avatar>
+              </div>
+              <div class style=" min-width: 100%">
+                <!-- User name -->
+                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.name}}</div>
 
                 <div class="pl-2">
                   <vs-button color="warn" type="filled" size="medium">Follow Request Pending</vs-button>
@@ -198,13 +245,16 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
 import { auth } from 'firebase'
 import { UserData } from '~/types/user'
 import { User } from '~/types'
+import firebase from 'firebase/app'
 @Component<UserProfile>({
   components: {
     NotesCard
   },
   async mounted() {
-    this.getUserNotes()
+    await this.getUserNotes()
+    console.log(this.UserNotes)
     await this.getFriends()
+    console.log(this.following)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -220,6 +270,8 @@ export default class UserProfile extends mixins(UserMixin) {
   UserNotes: Note[] = []
   subjectModalActive = true
   userInfo: UserData | null = null
+  followers: any = []
+  following: any = []
   async fetchUser(uid: string) {
     try {
       const doc = await firestore.doc(`users/${uid}`).get()
@@ -234,6 +286,10 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   async getFriends() {
+    if (!this.AuthUser) {
+      return
+    }
+
     var friends = []
 
     // Get pending friends
@@ -248,7 +304,8 @@ export default class UserProfile extends mixins(UserMixin) {
       friends.push({
         name: friendInfo?.displayName,
         photoURL: friendInfo?.photoURL,
-        status: 'pending'
+        status: 'pending',
+        uid: pendingFriends[i]
       })
     }
 
@@ -258,11 +315,74 @@ export default class UserProfile extends mixins(UserMixin) {
       .doc(this.AuthUser?.uid)
       .collection('followers')
       .get()
-    const followers2 = doc.docs.map((follower) => follower.data())
+    const followers2 = doc.docs.map((follower: any) => follower.data())
 
-    console.log(followers2)
+    this.following = Object.assign({}, friends)
+    this.followers = Object.assign({}, followers2)
     // const followerList = doc as UserData
-    // console.log(followerList)
+    console.log(this.followers)
+  }
+
+  async acceptFriend(uid: string, displayName: string, photoURL: string) {
+    const loading = this.$vs.loading()
+
+    // Add friend to user's collection
+    const doc = await firestore
+      .collection('users')
+      .doc(this.AuthUser?.uid)
+      .collection('followers')
+      .doc(uid)
+      .update({
+        accepted: true
+      })
+
+    // Add friend to friend's collection
+    const doc2 = await firestore
+      .collection('users')
+      .doc(uid)
+      .collection('followers')
+      .doc(uid)
+      .set({
+        displayName: displayName,
+        photoURL: photoURL,
+        createdAt: new Date(),
+        uid: uid,
+        accepted: true
+      })
+
+    // Delete pending following for friend
+    const doc3 = await firestore
+      .collection('users')
+      .doc(uid)
+      .update({
+        pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
+      })
+
+    await this.getFriends()
+    loading.close()
+  }
+
+  async declineFriend(uid: string) {
+    const loading = this.$vs.loading()
+    // Remove the pending follow request from user's collection
+
+    const doc = await firestore
+      .collection('users')
+      .doc(this.AuthUser?.uid)
+      .collection('followers')
+      .doc(uid)
+      .delete()
+
+    // Delete pending following for friend
+    const doc3 = await firestore
+      .collection('users')
+      .doc(uid)
+      .update({
+        pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
+      })
+
+    await this.getFriends()
+    loading.close()
   }
 
   async getUserNotes() {
