@@ -214,6 +214,7 @@ export default class TopNav extends mixins(UserMixin) {
   }
   async getNotifications() {
     try {
+      
       await notificationStore.getNotifications()
     } catch (error) {
       this.$vs.notification({

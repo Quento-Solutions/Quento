@@ -39,24 +39,12 @@
         <b>Sorry!</b> Something went wrong when fetching the Question. Please Try
         Again.
       </vs-alert>
-      <vs-button
-        size="xl"
-        type="filled"
-        color="warn"
-        class="vx-col shadow-md m-4 text-bold float-right"
-        style="font-weight: bold;"
-        @click="LoadMoreQuestions()"
-        :disabled="endOfList"
-      >
-        Load More &nbsp;
-        <i class="bx bx-loader-circle text-2xl" />
-      </vs-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 
 import { Question } from '~/types/questions'
 
@@ -65,21 +53,30 @@ import FilterSidebar from '~/components/FilterSidebar.vue'
 import QuestionCard from '~/components/QuestionCard.vue'
 import { Subject_O, Grade_O } from '~/types/subjects'
 import { School_O } from '~/types/schools'
+import LoadScrollMixin from '~/mixins/LoadScrollMixin'
 
 @Component<NotesPage>({
   components: { QuestionCard, FilterSidebar },
   async mounted() {
     const loading = this.$vs.loading()
     await questionStore.GetMoreQuestions()
+    this.loaded = true;
     loading.close()
   }
 })
-export default class NotesPage extends Vue {
+export default class NotesPage extends mixins(LoadScrollMixin) {
   sort: typeof questionStore.SortSelect = 'createdAt'
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
-
+  
+  @Watch('IsScrolledDown')
+  PageHeightChange(val: boolean, oldVal: boolean) {
+    if (val && this.loaded) {
+      this.LoadMoreQuestions()
+    }
+  }
+  
   async filter() {
     const loading = this.$vs.loading()
     try {
