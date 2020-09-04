@@ -1,6 +1,6 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { auth, firestore as FirestoreModule } from 'firebase/app'
+import { firestore as FirestoreModule } from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
@@ -16,9 +16,8 @@ import {
 
 import { authStore } from '~/store'
 import { School_O } from '~/types/schools'
-import { firestore as store } from 'firebase/app'
 
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+let LastVisible: FirestoreModule.QueryDocumentSnapshot<FirestoreModule.DocumentData> | null = null
 
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
@@ -28,9 +27,9 @@ export default class QuestionsModule extends VuexModule {
   }
   ActiveGrade: Grade_O = 'ALL'
   ActiveSchool: School_O | 'All Schools' = 'All Schools'
-  ActiveSubjects: Subject_O[] = [...SubjectList]
+  ActiveSubjects: Subject_O[] = []
   ActiveItems: Question[] = []
-  SortSelect: SortOptions_O = 'magicRank'
+  SortSelect: SortOptions_O = 'createdAt'
 
   ItemsPerPage = 5
   EndOfList = false
@@ -99,17 +98,17 @@ export default class QuestionsModule extends VuexModule {
   }
   
   @Action({rawError : true})
-  public async GetMoreQuestions() {
+  public async GetMoreQuestions(max ?: number) {
     if (this.EndOfList) {
       return
     }
-    let query: store.Query<store.DocumentData> = firestore.collection('questions')
+    if (max && max <= this.ActiveItems.length) return;
+    let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collection('questions')
     // Do query filtering things
 
-    if (!(this.ActiveGrade === 'ALL')) {
+    if ((this.ActiveGrade !== 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
     }
-    console.log(this.ActiveSchool);
     if ((this.ActiveSchool !== 'All Schools')) {
       query = query.where('school', '==', this.ActiveSchool)
     }

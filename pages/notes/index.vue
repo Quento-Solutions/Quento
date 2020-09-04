@@ -44,45 +44,48 @@
         <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
         Again.
       </vs-alert>
-      <vs-button
-        size="xl"
-        type="filled"
-        color="warn"
-        class="vx-col shadow-md m-4 text-bold float-right"
-        style="font-weight: bold;"
-        @click="LoadMoreNotes()"
-        :disabled="endOfList"
-      >
-        Load More &nbsp;
-        <i class="bx bx-loader-circle text-2xl" />
-      </vs-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, Watch, mixins } from 'nuxt-property-decorator'
 
 import { Note } from '~/types/notes'
 
 import { windowStore, notesStore } from '~/store'
 import FilterSidebar from '~/components/FilterSidebar.vue'
 import NotesCard from '~/components/NotesCard.vue'
-import NotesSearchBar from '~/components/NotesSearchBar.vue'
+import LoadScroll from '~/mixins/LoadScrollMixin'
 import { Subject_O, Grade_O } from '~/types/subjects'
 import { School_O } from '~/types/schools'
 
 @Component<NotesPage>({
-  components: { NotesCard, FilterSidebar, NotesSearchBar },
+  components: { NotesCard, FilterSidebar },
   async mounted() {
-    const loading = this.$vs.loading()
-    const notes = notesStore.GetMoreNotes()
-    await Promise.all([notes])
-    console.log(notesStore.likedPosts);
+    const loading = this.$vs.loading({
+      type: 'circles',
+      text : "Loading Data"
+    })
+    try {
+      const notes = notesStore.GetMoreNotes(true)
+      await Promise.all([notes])
+    } catch (error)
+    {
+      console.error({error});
+      this.$vs.notification({
+        title : error.message,
+        color : "danger"
+      })
+    }
+    this.loaded = true;
     loading.close()
   }
 })
-export default class NotesPage extends Vue {
+export default class NotesPage extends mixins(LoadScroll) {
+  get noNotesFound() {
+    return notesStore.EndOfList && this.notesList.length == 0
+  }
   sort: typeof notesStore.SortSelect = 'magicRank'
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
@@ -92,13 +95,13 @@ export default class NotesPage extends Vue {
 
   async filter() {
     const loading = this.$vs.loading()
-    notesStore.SET_FILTER({
+    notesStore.SetFilter({
       sortSelect: this.sort,
       filterSubjects: this.subjects,
       filterGrades: this.grade,
       filterSchools: this.school
     })
-    await notesStore.GetMoreNotes()
+    await notesStore.GetMoreNotes(true)
     loading.close()
   }
 
@@ -113,9 +116,13 @@ export default class NotesPage extends Vue {
     }
   }
 
-  get noNotesFound() {
-    return notesStore.EndOfList && this.notesList.length == 0
+  @Watch('IsScrolledDown')
+  PageHeightChange(val: boolean, oldVal: boolean) {
+    if (val && this.loaded) {
+      this.LoadMoreNotes()
+    }
   }
+
   async LoadMoreNotes() {
     const loading = this.$vs.loading()
     await notesStore.GetMoreNotes()

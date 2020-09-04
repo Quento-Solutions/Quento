@@ -83,16 +83,6 @@
   </div>
   </VxCard>
 
-
-
-
-
-
-
-
-
-
-
      <VxCard
      v-if="!listView || !preview"
     fitContent="true"
