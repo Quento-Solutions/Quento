@@ -22,6 +22,8 @@ import {
 } from '~/types/subjects'
 
 import { School_O } from '~/types/schools'
+import functions from '~/plugins/firebaseFunctions'
+import { HourDiff } from '~/utils/time'
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 
@@ -40,7 +42,7 @@ export default class NotesModule extends VuexModule {
 
   ActiveGrade: Grade_O = 'ALL'
   ActiveSchool: School_O | 'All Schools' = 'All Schools'
-  ActiveSubjects: Subject_O[] = [...SubjectList]
+  ActiveSubjects: Subject_O[] = []
   ActiveNotes: Note[] = []
   SortSelect: SortOptions_O = 'magicRank'
 
@@ -170,11 +172,61 @@ export default class NotesModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async GetMoreNotes(max ?: number) {
+  public async GetMoreNotes(max?: number) {
     if (this.EndOfList) {
       return
     }
-    if (max && max <= this.ActiveNotes.length) return;
+    console.log(
+      this.ActiveGrade,
+      this.ActiveSchool,
+      this.ActiveSubjects,
+      this.SortSelect
+    )
+    if (
+      this.ActiveGrade === 'ALL' &&
+      this.ActiveSchool === 'All Schools' &&
+      this.ActiveSubjects.length === 0 &&
+      this.SortSelect === 'magicRank'
+    ) {
+      console.log('CUSTOM RANK')
+      if (!LastVisible && authStore.userData?.lastFeedUpdated && HourDiff(authStore.userData.lastFeedUpdated) > 2) {
+        await functions.httpsCallable('PersonalRank')()
+      }
+      let query: store.Query<store.DocumentData> = firestore.collectionGroup(
+        'personalRanking'
+      )
+      query = query.where('userId', '==', authStore.user?.uid)
+      query = query.orderBy('magicRank', 'desc')
+      if (LastVisible) {
+        query = query.startAfter(LastVisible)
+      }
+      query = query.limit(this.NotesPerPage)
+
+      try {
+        const rankingDocs = await query.get()
+        LastVisible = rankingDocs.docs[rankingDocs.docs.length - 1]
+        const notes = await Promise.all(
+          rankingDocs.docs
+            .map((doc) => {
+              console.log({ parentPath: doc.data().parentPath })
+              return firestore.doc(doc.data().parentPath).get()
+            })
+            .map(async (docPromise) =>
+              Note.fromFirebase(
+                (await (await docPromise).data()) as Note_t_F,
+                (await docPromise).id
+              )
+            )
+        )
+        this.PUSH_NOTES(notes)
+      } catch (error) {
+        console.log({ error })
+        throw error
+      }
+      return
+    }
+
+    if (max && max <= this.ActiveNotes.length) return
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
 
@@ -197,12 +249,7 @@ export default class NotesModule extends VuexModule {
     query = query.limit(this.NotesPerPage)
     try {
       const snapshot = await query.get()
-      const notes = snapshot.docs.map((doc) => {
-        doc.ref.update({
-          deteriorate: store.FieldValue.increment(1)
-        })
-        return Note.fromFirebase(doc.data() as Note_t_F, doc.id)
-      })
+      const notes = snapshot.docs.map((doc) => Note.fromFirebase(doc.data() as Note_t_F, doc.id))
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
