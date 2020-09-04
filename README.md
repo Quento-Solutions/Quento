@@ -82,6 +82,38 @@ $ npm run generate
   - All the typescript files
 - Utils (not to be confused with ~\assets\utils)
 
+## An open letter to whoever needs to build a new page
+Here is the default layout of the page (also at localhost:3000/basepiece or quento.ca/basepiece)
+Enjoy!
+```html
+div Layout Main
+  userGuideModal
+  userInfoModal
+  Sidebar
+  div contentArea
+    div contentOverlay
+    div contentWrapper
+      Navbar
+      div Router View
+        div Router Content
+          transition thingy
+          div content-area__content (ie. the content of the area of the content of the page, go naming departement)
+            another transition
+              (YOUR CONTENT HERE)
+          /div
+        /div
+      /div
+    /div
+  /div
+/div
+/div
+/div
+/div
+/div
+/div
+/div
+(etc.)
+```
 
 ## Documentation/Dependencies
 For detailed explanation on how things work, checkout the following docs:
