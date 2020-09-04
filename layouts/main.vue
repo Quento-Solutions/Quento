@@ -12,6 +12,7 @@
     class="layout--main"
     :class="[navbarClasses, footerClasses, { 'app-page': isAppPage }]"
   >
+    <!-- onboarding, but everywhere 🤯 -->
     <UserGuideModal></UserGuideModal>
     <UserInfoModal></UserInfoModal>
     <Sidebar @focus="handleFocus" @focusout="handleFocusOut" tabindex="0"></Sidebar>
@@ -22,12 +23,12 @@
       :class="[contentAreaClass, { 'show-overlay': bodyOverlay, 'show-lower-overlay' : lowerOverlay }]"
       :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
 
-    >
-      <!-- CONTENT? -->
-      <div id="content-overlay"></div>
+    > <!-- CONTENT AREA -->
 
-      <div class="content-wrapper" 
-      >
+      <!-- A blur of sorts for the background -->
+      <div id="content-overlay" />
+
+      <div class="content-wrapper"><!--  CONTENT WRAPPER -->
         
         <!-- NAVBAR -->
         <TopNav
@@ -38,16 +39,12 @@
           ]"
         />
 
-        <div class="router-view">
-          <div
-            class="router-content"
-            :class="{ 'mt-0': navbarType == 'hidden' }"
-          >
-            <transition :name="routerTransition">
-              <div
-                class="router-header flex flex-wrap items-center mb-6"
-                v-if="$route.meta.breadcrumb || $route.meta.pageTitle"
-              >
+        <div class="router-view"> <!-- Router View -->
+          <div class="router-content" :class="{ 'mt-0': navbarType == 'hidden' }"> <!-- Router Content -->
+            
+            <!-- SPECIAL but not in a good way 😡-->
+            <transition :name="routerTransition"> <!-- Add a transition -->
+              <div class="router-header flex flex-wrap items-center mb-6" v-if="$route.meta.breadcrumb || $route.meta.pageTitle"><!-- Router Header? -->
                 <div
                   class="content-area__heading"
                   :class="{
@@ -65,7 +62,7 @@
                 />
 
                 <!-- DROPDOWN -->
-
+                <h1>A dropdown</h1>
                 <vs-dropdown
                   class="ml-auto md:block hidden cursor-pointer"
                   vs-trigger-click
@@ -115,8 +112,9 @@
               </div>
             </transition>
 
-            <div class="content-area__content">
+            <div class="content-area__content"> <!-- Content-area__content -->
               <transition :name="routerTransition" mode="out-in">
+                <!-- AND NOW, ACTUAL CONTENT -->
                 <nuxt />
               </transition>
             </div>
