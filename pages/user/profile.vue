@@ -103,6 +103,35 @@
             <vs-button color="warn" type="filled" size="large" to="/user/edit">Edit Profile</vs-button>
           </div>
           <!-- /Information - Col 2 -->
+
+          <!-- Modal -->
+          <vs-dialog v-model="subjectModalActive" style="min-width:100%">
+            <template #header>
+              <h2 class="not-margin mt-3">
+                <b>My Friends</b>
+              </h2>
+            </template>
+
+            <div
+              class="justify-start w-5/6 m-0 vx-row items-center ml-16 mb-4"
+              style="flex-wrap: nowrap"
+            >
+              <div>
+                <vs-avatar size="75" class="icon" @click.stop="$router.push(`/user/view/_id`)">
+                  <img v-if="UserData.photoURL" :src="UserData.photoURL" />
+                  <template slot="text" v-else>Vansh Sethi</template>
+                </vs-avatar>
+              </div>
+              <div class style=" min-width: 100%">
+                <!-- User name -->
+                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">Vansh Sethi</div>
+
+                <div class="pl-2">
+                  <vs-button color="warn" type="filled" size="medium">Follow Request Pending</vs-button>
+                </div>
+              </div>
+            </div>
+          </vs-dialog>
         </div>
       </VxCard>
 
@@ -166,12 +195,16 @@ import firestore from '~/plugins/firestore'
 import { SubjectGroup_O, Subject_O, SubjectIconList } from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
+import { auth } from 'firebase'
+import { UserData } from '~/types/user'
+import { User } from '~/types'
 @Component<UserProfile>({
   components: {
     NotesCard
   },
-  mounted() {
+  async mounted() {
     this.getUserNotes()
+    await this.getFriends()
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -185,6 +218,53 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   UserNotes: Note[] = []
+  subjectModalActive = true
+  userInfo: UserData | null = null
+  async fetchUser(uid: string) {
+    try {
+      const doc = await firestore.doc(`users/${uid}`).get()
+      const userData2 = doc.data() as UserData
+
+      const userDataReq = Object.assign({}, userData2)
+      return userDataReq
+    } catch (error) {
+      console.error({ error })
+      return
+    }
+  }
+
+  async getFriends() {
+    var friends = []
+
+    // Get pending friends
+    const userObject = await this.fetchUser(this.AuthUser?.uid as string)
+    const pendingFriends = userObject?.pendingFollowing
+
+    if (!pendingFriends) {
+      return
+    }
+    for (var i = 0; i < pendingFriends?.length; i++) {
+      const friendInfo = await this.fetchUser(pendingFriends[i])
+      friends.push({
+        name: friendInfo?.displayName,
+        photoURL: friendInfo?.photoURL,
+        status: 'pending'
+      })
+    }
+
+    // Get friends
+    const doc = await firestore
+      .collection('users')
+      .doc(this.AuthUser?.uid)
+      .collection('followers')
+      .get()
+    const followers2 = doc.docs.map((follower) => follower.data())
+
+    console.log(followers2)
+    // const followerList = doc as UserData
+    // console.log(followerList)
+  }
+
   async getUserNotes() {
     if (!this.AuthUser) {
       return

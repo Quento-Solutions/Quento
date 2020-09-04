@@ -20,7 +20,16 @@
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <div class="vx-row font-bold text-3xl" style>{{ userInfo.displayName }}</div>
+              <div class="vx-row font-bold text-3xl" style>
+                <span style="margin-right:0.8rem">{{ userInfo.displayName }}</span>
+                <vs-button
+                  color="success"
+                  type="filled"
+                  size="medium"
+                  class="ml-"
+                  @click="followUser()"
+                >Follow</vs-button>
+              </div>
               <div
                 class="vx-row w-full text-2xl"
                 style
@@ -152,11 +161,13 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
 import firestore from '~/plugins/firestore'
 import { UserData } from '~/types/user'
 import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
+import UserMixin from '~/mixins/UserMixin'
+import firebase from 'firebase/app'
 
 @Component<UserPage>({
   components: {},
@@ -165,7 +176,7 @@ import { Note_t, Note, Note_t_F } from '~/types/notes'
     await this.getUserNotes()
   }
 })
-export default class UserPage extends Vue {
+export default class UserPage extends mixins(UserMixin) {
   userId: string | null = null
   userInfo: UserData | null = null
   UserNotes: Note[] = []
@@ -191,6 +202,37 @@ export default class UserPage extends Vue {
       loading.close()
       console.error({ error })
       return
+    }
+  }
+
+  async followUser() {
+    const loading = this.$vs.loading()
+
+    try {
+      const userSide = await firestore
+        .collection('users')
+        .doc(this.AuthUser?.uid as string)
+        .update({
+          pendingFollowing: firebase.firestore.FieldValue.arrayUnion(
+            this.userId
+          )
+        })
+
+      const profileSide = await firestore
+        .collection('users')
+        .doc(this.userId as string)
+        .collection('followers')
+        .doc(this.AuthUser?.uid)
+        .set({
+          displayName: this.UserData?.displayName,
+          photoURL: this.UserData?.photoURL,
+          createdAt: new Date(),
+          accepted: false
+        })
+
+      // const new_query = await firestore.collection('notes').where(firebase.firestore.FieldPath.documentId(), 'in', [uid1, uid2])
+    } catch (error) {
+      console.log(error)
     }
   }
 
