@@ -62,7 +62,7 @@ import { School_O } from '~/types/schools'
       type: 'circles',
       text : "Loading Data"
     })
-    const notes = notesStore.GetMoreNotes(5)
+    const notes = notesStore.GetMoreNotes(true)
     await Promise.all([notes])
     this.loaded = true;
     loading.close()
@@ -79,13 +79,13 @@ export default class NotesPage extends mixins(LoadScroll) {
 
   async filter() {
     const loading = this.$vs.loading()
-    notesStore.SET_FILTER({
+    notesStore.SetFilter({
       sortSelect: this.sort,
       filterSubjects: this.subjects,
       filterGrades: this.grade,
       filterSchools: this.school
     })
-    await notesStore.GetMoreNotes()
+    await notesStore.GetMoreNotes(true)
     loading.close()
   }
   @Watch('IsScrolledDown')
