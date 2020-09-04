@@ -1,6 +1,6 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { auth, firestore as FirestoreModule } from 'firebase/app'
+import { firestore as FirestoreModule } from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
@@ -16,9 +16,8 @@ import {
 
 import { authStore } from '~/store'
 import { School_O } from '~/types/schools'
-import { firestore as store } from 'firebase/app'
 
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+let LastVisible: FirestoreModule.QueryDocumentSnapshot<FirestoreModule.DocumentData> | null = null
 
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
@@ -104,7 +103,7 @@ export default class QuestionsModule extends VuexModule {
       return
     }
     if (max && max <= this.ActiveItems.length) return;
-    let query: store.Query<store.DocumentData> = firestore.collection('questions')
+    let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collection('questions')
     // Do query filtering things
 
     if ((this.ActiveGrade !== 'ALL')) {

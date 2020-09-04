@@ -1,6 +1,5 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from '~/store'
 import { Grade_O, Subject_O } from '~/types/subjects'
 import { School_O } from '~/types/schools'

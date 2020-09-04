@@ -1,14 +1,12 @@
 import {
   Module,
   VuexModule,
-  MutationAction,
   Action,
   Mutation
 } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { authStore } from './index'
 import { firestore as store } from 'firebase/app'
-import { v4 } from 'uuid'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
 
@@ -67,7 +65,7 @@ export default class NotesModule extends VuexModule {
   @Mutation
   public RESET_NOTES() {
     this.ActiveNotes = []
-    this.isPersonalized = false;
+    this.isPersonalized = false
     LastVisible = null
     this.EndOfList = false
   }
@@ -95,11 +93,10 @@ export default class NotesModule extends VuexModule {
     return await this.GetMoreNotes(true)
   }
 
-  @Action({rawError : true})
-  public SetFilter(filter: FilterOptions)
-  {
-    this.SET_FILTER(filter);
-    this.RESET_NOTES();
+  @Action({ rawError: true })
+  public SetFilter(filter: FilterOptions) {
+    this.SET_FILTER(filter)
+    this.RESET_NOTES()
   }
 
   @Mutation
@@ -204,18 +201,22 @@ export default class NotesModule extends VuexModule {
 
     if (this.isPersonalized) {
       console.log('CUSTOM RANK')
-      if (
-        !LastVisible &&
-        (!authStore.userData?.lastFeedUpdated ||
-          HourDiff(authStore.userData.lastFeedUpdated) > 2)
-      ) {
-        await functions.httpsCallable('PersonalRank')()
+
+      if (!LastVisible) {
+        if (!authStore.userData?.lastFeedUpdated) {
+          // If the user is generating the feed for the first time, wait for it to be generated completely
+          await functions.httpsCallable('PersonalRank')()
+        } else if (HourDiff(authStore.userData.lastFeedUpdated) > 2) {
+          // If the user already has a feed, generate the feed asynchronously
+          functions.httpsCallable('PersonalRank')()
+        }
       }
-      let query: store.Query<store.DocumentData> = firestore.collectionGroup(
-        'personalRanking'
-      )
-      query = query.where('userId', '==', authStore.user?.uid)
-      query = query.orderBy('magicRank', 'desc')
+      let query: store.Query<store.DocumentData> = firestore.collectionGroup('personalRanking')
+
+      query = query.where("dataType", "==", "note");
+      query = query.where('userId', '==', authStore.user?.uid);
+      query = query.orderBy("updatedAt", "desc");
+      query = query.orderBy('magicRank', 'desc');
       if (LastVisible) {
         query = query.startAfter(LastVisible)
       }
