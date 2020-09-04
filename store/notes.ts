@@ -176,12 +176,6 @@ export default class NotesModule extends VuexModule {
     if (this.EndOfList) {
       return
     }
-    console.log(
-      this.ActiveGrade,
-      this.ActiveSchool,
-      this.ActiveSubjects,
-      this.SortSelect
-    )
     if (
       this.ActiveGrade === 'ALL' &&
       this.ActiveSchool === 'All Schools' &&
@@ -189,7 +183,7 @@ export default class NotesModule extends VuexModule {
       this.SortSelect === 'magicRank'
     ) {
       console.log('CUSTOM RANK')
-      if (!LastVisible && authStore.userData?.lastFeedUpdated && HourDiff(authStore.userData.lastFeedUpdated) > 2) {
+      if (!LastVisible && (!authStore.userData?.lastFeedUpdated || HourDiff(authStore.userData.lastFeedUpdated) > 2)) {
         await functions.httpsCallable('PersonalRank')()
       }
       let query: store.Query<store.DocumentData> = firestore.collectionGroup(
