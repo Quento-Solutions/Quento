@@ -82,7 +82,6 @@
               <vs-navbar-item to="/user/profile">Profile</vs-navbar-item>
 
               <vs-navbar-item to="/user/edit">Settings</vs-navbar-item>
-              <vs-navbar-item to="/user/friends">Friend Requests</vs-navbar-item>
               <vs-navbar-item
                 warning
                 @click="SignOut()"
