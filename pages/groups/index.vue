@@ -1,26 +1,33 @@
 <template>
-  <div class="vx-row w-full ml-8" id="newsletter-container">
+  <div> <!-- Yay we need a root because fun vue -->
     <!-- TITLE AND CREATE CARDS? -->
-    <span class="h-15 w-full mr-8 mb-4">
-      <div class = 'inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4'>
-        YOUR GROUPS
+    <div class = "mb-10 pt-8" style = "width:60%">
+      <div class = 'mb-3 text-black font-extrabold text-6xl text-open'>
+        Groups
       </div>
-      <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
-        <div class="text-lg text-xs font-ginger-b">Join</div>
-        <template #animate>
-          <i class="bx bx-plus text-2xl"></i>
-        </template>
-      </vs-button>
-      <vs-button circle flat success animation-type="vertical" class="float-right mr-10 w-20">
-        <div class="text-lg text-xs font-ginger-b">Create</div>
-        <template #animate>
-          <i class="bx bx-plus text-2xl"></i>
-        </template>
-      </vs-button>
-    </span>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed augue lorem, interdum a maximus ut, luctus vel justo. Maecenas sit amet massa purus. Quisque eu mattis nibh, in commodo turpis. Aenean turpis ante, porta non euismod at, maximus eu justo. Curabitur nec gravida libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus ac molestie neque. Etiam vitae rutrum nisi, eget feugiat est.
+      </p>
+    </div>
+
+    <!--
+    Right Buttons
+    <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
+      <div class="text-lg text-xs font-ginger-b">Join</div>
+      <template #animate>
+        <i class="bx bx-plus text-2xl"></i>
+      </template>
+    </vs-button>
+    <vs-button circle flat success animation-type="vertical" class="float-right mr-10 w-20">
+      <div class="text-lg text-xs font-ginger-b">Create</div>
+      <template #animate>
+        <i class="bx bx-plus text-2xl"></i>
+      </template>
+    </vs-button> 
+    -->
 
     <!-- CARDS -->
-    <div v-if="loaded" class="flex flex-row bg-gray-200" id="groupCard">
+    <div v-if="loaded" class="flex flex-row justify-around border-4 border-solid" id="groupCard">
       <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
     </div>
   </div>

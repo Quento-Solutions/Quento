@@ -276,14 +276,3 @@ export default class MainLayout extends mixins(UserMixin) {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-#content-area
-{
-  .router-content
-  {
-    margin-top : 8rem !important;
-
-  }
-}
-</style>

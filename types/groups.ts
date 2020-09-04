@@ -1,5 +1,4 @@
-export interface Group_t
-{
+export interface Group_t{
     title : string;
     // contents : string;
     createdAt : Date;
@@ -11,15 +10,13 @@ export interface Group_t
 
     id ?: string;
 }
-export interface Date_t_F
-{
+
+export interface Date_t_F{
     seconds : number;
     nanoseconds : number
-
 }
-export interface Group_t_F
-{
 
+export interface Group_t_F{
     title : string;
     // contents : string;
 
@@ -31,9 +28,7 @@ export interface Group_t_F
     // views : number;
 }
 
-export class Group
-{
-
+export class Group{
     constructor(
         opts : Group_t
     ){
