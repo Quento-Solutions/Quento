@@ -45,12 +45,18 @@ export default class NotesModule extends VuexModule {
   ActiveSubjects: Subject_O[] = []
   ActiveNotes: Note[] = []
   SortSelect: SortOptions_O = 'magicRank'
+  isPersonalized = false
 
   NotesPerPage = 5
   EndOfList = false
 
   get likedPosts() {
     return authStore.userData?.likedNotes
+  }
+
+  @Mutation
+  public SET_FEED_PERSONALIZED(isPersonalized: boolean) {
+    this.isPersonalized = isPersonalized
   }
 
   @Mutation
@@ -61,6 +67,7 @@ export default class NotesModule extends VuexModule {
   @Mutation
   public RESET_NOTES() {
     this.ActiveNotes = []
+    this.isPersonalized = false;
     LastVisible = null
     this.EndOfList = false
   }
@@ -84,23 +91,28 @@ export default class NotesModule extends VuexModule {
     this.TOGGLE_PREVIEW_MODAL(false)
     this.TOGGLE_NOTES_MODULE(false)
     this.SET_EDIT_NOTE(null)
-    return await this.GetMoreNotes()
+
+    return await this.GetMoreNotes(true)
+  }
+
+  @Action({rawError : true})
+  public SetFilter(filter: FilterOptions)
+  {
+    this.SET_FILTER(filter);
+    this.RESET_NOTES();
   }
 
   @Mutation
-  public SET_FILTER({
+  private SET_FILTER({
     filterGrades,
     filterSubjects,
     filterSchools,
     sortSelect
   }: FilterOptions) {
-    this.ActiveNotes = []
-    LastVisible = null
     this.ActiveSubjects = [...filterSubjects]
     this.ActiveGrade = filterGrades
     this.ActiveSchool = filterSchools
     this.SortSelect = sortSelect
-    this.EndOfList = false
   }
 
   @Action({ rawError: true })
@@ -172,18 +184,31 @@ export default class NotesModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  public async GetMoreNotes(max?: number) {
+  public async GetMoreNotes(start = false) {
     if (this.EndOfList) {
       return
     }
+    if (start && this.NotesPerPage <= this.ActiveNotes.length) return
+    // If you are just trying to get the first notes and note trying to load more, dont load more than you need to
     if (
+      start &&
+      authStore.userData &&
       this.ActiveGrade === 'ALL' &&
       this.ActiveSchool === 'All Schools' &&
       this.ActiveSubjects.length === 0 &&
       this.SortSelect === 'magicRank'
     ) {
+      // If you are generating a new feed and the conditions are met
+      this.SET_FEED_PERSONALIZED(true)
+    }
+
+    if (this.isPersonalized) {
       console.log('CUSTOM RANK')
-      if (!LastVisible && (!authStore.userData?.lastFeedUpdated || HourDiff(authStore.userData.lastFeedUpdated) > 2)) {
+      if (
+        !LastVisible &&
+        (!authStore.userData?.lastFeedUpdated ||
+          HourDiff(authStore.userData.lastFeedUpdated) > 2)
+      ) {
         await functions.httpsCallable('PersonalRank')()
       }
       let query: store.Query<store.DocumentData> = firestore.collectionGroup(
@@ -220,7 +245,6 @@ export default class NotesModule extends VuexModule {
       return
     }
 
-    if (max && max <= this.ActiveNotes.length) return
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
 
@@ -243,7 +267,9 @@ export default class NotesModule extends VuexModule {
     query = query.limit(this.NotesPerPage)
     try {
       const snapshot = await query.get()
-      const notes = snapshot.docs.map((doc) => Note.fromFirebase(doc.data() as Note_t_F, doc.id))
+      const notes = snapshot.docs.map((doc) =>
+        Note.fromFirebase(doc.data() as Note_t_F, doc.id)
+      )
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
