@@ -59,7 +59,8 @@ import { School_O } from '~/types/schools'
   components: { NotesCard, FilterSidebar },
   async mounted() {
     const loading = this.$vs.loading({
-          type: 'waves',
+      type: 'circles',
+      text : "Loading Data"
     })
     const notes = notesStore.GetMoreNotes(5)
     await Promise.all([notes])
