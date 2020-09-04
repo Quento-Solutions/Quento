@@ -16,9 +16,13 @@
         <i class="bx bxs-plus-square text-4xl" />
         <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
       </vs-button>
+        <vs-button :color="toggleColor" @click="toggleListView()" class="w-full">
+        <i class="bx bx-list-ul text-4xl" />
+        <div class="text-2xl font-ginger-b">&nbsp; List View</div>
+      </vs-button>
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
+    <div class="vx-col lg:w-2/3 w-full">
       <div class="vx-col w-full inline-flex lg:hidden" style="">
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
@@ -31,6 +35,7 @@
         :key="index"
         class
         :note="note"
+        :listView="listViewEnabled"
         :clickable="true"
         :preview="true"
       />
@@ -82,6 +87,8 @@ export default class NotesPage extends Vue {
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
+  listViewEnabled = false
+  toggleColor = "#99b8d1"
 
   async filter() {
     const loading = this.$vs.loading()
@@ -93,6 +100,17 @@ export default class NotesPage extends Vue {
     })
     await notesStore.GetMoreNotes()
     loading.close()
+  }
+
+  toggleListView() {
+    if(this.listViewEnabled) {
+      this.listViewEnabled = false
+      this.toggleColor = "#99b8d1"
+    }
+    else {
+      this.listViewEnabled = true
+      this.toggleColor = "#ed8936"
+    }
   }
 
   get noNotesFound() {
