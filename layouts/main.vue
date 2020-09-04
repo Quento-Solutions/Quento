@@ -41,7 +41,6 @@
         <div class="router-view">
           <div
             class="router-content"
-            
             :class="{ 'mt-0': navbarType == 'hidden' }"
           >
             <transition :name="routerTransition">
