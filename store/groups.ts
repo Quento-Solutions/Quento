@@ -18,7 +18,8 @@ export interface FilterOptions {
 
 @Module({ stateFactory: true, name: 'groups', namespaced: true })
 export default class GroupsModule extends VuexModule {
-
+  openGroupsModal = false
+  addGroup: Group | null = null
   groupList: Group[] = [];
   sortBy = "createdAt";
   @Mutation
@@ -39,6 +40,33 @@ export default class GroupsModule extends VuexModule {
       console.log({ error })
     }
     return; 
+  }
+  @Action({ rawError: true })
+  public async createGroup(group: Group ) {
+    const newGroup : Group = Object.assign({}, group)
+    if(group.id)
+    {
+      return await firestore.collection('groups').doc(group.id).update(Group.toFirebase(newGroup));
+    }
+    await firestore.collection('groups').add(Group.toFirebase(newGroup));
+  }
+  @Mutation
+  private SET_ADD_GROUP(val: Group | null) {
+    this.addGroup = val
+  }
+
+  @Action({ rawError: true })
+  public SetAddGroup(val: Group | null) {
+    this.SET_ADD_GROUP(val)
+  }
+  @Mutation
+  private TOGGLE_GROUPS_MODULE(val: boolean) {
+    this.openGroupsModal = val
+  }
+
+  @Action({ rawError: true })
+  public ToggleGroupsModule(val: boolean) {
+    this.TOGGLE_GROUPS_MODULE(val)
   }
 
 }

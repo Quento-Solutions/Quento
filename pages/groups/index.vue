@@ -1,16 +1,20 @@
 <template>
   <div class="vx-row w-full ml-8" id="newsletter-container">
     <span class="h-15 w-full mr-8 mb-4">
-      <div class = 'inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4'>
-        YOUR GROUPS
-      </div>
-      <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
+      <div class="inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4">YOUR GROUPS</div>
+      <vs-button
+        circle
+        flat
+        success
+        animation-type="vertical"
+        class="purple inline-block float-right mr-10 w-20"
+      >
         <div class="text-lg text-xs font-ginger-b">Join</div>
         <template #animate>
           <i class="bx bx-plus text-2xl"></i>
         </template>
       </vs-button>
-      <vs-button circle flat success animation-type="vertical" class="float-right mr-10 w-20">
+      <vs-button @click="ToggleGroupsModal(true)" circle flat success animation-type="vertical" class="float-right mr-10 w-20">
         <div class="text-lg text-xs font-ginger-b">Create</div>
         <template #animate>
           <i class="bx bx-plus text-2xl"></i>
@@ -21,11 +25,6 @@
     <div v-if="loaded" class="w-full lg:w-1/2" id="groupCard">
       <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
     </div>
-    <!-- <vs-button warn @click="toggleNotesModal(true)" class="w-full">
-      <div class="text-2xl font-ginger-b">
-        &nbsp; Post New Note
-      </div>
-    </vs-button>-->
   </div>
 </template>
 
@@ -33,6 +32,7 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import { groupsStore } from '~/store'
 import NewsletterModal from '~/screens/newsletter/NewsletterModal.vue'
+import groupModal from '~/screens/groupsModal.vue'
 import NewsletterCard from '~/components/NewsletterCard.vue'
 import GroupCard from '~/components/GroupCard.vue'
 
@@ -51,9 +51,9 @@ export default class GroupsPage extends Vue {
     return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
   }
 
-  //   toggleNotesModal(val: boolean) {
-  //     groupsStore.SET_POST_MODAL_OPEN(val)
-  //   }
+  ToggleGroupsModal(val: boolean) {
+    groupsStore.ToggleGroupsModule(val)
+  }
   get groups() {
     return groupsStore.groupList
   }

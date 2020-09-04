@@ -1,10 +1,11 @@
 export interface Group_t
 {
     title : string;
+    uid: string;
     // contents : string;
     createdAt : Date;
     // views : number;
-
+    contents: string;
     backgroundImageUrl : string;
     authorPhotoUrl : string;
     authorDisplayName : string;
@@ -19,10 +20,10 @@ export interface Date_t_F
 }
 export interface Group_t_F
 {
-
+    uid: string;
     title : string;
     // contents : string;
-
+    contents: string;
     backgroundImageUrl : string;
     authorPhotoUrl : string;
     authorDisplayName : string;
