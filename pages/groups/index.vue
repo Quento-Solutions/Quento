@@ -27,7 +27,7 @@
     -->
 
     <!-- CARDS -->
-    <div v-if="loaded" class="flex flex-row justify-around border-4 border-solid" id="groupCard">
+    <div v-if="loaded" class="flex flex-row justify-around flex-wrap border-4 border-solid" id="groupCard">
       <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
     </div>
   </div>
@@ -76,11 +76,3 @@ export default class GroupsPage extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-#groupCard {
-  display: grid;
-  grid-template-columns: repeat(3, 500px);
-  grid-gap: 10px;
-}
-</style>

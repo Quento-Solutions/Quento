@@ -44,7 +44,8 @@ function isAdminRoute(route: Route) {
         "/questions", 
         "/newsletters", 
         "/user", 
-        "/basepiece"
+        "/basepiece",
+        "/groups"
     ]
     return (route.matched.some(record => (adminSites.includes(record.path))))
 }
