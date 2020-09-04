@@ -7,6 +7,7 @@ import {
   algoliaDate,
 } from './firebaseTypes'
 import { firestore } from 'firebase/app'
+
 import {School_O} from './schools'
 
 export interface Note_t {
