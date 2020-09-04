@@ -1,7 +1,7 @@
 import { Grade_O, Subject_O } from './subjects'
 
 import { School_O } from './schools'
-import { firestore } from 'firebase'
+import type firebase from '~/plugins/firebase'
 
 export type User = {
   uid: string
@@ -46,5 +46,5 @@ export interface UserData {
   photoFileName?: string | null
 
   notifications?: boolean
-  lastFeedUpdated ?: firestore.Timestamp
+  lastFeedUpdated ?: firebase.firestore.Timestamp
 }

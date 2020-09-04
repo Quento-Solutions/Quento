@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import { firestore } from 'firebase/app';
 
 export const HourDiff = (date: firestore.Timestamp) => {
   const now = firestore.Timestamp.now().toDate();
