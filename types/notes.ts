@@ -6,9 +6,9 @@ import {
   StoredImage,
   algoliaDate,
 } from './firebaseTypes'
-import { firestore } from 'firebase/app'
 
 import {School_O} from './schools'
+import { Timestamp } from './env.utils'
 
 export interface Note_t {
   title: string
@@ -69,7 +69,7 @@ export class Note {
   }
 
   static toFirebase = (note: Note): Note_t_F => {
-    const createdAt = firestore.Timestamp.fromDate(note.createdAt)
+    const createdAt = Timestamp.fromDate(note.createdAt)
     const { id, ...firebaseDoc } = { ...note }
     return { ...firebaseDoc, createdAt }
   }

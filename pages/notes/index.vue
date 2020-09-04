@@ -19,7 +19,7 @@
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
-      <div class="vx-col w-full inline-flex lg:hidden" style="">
+      <div class="vx-col w-full inline-flex lg:hidden" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
             <i class="bx bx-menu" style="font-size: 1.25rem;" />
@@ -62,8 +62,17 @@ import { School_O } from '~/types/schools'
       type: 'circles',
       text : "Loading Data"
     })
-    const notes = notesStore.GetMoreNotes(true)
-    await Promise.all([notes])
+    try {
+      const notes = notesStore.GetMoreNotes(true)
+      await Promise.all([notes])
+    } catch (error)
+    {
+      console.error({error});
+      this.$vs.notification({
+        title : error.message,
+        color : "danger"
+      })
+    }
     this.loaded = true;
     loading.close()
   }
