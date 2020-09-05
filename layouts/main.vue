@@ -18,10 +18,7 @@
 
     <div
       id="content-area"
-
-      :class="[contentAreaClass, { 'show-overlay': bodyOverlay, 'show-lower-overlay' : lowerOverlay }]"
-      :style="sidebarOpen ? `float: right; width: 95%;` : 'width: 100vw'"
-
+      :class="[contentAreaClass, { 'show-overlay': bodyOverlay, 'show-lower-overlay' : lowerOverlay, 'sidebar-open' : sidebarOpen }]"
     >
       <div id="content-overlay"></div>
 
@@ -281,8 +278,14 @@ export default class MainLayout extends mixins(UserMixin) {
 {
   .router-content
   {
-    margin-top : 8rem !important;
+    margin-top : 70px !important;
 
+  }
+  width : 100vw;
+  &.sidebar-open 
+  {
+    float : right;
+    width : calc(100vw - 50px);
   }
 }
 </style>
