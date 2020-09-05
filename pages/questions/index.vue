@@ -58,21 +58,26 @@ import LoadScrollMixin from '~/mixins/LoadScrollMixin'
 @Component<NotesPage>({
   components: { QuestionCard, FilterSidebar },
   async mounted() {
+    if(this.questionList.length)
+    {
+      this.loaded = true;
+      return;
+    }
     const loading = this.$vs.loading()
-    await questionStore.GetMoreQuestions()
+    await questionStore.GetMoreQuestions(true)
     this.loaded = true;
     loading.close()
   }
 })
 export default class NotesPage extends mixins(LoadScrollMixin) {
-  sort: typeof questionStore.SortSelect = 'createdAt'
+  sort: typeof questionStore.SortSelect = 'magicRank'
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
   
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
-    if (val && this.loaded) {
+    if (!this.endOfList && val && this.loaded) {
       this.LoadMoreQuestions()
     }
   }
@@ -80,7 +85,7 @@ export default class NotesPage extends mixins(LoadScrollMixin) {
   async filter() {
     const loading = this.$vs.loading()
     try {
-      questionStore.SET_FILTER({
+      questionStore.SetFilter({
         sortSelect: this.sort,
         filterSubjects: this.subjects,
         filterGrades: this.grade,
