@@ -1,82 +1,145 @@
 <template>
-  <div class="vx-row w-full ml-8" id="newsletter-container">
-    <span class="h-15 w-full mr-8 mb-4">
-      <div class="inline-block text-black font-bold mb-4 text-ginger-b text-4xl p-4">YOUR GROUPS</div>
-      <vs-button
-        circle
-        flat
-        success
-        animation-type="vertical"
-        class="purple inline-block float-right mr-10 w-20"
-      >
-        <div class="text-lg text-xs font-ginger-b">Join</div>
-        <template #animate>
-          <i class="bx bx-plus text-2xl"></i>
-        </template>
+  <div
+    class="vx-row w-full relative justify-evenly"
+    :class="[{ 'show-overlay': bodyOverlay }]"
+    id="groups-screen-container"
+  >
+    <div id="notes-content-overlay"></div>
+    <FilterSidebar
+      :sort.sync="sort"
+      :subjects.sync="subjects"
+      :school.sync="school"
+      :grade.sync="grade"
+      @filter="filter()"
+    >
+      <vs-button warn @click="notesModalActive = true" class="w-full">
+        <i class="bx bxs-plus-square text-4xl" />
+        <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
       </vs-button>
-      <vs-button @click="ToggleGroupsModal(true)" circle flat success animation-type="vertical" class="float-right mr-10 w-20">
-        <div class="text-lg text-xs font-ginger-b">Create</div>
-        <template #animate>
-          <i class="bx bx-plus text-2xl"></i>
-        </template>
-      </vs-button>
-    </span>
-
-    <div v-if="loaded" class="w-full lg:w-1/2" id="groupCard">
-      <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
+    </FilterSidebar>
+    <div class="sidebar-spacer"></div>
+    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
+      <div class="vx-col w-full inline-flex lg:hidden" style>
+        <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
+          <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
+            <i class="bx bx-menu" style="font-size: 1.25rem;" />
+          </vs-avatar>
+        </div>
+      </div>
+      <GroupsCard
+        v-for="(group, index) in groupsList"
+        :key="index"
+        class
+        :group="group"
+        :clickable="true"
+        :preview="true"
+      />
+      <vs-alert color="danger" v-if="noNotesFound">
+        <template #title>No Notes Found For This Search</template>
+        <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
+        Again.
+      </vs-alert>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
-import { groupsStore } from '~/store'
-import NewsletterModal from '~/screens/newsletter/NewsletterModal.vue'
-import groupModal from '~/screens/groupsModal.vue'
-import NewsletterCard from '~/components/NewsletterCard.vue'
-import GroupCard from '~/components/GroupCard.vue'
+import { Component, Vue, Prop, Watch, mixins } from 'nuxt-property-decorator'
+
+import { Note } from '~/types/notes'
+
+import { windowStore, notesStore, groupsStore } from '~/store'
+import FilterSidebar from '~/components/FilterSidebar.vue'
+import NotesCard from '~/components/NotesCard.vue'
+import GroupsCard from '~/components/GroupsCard.vue'
+import LoadScroll from '~/mixins/LoadScrollMixin'
+import { Subject_O, Grade_O } from '~/types/subjects'
+import { School_O } from '~/types/schools'
 
 @Component<GroupsPage>({
-  components: { GroupCard },
-  mounted() {
-    console.log('abanana')
-    this.GetGroups()
+  components: { NotesCard, FilterSidebar, GroupsCard },
+  async mounted() {
+    if(groupsStore.groupList.length) return;
+    const loading = this.$vs.loading({
+      type: 'circles',
+      text : "Loading Data"
+    })
+    try {
+      const groups = groupsStore.GetMoreGroups(true)
+      await Promise.all([groups])
+    } catch (error)
+    {
+      console.error({error});
+      this.$vs.notification({
+        title : error.message,
+        color : "danger"
+      })
+    }
+    this.loaded = true;
+    loading.close()
   }
 })
-export default class GroupsPage extends Vue {
-  numberOfArticles = 3
-  loaded = false
-
-  backgroundGradient(imageUrl: string) {
-    return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+export default class GroupsPage extends mixins(LoadScroll) {
+  get noNotesFound() {
+    return notesStore.EndOfList && this.groupsList.length == 0
   }
+  sort: typeof notesStore.SortSelect = 'magicRank'
+  subjects: Subject_O[] = []
+  grade: Grade_O = 'ALL'
+  school: School_O | 'All Schools' = 'All Schools'
 
-  ToggleGroupsModal(val: boolean) {
-    groupsStore.ToggleGroupsModule(val)
-  }
-  get groups() {
-    return groupsStore.groupList
-  }
-
-  async GetGroups() {
+  async filter() {
     const loading = this.$vs.loading()
-    try {
-      await groupsStore.GetGroups()
-    } catch (error) {
-      console.log({ error })
-    }
+    notesStore.SetFilter({
+      sortSelect: this.sort,
+      filterSubjects: this.subjects,
+      filterGrades: this.grade,
+      filterSchools: this.school
+    })
+    await notesStore.GetMoreNotes(true)
     loading.close()
+  }
+  @Watch('IsScrolledDown')
+  PageHeightChange(val: boolean, oldVal: boolean) {
+    if (val && this.loaded) {
+      this.LoadMoreNotes()
+    }
+  }
 
-    this.loaded = true
-    return
+  async LoadMoreNotes() {
+    const loading = this.$vs.loading()
+    await notesStore.GetMoreNotes()
+    loading.close()
+  }
+
+  get endOfList() {
+    return notesStore.EndOfList
+  }
+  get bodyOverlay() {
+    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
+  }
+  get previewModalActive() {
+    return notesStore.PreviewModalOpen
+  }
+  set previewModalActive(value: boolean) {
+    notesStore.TogglePreviewModal(value)
+  }
+
+  get notesModalActive() {
+    return notesStore.NotesModuleOpen
+  }
+  set notesModalActive(value: boolean) {
+    notesStore.ToggleNotesModule(value)
+  }
+  openFilterSidebar() {
+    windowStore.SetFilterSidebar(true)
+  }
+
+  get groupsList() {
+    return groupsStore.groupList
   }
 }
 </script>
 
 <style lang="scss">
-#groupCard {
-  display: grid;
-  grid-template-columns: repeat(3, 500px);
-  grid-gap: 10px;
-}
 </style>
