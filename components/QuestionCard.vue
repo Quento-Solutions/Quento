@@ -6,6 +6,7 @@
     :class="clickable ? 'previewClickable' : ''"
     @click="PushQuestionsPage()"
   >
+  <template slot="no-body">
     <!-- Card Header -->
      <div class="p-6">
     <AvatarBar
@@ -99,6 +100,7 @@
     </div>
       </div>
      </div>
+     </template>
   </VxCard>
 </template>
 
@@ -168,8 +170,11 @@ export default class QuestionCard extends mixins(UserMixin) {
   image?: HTMLImageElement
 }
 </script>
+<<<<<<< HEAD
 <style>
 .vx-card__body {
   padding:0 !important;
 }
 </style>
+=======
+>>>>>>> origin/development

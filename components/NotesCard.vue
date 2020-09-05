@@ -90,7 +90,7 @@
     id="note-card"
     :class="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
-  >
+  ><template slot="no-body">
   <div class="card-content" :style="preview? 'cursor: pointer;':''">
   <div class="p-6 text-container" :style="preview ? '' : 'width:100%'">
     <DeleteNotesModal v-if="!disabled && NoteOwner" :open.sync="deleteNotesOpen" :noteId="note.id"></DeleteNotesModal>
@@ -253,6 +253,7 @@
       style="position:absolute;object-fit: cover;min-height:100%"/>
   </div>
   </div>
+  </template>
   </VxCard>
 </div>
 </template>
@@ -336,9 +337,6 @@ export default class NotesCard extends Vue {
 </script>
 
 <style>
-.vx-card__body {
-  padding:0 !important;
-}
 .vs-navbar__group__items {
   background:white !important;
 }
