@@ -1,58 +1,61 @@
-export interface Group_t
-{
-    title : string;
-    uid: string;
-    // contents : string;
-    createdAt : Date;
-    // views : number;
-    contents: string;
-    backgroundImageUrl : string;
-    authorPhotoUrl : string;
-    authorDisplayName : string;
+import { Subject_O, Grade_O } from './subjects'
+import { Date_t_F } from './firebaseTypes'
 
-    id ?: string;
-}
-export interface Date_t_F
-{
-    seconds : number;
-    nanoseconds : number
+import { School_O } from './schools'
+import { Timestamp } from './env.utils'
 
-}
-export interface Group_t_F
-{
-    uid: string;
-    title : string;
-    // contents : string;
-    contents: string;
-    backgroundImageUrl : string;
-    authorPhotoUrl : string;
-    authorDisplayName : string;
+export interface Group_t {
+  title: string
+  uid: string
+  // contents : string;
+  createdAt: Date
+  // views : number;
+  approved ?: boolean
+  description: string
+  backgroundImageUrl: string
 
-    createdAt : Date | Date_t_F;
-    // views : number;
+  id?: string
+  school?: School_O
+  memberList : string[]
+  members: number
+
+  subject?: Subject_O
+  grade?: Grade_O
 }
 
-export class Group
-{
+export interface Group_t_F {
+  uid: string
+  title: string
+  // contents : string;
+  approve ?: boolean;
+  description: string
+  backgroundImageUrl: string
+  
+  createdAt: Date | Date_t_F
+  members : number
+  memberList : string[]
 
-    constructor(
-        opts : Group_t
-    ){
-        return Object.assign(this, opts)
-    }
+  school?: School_O
+  subject ?: Subject_O
+  grade ?: Grade_O
+  // views : number;
+}
 
-    static fromFirebase = (doc : Group_t_F, id ?: string) =>
-    {
-        const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
-        const obj = {...doc, createdAt, id};
-        return new Group(obj)
-    }
+export class Group {
+  constructor(opts: Group_t) {
+    return Object.assign(this, opts)
+  }
 
-    static toFirebase(doc: Group) : Group_t_F
-    {
-        const {id, ...firebaseDoc} = {...doc}
-        return firebaseDoc
-    }
+  static fromFirebase = (doc: Group_t_F, id?: string) => {
+    const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
+    const obj = { ...doc, createdAt, id }
+    return new Group(obj)
+  }
+
+  static toFirebase(doc: Group): Group_t_F {
+    const { id, ...firebaseDoc } = { ...doc }
+    return firebaseDoc
+  }
 }
 
 export interface Group extends Group_t {}

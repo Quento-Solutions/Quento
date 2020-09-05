@@ -1,53 +1,47 @@
 <template>
   <vs-dialog
     v-model="active"
-    id="suggestionsPopup"
-    class="content-popup"
     style="z-index: 1000000000;"
-    scroll
     :full-screen="!isLargeScreen"
-    prevent-close
     overflow-hidden
   >
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">
-          <b>Create</b> Groups
+          <b>Create or Join a Group!</b>
         </h4>
       </div>
     </template>
-    <vs-alert v-if="contents.length > characterLimit" danger>Your note cannot exceed 5000 characters</vs-alert>
-    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
-      <vs-input v-model="title" placeholder="Title" class="block mb-3 w-6 mt-3" width="w-6">
-        <template #icon>
-          <i class="bx bx-highlight" primary></i>
-        </template>
-      </vs-input>
-      <VsTextarea
-        v-model="contents"
-        placeholder="Enter your content here"
-        class="block rounded-lg pl-1"
-        ref="textarea"
-        expand="true"
-        markdownOptions="true"
-        @paste="onPaste"
-      ></VsTextarea>
-    </div>
-    <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-      <vs-button
-        class="md:w-1/2 w-full"
-        warn
-        :disabled="formErrors || contents.length > characterLimit"
-        @click="giveGroupInfo()"
-      >
-        <div class="text-xl p-2 font-bold lg:text-2xl" style>CREATE GROUP</div>
-      </vs-button>
+
+    <div class="vx-row w-full" style>
+      <div class="vx-col w-full lg:w-1/2 p-4 ">
+        <div class="flex flex-col justify-center w-full items-center border-2 p-4 rounded">
+          <div class = "text-center  w-4/5">
+            <b>Create</b> a New Group and Add Your Friends
+          </div>
+          <i class="bx bx-group" style="font-size: 8rem"></i>
+          <vs-button>
+            <div class="text-xl p-2 font-bold lg:text-2xl" style>Create a group</div>
+          </vs-button>
+        </div>
+      </div>
+     <div class="vx-col w-full lg:w-1/2 p-4 ">
+        <div class="flex flex-col justify-center w-full items-center border-2 p-4 rounded">
+          <div class = "text-center w-4/5">
+            <b>Join</b> a group with an invite code or link
+          </div>
+          <i class="bx bx-group" style="font-size: 8rem"></i>
+          <vs-button class="rounded">
+            <div class="text-xl p-2 font-bold lg:text-2xl" style>Join a group</div>
+          </vs-button>
+        </div>
+      </div>
     </div>
   </vs-dialog>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
 import {
   suggestionsStore,
@@ -58,15 +52,15 @@ import {
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
-import { Group, Group_t } from '~/types/groups'
+import {Group, Group_t} from '~/types/groups'
 import VsUpload from '~/components/VsUpload.vue'
 import storage from '~/plugins/firebaseStorage'
 import functions from '~/plugins/firebaseFunctions'
 
-import { v4 } from 'uuid'
+import {v4} from 'uuid'
 
-import { authStore } from '~/store'
-import { School_O, SchoolList } from '~/types/schools'
+import {authStore} from '~/store'
+import {School_O, SchoolList} from '~/types/schools'
 
 interface imageSrc {
   error: boolean
@@ -87,7 +81,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   schoolSelect: School_O | 'All Schools' = 'All Schools'
   characterLimit = 5000
 
-  contents = ''
+  description = ''
   backgroundImageUrl =
     'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
   title = ''
@@ -127,6 +121,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   }
 
   async giveGroupInfo() {
+    if (!authStore.user?.uid) return
     const loading = this.$vs.loading()
     if (this.formErrors) {
       this.$vs.notification({
@@ -138,11 +133,12 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     const addGroup = new Group({
       title: this.title,
       uid: authStore.user?.uid!,
-      authorDisplayName: authStore.userData?.displayName!,
-      authorPhotoUrl: authStore.userData?.photoURL!,
       createdAt: new Date(),
-      contents: this.contents,
-      backgroundImageUrl: this.backgroundImageUrl
+      description: this.description,
+      members: 10,
+      backgroundImageUrl: this.backgroundImageUrl,
+      approved: false,
+      memberList: [authStore.user.uid]
     })
     try {
       await groupsStore.createGroup(addGroup)
@@ -151,7 +147,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
         title: 'Group Created'
       })
     } catch (error) {
-      console.log({ error })
+      console.log({error})
       this.$vs.notification({
         color: 'danger',
         title: 'An Error Occurred While Creating Your Group'
@@ -165,9 +161,9 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   async GetGroups() {
     const loading = this.$vs.loading()
     try {
-      await groupsStore.GetGroups()
+      await groupsStore.GetMoreGroups()
     } catch (error) {
-      console.log({ error })
+      console.log({error})
     }
     loading.close()
 

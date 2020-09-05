@@ -10,14 +10,12 @@ import { School_O } from '~/types/schools'
 import {
   Grade_O,
   SubjectList,
+  FilterOptions,
   Subject_O,
   SortOptions_O
 } from '~/types/subjects'
-export interface FilterOptions {
-  filterSubjects: Subject_O[]
-  filterGrades: Grade_O
-  sortSelect: SortOptions_O
-}
+import { authStore } from '~/utils/store-accessor'
+
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 
@@ -26,6 +24,8 @@ export default class GroupsModule extends VuexModule {
   openGroupsModal = false
   addGroup: Group | null = null
   groupList: Group[] = [];
+  userGroups : Group[] = []
+
   sortBy = "createdAt";
   ItemsPerPage = 10;
   EndOfList = false;
@@ -37,9 +37,18 @@ export default class GroupsModule extends VuexModule {
 
 
   @Mutation
-  public SET_GROUP_LIST(items: Group[])
+  public SET_USER_GROUPS(items: Group[])
   {
-    this.groupList = items;
+    this.userGroups = items;
+  }
+
+  @Action({rawError: true})
+  public async GetUserGroups()
+  {
+    if(!authStore.user?.uid) return;
+    const userGroupsRef = await firestore.collection('groups').where("memberList", "array-contains", authStore.user.uid).get();
+    const userGroups = userGroupsRef.docs.map(doc => Group.fromFirebase(doc.data() as Group_t_F));
+    this.SET_USER_GROUPS(userGroups)
   }
 
 
@@ -63,7 +72,8 @@ export default class GroupsModule extends VuexModule {
     if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
-
+    query = query.where('public', '==', true);
+    
     query = query.orderBy(this.SortSelect, 'desc')
 
     if (LastVisible) {
@@ -93,7 +103,32 @@ export default class GroupsModule extends VuexModule {
     this.groupList.push(...groups)
   }
 
+  @Action({ rawError: true })
+  public SetFilter(filter: FilterOptions) {
+    this.SET_FILTER(filter)
+    this.RESET_GROUPS()
+  }
 
+  @Mutation
+  public RESET_GROUPS() {
+    this.groupList = []
+    LastVisible = null
+    this.EndOfList = false
+  }
+
+
+  @Mutation
+  private SET_FILTER({
+    filterGrades,
+    filterSubjects,
+    filterSchools,
+    sortSelect
+  }: FilterOptions) {
+    this.ActiveSubjects = [...filterSubjects]
+    this.ActiveGrade = filterGrades
+    this.ActiveSchool = filterSchools
+    this.SortSelect = sortSelect
+  }
 
   @Action({ rawError: true })
   public async createGroup(group: Group ) {

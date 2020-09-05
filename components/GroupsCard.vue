@@ -1,5 +1,5 @@
 <template>
-  <VxCard v-if="group" class="mb-6 w-24 min-w-full">
+  <VxCard v-if="group" class="mb-6 w-24 min-w-full" @click="PushGroupsPage()">
     <template slot="no-body">
       <nuxt-link :to="`/groups/${group.id}`">
         <div
@@ -48,6 +48,10 @@ export default class GroupCard extends Vue {
 
   backgroundGradient(imageUrl: string) {
     return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+  }
+  PushGroupsPage()
+  {
+    this.$router.push(`/groups/g/${this.group?.id}`)
   }
 }
 </script>
