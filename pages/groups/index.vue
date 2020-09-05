@@ -2,7 +2,7 @@
   <div> <!-- Yay we need a root because fun vue -->
     <!-- TITLE AND CREATE CARDS? -->
     <div class = "mb-10 pt-8" style = "width:60%">
-      <div class = 'mb-3 text-black font-extrabold text-6xl text-open'>
+      <div class = 'mb-3 text-black font-extrabold text-6xl font-open'>
         Groups
       </div>
       <p>
@@ -27,7 +27,7 @@
     -->
 
     <!-- CARDS -->
-    <div v-if="loaded" class="flex flex-row justify-around flex-wrap border-4 border-solid" id="groupCard">
+    <div v-if="loaded" class="flex flex-row justify-between flex-wrap" id="groupCard">
       <GroupCard v-for="(item, index) in groups" :key="index" :group="item"></GroupCard>
     </div>
   </div>
@@ -43,7 +43,6 @@ import GroupCard from '~/components/GroupCard.vue'
 @Component<GroupsPage>({
   components: { GroupCard },
   mounted() {
-    console.log('abanana')
     this.GetGroups()
   }
 })

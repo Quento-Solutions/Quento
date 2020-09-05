@@ -1,15 +1,15 @@
 <template>
-	<div class = "groupCard">
-		<VxCard v-if="group" class="overlay-card mb-4"> <!-- Card Outside -->
+	<div class = "lg:w-33% md:w-50% sm:100%">
+		<VxCard v-if="group" class="overlay-card mb-4 overflow-hidden rounded-super"> <!-- Card Outside -->
 			<template slot="no-body">
 				<nuxt-link :to="`/groups/${group.id}`">
 					<!-- Background -->
 					<div
-						class="text-white background-cover p-10 pt-40 h-full"
+						class="text-white background-cover p-8 pt-40 relative"
 						:style="backgroundGradient(group.backgroundImageUrl)"
 					>
 						<!-- MAIN INSIDE CARD -->
-						<div class="mb-4 w-full font-bold text-white text-open text-4xl">
+						<div class="mb-4 w-full font-bold text-white font-open text-4xl">
 							{{ group.title }} <!--Title-->
 						</div>
 
@@ -29,6 +29,14 @@
 									{{ group.createdAt.toDateString() }}
 								</div>
 							</div>
+						</div>
+
+						<!-- Side -->
+						<div class = "bg-grey rounded-r-super absolute top-0 right-0 h-full w-33% p-4 text-black font-open">
+							<h4 class = "my-2 font-bold">Description</h4>
+							<p class = "text-sm italic font-thin">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque semper tortor non ultrices. Nunc porttitor justo ac purus porta placerat. Ut nec diam eget leo volutpat placerat. Etiam a lacus a leo malesuada vehicula a non risus.
+							</p>
 						</div>
 					</div>
 				</nuxt-link>
@@ -51,16 +59,3 @@
 		}
 	}
 </script>
-
-
-<style scoped>
-	@media only screen and (max-width: 991px) {
-		.groupCard {width:49% !important;}
-	}
-	@media only screen and (max-width: 768px) {
-		.groupCard {width:100% !important;}
-	}
-	.groupCard{
-		width: 32.9%;
-	}
-</style>
