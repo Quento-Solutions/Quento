@@ -9,14 +9,14 @@
 						:style="backgroundGradient(group.backgroundImageUrl)"
 					>
 						<!-- MAIN INSIDE CARD -->
-						<div class="mb-4 w-full font-bold text-white font-open text-4xl">
+						<div class="mb-2 w-full font-bold text-white font-open text-4xl">
 							{{ group.title }} <!--Title-->
 						</div>
 
 						<!-- Author Line -->
 						<div class="vx-row w-full" style="">
 							<vs-avatar class="icon">
-								<img v-if="group.authorPhotoUrl" :src="group.authorPhotoUrl"/>
+								<img v-if="group.authorPhotoUrl" :src="group.authorPhotoUrl" style="object-fit: cover;height: 100%;"/>
 								<template #text v-else>
 									{{ group.authorDisplayName }}
 								</template>
@@ -33,10 +33,22 @@
 
 						<!-- Side -->
 						<div class = "bg-grey rounded-r-super absolute top-0 right-0 h-full w-33% p-4 text-black font-open">
-							<h4 class = "my-2 font-bold">Description</h4>
-							<p class = "text-sm italic font-thin">
+							<h4 class = "font-bold my-1">Description</h4>
+							<div
+								:style="`background-color: #${randomColor()}`"
+								style = "border-radius:9999px;width:fit-content"
+								class = "p-1 px-2 text-xs"
+								v-if="group.subject"
+							>
+								{{group.subject}}
+							</div>
+
+							<p class = "text-xs italic font-thin mb-4 mt-2">
 								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque semper tortor non ultrices. Nunc porttitor justo ac purus porta placerat. Ut nec diam eget leo volutpat placerat. Etiam a lacus a leo malesuada vehicula a non risus.
 							</p>
+
+							<h5 class = "font-semibold text-md">Members</h5>
+							<p class = "font-light text-sm">{{group.members}}</p>
 						</div>
 					</div>
 				</nuxt-link>
@@ -56,6 +68,9 @@
 
 		backgroundGradient(imageUrl: string) {
 			return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+		}
+		randomColor() {
+			return Math.floor(Math.random() * 16777215).toString(16)
 		}
 	}
 </script>

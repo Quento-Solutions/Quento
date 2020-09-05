@@ -31,7 +31,6 @@ module.exports = {
       '4': '4px'
     },
     borderRadius: {
-      'none': '0',
       'super': '1.25rem',
     },
     extend: {
@@ -79,5 +78,6 @@ module.exports = {
     ]
   },
   variants: {},
-  plugins: []
+  plugins: [
+  ]
 }
