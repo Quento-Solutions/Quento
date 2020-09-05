@@ -29,7 +29,9 @@
                   </div>
                 </div>
 
-                <div class="flex-shrink-0 w-full md:w-auto flex flex-row justify-center mt-4 md:mt-0">
+                <div
+                  class="flex-shrink-0 w-full md:w-auto flex flex-row justify-center mt-4 md:mt-0"
+                >
                   <vs-button
                     gradient
                     color="rgb(159, 122, 234)"
@@ -42,23 +44,25 @@
             </VxCard>
             <VxCard class="mt-4 overflow-hidden" :fitContent="true">
               <template #no-body>
-                <div>
-                  <div
-                    class="justify-between items-center background-cover"
-                    :style="AuxiliumImage"
-                    style="height: 200px"
-                  ></div>
-                  <div class="p-4">
-                    <h1 class="text-ginger-b">Auxilium Mentorship Program</h1>
+                <a href="https://www.theauxilium.com/" target="_blank">
+                  <div>
                     <div
-                      class="text-ginger p-4 text-gray-600"
-                      style="line-height:1.5"
-                    >{{AuxiliumText.substring(0, 200)}}...</div>
-                    <div class="float-right pb-4">
-                      <nuxt-link to="/">Learn More</nuxt-link>
+                      class="justify-between items-center background-cover"
+                      :style="AuxiliumImage"
+                      style="height: 200px"
+                    ></div>
+                    <div class="p-4">
+                      <h1 class="text-ginger-b">Auxilium Mentorship Program</h1>
+                      <div
+                        class="text-ginger p-4 text-gray-600"
+                        style="line-height:1.5"
+                      >{{AuxiliumText.substring(0, 200)}}...</div>
+                      <div class="float-right pb-4">
+                        <nuxt-link to="/">Learn More</nuxt-link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
               </template>
             </VxCard>
             <VxCard class="mt-6 overflow-hidden" :fitContent="true">
