@@ -11,6 +11,7 @@ import type { FireAuthServerUser } from '@nuxtjs/firebase'
 import { User, UserData } from '~/types/user'
 import firestore from '~/plugins/firestore'
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase'
+let UserListener :(() => void) | null = null;
 
 export interface AuthState {
   user: User
@@ -64,7 +65,7 @@ export default class AuthModule extends VuexModule implements AuthState {
     }
 
     this.context.commit('SET_USER', user)
-    await this.refreshUserData()
+    this.listenUserData();
     this.context.commit('SET_LOADING', false)
   }
   @Action({ rawError: true })
@@ -111,6 +112,26 @@ export default class AuthModule extends VuexModule implements AuthState {
     }
   }
 
+  @Action({rawError : true})
+  public listenUserData()
+  {
+    if(!this.user)
+    {
+      UserListener = (UserListener && (UserListener())) || null
+      return
+    }
+    UserListener = UserListener || firestore.collection("users").doc(this.user.uid).onSnapshot((snapshot) => {
+      const UserData = snapshot.data() as UserData;
+      this.SET_USER_DATA(UserData);
+    });
+  }
+
+  @Action({rawError : true})
+  public unlistenUserData()
+  {
+    UserListener = (UserListener && (UserListener())) || null
+  }
+
   @Action({ rawError: true })
   public async signOut() {
     await firebaseAuth.signOut()
@@ -121,26 +142,11 @@ export default class AuthModule extends VuexModule implements AuthState {
   private SET_USER_DATA(userData: UserData | null) {
     this.userData = userData
   }
-  @Action({ rawError: true })
-  public async refreshUserData() {
-    if (!this.user || !this.user.uid) {
-      this.SET_USER_DATA(null)
-      return
-    }
-
-    const fetchedUserData = await firestore
-      .collection('users')
-      .doc(this.user.uid)
-      .get()
-    this.SET_USER_DATA(fetchedUserData.data() as UserData)
-    return
-  }
 
   @Action({ rawError: true })
   public async updateUserData(userData: Partial<UserData>) {
     const uid = this.user?.uid
     await firestore.collection('users').doc(uid).update(userData)
-    await this.refreshUserData()
     return
   }
 

@@ -12,7 +12,4 @@ export default class UserMixin extends Vue {
   get UserData() {
     return authStore.userData
   }
-  async refreshUserData() {
-    return await authStore.refreshUserData()
-  }
 }

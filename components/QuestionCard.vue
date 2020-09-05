@@ -6,23 +6,34 @@
     :class="clickable ? 'previewClickable' : ''"
     @click="PushQuestionsPage()"
   >
+  <template slot="no-body">
     <!-- Card Header -->
+     <div class="p-6">
     <AvatarBar
       :username="question.userDisplayName"
       :date="question.createdAt"
       :photoURL="question.userPhotoUrl"
       :userId="question.userId"
     ></AvatarBar>
-
     <!-- Category Pills -->
-    <div class="w-4/5 vx-row p-2 items-center text-sm mt-2 ml-1/2 title-content">
+        <div class="inner-content" :style="preview? '':'width:70%;margin-left:15%'">
+
+    <div
+      class="w-4/5 vx-row p-2 items-start md:items-center md:text-sm text-xs mt-2 flex-row"
+    >
       <div
-        class="rounded-full bg-orange-500 p-2 px-4 vx-row items-center text-ginger text-white"
+        class="rounded-full bg-orange-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white" 
+        style="background-color: #ed8936 padding-top:0.6rem;padding-bottom:0.6rem;"
       >Grade {{ question.grade }}</div>
       <div
-        class="rounded-full bg-purple-500 p-2 px-4 vx-row items-center text-ginger text-white mx-2"
+        class="rounded-full bg-purple-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white mt-0 mx-2"
+        style="background-color: #9f7aea"
       >
-        <i class="bx text-xl text-white mr-2" :class="getIcon(question.subject)" />
+        <i
+          class="bx text-xl text-white mr-2"
+          :class="getIcon(question.subject)"
+          style="background-color:transparent;"
+        />
         {{ question.subject }}
       </div>
       <VxTooltip v-if="question.school">
@@ -36,14 +47,13 @@
 
     <!-- Title -->
     <div
-      class="w-4/5 text-ginger-b text-3xl p-4 ml-1/2 title-content"
-      style="line-height: 1;"
+      class="w-4/5 text-ginger-b text-3xl p-4 ml-1/2 pl-2"
+      style="line-height: 1.3;"
     >{{ question.title }}</div>
-
     <!-- Content -->
-    <div class="vx-row w-full justify-center p-4 pt-0 m-0 pt-0" style="margin: 0;">
-      <div
-        class="md:w-4/5 w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1"
+<div class="vx-row w-full justify-start p-4 pt-0 m-0 pt-0 pl-0" style="margin: 0;">
+        <div
+       class="md:w-full w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1 pb-0"
         :style="
           preview ? 'max-height: 200px' : ''"
       >
@@ -59,7 +69,7 @@
 
     <!-- Footer -->
 
-    <div class="vx-row w-full justify-evenly lg:px-10 p-6">
+    <div class="vx-row md:w-1/2 w-2/3 justify-between lg:px-10 p-6" style="padding-left:1rem;padding-top:0;" :style="preview? '':'width:80%;margin-left:10%'">
       <vs-avatar
         class="icon-small"
         :color="userLiked(question.id) ? 'danger' : '#f4f7f8'"
@@ -88,6 +98,9 @@
         <template #tooltip>{{ question.responses }} Responses</template>
       </VxTooltip>
     </div>
+      </div>
+     </div>
+     </template>
   </VxCard>
 </template>
 
@@ -157,5 +170,3 @@ export default class QuestionCard extends mixins(UserMixin) {
   image?: HTMLImageElement
 }
 </script>
-<style lang="scss">
-</style>

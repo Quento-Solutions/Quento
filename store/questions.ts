@@ -1,15 +1,39 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { auth, firestore as FirestoreModule } from 'firebase/app'
+import { firestore as FirestoreModule } from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
 import { Question, Question_t_F } from '~/types/questions'
 import { Response, Response_t_F } from '~/types/responses'
+import {
+  Grade_O,
+  SubjectList,
+  Subject_O,
+  SortOptions_O,
+  FilterOptions
+} from '~/types/subjects'
 
 import { authStore } from '~/store'
+import { School_O } from '~/types/schools'
+
+let LastVisible: FirestoreModule.QueryDocumentSnapshot<FirestoreModule.DocumentData> | null = null
+
 @Module({ stateFactory: true, name: 'questions', namespaced: true })
 export default class QuestionsModule extends VuexModule {
+  get likedPosts()
+  {
+    return authStore.userData?.likedQuestions
+  }
+  ActiveGrade: Grade_O = 'ALL'
+  ActiveSchool: School_O | 'All Schools' = 'All Schools'
+  ActiveSubjects: Subject_O[] = []
+  ActiveItems: Question[] = []
+  SortSelect: SortOptions_O = 'createdAt'
+
+  ItemsPerPage = 5
+  EndOfList = false
+
   // Modal Logic
 
   // Global Logic
@@ -27,6 +51,28 @@ export default class QuestionsModule extends VuexModule {
     this.PostQuestionModalOpen = value
   }
 
+  @Mutation
+  public RESET_ITEMS() {
+    this.ActiveItems = []
+    LastVisible = null
+    this.EndOfList = false
+  }
+
+  @Mutation
+  public SET_FILTER({
+    filterGrades,
+    filterSubjects,
+    filterSchools,
+    sortSelect
+  }: FilterOptions) {
+    this.ActiveItems = []
+    LastVisible = null
+    this.ActiveSubjects = [...filterSubjects]
+    this.ActiveGrade = filterGrades
+    this.ActiveSchool = filterSchools
+    this.SortSelect = sortSelect
+    this.EndOfList = false
+  }
   // Preview Modal
   PreviewQuestion: Question | null = null
   PreviewModalOpen = false
@@ -41,6 +87,53 @@ export default class QuestionsModule extends VuexModule {
     this.SET_POST_MODAL_OPEN(false)
     this.SET_PREVIEW_QUESTION(null)
     this.SET_RESET(true)
+  }
+
+  @Mutation
+  private PUSH_QUESTIONS(questions: Question[]) {
+    if (questions.length < this.ItemsPerPage) {questions
+      this.EndOfList = true
+    }
+    this.ActiveItems.push(...questions)
+  }
+  
+  @Action({rawError : true})
+  public async GetMoreQuestions(max ?: number) {
+    if (this.EndOfList) {
+      return
+    }
+    if (max && max <= this.ActiveItems.length) return;
+    let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collection('questions')
+    // Do query filtering things
+
+    if ((this.ActiveGrade !== 'ALL')) {
+      query = query.where('grade', '==', this.ActiveGrade)
+    }
+    if ((this.ActiveSchool !== 'All Schools')) {
+      query = query.where('school', '==', this.ActiveSchool)
+    }
+    if (this.ActiveSubjects.length != 0) {
+      query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
+    }
+
+    query = query.orderBy(this.SortSelect, 'desc')
+
+    if (LastVisible) {
+      query = query.startAfter(LastVisible)
+    }
+
+    query = query.limit(this.ItemsPerPage)
+    try {
+      const snapshot = await query.get()
+      const notes = snapshot.docs.map((doc) =>
+        Question.fromFirebase(doc.data() as Question_t_F, doc.id)
+      )
+      LastVisible = snapshot.docs[snapshot.docs.length - 1]
+      this.PUSH_QUESTIONS(notes)
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
   }
   // Question Data Logic
   @Action({ rawError: true })
@@ -138,7 +231,6 @@ export default class QuestionsModule extends VuexModule {
   // Response Data Logic
   @Action({ rawError: true })
   public async ToggleLikedQuestion(questionId: string) {
-    await authStore.refreshUserData()
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const questionRef = firestore.collection('questions').doc(questionId)
@@ -155,10 +247,6 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
-    functions.httpsCallable('algoliaUpdateQuestion')({
-      questionId
-    })
-    await authStore.refreshUserData()
     return
   }
   @Action({ rawError: true })
@@ -169,7 +257,6 @@ export default class QuestionsModule extends VuexModule {
     questionId: string
     responseId: string
   }) {
-    await authStore.refreshUserData()
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const responseRef = firestore
@@ -190,8 +277,6 @@ export default class QuestionsModule extends VuexModule {
         : FirestoreModule.FieldValue.increment(1)
     })
     await batch.commit()
-    await authStore.refreshUserData()
-
     return
   }
 
