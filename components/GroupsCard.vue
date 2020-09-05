@@ -1,7 +1,7 @@
 <template>
   <VxCard v-if="group" class="mb-6 w-24 min-w-full" @click="PushGroupsPage()">
     <template slot="no-body">
-      <nuxt-link :to="`/groups/${group.id}`">
+      <nuxt-link :to="`/groups/g/${group.id}`">
         <div
           class="text-white flex flex-col justify-between items-center background-cover md:p-10 p-4 h-full"
           :style="backgroundGradient(group.backgroundImageUrl)"

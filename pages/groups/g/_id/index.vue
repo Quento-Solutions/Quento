@@ -4,38 +4,52 @@
       <VxCard class="mb-6 w-24 min-w-full">
         <template slot="no-body">
           <div
-            class="text-white flex flex-col background-cover p-4 w-full"
+            class="text-white flex flex-col background-cover p-4 md:p-8 w-full"
             :style="backgroundGradient(group.backgroundImageUrl)"
             style="min-height: 20vw;"
           >
-            <div class="vx-row mb-4 w-full lg:w-1/2 rounded-md p-2">
-              <vs-avatar class="icon-small float-right" @click="goBack()">
-                <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
-              </vs-avatar>
-            </div>
-            <div
+            <input
               class="text-white text-title text-6xl font-medium"
               style="line-height: 1.125;"
-            >{{ group.title }}</div>
+              :readonly="true"
+              v-model="group.title"
+            />
           </div>
         </template>
       </VxCard>
-      <!-- <div class="vx-col">
-        <div class="vx-row justify-center w-full">
-          <div class="vx-row mb-4 w-full lg:w-1/2 xs:bg-white rounded-md p-2">
-            <vs-avatar class="icon-small float-right" @click="goBack()">
-              <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
-            </vs-avatar>
-          </div>
+      <div class="w-full vx-row bg-white rounded-md">
+        <div class="vx-row mb-4 w-full justify-around p-2 border-b-2 border-black">
+          <vs-avatar class="icon-small float-right" @click="goBack()">
+            <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
+          </vs-avatar>
+          <vs-button-group>
+            <vs-button transparent :active="active=='Summary'">
+              <div class="text-xl px-2 text-ginger">Summary</div>
+            </vs-button>
+            <vs-button transparent :active="active=='Notes'">
+              <div class="text-xl px-2 text-ginger">Notes</div>
+            </vs-button>
+            <vs-button transparent :active="active=='Questions'">
+              <div class="text-xl px-2 text-ginger">Questions</div>
+            </vs-button>
+          </vs-button-group>
         </div>
-        <div class="vx-row justify-center w-full">
-          <div class="vx-row w-full bg-white rounded-md lg:w-1/2">
-            <div class="md-container p-4 md:p-6 lg:p-8" v-html="$md.render(newsletter.contents)"></div>
-          </div>
-        </div>
-      </div>-->
-    </div>
+        <!-- Summary -->
 
+        <div class="w-full md:w-2/3 p-4 md:px-8">
+
+          <h1 class="text-title">Description</h1>
+          <div class="mt-4">{{group.description}}</div>
+        </div>
+
+        <!-- Member List -->
+        <div class="vx-row justify-center w-full md:w-1/3">
+          <div class="vx-row w-full bg-white rounded-md lg:w-1/2">
+            <div class="p-4 md:p-6 lg:p-8"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <vs-alert color="danger" v-if="docNotFound">
       <template #title>Something Went Wrong</template>
       <b>Sorry!</b> Something went wrong when fetching the Newsletter. Please Try
@@ -60,6 +74,8 @@ export default class GroupsSummary extends Vue {
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
+
+  active: 'Questions' | 'Summary' | 'Notes' = 'Summary'
 
   backgroundGradient(imageUrl: string) {
     return `background-image : linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${imageUrl}')`

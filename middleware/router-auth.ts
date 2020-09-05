@@ -3,7 +3,7 @@ import type { Route } from 'vue-router'
 
 export default function ({ store, redirect, route }: Context) {
     // if(route.name == null) redirect ('/')
-
+    return;
     const validUser = (store.state.auth.user != null && store.state.auth.user.emailVerified)
     console.log(route.name);
     if (route.name == "index") {

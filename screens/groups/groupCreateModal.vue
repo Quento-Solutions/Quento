@@ -1,21 +1,37 @@
 <template>
-  <vs-dialog
-    v-model="active"
-    style="z-index: 1000000000;"
-    :full-screen="isSmallScreen"
-    overflow-hidden
-  >
-    <template #header>
-      <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl">
-          <b>Create or Join a Group!</b>
-        </h4>
-      </div>
-    </template>
-    <transition name="fade" mode="out-in" >
-      <component :is="currentScreen" @next="nextScreen"></component>
-    </transition>
-  </vs-dialog>
+  <div>
+    <vs-alert
+      v-if="description.length > characterLimit"
+      danger
+    >Your note cannot exceed 5000 characters</vs-alert>
+    <vs-alert>How the group works?</vs-alert>
+    <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
+      <vs-input v-model="title" placeholder="Title" class="block mb-3 w-6 mt-3" width="w-6">
+        <template #icon>
+          <i class="bx bx-highlight" primary></i>
+        </template>
+      </vs-input>
+      <VsTextarea
+        v-model="description"
+        placeholder="Enter your content here"
+        class="block rounded-lg pl-1"
+        ref="textarea"
+        expand="true"
+        markdownOptions="true"
+        @paste="onPaste"
+      ></VsTextarea>
+    </div>
+    <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
+      <vs-button
+        class="md:w-1/2 w-full"
+        warn
+        :disabled="formErrors || description.length > characterLimit"
+        @click="giveGroupInfo()"
+      >
+        <div class="text-xl p-2 font-bold lg:text-2xl" style>CREATE GROUP</div>
+      </vs-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,10 +53,6 @@ import functions from '~/plugins/firebaseFunctions'
 
 import {v4} from 'uuid'
 
-import GroupSelectModal from './groupModal.vue'
-import GroupCreateModal from './groupCreateModal.vue'
-import GroupJoinModal from './groupJoinModal.vue'
-
 import {authStore} from '~/store'
 import {School_O, SchoolList} from '~/types/schools'
 
@@ -54,27 +66,15 @@ interface imageSrc {
 
 @Component<GroupsModal>({
   components: {
-    VsUpload, GroupSelectModal, GroupJoinModal, GroupCreateModal
+    VsUpload
   },
   mounted() {}
 })
 export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   readonly SchoolList = ['All Schools', ...SchoolList]
-  nextScreen(args : number)
-  {
-    // console.log({args});
-    this.screen = args;
-    this.active = true;
-  }
-  get currentScreen()
-  {
-    return this.screens[this.screen]
-  }
-  screens = [GroupSelectModal, GroupCreateModal, GroupJoinModal]
-  screen = 0;
-
   schoolSelect: School_O | 'All Schools' = 'All Schools'
   characterLimit = 5000
+
   description = ''
   backgroundImageUrl =
     'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
@@ -106,12 +106,12 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   }
 
   // ClearFields() {
-  //   this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
+  //   this.title = this.description = this.subjectSelect = this.gradeSelect = ''
   //   this.schoolSelect = "All Schools";
   // }
 
-  get isSmallScreen() {
-    return windowStore.isSmallScreen
+  get isLargeScreen() {
+    return windowStore.isLargeScreen
   }
 
   async giveGroupInfo() {
@@ -129,10 +129,10 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       uid: authStore.user?.uid!,
       createdAt: new Date(),
       description: this.description,
-      members: 10,
-      backgroundImageUrl: this.backgroundImageUrl,
+      members: 0,
       approved: false,
-      memberList: [authStore.user.uid]
+      memberList: [authStore.user?.uid],
+      backgroundImageUrl: this.backgroundImageUrl
     })
     try {
       await groupsStore.createGroup(addGroup)
@@ -164,16 +164,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     return
   }
   get formErrors() {
-    return !this.title || !this.contents
+    return !this.title || !this.description
   }
 }
 </script>
-
-<style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
