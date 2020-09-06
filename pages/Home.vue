@@ -90,13 +90,10 @@
 
           <!-- Feed -->
           <div class="w-full lg:w-2/3 mt-6 lg:mt-0 lg:px-1 col" v-if="notesList">
-            <NotesCard
-              v-for="(note, index) in notesList"
-              :key="index"
-              :note="note"
-              :clickable="true"
-              :preview="true"
-            />
+            <div v-for="(item, index) in notesList" :key="index">
+              <NotesCard :note="item.docData" :clickable="true" :preview="true" v-if="item.dataType ==='note'"/>
+              <QuestionCard :question="item.docData" :clickable="true" :preview="true" v-if="item.dataType ==='question'"/>
+            </div>
           </div>
         </div>
       </template>
@@ -110,6 +107,8 @@ import { Vue, Component, mixins } from 'nuxt-property-decorator'
 import { windowStore, authStore, newslettersStore, feedsStore } from '~/store'
 import NewsletterCard from '~/components/NewsletterCard.vue'
 import NotesCard from '~/components/NotesCard.vue'
+import QuestionCard from '~/components/QuestionCard.vue'
+
 
 import Analytics from '~/mixins/AnalyticsMixin'
 
@@ -127,10 +126,19 @@ export interface ContactInformation {
 
 @Component({
   layout: 'main',
-  components: { NewsletterCard, NotesCard },
-  mounted() {
+  components: { NewsletterCard, NotesCard, QuestionCard },
+  async mounted() {
     newslettersStore.GetNewsletters()
-    feedsStore.GetMoreNotes(true)
+    try {
+      await feedsStore.GetMoreNotes(true)
+    } catch(error)
+    {
+      console.error(error);
+      this.$vs.notification({
+        title : error.message,
+        color : 'danger'
+      })
+    }
   },
   name: 'Home'
 })
