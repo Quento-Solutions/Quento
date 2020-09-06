@@ -285,17 +285,27 @@ export default class UserPage extends mixins(UserMixin) {
       })
 
     this.followingAlready()
-    this.$router.go(this.$router.currentRoute)
+    this.$router.go((this.$router.currentRoute as unknown) as number)
 
     loading.close()
   }
 
   async followUser() {
     const loading = this.$vs.loading()
-    if (
-      this.UserData.following.length + this.UserData.pendingFollowing.length >
-      10
-    ) {
+    var length_of_following: number = 0
+    var length_of_pendingFollowing: number = 0
+    if (this.UserData?.following?.length == undefined) {
+      length_of_following = 0
+    } else {
+      length_of_following = this.UserData?.following.length
+    }
+
+    if (this.UserData?.pendingFollowing?.length == undefined) {
+      length_of_pendingFollowing = 0
+    } else {
+      length_of_pendingFollowing = this.UserData?.pendingFollowing?.length
+    }
+    if (length_of_following + length_of_pendingFollowing >= 10) {
       this.$vs.notification({
         title: "Already following 10+ people. Can't follow more.",
         color: 'warn'
@@ -328,7 +338,7 @@ export default class UserPage extends mixins(UserMixin) {
         })
 
       this.followingAlready()
-      this.$router.go(this.$router.currentRoute)
+      this.$router.go((this.$router.currentRoute as unknown) as number)
 
       // const new_query = await firestore.collection('notes').where(firebase.firestore.FieldPath.documentId(), 'in', [uid1, uid2])
     } catch (error) {
