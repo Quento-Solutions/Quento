@@ -27,8 +27,31 @@
                   type="filled"
                   size="medium"
                   class="ml-"
+                  v-if="!alreadyPendingFollowing && !alreadyFollowing"
                   @click="followUser()"
                 >Follow</vs-button>
+                <vs-button
+                  color="warn"
+                  type="filled"
+                  size="medium"
+                  class="ml-"
+                  v-if="alreadyPendingFollowing"
+                >Follow Request Pending</vs-button>
+                <vs-button
+                  color="danger"
+                  type="filled"
+                  size="medium"
+                  class="ml-"
+                  v-if="alreadyFollowing"
+                  @click="unFollowFriend()"
+                >Unfollow</vs-button>
+                <vs-button
+                  color="success"
+                  type="filled"
+                  size="medium"
+                  class="ml-"
+                  v-if="personFollowsYou"
+                >Follows You</vs-button>
               </div>
               <div
                 class="vx-row w-full text-2xl"
@@ -174,6 +197,9 @@ import firebase from 'firebase/app'
   async mounted() {
     await this.fetchUser()
     await this.getUserNotes()
+    this.followingAlready()
+
+    console.log(this.personFollowsYou)
   }
 })
 export default class UserPage extends mixins(UserMixin) {
@@ -181,6 +207,49 @@ export default class UserPage extends mixins(UserMixin) {
   userInfo: UserData | null = null
   UserNotes: Note[] = []
   docNotFound = false
+  alreadyPendingFollowing: boolean = false
+  alreadyFollowing: boolean = false
+  personFollowsYou: boolean = false
+  followingAlready() {
+    this.pendingAlready()
+    this.followingAlreadyCheck()
+    this.followsYouAlready()
+  }
+
+  pendingAlready() {
+    if (!this.UserData?.pendingFollowing) {
+      return
+    }
+    for (var i = 0; i < this.UserData?.pendingFollowing.length; i++) {
+      if (this.UserData?.pendingFollowing[i] == this.userId) {
+        this.alreadyPendingFollowing = true
+      }
+    }
+  }
+
+  followingAlreadyCheck() {
+    if (!this.UserData?.following) {
+      return
+    }
+    for (var i = 0; i < this.UserData?.following.length; i++) {
+      if (this.UserData?.following[i] == this.userId) {
+        this.alreadyFollowing = true
+        console.log(this.UserData.following)
+      }
+    }
+  }
+
+  followsYouAlready() {
+    if (!this.userInfo?.following) {
+      return
+    }
+    for (var i = 0; i < this.userInfo?.following.length; i++) {
+      if (this.userInfo?.following[i] == this.AuthUser?.uid) {
+        this.personFollowsYou = true
+      }
+    }
+  }
+
   async fetchUser() {
     const loading = this.$vs.loading()
 
@@ -205,8 +274,35 @@ export default class UserPage extends mixins(UserMixin) {
     }
   }
 
+  async unFollowFriend(uid: string) {
+    const loading = this.$vs.loading()
+
+    const doc = await firestore
+      .collection('users')
+      .doc(this.AuthUser?.uid)
+      .update({
+        following: firebase.firestore.FieldValue.arrayRemove(this.userId)
+      })
+
+    this.followingAlready()
+    this.$router.go(this.$router.currentRoute)
+
+    loading.close()
+  }
+
   async followUser() {
     const loading = this.$vs.loading()
+    if (
+      this.UserData.following.length + this.UserData.pendingFollowing.length >
+      10
+    ) {
+      this.$vs.notification({
+        title: "Already following 10+ people. Can't follow more.",
+        color: 'warn'
+      })
+      loading.close()
+      return
+    }
 
     try {
       const userSide = await firestore
@@ -230,6 +326,9 @@ export default class UserPage extends mixins(UserMixin) {
           uid: this.AuthUser?.uid,
           accepted: false
         })
+
+      this.followingAlready()
+      this.$router.go(this.$router.currentRoute)
 
       // const new_query = await firestore.collection('notes').where(firebase.firestore.FieldPath.documentId(), 'in', [uid1, uid2])
     } catch (error) {

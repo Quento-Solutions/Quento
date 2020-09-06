@@ -16,28 +16,21 @@
 
             <!-- Information - Col 1 -->
             <div class="vx-col flex-1 w-full md:text-lg text-2xl" id="account-info-col-1">
-              <div class="vx-row font-bold text-3xl" style>{{ UserData.displayName }}</div>
+              <div class="vx-row font-bold text-3xl" style>
+                {{ UserData.displayName }}
+                <vs-button
+                  color="#808080"
+                  style="margin-left: 0.75rem"
+                  type="filled"
+                  size="medium"
+                  @click="followerModal = true"
+                >Friends</vs-button>
+              </div>
               <div
                 class="vx-row w-full text-2xl"
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
-              <div class="vx-row w-full items-center text-ginger" style>
-                <vs-button
-                  class="text-title text-2xl"
-                  style="font-size: 1.2rem"
-                  color="#7289DA"
-                  s
-                  @click="linkDiscord()"
-                >
-                  <i class="bx bxl-discord text-4xl mr-2" />
-                  <div
-                    v-if="UserData.discordUsername"
-                    style="max-width: 40vw"
-                    class="truncate"
-                  >{{ UserData.discordUsername }}</div>
-                  <div v-else>Link Discord</div>
-                </vs-button>
-              </div>
+
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
@@ -46,7 +39,7 @@
               </div>
 
               <!-- MAKE A PROGRESSION BAR  -->
-              <div class="vx-row w-full mt-4 mb-2">
+              <div class="vx-row w-full mt-4 mb-4">
                 <v-progress-linear
                   color="deep-purple accent-4"
                   height="11"
@@ -99,8 +92,23 @@
           <div class="vx-row w-full lg:w-1/2" style>
             <div class="vx-col w-full" style></div>
           </div>
-          <div class="w-full p-2 md:px-8" style>
+          <div class="vx-row w-full p-2 md:px-8" style>
             <vs-button color="warn" type="filled" size="large" to="/user/edit">Edit Profile</vs-button>
+            <vs-button
+              class="text-title text-2xl"
+              style="font-size: 1.2rem"
+              color="#7289DA"
+              s
+              @click="linkDiscord()"
+            >
+              <i class="bx bxl-discord text-4xl mr-2" />
+              <div
+                v-if="UserData.discordUsername"
+                style="max-width: 40vw"
+                class="truncate"
+              >{{ UserData.discordUsername }}</div>
+              <div v-else>Link Discord</div>
+            </vs-button>
           </div>
           <!-- /Information - Col 2 -->
 
@@ -109,7 +117,7 @@
             scroll
             auto-width
             overflow-hidden
-            v-model="subjectModalActive"
+            v-model="followerModal"
             style=" max-width: 100%;"
           >
             <template #header>
@@ -117,6 +125,8 @@
                 <b>My Followers</b>
               </h2>
             </template>
+
+            <!-- User's Followers -->
 
             <div
               class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
@@ -147,12 +157,43 @@
                   <vs-button color="danger" size="medium" @click="declineFriend(person.uid)">Decline</vs-button>
                 </div>
                 <div v-if="person.accepted == true" class="pl-2 vx-row">
-                  <vs-button color="success" type="filled" size="medium">Following</vs-button>
+                  <vs-button color="success" type="filled" size="medium">Follows You</vs-button>
                 </div>
               </div>
             </div>
 
-            <!-- Requested Follow Field -->
+            <!-- User's Following -->
+            <div
+              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+              v-for="(person,index) in following_for_real"
+              :key="index"
+            >
+              <div>
+                <vs-avatar
+                  size="75"
+                  class="icon"
+                  @click.stop="$router.push(`/user/view/${person.uid}`)"
+                >
+                  <img v-if="person.photoURL" :src="person.photoURL" />
+                  <template slot="text" v-else>{{ person.displayName }}</template>
+                </vs-avatar>
+              </div>
+              <div class style=" min-width: 100%">
+                <!-- User name -->
+                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.displayName}}</div>
+
+                <div class="pl-2 vx-row">
+                  <vs-button
+                    color="danger"
+                    size="medium"
+                    @click="unFollowFriend(person.uid)"
+                  >Unfollow</vs-button>
+                </div>
+              </div>
+            </div>
+
+            <!-- User's Requested Followers -->
             <div
               class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
               style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
@@ -252,9 +293,7 @@ import firebase from 'firebase/app'
   },
   async mounted() {
     await this.getUserNotes()
-    console.log(this.UserNotes)
     await this.getFriends()
-    console.log(this.following)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -268,10 +307,11 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   UserNotes: Note[] = []
-  subjectModalActive = true
+  followerModal = false
   userInfo: UserData | null = null
   followers: any = []
   following: any = []
+  following_for_real: any = []
   async fetchUser(uid: string) {
     try {
       const doc = await firestore.doc(`users/${uid}`).get()
@@ -320,7 +360,17 @@ export default class UserProfile extends mixins(UserMixin) {
     this.following = Object.assign({}, friends)
     this.followers = Object.assign({}, followers2)
     // const followerList = doc as UserData
-    console.log(this.followers)
+
+    // Get Following
+    this.following_for_real = (
+      await Promise.all(
+        this.UserData?.following?.map((id) =>
+          firestore.collection('users').doc(id).get()
+        ) || []
+      )
+    ).map((doc) => ({ ...doc.data(), uid: doc.id }))
+
+    console.log({ hello: this.following_for_real })
   }
 
   async acceptFriend(uid: string, displayName: string, photoURL: string) {
@@ -334,28 +384,6 @@ export default class UserProfile extends mixins(UserMixin) {
       .doc(uid)
       .update({
         accepted: true
-      })
-
-    // Add friend to friend's collection
-    const doc2 = await firestore
-      .collection('users')
-      .doc(uid)
-      .collection('followers')
-      .doc(uid)
-      .set({
-        displayName: displayName,
-        photoURL: photoURL,
-        createdAt: new Date(),
-        uid: uid,
-        accepted: true
-      })
-
-    // Delete pending following for friend
-    const doc3 = await firestore
-      .collection('users')
-      .doc(uid)
-      .update({
-        pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
       })
 
     await this.getFriends()
@@ -374,11 +402,18 @@ export default class UserProfile extends mixins(UserMixin) {
       .delete()
 
     // Delete pending following for friend
-    const doc3 = await firestore
+    await this.getFriends()
+    loading.close()
+  }
+
+  async unFollowFriend(uid: string) {
+    const loading = this.$vs.loading()
+
+    const doc = await firestore
       .collection('users')
-      .doc(uid)
+      .doc(this.AuthUser?.uid)
       .update({
-        pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
+        following: firebase.firestore.FieldValue.arrayRemove(uid)
       })
 
     await this.getFriends()

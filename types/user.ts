@@ -46,4 +46,5 @@ export interface UserData {
 
   notifications?: boolean
   pendingFollowing?: string[]
+  following?: string[]
 }
