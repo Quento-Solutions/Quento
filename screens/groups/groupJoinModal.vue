@@ -1,8 +1,14 @@
 <template>
   <div style="width : 500px">
     <div>
+<<<<<<< HEAD
       <vs-alert>How the group works?</vs-alert>
       <vs-input border v-model="link" placeholder="Enter an invite" class="block"/>
+=======
+      <vs-alert>Enter an invite below to join an existing server.</vs-alert>
+      <div class = "p-6"></div>
+      <vs-input class = "block" border v-model="link" label="Enter an invite" placeholder = "Quento.ca/groups/join?exampletoken=QTxgBw1uvD5sAAtP2UI6" />
+>>>>>>> 4a3b0afb9f9edeece6277863285cf9ba06f7af05
       <div class="w-full flex flex-row justify-end mt-6 items-center" style></div>
     </div>
     <div class="flex flex-row justify-between items-center">
@@ -13,10 +19,17 @@
       </vs-button>
       <vs-button
         success
+<<<<<<< HEAD
         :disabled="formErrors"
         @click="joinGroup()"
       >
         <div class="text-xl p-1 font-bold lg:text-xl" style>Join</div>
+=======
+        :disabled="link.length == 0"
+        @click="giveGroupInfo()"
+      >
+        <div class="text-xl p-1 font-bold lg:text-xl" style>JOIN</div>
+>>>>>>> 4a3b0afb9f9edeece6277863285cf9ba06f7af05
       </vs-button>
     </div>
   </div>
@@ -85,10 +98,6 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     groupsStore.ToggleGroupsModule(value)
   }
 
-  // ClearFields() {
-  //   this.title = this.description = this.subjectSelect = this.gradeSelect = ''
-  //   this.schoolSelect = "All Schools";
-  // }
 
   async joinGroup()
   {
