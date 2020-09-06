@@ -40,7 +40,7 @@
         style
       >
         <GroupsCard
-          class="w-full lg:w-1/3 md:w-1/2"
+          class="w-full"
           :group="group"
           :clickable="true"
           :preview="true"
