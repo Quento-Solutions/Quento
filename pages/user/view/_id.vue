@@ -284,6 +284,13 @@ export default class UserPage extends mixins(UserMixin) {
         following: firebase.firestore.FieldValue.arrayRemove(this.userId)
       })
 
+    const unFollowFriendDoc = firestore
+    .collection('users')
+    .doc(this.userId as string)
+    .collection('followers')
+    .doc(this.AuthUser?.uid)
+    .delete()
+
     this.followingAlready()
     this.$router.go((this.$router.currentRoute as unknown) as number)
 

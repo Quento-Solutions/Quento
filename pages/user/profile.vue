@@ -416,6 +416,13 @@ export default class UserProfile extends mixins(UserMixin) {
         following: firebase.firestore.FieldValue.arrayRemove(uid)
       })
 
+    const unFollowQuery = await firestore
+      .collection('users')
+      .doc(uid)
+      .collection('followers')
+      .doc(this.AuthUser?.uid)
+      .delete()
+
     await this.getFriends()
     loading.close()
   }
