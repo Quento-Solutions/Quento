@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="width : 500px">
     <div>
       <vs-alert>How the group works?</vs-alert>
-      <vs-input border v-model="link" placeholder="Enter an invite" />
+      <vs-input border v-model="link" placeholder="Enter an invite" class="block"/>
       <div class="w-full flex flex-row justify-end mt-6 items-center" style></div>
     </div>
     <div class="flex flex-row justify-between items-center">
@@ -13,10 +13,10 @@
       </vs-button>
       <vs-button
         success
-        :disabled="formErrors || description.length > characterLimit"
-        @click="giveGroupInfo()"
+        :disabled="formErrors"
+        @click="joinGroup()"
       >
-        <div class="text-xl p-1 font-bold lg:text-xl" style>CREATE</div>
+        <div class="text-xl p-1 font-bold lg:text-xl" style>Join</div>
       </vs-button>
     </div>
   </div>
@@ -75,29 +75,9 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
 
   characterLimit = 5000
   groupPublic = true
-  description = ''
-  backgroundImageUrl =
-    'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
-  title = ''
-  @Watch('IsReset')
-  // onResetChanged(value: boolean, oldVal: boolean) {
-  //   if (value) {
-  //     this.ClearFields()
-  //     groupsStore.SET_RESET(false)
-  //   }
-  // }
 
-  // get IsReset() {
-  //   return groupsStore.IsReset
-  // }
+  link = ''
 
-  // readonly GradeList = GradeList.filter((v) => v !== 'ALL')
-  // Cancel() {}
-  // // make this a mixin
-  // getIcon(subject: SubjectGroup_O | Subject_O) {
-  //   return SubjectIconList[subject]
-  // }
-  // readonly SubjectGroupList = NestedSubjectList
   get active() {
     return groupsStore.openGroupsModal
   }
@@ -110,62 +90,30 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   //   this.schoolSelect = "All Schools";
   // }
 
+  async joinGroup()
+  {
+    if(!this.link || this.link === '') return;
+    const searchString = "/groups/join?token=";
+    const linkIndex = this.link.indexOf(searchString);
+    if(linkIndex == -1) 
+    {
+      this.active = false;
+      return this.$vs.notification({
+        title : 'Invalid Link',
+        color : 'danger'
+      })
+    }
+    const token = this.link.substring(linkIndex + searchString.length);
+    this.active = false;
+    this.$router.push(`/groups/join?token=${token}`);
+  }
+
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
-  async giveGroupInfo() {
-    if (!authStore.user?.uid) return
-    const loading = this.$vs.loading()
-    if (this.formErrors) {
-      this.$vs.notification({
-        color: 'danger',
-        title: 'Fill Out All Fields!'
-      })
-      return
-    }
-    const addGroup = new Group({
-      title: this.title,
-      uid: authStore.user?.uid!,
-      createdAt: new Date(),
-      description: this.description,
-      members: 0,
-      private: !this.groupPublic,
-      approved: false,
-      memberList: [authStore.user?.uid],
-      backgroundImageUrl: this.backgroundImageUrl
-    })
-    try {
-      await groupsStore.createGroup(addGroup)
-      this.$vs.notification({
-        color: 'success',
-        title: 'Group Created'
-      })
-    } catch (error) {
-      console.log({error})
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Creating Your Group'
-      })
-    }
-    this.active = false
-    loading.close()
-    // notesStore.TogglePreviewModal(true)
-    this.GetGroups()
-  }
-  async GetGroups() {
-    const loading = this.$vs.loading()
-    try {
-      await groupsStore.GetMoreGroups()
-    } catch (error) {
-      console.log({error})
-    }
-    loading.close()
-
-    return
-  }
   get formErrors() {
-    return !this.title || !this.description
+    return  !this.link
   }
 }
 </script>
