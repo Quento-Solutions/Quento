@@ -208,14 +208,15 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     }
     const addGroup = new Group({
       title: this.title,
-      uid: authStore.user?.uid!,
+      userId: authStore.user?.uid!,
       createdAt: new Date(),
       description: this.description,
       members: 0,
       private: !this.groupPublic,
       approved: false,
       memberList: [authStore.user?.uid],
-      backgroundImageUrl: this.backgroundImageUrl
+      backgroundImageUrl: this.backgroundImageUrl,
+
     })
     if (this.schoolSelect !== 'Any') {
       addGroup.school = this.schoolSelect

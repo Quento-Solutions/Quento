@@ -6,7 +6,7 @@ import { Timestamp } from './env.utils'
 
 export interface Group_t {
   title: string
-  uid: string
+  userId: string
   // contents : string;
   createdAt: Date
   // views : number;
@@ -26,7 +26,7 @@ export interface Group_t {
 }
 
 export interface Group_t_F {
-  uid: string
+  userId: string
   title: string
   // contents : string;
   approved : boolean;
