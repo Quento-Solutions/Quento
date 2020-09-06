@@ -6,6 +6,7 @@
     id="notes-sidebar"
     class="rounded-md w-full notes-sidebar"
     style="z-index: 2; border-radius: 1rem; height: auto;"
+    :style="style"
   >
     <div>
       <div class="vx-row w-full justify-center p-4">
@@ -150,6 +151,7 @@ export default class NotesSidebar extends Vue {
   @PropSync('sort') sortSelect!: typeof notesStore.SortSelect
   @Prop({default : true}) sortEnabled !: boolean
   @Prop({default : true}) absolute !: boolean
+  @Prop({default : ''}) style !: string;
 
   SubjectDict = s
   GradeList = GradeList

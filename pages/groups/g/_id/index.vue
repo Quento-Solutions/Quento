@@ -1,6 +1,11 @@
 <template>
   <div id="newsletter-content-container">
-          <input type="text" :value='JoinToken' id="joinInput" style="position : absolute; z-index : -10000000"/>
+    <input
+      type="text"
+      :value="JoinToken"
+      id="joinInput"
+      style="position : absolute; z-index : -10000000"
+    />
 
     <div class="vx-row justify-center w-full" v-if="group">
       <VxCard class="mb-6 w-24 min-w-full">
@@ -74,7 +79,7 @@
             >
               <div class="font-bold truncate">{{ school }}</div>
             </vs-option>
-          </vs-select> -->
+          </vs-select>-->
         </div>
 
         <!-- Member List -->
@@ -127,8 +132,8 @@ export default class GroupsSummary extends mixins(UserMixin) {
   goBack() {
     this.$router.push('/groups')
   }
-  pushNotes(){
-    this.$router.push('/groups/g/' + this.groupId+'/groupNotes')
+  pushNotes() {
+    this.$router.push('/groups/g/' + this.groupId + '/groupNotes')
   }
   get memberOfGroup() {
     return (
@@ -162,17 +167,16 @@ export default class GroupsSummary extends mixins(UserMixin) {
     loading.close()
   }
 
-  copyLink()
-  {
-    const tokenEl = (document.querySelector('#joinInput')) as HTMLInputElement;
+  copyLink() {
+    const tokenEl = document.querySelector('#joinInput') as HTMLInputElement
     console.log({tokenEl})
     tokenEl.setAttribute('type', 'text')
-    tokenEl.select();
+    tokenEl.select()
     // tokenEl.setSelectionRange(0, 99999); /*For mobile devices*/
-    document.execCommand('copy');
+    document.execCommand('copy')
     this.$vs.notification({
-      title : 'Link Copied to Clipboard',
-      color : "success"
+      title: 'Link Copied to Clipboard',
+      color: 'success'
     })
   }
   async fetchGroup() {
@@ -199,6 +203,5 @@ export default class GroupsSummary extends mixins(UserMixin) {
       loading.close()
     }
   }
-  
 }
 </script>

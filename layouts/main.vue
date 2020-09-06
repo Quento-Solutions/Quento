@@ -39,7 +39,7 @@
           ]"
         />
 
-        <div class="router-view"> <!-- Router View -->
+        <div class="router-view"  > <!-- Router View -->
           <div class="router-content" :class="{ 'mt-0': navbarType == 'hidden' }"> <!-- Router Content -->
             
             <!-- SPECIAL but not in a good way 😡-->

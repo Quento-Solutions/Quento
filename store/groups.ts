@@ -64,7 +64,8 @@ export default class GroupsModule extends VuexModule {
     let query: store.Query<store.DocumentData> = firestore.collection('groups')
     // Do query filtering things
 
-    if (!(this.ActiveGrade === 'ALL')) {
+    if (!(this.ActiveGrade === 'ALL')) 
+    {
       query = query.where('grade', '==', this.ActiveGrade)
     }
     if (this.ActiveSchool !== 'All Schools') {
@@ -73,7 +74,9 @@ export default class GroupsModule extends VuexModule {
     if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
-    query = query.where('public', '==', true);
+
+    query = query.where('private', '==', false);
+    query = query.where("approved", '==', true);
     
     query = query.orderBy(this.SortSelect, 'desc')
 

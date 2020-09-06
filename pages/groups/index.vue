@@ -20,7 +20,7 @@
         </vs-alert>
       </div>
     </div>
-    <div class="vx-row w-full mt-8" style>
+    <div class="vx-row w-full mt-8 justify-center" style>
       <div class="vx-col flex flex-col justify-center items-center w-full lg:w-1/3 md:w-1/2" style>
         <div
           class="flex flex-col justify-center items-center cursor-pointer"
