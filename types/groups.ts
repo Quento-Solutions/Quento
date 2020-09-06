@@ -29,9 +29,7 @@ export interface Group_t_F{
 }
 
 export class Group{
-    constructor(
-        opts : Group_t
-    ){
+    constructor(opts : Group_t){
         return Object.assign(this, opts)
     }
 

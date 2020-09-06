@@ -1,6 +1,6 @@
 <template>
-	<div class = "lg:w-33% md:w-50% sm:100%">
-		<VxCard v-if="group" class="overlay-card mb-4 overflow-hidden rounded-super"> <!-- Card Outside -->
+	<div class = "xxlmin:w-33% lg:w-50% xs:w-100%">
+		<VxCard v-if="group" class="overlay-card mb-4 overflow-hidden cardster" style="border-radius: 1.28rem !important"> <!-- Card Outside -->
 			<template slot="no-body">
 				<nuxt-link :to="`/groups/${group.id}`">
 					<!-- Background -->
@@ -32,7 +32,7 @@
 						</div>
 
 						<!-- Side -->
-						<div class = "bg-grey rounded-r-super absolute top-0 right-0 h-full w-33% p-4 text-black font-open">
+						<div class = " sideboi rounded-r-super absolute top-0 right-0 h-full w-33% p-4 text-black font-open">
 							<h4 class = "font-bold my-1">Description</h4>
 							<div
 								:style="`background-color: #${randomColor()}`"
@@ -74,3 +74,21 @@
 		}
 	}
 </script>
+
+<style lang = "scss">
+	.cardster{
+		box-shadow: 0px 12px 15px -7px rgba(0,0,0,0.27);
+	}
+	.sideboi{
+		background-color:#f9f9f9;
+		transition: background-color 0.8s ease-in-out;
+	}
+	.cardster:hover{
+		box-shadow: 0px 19px 37px 3px rgba(0,0,0,0.21);
+		.sideboi{
+			background-color: white;
+			box-shadow: 0px 10px 34px 0px rgba(0,0,0,0.42);
+			transition: box-shadow 0.3s ease-in-out;
+		}
+	}
+</style>

@@ -10,9 +10,8 @@
       </p>
     </div>
 
-    <!--
-    Right Buttons
-    <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
+    
+    <!-- <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10 w-20">
       <div class="text-lg text-xs font-ginger-b">Join</div>
       <template #animate>
         <i class="bx bx-plus text-2xl"></i>
@@ -23,8 +22,8 @@
       <template #animate>
         <i class="bx bx-plus text-2xl"></i>
       </template>
-    </vs-button> 
-    -->
+    </vs-button>  -->
+   
 
     <!-- CARDS -->
     <div v-if="loaded" class="flex flex-row justify-between flex-wrap" id="groupCard">
@@ -34,44 +33,44 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
-import { groupsStore } from '~/store'
-import NewsletterModal from '~/screens/newsletter/NewsletterModal.vue'
-import NewsletterCard from '~/components/NewsletterCard.vue'
-import GroupCard from '~/components/GroupCard.vue'
+  import { Vue, Component } from 'nuxt-property-decorator'
+  import { groupsStore } from '~/store'
+  import GroupCard from '~/components/GroupCard.vue'
 
-@Component<GroupsPage>({
-  components: { GroupCard },
-  mounted() {
-    this.GetGroups()
-  }
-})
-export default class GroupsPage extends Vue {
-  numberOfArticles = 3
-  loaded = false
-
-  backgroundGradient(imageUrl: string) {
-    return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
-  }
-
-  //   toggleNotesModal(val: boolean) {
-  //     groupsStore.SET_POST_MODAL_OPEN(val)
-  //   }
-  get groups() {
-    return groupsStore.groupList
-  }
-
-  async GetGroups() {
-    const loading = this.$vs.loading()
-    try {
-      await groupsStore.GetGroups()
-    } catch (error) {
-      console.log({ error })
+  @Component<GroupsPage>({
+    components: { GroupCard },
+    mounted() {
+      this.GetGroups()
     }
-    loading.close()
+  })
+  export default class GroupsPage extends Vue {
+    numberOfArticles = 3
+    loaded = false
 
-    this.loaded = true
-    return
+    backgroundGradient(imageUrl: string) {
+      return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+    }
+
+    //   toggleNotesModal(val: boolean) {
+    //     groupsStore.SET_POST_MODAL_OPEN(val)
+    //   }
+    get groups() {
+      return groupsStore.groupList
+    }
+
+    async GetGroups() {
+      const loading = this.$vs.loading()
+      
+      try {
+        await groupsStore.GetGroups()
+      }
+      catch (error) {
+        console.log({ error })
+      }
+      loading.close()
+
+      this.loaded = true
+      return
+    }
   }
-}
 </script>

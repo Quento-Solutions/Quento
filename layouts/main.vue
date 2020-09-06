@@ -21,7 +21,7 @@
       id="content-area"
 
       :class="[contentAreaClass, { 'show-overlay': bodyOverlay, 'show-lower-overlay' : lowerOverlay }]"
-      :style="sidebarOpen ? `float: right; width: 95%` : 'width: 100vw;background-color:red'"
+      :style="sidebarOpen ? `float: right; width: 95%` : 'width: 100vw;'"
 
     > <!-- CONTENT AREA -->
 

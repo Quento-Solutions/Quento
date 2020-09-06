@@ -5,16 +5,15 @@
  ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
  */
 module.exports = {
-  important: true,
   theme: {
     screens: {
-      xs: '320px',
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      xxlmin: '1351px',
-      xxlmax: { max: '1350px' }
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      'xxlmin': '1351px',
+      'xxlmax': { max: '1350px' }
     },
     fontFamily: {
       display: ['Quicksand', 'sans-serif'],
