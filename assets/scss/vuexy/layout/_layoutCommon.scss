@@ -40,7 +40,11 @@ body {
 
 .router-view {
   position: relative;
-  padding: 2.2rem;
+  
+  //TEMPORARY SOLUTION. FIX SOON
+  $extraPadding:0rem;
+  padding: 2.2rem + $extraPadding;
+  padding-left:$extraPadding;
 
   @media (max-width: 576px) {
     padding: 1.2rem !important;

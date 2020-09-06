@@ -8,13 +8,12 @@
 <script lang="ts">
 import { Vue, Component, mixins } from 'nuxt-property-decorator'
 import { groupsStore } from '~/store'
-import VxCard from '~/components/VxCard.vue'
 import Analytics from '~/mixins/AnalyticsMixin';
 import GroupsModal from '~/screens/groups/NewGroupsModal.vue'
 
 @Component<GroupsPage>({
   layout: 'main',
-  components: { VxCard, GroupsModal},
+  components: { GroupsModal},
   name : "GroupsPage"
 })
 export default class GroupsPage extends mixins(Analytics) 

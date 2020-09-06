@@ -7,7 +7,7 @@ let ana : firebase.analytics.Analytics | null = null;
 if (process.client)
 {
     ana = app.analytics();
-    console.log("analytics")
+    console.log("Firebase Analytics Active")
 }
 
 export default ana;
