@@ -1,8 +1,9 @@
 <template>
   <div>
     <div>
-      <vs-alert>How the group works?</vs-alert>
-      <vs-input border v-model="link" placeholder="Enter an invite" />
+      <vs-alert>Enter an invite below to join an existing server.</vs-alert>
+      <div class = "p-6"></div>
+      <vs-input class = "block" border v-model="link" label="Enter an invite" placeholder = "Quento.ca/groups/join?exampletoken=QTxgBw1uvD5sAAtP2UI6" />
       <div class="w-full flex flex-row justify-end mt-6 items-center" style></div>
     </div>
     <div class="flex flex-row justify-between items-center">
@@ -13,10 +14,10 @@
       </vs-button>
       <vs-button
         success
-        :disabled="formErrors || description.length > characterLimit"
+        :disabled="link.length == 0"
         @click="giveGroupInfo()"
       >
-        <div class="text-xl p-1 font-bold lg:text-xl" style>CREATE</div>
+        <div class="text-xl p-1 font-bold lg:text-xl" style>JOIN</div>
       </vs-button>
     </div>
   </div>
@@ -75,7 +76,8 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
 
   characterLimit = 5000
   groupPublic = true
-  description = ''
+  link = ''
+  description =''
   backgroundImageUrl =
     'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
   title = ''
