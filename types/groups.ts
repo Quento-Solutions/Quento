@@ -10,15 +10,17 @@ export interface Group_t {
   // contents : string;
   createdAt: Date
   // views : number;
-  approved ?: boolean
+  approved : boolean
   description: string
-  backgroundImageUrl: string
+  backgroundImageUrl: string,
+  private : boolean
 
   id?: string
   school?: School_O
   memberList : string[]
   members: number
-
+                                                                                                                                                                                                          
+  inviteToken ?: string;
   subject?: Subject_O
   grade?: Grade_O
 }
@@ -27,13 +29,16 @@ export interface Group_t_F {
   uid: string
   title: string
   // contents : string;
-  approve ?: boolean;
+  approved : boolean;
   description: string
-  backgroundImageUrl: string
+  backgroundImageUrl: string,
+  private : boolean
   
   createdAt: Date | Date_t_F
   members : number
   memberList : string[]
+
+  inviteToken ?: string;
 
   school?: School_O
   subject ?: Subject_O

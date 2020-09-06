@@ -149,6 +149,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   gradeSelect: Grade_O | '' = ''
   readonly SchoolList = [ "All Schools", ...SchoolList];
   schoolSelect : School_O | "All Schools" = "All Schools"
+  
   characterLimit = 5000
 
   contents = ''

@@ -1,5 +1,7 @@
 <template>
   <div id="newsletter-content-container">
+          <input type="text" :value='JoinToken' id="joinInput" style="position : absolute; z-index : -10000000"/>
+
     <div class="vx-row justify-center w-full" v-if="group">
       <VxCard class="mb-6 w-24 min-w-full">
         <template slot="no-body">
@@ -36,10 +38,43 @@
         </div>
         <!-- Summary -->
 
-        <div class="w-full md:w-2/3 p-4 md:px-8">
-
+        <div class="w-full md:w-2/3 p-4 md:px-8 content-input">
           <h1 class="text-title">Description</h1>
           <div class="mt-4">{{group.description}}</div>
+
+          <h1 class="text-title mt-6">Join Link</h1>
+          <vs-button @click="GenerateJoinToken()">Generate Join Link</vs-button>
+          <vs-input
+            class="mt-4 block"
+            readonly
+            style="max-width : 600px"
+            icon-after
+            :value="JoinToken"
+            @click-icon="copyLink()"
+          >
+            <template #icon>
+              <i class="bx bx-clipboard cursor-pointer"></i>
+            </template>
+          </vs-input>
+
+          <!-- <vs-select
+            filter
+            class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+            placeholder="School"
+            v-model="schoolSelect"
+          >
+            <vs-option value="Any" label="Select School">
+              <div class="font-bold truncate">Any</div>
+            </vs-option>
+            <vs-option
+              v-for="(school, subIndex) in SchoolList"
+              :key="subIndex"
+              :label="school"
+              :value="school"
+            >
+              <div class="font-bold truncate">{{ school }}</div>
+            </vs-option>
+          </vs-select> -->
         </div>
 
         <!-- Member List -->
@@ -60,7 +95,9 @@
 
 
 <script lang="ts">
-import {Component, Vue, Prop} from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
+import UserMixin from '~/mixins/UserMixin'
+import functions from '~/plugins/firebaseFunctions'
 import firestore from '~/plugins/firestore'
 import {Group, Group_t_F} from '~/types/groups'
 
@@ -70,15 +107,71 @@ import {Group, Group_t_F} from '~/types/groups'
     this.fetchGroup()
   }
 })
-export default class GroupsSummary extends Vue {
+export default class GroupsSummary extends mixins(UserMixin) {
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
 
+  get JoinToken() {
+    if (this.group?.inviteToken) {
+      const redirect_uri = window.location.origin
+      return `${redirect_uri}/groups/join?token=${this.group.inviteToken}`
+    }
+    return ''
+  }
   active: 'Questions' | 'Summary' | 'Notes' = 'Summary'
 
   backgroundGradient(imageUrl: string) {
     return `background-image : linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${imageUrl}')`
+  }
+  goBack() {
+    this.$router.push('/groups')
+  }
+
+  get memberOfGroup() {
+    return (
+      this.group &&
+      this.AuthUser?.uid &&
+      this.group.memberList.includes(this.AuthUser.uid)
+    )
+  }
+
+  async GenerateJoinToken() {
+    const groupId = this.groupId
+    if (
+      !groupId ||
+      this.docNotFound ||
+      !this.group ||
+      !this.group.approved ||
+      !this.memberOfGroup
+    )
+      return
+    const loading = this.$vs.loading()
+    const res = await functions.httpsCallable('GenerateJoinToken')({groupId})
+    if (res.data.status !== 200) {
+      this.$vs.notification({
+        title: res.data.message,
+        color: 'danger'
+      })
+      console.log({res})
+    } else {
+      this.fetchGroup()
+    }
+    loading.close()
+  }
+
+  copyLink()
+  {
+    const tokenEl = (document.querySelector('#joinInput')) as HTMLInputElement;
+    console.log({tokenEl})
+    tokenEl.setAttribute('type', 'text')
+    tokenEl.select();
+    // tokenEl.setSelectionRange(0, 99999); /*For mobile devices*/
+    document.execCommand('copy');
+    this.$vs.notification({
+      title : 'Link Copied to Clipboard',
+      color : "success"
+    })
   }
   async fetchGroup() {
     //   this.group!.bac

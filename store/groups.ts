@@ -15,6 +15,7 @@ import {
   SortOptions_O
 } from '~/types/subjects'
 import { authStore } from '~/utils/store-accessor'
+import { Timestamp } from '~/types/env.utils'
 
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
@@ -35,7 +36,10 @@ export default class GroupsModule extends VuexModule {
   ActiveSubjects: Subject_O[] = []
   SortSelect: SortOptions_O = 'createdAt'
 
-
+  async GenerateJoinToken(groupId : string)
+  {
+    
+  }
   @Mutation
   public SET_USER_GROUPS(items: Group[])
   {
@@ -47,11 +51,10 @@ export default class GroupsModule extends VuexModule {
   {
     if(!authStore.user?.uid) return;
     const userGroupsRef = await firestore.collection('groups').where("memberList", "array-contains", authStore.user.uid).get();
-    const userGroups = userGroupsRef.docs.map(doc => Group.fromFirebase(doc.data() as Group_t_F));
+    const userGroups = userGroupsRef.docs.map(doc => Group.fromFirebase(doc.data() as Group_t_F, doc.id));
     this.SET_USER_GROUPS(userGroups)
   }
-
-
+  
   @Action({ rawError: true })
   public async GetMoreGroups(start = false) {
     if (this.EndOfList) {

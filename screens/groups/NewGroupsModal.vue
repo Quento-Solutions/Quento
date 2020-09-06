@@ -1,10 +1,5 @@
 <template>
-  <vs-dialog
-    v-model="active"
-    style="z-index: 1000000000;"
-    :full-screen="isSmallScreen"
-    overflow-hidden
-  >
+  <vs-dialog v-model="active" style="z-index: 1000000000;" overflow-hidden>
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">
@@ -12,7 +7,7 @@
         </h4>
       </div>
     </template>
-    <transition name="fade" mode="out-in" >
+    <transition name="fade" mode="out-in">
       <component :is="currentScreen" @next="nextScreen"></component>
     </transition>
   </vs-dialog>
@@ -54,24 +49,25 @@ interface imageSrc {
 
 @Component<GroupsModal>({
   components: {
-    VsUpload, GroupSelectModal, GroupJoinModal, GroupCreateModal
+    VsUpload,
+    GroupSelectModal,
+    GroupJoinModal,
+    GroupCreateModal
   },
   mounted() {}
 })
 export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   readonly SchoolList = ['All Schools', ...SchoolList]
-  nextScreen(args : number)
-  {
+  nextScreen(args: number) {
     // console.log({args});
-    this.screen = args;
-    this.active = true;
+    this.screen = args
+    this.active = true
   }
-  get currentScreen()
-  {
+  get currentScreen() {
     return this.screens[this.screen]
   }
   screens = [GroupSelectModal, GroupCreateModal, GroupJoinModal]
-  screen = 0;
+  screen = 0
 
   schoolSelect: School_O | 'All Schools' = 'All Schools'
   characterLimit = 5000
@@ -114,44 +110,6 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     return windowStore.isSmallScreen
   }
 
-  async giveGroupInfo() {
-    if (!authStore.user?.uid) return
-    const loading = this.$vs.loading()
-    if (this.formErrors) {
-      this.$vs.notification({
-        color: 'danger',
-        title: 'Fill Out All Fields!'
-      })
-      return
-    }
-    const addGroup = new Group({
-      title: this.title,
-      uid: authStore.user?.uid!,
-      createdAt: new Date(),
-      description: this.description,
-      members: 10,
-      backgroundImageUrl: this.backgroundImageUrl,
-      approved: false,
-      memberList: [authStore.user.uid]
-    })
-    try {
-      await groupsStore.createGroup(addGroup)
-      this.$vs.notification({
-        color: 'success',
-        title: 'Group Created'
-      })
-    } catch (error) {
-      console.log({error})
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Creating Your Group'
-      })
-    }
-    this.active = false
-    loading.close()
-    // notesStore.TogglePreviewModal(true)
-    this.GetGroups()
-  }
   async GetGroups() {
     const loading = this.$vs.loading()
     try {
@@ -170,8 +128,9 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
 </script>
 
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;

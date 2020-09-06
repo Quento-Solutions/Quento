@@ -6,29 +6,102 @@
     >Your note cannot exceed 5000 characters</vs-alert>
     <vs-alert>How the group works?</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
-      <vs-input v-model="title" placeholder="Title" class="block mb-3 w-6 mt-3" width="w-6">
+      <vs-input v-model="title" placeholder="Group Name" class="block mb-3 w-6 mt-3" width="w-6">
         <template #icon>
           <i class="bx bx-highlight" primary></i>
         </template>
       </vs-input>
+      <vs-select
+        filter
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="Subject"
+        v-model="subjectSelect"
+      >
+        <vs-option value="Any" label="Select Subject">
+          <div class="font-bold truncate">Any</div>
+        </vs-option>
+        <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
+          <div slot="title" class="w-full vx-row">
+            <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
+            <div class="font-bold truncate">{{ subjectGroup.name }}</div>
+          </div>
+          <vs-option
+            v-for="(subject, subIndex) in subjectGroup.items"
+            :key="subIndex"
+            :label="subject.name"
+            :value="subject.name"
+          >
+            <i class="bx text-3xl mr-2" :class="subject.iconClass" />
+            <div class="font-bold truncate">{{ subject.name }}</div>
+          </vs-option>
+        </vs-option-group>
+      </vs-select>
+      <vs-select
+        filter
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="Grade"
+        v-model="gradeSelect"
+      >
+        <vs-option value="Any" label="Select Grade">
+          <div class="font-bold truncate">Any</div>
+        </vs-option>
+        <vs-option
+          v-for="(grade, subIndex) in GradeList"
+          :key="subIndex"
+          :label="`Grade ${grade}`"
+          :value="grade"
+        >
+          <div class="font-bold truncate">Grade {{ grade }}</div>
+        </vs-option>
+      </vs-select>
+      <vs-select
+        filter
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="School"
+        v-model="schoolSelect"
+      >
+        <vs-option value="Any" label="Select School">
+          <div class="font-bold truncate">Any</div>
+        </vs-option>
+        <vs-option
+          v-for="(school, subIndex) in SchoolList"
+          :key="subIndex"
+          :label="school"
+          :value="school"
+        >
+          <div class="font-bold truncate">{{ school }}</div>
+        </vs-option>
+      </vs-select>
       <VsTextarea
         v-model="description"
-        placeholder="Enter your content here"
+        placeholder="Description"
         class="block rounded-lg pl-1"
         ref="textarea"
-        expand="true"
-        markdownOptions="true"
         @paste="onPaste"
       ></VsTextarea>
+      <div class="w-full flex flex-row justify-end mt-6 items-center" style>
+        <div class="text-ginger-b" style="">
+          Group Visibility: &nbsp;
+        </div>
+        <vs-switch v-model="groupPublic">
+          <template #off>Private</template>
+          <template #on>Public</template>
+        </vs-switch>
+      </div>
     </div>
-    <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
+
+    <div class="flex flex-row justify-between items-center">
+      <vs-button class transparent @click="$emit('next', 0)">
+        <div class="vx-row text-xl items-center p-1">
+          <i class="bx bx-arrow-back text-3xl"></i>&nbsp;Back
+        </div>
+      </vs-button>
       <vs-button
-        class="md:w-1/2 w-full"
-        warn
+        success
         :disabled="formErrors || description.length > characterLimit"
         @click="giveGroupInfo()"
       >
-        <div class="text-xl p-2 font-bold lg:text-2xl" style>CREATE GROUP</div>
+        <div class="text-xl p-1 font-bold lg:text-xl" style>CREATE</div>
       </vs-button>
     </div>
   </div>
@@ -55,6 +128,12 @@ import {v4} from 'uuid'
 
 import {authStore} from '~/store'
 import {School_O, SchoolList} from '~/types/schools'
+import {
+  GradeList,
+  Grade_O,
+  NestedSubjectList,
+  Subject_O
+} from '~/types/subjects'
 
 interface imageSrc {
   error: boolean
@@ -71,10 +150,15 @@ interface imageSrc {
   mounted() {}
 })
 export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
-  readonly SchoolList = ['All Schools', ...SchoolList]
-  schoolSelect: School_O | 'All Schools' = 'All Schools'
-  characterLimit = 5000
+  subjectSelect: Subject_O | 'Any' = 'Any'
+  gradeSelect: Grade_O | 'Any' = 'Any'
+  readonly SchoolList = [...SchoolList]
+  schoolSelect: School_O | 'Any' = 'Any'
+  readonly GradeList = [...GradeList.filter((v) => v !== 'ALL')]
+  readonly SubjectGroupList = NestedSubjectList
 
+  characterLimit = 5000
+  groupPublic = true
   description = ''
   backgroundImageUrl =
     'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
@@ -130,6 +214,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       createdAt: new Date(),
       description: this.description,
       members: 0,
+      private : !this.groupPublic,
       approved: false,
       memberList: [authStore.user?.uid],
       backgroundImageUrl: this.backgroundImageUrl
