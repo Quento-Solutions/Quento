@@ -101,6 +101,3 @@ export default class GroupsPage extends mixins(LoadScroll) {
   }
 }
 </script>
-
-<style lang="scss">
-</style>

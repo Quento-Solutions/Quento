@@ -80,7 +80,7 @@
         <!-- Member List -->
         <div class="vx-row justify-center w-full md:w-1/3">
           <div class="vx-row w-full bg-white rounded-md lg:w-1/2">
-            <div class="p-4 md:p-6 lg:p-8"></div>
+            <div class="p-4 md:p-6 lg:p-8">test</div>
           </div>
         </div>
       </div>

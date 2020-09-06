@@ -1,4 +1,6 @@
 <template>
+  <!-- ----------------------------------JEFF'S VERSION---------------------------------- -->
+  <!--
   <div
     class="vx-row w-full relative justify-evenly"
     :class="[{ 'show-overlay': bodyOverlay }]"
@@ -18,16 +20,21 @@
         <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
       </vs-button>
     </FilterSidebar>
+
     <div class="sidebar-spacer"></div>
     <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
+      Mobile
       <div class="vx-col w-full inline-flex lg:hidden" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
             <i class="bx bx-menu" style="font-size: 1.25rem;" />
+            piss
           </vs-avatar>
         </div>
       </div>
+      
       <div class="vx-row" style>
+        Join Group
         <div
           class="vx-col flex flex-col justify-center items-center w-full lg:w-1/3 md:w-1/2"
           style
@@ -63,6 +70,55 @@
         <b>Sorry!</b> Something went wrong when fetching the Groups. Please Try
         Again.
       </vs-alert>
+    </div>
+  </div>
+  -->
+
+  <!-- ----------------------------------MY VERSION---------------------------------- -->
+  
+  <div> <!-- Yay we need a root because fun vue -->
+    <!-- TITLE AND CREATE CARDS? -->
+    <div class = "mb-10 pt-8" style = "width:60%">
+      <div class = 'mb-3 text-black font-extrabold text-6xl font-open'>
+        Groups
+      </div>
+
+      <div class = "absolute right-0"> <!-- Button Container -->
+        <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10" @click="ToggleGroupsModal(true)">
+          <div class="text-lg text-xs font-ginger-b">Create/Join by Link</div>
+          <template #animate>
+            <i class="bx bx-plus text-2xl"></i>
+          </template>
+        </vs-button>
+      </div>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed augue lorem, interdum a maximus ut, luctus vel justo. Maecenas sit amet massa purus. Quisque eu mattis nibh, in commodo turpis. Aenean turpis ante, porta non euismod at, maximus eu justo. Curabitur nec gravida libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus ac molestie neque. Etiam vitae rutrum nisi, eget feugiat est.
+      </p>
+    </div>
+    
+
+    <!-- CARDS -->
+    <div class = "flex flex-row"> <!-- BANDAID SOLUTIONS 4 LIFE -->
+      <FilterSidebar
+          :sort.sync="sort"
+          :subjects.sync="subjects"
+          :school.sync="school"
+          :grade.sync="grade"
+          :sortEnabled="false"
+          @filter="filter()"
+          :absolute="false"
+        >
+          <vs-button to="/groups" class="w-full">
+            <i class="bx bx-arrow-back text-4xl" />
+            <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
+          </vs-button>
+      </FilterSidebar>
+      
+      <div v-if="groupsList.length" class="flex flex-row justify-between flex-wrap self-start" id="groupCard">
+        <div v-for="(item, index) in groupsList" :key="index" class="px-2 w-full xxlmin:w-33% lg:w-50% xs:w-100%">
+          <GroupsCard :group="item"></GroupsCard>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -156,6 +212,3 @@ export default class DiscoverGroups extends mixins(LoadScroll) {
   }
 }
 </script>
-
-<style lang="scss">
-</style>

@@ -1,6 +1,7 @@
 <template>
   <vs-sidebar
-    absolute
+    :absolute="absolute"
+    :relative="!absolute"
     :open.sync="open"
     id="notes-sidebar"
     class="rounded-md w-full notes-sidebar"
@@ -148,6 +149,7 @@ export default class NotesSidebar extends Vue {
   @PropSync('school') schoolSelect!: School_O | 'All Schools'
   @PropSync('sort') sortSelect!: typeof notesStore.SortSelect
   @Prop({default : true}) sortEnabled !: boolean
+  @Prop({default : true}) absolute !: boolean
 
   SubjectDict = s
   GradeList = GradeList
