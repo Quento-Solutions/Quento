@@ -421,60 +421,46 @@ export default class NotesCard extends Vue {
   border-radius: 15px !important;
 }
 
-
-
-
 @media only screen and (max-width: 1670px) {
   .list-icons {
     width:15%;
-        // background-color: yellow;
   }
   .list-title{
-        // background-color: purple;
-        width:40%;
+    width:40%;
   }
   .list-date{
     display: none;
   }
-  .list-name{
-        // background-color: green;
-  }
   .list-buttons{
     width:20%;
-    // background-color: red;
   }
 }
 
 @media only screen and (max-width: 1300px) {
   .list-name{
-        display:none;
+    display:none;
   }
   .list-title{
-        // background-color: purple;
-        width:50%;
+    width:50%;
   }
   .list-buttons{
     width:30%;
-    // background-color: red;
   }
 }
 
 @media only screen and (max-width: 650px) {
   .list-icons {
     width:20%;
-        // background-color: yellow;
   }
   .list-title{
-        // background-color: purple;
-        width:40%;
+    width:40%;
   }
   .list-title div {
-            font-size: 0.9rem !important;
-            white-space: pre-wrap;
+    font-size: 0.9rem !important;
+    white-space: pre-wrap;
   }
   .list-buttons{
     width:40%;
-    // background-color: red;
   }
 }
 
@@ -484,10 +470,10 @@ export default class NotesCard extends Vue {
     width:15%;
   }
   .list-title{
-        width:60%;
+    width:60%;
   }
   .list-title div {
-            font-size: 1rem !important;
+    font-size: 1rem !important;
   }
   .list-buttons{
     flex-direction:column;

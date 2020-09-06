@@ -259,11 +259,69 @@ export default class QuestionCard extends mixins(UserMixin) {
   image?: HTMLImageElement
 }
 </script>
-<<<<<<< HEAD
-<style>
-.vx-card__body {
-  padding:0 !important;
+
+<style scoped>
+
+@media only screen and (max-width: 1670px) {
+  .list-icons {
+    width:15%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-date{
+    display: none;
+  }
+  .list-buttons{
+    width:20%;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .list-name{
+    display:none;
+  }
+  .list-title{
+    width:50%;
+  }
+  .list-buttons{
+    width:30%;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .list-icons {
+    width:20%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-title div {
+    font-size: 0.9rem !important;
+    white-space: pre-wrap;
+  }
+  .list-buttons{
+    width:40%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .list-icons {
+    flex-direction:column;
+    width:15%;
+  }
+  .list-title{
+    width:60%;
+  }
+  .list-title div {
+    font-size: 1rem !important;
+  }
+  .list-buttons{
+    flex-direction:column;
+    width: 15%;
+  }
+  .bottom-icon {
+    margin-top: 1rem;
+  }
 }
 </style>
-=======
->>>>>>> origin/development
