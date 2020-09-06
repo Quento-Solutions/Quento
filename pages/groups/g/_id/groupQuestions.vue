@@ -13,13 +13,13 @@
       :grade.sync="grade"
       @filter="filter()"
     >
-      <vs-button warn @click="notesModalActive = true" class="w-full">
+      <vs-button warn @click="questionModalActive = true" class="w-full">
         <i class="bx bxs-plus-square text-4xl" />
-        <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
+        <div class="text-2xl font-ginger-b">&nbsp; Ask A Question</div>
       </vs-button>
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
+    <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
       <div class="vx-col w-full inline-flex lg:hidden" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
@@ -31,19 +31,19 @@
       <vs-avatar class="icon-small float-left" @click="goBack()">
         <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
       </vs-avatar>
-      <div class="text-4xl font-bold pl-4">{{group.title}}'s Notes</div>
+      <div class="text-4xl font-bold pl-4">{{group.title}}'s Questions</div>
     </div>
-    <NotesCard
-      v-for="(note, index) in groupNotes"
+    <QuestionCard
+      v-for="(question, index) in groupQuestion"
       :key="index"
       class
-      :note="note"
+      :question="question"
       :clickable="true"
       :preview="true"
     />
-    <vs-alert color="danger" v-if="noNotesFound">
-      <template #title>No Notes Found For This Search</template>
-      <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
+    <vs-alert color="danger" v-if="noItemsFound">
+      <template #title>No Questions Found For This Search</template>
+      <b>Sorry!</b> Something went wrong when fetching the Question. Please Try
       Again.
     </vs-alert>
     <!-- </div> -->
@@ -51,81 +51,50 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, Watch, mixins} from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
-import {Note, Note_t_F} from '~/types/notes'
+import {Question, Question_t_F} from '~/types/questions'
+import {Note} from '~/types/notes'
+import {Group, Group_t_F} from '~/types/groups'
+import firestore from '~/plugins/firestore'
 
-import {windowStore, notesStore} from '~/store'
+import {windowStore, questionStore} from '~/store'
 import FilterSidebar from '~/components/FilterSidebar.vue'
-import NotesCard from '~/components/NotesCard.vue'
-import LoadScroll from '~/mixins/LoadScrollMixin'
+import QuestionCard from '~/components/QuestionCard.vue'
 import {Subject_O, Grade_O} from '~/types/subjects'
 import {School_O} from '~/types/schools'
-import firestore from '~/plugins/firestore'
-import {Group, Group_t_F} from '~/types/groups'
-import functions from '~/plugins/firebaseFunctions'
+import LoadScrollMixin from '~/mixins/LoadScrollMixin'
 import UserMixin from '~/mixins/UserMixin'
+import functions from '~/plugins/firebaseFunctions'
 
-@Component<groupNotes>({
-  components: {NotesCard, FilterSidebar},
+@Component<groupQuestions>({
+  components: {QuestionCard, FilterSidebar},
   async mounted() {
-    this.fetchNotes()
+    this.fetchQuestions()
     this.fetchGroup()
-    const loading = this.$vs.loading({
-      type: 'circles',
-      text: 'Loading Data'
-    })
-    try {
-      const notes = notesStore.GetMoreNotes(true)
-      await Promise.all([notes])
-    } catch (error) {
-      console.error({error})
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
-    }
+    const loading = this.$vs.loading()
+    await questionStore.GetMoreQuestions()
     this.loaded = true
     loading.close()
   }
 })
-export default class groupNotes extends mixins(LoadScroll, UserMixin) {
-  groupNotes: Note[] = []
-  note: Note | null = null
-  noteId: string | null = null
+export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
+  groupQuestion: Question[] = []
+  question: Question | null = null
+  questionId: string | null = null
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
-  get noNotesFound() {
-    return notesStore.EndOfList && this.notesList.length == 0
-  }
-  sort: typeof notesStore.SortSelect = 'magicRank'
+  sort: typeof questionStore.SortSelect = 'createdAt'
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
 
-  async filter() {
-    const loading = this.$vs.loading()
-    notesStore.SetFilter({
-      sortSelect: this.sort,
-      filterSubjects: this.subjects,
-      filterGrades: this.grade,
-      filterSchools: this.school
-    })
-    await notesStore.GetMoreNotes(true)
-    loading.close()
-  }
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
     if (val && this.loaded) {
-      this.LoadMoreNotes()
+      this.LoadMoreQuestions()
     }
-  }
-
-  async LoadMoreNotes() {
-    const loading = this.$vs.loading()
-    await notesStore.GetMoreNotes()
-    loading.close()
   }
   get memberOfGroup() {
     return (
@@ -134,48 +103,20 @@ export default class groupNotes extends mixins(LoadScroll, UserMixin) {
       this.group.memberList.includes(this.AuthUser.uid)
     )
   }
-  get endOfList() {
-    return notesStore.EndOfList
-  }
-  get bodyOverlay() {
-    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
-  }
-  get previewModalActive() {
-    return notesStore.PreviewModalOpen
-  }
-  set previewModalActive(value: boolean) {
-    notesStore.TogglePreviewModal(value)
-  }
-
-  get notesModalActive() {
-    return notesStore.NotesModuleOpen
-  }
-  set notesModalActive(value: boolean) {
-    notesStore.ToggleNotesModule(value)
-  }
-  openFilterSidebar() {
-    windowStore.SetFilterSidebar(true)
-  }
-  get NoteId() {
-    return this.$route.params.id
-  }
-  get notesList() {
-    return notesStore.ActiveNotes
-  }
-  async fetchNotes() {
+  async fetchQuestions() {
     const loading = this.$vs.loading()
-    this.noteId = this.$route.params.id
-    if (!this.noteId) {
-      this.$router.push('/notes')
+    this.questionId = this.$route.params.id
+    if (!this.questionId) {
+      this.$router.push('/groups')
       return
     }
     try {
       const doc = await firestore
-        .collection('notes')
-        .where('groupId', '==', this.noteId)
+        .collection('questions')
+        .where('questionId', '==', this.questionId)
         .get()
-      this.groupNotes = doc.docs.map((document) =>
-        Note.fromFirebase(document.data() as Note_t_F, document.id)
+      this.groupQuestion = doc.docs.map((document) =>
+        Question.fromFirebase(document.data() as Question_t_F, document.id)
       )
       loading.close()
       return
@@ -183,6 +124,26 @@ export default class groupNotes extends mixins(LoadScroll, UserMixin) {
       console.log({error})
       loading.close()
     }
+  }
+  async filter() {
+    const loading = this.$vs.loading()
+    try {
+      questionStore.SET_FILTER({
+        sortSelect: this.sort,
+        filterSubjects: this.subjects,
+        filterGrades: this.grade,
+        filterSchools: this.school
+      })
+      await questionStore.GetMoreQuestions()
+    } catch (error) {
+      this.$vs.notification({
+        title: error.message,
+        color: 'danger'
+      })
+      console.error(error)
+    }
+
+    loading.close()
   }
   async fetchGroup() {
     //   this.group!.bac
@@ -233,6 +194,39 @@ export default class groupNotes extends mixins(LoadScroll, UserMixin) {
   }
   goBack() {
     this.$router.push('/groups/g/' + this.groupId)
+  }
+
+  get noItemsFound() {
+    return questionStore.EndOfList && this.questionList.length == 0
+  }
+  async LoadMoreQuestions() {
+    const loading = this.$vs.loading()
+    await questionStore.GetMoreQuestions()
+    loading.close()
+  }
+
+  get endOfList() {
+    return questionStore.EndOfList
+  }
+  get bodyOverlay() {
+    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
+  }
+  get previewModalActive() {
+    return questionStore.PreviewModalOpen
+  }
+
+  get questionModalActive() {
+    return questionStore.PostQuestionModalOpen
+  }
+  set questionModalActive(value: boolean) {
+    questionStore.SET_POST_MODAL_OPEN(value)
+  }
+  openFilterSidebar() {
+    windowStore.SetFilterSidebar(true)
+  }
+
+  get questionList() {
+    return questionStore.ActiveItems
   }
 }
 </script>
