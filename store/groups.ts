@@ -26,6 +26,7 @@ export default class GroupsModule extends VuexModule {
   addGroup: Group | null = null
   groupList: Group[] = [];
   userGroups : Group[] = []
+  userGroupFetched = false;
 
   sortBy = "createdAt";
   ItemsPerPage = 10;
@@ -36,13 +37,10 @@ export default class GroupsModule extends VuexModule {
   ActiveSubjects: Subject_O[] = []
   SortSelect: SortOptions_O = 'createdAt'
 
-  async GenerateJoinToken(groupId : string)
-  {
-    
-  }
   @Mutation
   public SET_USER_GROUPS(items: Group[])
   {
+    this.userGroupFetched = true;
     this.userGroups = items;
   }
 

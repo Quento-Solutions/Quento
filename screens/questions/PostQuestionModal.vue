@@ -24,9 +24,50 @@
           </template>
         </vs-input>
       </div>
+      <div class="px-6 w-full">
+        <vs-select
+          filter
+          class="block my-3 mb-6 w-full"
+          placeholder="Group"
+          :loading="groupsLoading"
+          v-model="groupSelect"
+        >
+          <vs-option value="false" label="No Group">None</vs-option>
+          <vs-option
+            v-for="(school, subIndex) in userGroups"
+            :key="subIndex"
+            :label="school.title"
+            :value="school.id"
+          >
+            <div class="font-bold truncate">{{ school.title }}</div>
+          </vs-option>
+        </vs-select>
+        <vs-select
+          filter
+          class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+          placeholder="School"
+          :disabled="group"
+          v-model="schoolSelect"
+        >
+          <vs-option
+            v-for="(school, subIndex) in SchoolList"
+            :key="subIndex"
+            :label="school"
+            :value="school"
+          >
+            <div class="font-bold truncate">{{ school }}</div>
+          </vs-option>
+        </vs-select>
+      </div>
 
       <div class="p-6 w-full lg:w-1/2">
-        <vs-select filter class="block w-full" placeholder="Subject" v-model="subjectSelect">
+        <vs-select
+          filter
+          class="block w-full"
+          placeholder="Subject"
+          v-model="subjectSelect"
+          :disabled="group"
+        >
           <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
             <div slot="title" class="w-full vx-row">
               <i class="bx text-xl mr-2" :class="subjectGroup.iconClass" />
@@ -45,7 +86,13 @@
         </vs-select>
       </div>
       <div class="p-6 w-full lg:w-1/2">
-        <vs-select filter class="block w-full" placeholder="Grade" v-model="gradeSelect">
+        <vs-select
+          filter
+          class="block w-full"
+          placeholder="Grade"
+          v-model="gradeSelect"
+          :disabled="group"
+        >
           <vs-option
             v-for="(grade, subIndex) in GradeList"
             :key="subIndex"
@@ -56,23 +103,7 @@
           </vs-option>
         </vs-select>
       </div>
-      <div class="px-6 pb-6 w-full">
-        <vs-select
-          filter
-          class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
-          placeholder="School"
-          v-model="schoolSelect"
-        >
-          <vs-option
-            v-for="(school, subIndex) in SchoolList"
-            :key="subIndex"
-            :label="school"
-            :value="school"
-          >
-            <div class="font-bold truncate">{{ school }}</div>
-          </vs-option>
-        </vs-select>
-      </div>
+
       <div class="w-full p-6 px-10 pt-0">
         <VsTextarea
           v-model="contents"
@@ -102,9 +133,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
-import { notesStore, windowStore, questionStore } from '~/store'
+import {notesStore, windowStore, questionStore, groupsStore} from '~/store'
 import UserMixin from '~/mixins/UserMixin'
 
 import {
@@ -117,11 +148,12 @@ import {
   Keyword_O
 } from '~/types/subjects'
 
-import { Note } from '~/types/notes'
+import {Note} from '~/types/notes'
 import PasteImage from '~/mixins/PasteImagesMixin'
 
-import { Question } from '~/types/questions'
-import { SchoolList, School_O } from '~/types/schools'
+import {Question} from '~/types/questions'
+import {SchoolList, School_O} from '~/types/schools'
+import {Group} from '~/types/groups'
 
 interface imageSrc {
   error: boolean
@@ -132,12 +164,52 @@ interface imageSrc {
 }
 
 @Component<PostQuestionModal>({
-  components: {}
+  components: {},
+  async mounted() {
+    if (!this.userGroups.length && !groupsStore.userGroupFetched) {
+      this.groupsLoading = true
+      await groupsStore.GetUserGroups()
+      this.groupsLoading = false
+    }
+  }
 })
 export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
   characterLimit = 5000
   readonly SchoolList = ['All Schools', ...SchoolList]
   schoolSelect: School_O | 'All Schools' = 'All Schools'
+
+  groupSelect = ''
+  groupsLoading = false
+
+  group: Group | null = null
+
+  @Watch('groupSelect')
+  watchGroup(val: string, oldVal: string) {
+    const group = this.userGroups.find((v) => v.id === val)
+    if (!group) {
+      this.unsetGroup()
+    } else {
+      this.setGroup(group)
+    }
+  }
+
+  unsetGroup() {
+    console.log('UNSET GROUP')
+    this.group = null
+  }
+
+  setGroup(group: Group) {
+    this.schoolSelect = group.school || 'All Schools'
+
+    this.gradeSelect = group.grade || 'ALL'
+    this.subjectSelect = group.subject || ''
+    this.group = group
+  }
+
+  get userGroups() {
+    return groupsStore.userGroups
+  }
+
   get active() {
     return questionStore.PostQuestionModalOpen
   }
@@ -196,14 +268,19 @@ export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
       upVotes: 0,
       views: 0,
       responses: 0,
-      school : this.schoolSelect != "All Schools" ? this.schoolSelect : undefined,
+      school:
+        this.schoolSelect != 'All Schools' ? this.schoolSelect : undefined,
       keywords: this.keywords,
       contents: this.contents,
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       storedImages: this.images
     })
-
+    if(this.group)
+    {
+      previewQuestion.groupId = this.group.id;
+      previewQuestion.groupName = this.group.title
+    }
     questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion))
   }
 

@@ -30,6 +30,8 @@ module.exports = {
       '4': '4px'
     },
     borderRadius: {
+      
+      'full' : '1rem',
       'super': '1.25rem',
     },
     extend: {

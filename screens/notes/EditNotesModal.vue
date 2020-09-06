@@ -31,10 +31,21 @@
       </vs-input>
 
       <vs-select
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="Group"
+        v-if="ActiveNote.groupId"
+        value="false"
+        disabled
+      >
+        <vs-option value="false" :label="ActiveNote.groupName">{{ActiveNote.groupName}}</vs-option>
+      </vs-select>
+
+      <vs-select
         filter
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="ActiveNote.subject"
+        :disabled="ActiveNote.groupId"
       >
         <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
@@ -57,6 +68,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="ActiveNote.grade"
+        :disabled="ActiveNote.groupId"
       >
         <vs-option
           v-for="(grade, subIndex) in GradeList"
@@ -72,6 +84,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="School"
         v-model="activeSchool"
+        :disabled="ActiveNote.groupId"
       >
         <vs-option
           v-for="(school, subIndex) in SchoolList"
@@ -109,9 +122,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
-import { suggestionsStore, notesStore, windowStore } from '~/store'
+import {suggestionsStore, notesStore, windowStore, groupsStore} from '~/store'
 import {
   NestedSubjectList,
   SubjectGroup_O,
@@ -123,14 +136,31 @@ import {
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
-import { Note } from '~/types/notes'
-import { authStore } from '~/store'
-import { SchoolList, School_O } from '~/types/schools'
-@Component<EditNotesModal>({})
+import {Note} from '~/types/notes'
+import {authStore} from '~/store'
+import {SchoolList, School_O} from '~/types/schools'
+import { Group } from '~/types/groups'
+@Component<EditNotesModal>({
+  async mounted() {
+    if (!this.userGroups.length && !groupsStore.userGroupFetched) {
+      this.groupsLoading = true
+      await groupsStore.GetUserGroups()
+      this.groupsLoading = false
+    }
+  }
+})
 export default class EditNotesModal extends mixins(PasteImage) {
   ActiveNote: Note | null = null
   characterLimit = 5000
   readonly SchoolList = ['All Schools', ...SchoolList] as const
+  groupSelect = ''
+  groupsLoading = false
+
+  group: Group | null = null
+  get userGroups() {
+    return groupsStore.userGroups
+  }
+
 
   get contents() {
     return this.ActiveNote?.contents || ''
@@ -138,13 +168,13 @@ export default class EditNotesModal extends mixins(PasteImage) {
   set contents(value) {
     this.ActiveNote ? (this.ActiveNote.contents = value) : ''
   }
-  
-  activeSchool : "All Schools" | School_O = "All Schools";
+
+  activeSchool: 'All Schools' | School_O = 'All Schools'
   @Watch('StoreEditNotes')
   onStoreEditNoteChanged(value: Note | null, oldVal: Note | null) {
     this.ActiveNote = Object.assign({}, value)
     this.images = value?.storedImages ? [...value.storedImages] : []
-    this.activeSchool = value?.school || "All Schools";
+    this.activeSchool = value?.school || 'All Schools'
     // console.log(value, this.ActiveNote);
   }
 
@@ -180,7 +210,8 @@ export default class EditNotesModal extends mixins(PasteImage) {
       })
       return
     }
-    this.ActiveNote!.school = this.activeSchool == "All Schools" ? undefined : this.activeSchool;
+    this.ActiveNote!.school =
+      this.activeSchool == 'All Schools' ? undefined : this.activeSchool
     this.ActiveNote!.storedImages = [...this.images]
     notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote))
     notesStore.TogglePreviewModal(true)

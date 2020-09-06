@@ -27,8 +27,27 @@
       <vs-select
         filter
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
+        placeholder="Group"
+        :loading="groupsLoading"
+        v-model="groupSelect"
+      >
+        <vs-option value="false" label="No Group">None</vs-option>
+        <vs-option
+          v-for="(school, subIndex) in userGroups"
+          :key="subIndex"
+          :label="school.title"
+          :value="school.id"
+        >
+          <div class="font-bold truncate">{{ school.title }}</div>
+        </vs-option>
+      </vs-select>
+
+      <vs-select
+        filter
+        class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="subjectSelect"
+        :disabled="group"
       >
         <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
@@ -51,6 +70,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="gradeSelect"
+        :disabled="group"
       >
         <vs-option
           v-for="(grade, subIndex) in GradeList"
@@ -61,11 +81,12 @@
           <div class="font-bold truncate">Grade {{ grade }}</div>
         </vs-option>
       </vs-select>
-            <vs-select
+      <vs-select
         filter
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="School"
         v-model="schoolSelect"
+        :disabled="group"
       >
         <vs-option
           v-for="(school, subIndex) in SchoolList"
@@ -75,7 +96,6 @@
         >
           <div class="font-bold truncate">{{ school }}</div>
         </vs-option>
-        
       </vs-select>
       <VsTextarea
         v-model="contents"
@@ -101,12 +121,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
 import {
   suggestionsStore,
   notesStore,
   windowStore,
+  groupsStore,
   newslettersStore
 } from '~/store'
 import {
@@ -120,15 +141,16 @@ import {
 
 import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
-import { Note } from '~/types/notes'
+import {Note} from '~/types/notes'
 import VsUpload from '~/components/VsUpload.vue'
 import storage from '~/plugins/firebaseStorage'
 import functions from '~/plugins/firebaseFunctions'
 
-import { v4 } from 'uuid'
+import {v4} from 'uuid'
 
-import { authStore } from '~/store'
-import { School_O, SchoolList } from '~/types/schools'
+import {authStore} from '~/store'
+import {School_O, SchoolList} from '~/types/schools'
+import {Group} from '~/types/groups'
 
 interface imageSrc {
   error: boolean
@@ -142,14 +164,50 @@ interface imageSrc {
   components: {
     VsUpload
   },
-  mounted() {}
+  async mounted() {
+    if (!this.userGroups.length && !groupsStore.userGroupFetched) {
+      this.groupsLoading = true
+      await groupsStore.GetUserGroups()
+      this.groupsLoading = false
+    }
+  }
 })
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
-  readonly SchoolList = [ "All Schools", ...SchoolList];
-  schoolSelect : School_O | "All Schools" = "All Schools"
-  
+  readonly SchoolList = ['All Schools', ...SchoolList]
+  schoolSelect: School_O | 'All Schools' = 'All Schools'
+  groupSelect = ''
+  groupsLoading = false
+
+  group: Group | null = null
+
+  @Watch('groupSelect')
+  watchGroup(val: string, oldVal: string) {
+    const group = this.userGroups.find((v) => v.id === val)
+    if (!group) {
+      this.unsetGroup()
+    } else {
+      this.setGroup(group)
+    }
+  }
+
+  unsetGroup() {
+    console.log('UNSET GROUP')
+    this.group = null
+  }
+
+  setGroup(group: Group) {
+    this.schoolSelect = group.school || 'All Schools'
+
+    this.gradeSelect = group.grade || 'ALL'
+    this.subjectSelect = group.subject || ''
+    this.group = group
+  }
+
+  get userGroups() {
+    return groupsStore.userGroups
+  }
   characterLimit = 5000
 
   contents = ''
@@ -183,7 +241,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
 
   ClearFields() {
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
-    this.schoolSelect = "All Schools";
+    this.schoolSelect = 'All Schools'
   }
 
   get isLargeScreen() {
@@ -211,9 +269,14 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
       storedImages: [...this.images]
-    })  
-    if(this.schoolSelect != "All Schools") previewNote.school = this.schoolSelect;
-    
+    })
+    if (this.schoolSelect != 'All Schools')
+      previewNote.school = this.schoolSelect
+
+    if (this.group) {
+      previewNote.groupId = this.group.id
+      previewNote.groupName = this.group.title
+    }
     notesStore.SetPreviewNote(previewNote)
     notesStore.TogglePreviewModal(true)
   }
