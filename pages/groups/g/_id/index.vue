@@ -199,5 +199,6 @@ export default class GroupsSummary extends mixins(UserMixin) {
       loading.close()
     }
   }
+  
 }
 </script>
