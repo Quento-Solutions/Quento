@@ -28,7 +28,7 @@
             <vs-button transparent :active="active=='Summary'">
               <div class="text-xl px-2 text-ginger">Summary</div>
             </vs-button>
-            <vs-button transparent :active="active=='Notes'">
+            <vs-button @click="pushNotes()" transparent :active="active=='Notes'">
               <div class="text-xl px-2 text-ginger">Notes</div>
             </vs-button>
             <vs-button transparent :active="active=='Questions'">
@@ -127,7 +127,9 @@ export default class GroupsSummary extends mixins(UserMixin) {
   goBack() {
     this.$router.push('/groups')
   }
-
+  pushNotes(){
+    this.$router.push('/groups/g/' + this.groupId+'/groupNotes')
+  }
   get memberOfGroup() {
     return (
       this.group &&
@@ -197,5 +199,6 @@ export default class GroupsSummary extends mixins(UserMixin) {
       loading.close()
     }
   }
+  
 }
 </script>

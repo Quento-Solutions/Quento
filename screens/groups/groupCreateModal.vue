@@ -80,9 +80,7 @@
         @paste="onPaste"
       ></VsTextarea>
       <div class="w-full flex flex-row justify-end mt-6 items-center" style>
-        <div class="text-ginger-b" style="">
-          Group Visibility: &nbsp;
-        </div>
+        <div class="text-ginger-b" style>Group Visibility: &nbsp;</div>
         <vs-switch v-model="groupPublic">
           <template #off>Private</template>
           <template #on>Public</template>
@@ -214,11 +212,20 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       createdAt: new Date(),
       description: this.description,
       members: 0,
-      private : !this.groupPublic,
+      private: !this.groupPublic,
       approved: false,
       memberList: [authStore.user?.uid],
       backgroundImageUrl: this.backgroundImageUrl
     })
+    if (this.schoolSelect !== 'Any') {
+      addGroup.school = this.schoolSelect
+    }
+    if (this.gradeSelect !== 'Any') {
+      addGroup.grade = this.gradeSelect
+    }
+    if (this.subjectSelect !== 'Any') {
+      addGroup.subject = this.subjectSelect
+    }
     try {
       await groupsStore.createGroup(addGroup)
       this.$vs.notification({

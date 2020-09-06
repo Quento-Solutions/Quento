@@ -28,6 +28,9 @@ export interface Note_t {
   subject: Subject_O
   grade: Grade_O
   id?: string
+  
+  groupId ?: string;
+  groupName ?: string;
 }
 export interface Note_t_F {
   // How the data is stored in firebase
@@ -47,7 +50,10 @@ export interface Note_t_F {
   school ?: School_O;
   grade: Grade_O
   views: number
+
+  groupName ?: string;
   magicRank?: number
+  groupId?: string
 }
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {
