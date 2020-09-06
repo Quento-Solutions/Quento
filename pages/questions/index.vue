@@ -16,9 +16,13 @@
         <i class="bx bxs-plus-square text-4xl" />
         <div class="text-2xl font-ginger-b">&nbsp; Ask A Question</div>
       </vs-button>
+      <vs-button :color="toggleColor" @click="toggleListView()" class="w-full">
+        <i class="bx bx-list-ul text-4xl" />
+        <div class="text-2xl font-ginger-b">&nbsp; List View</div>
+      </vs-button>
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-1/2 md:w-2/3 w-full">
+    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
       <div class="vx-col w-full inline-flex lg:hidden" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
@@ -33,6 +37,7 @@
         :question="question"
         :clickable="true"
         :preview="true"
+        :listView="listViewEnabled"
       />
       <vs-alert color="danger" v-if="noItemsFound">
         <template #title>No Questions Found For This Search</template>
@@ -69,13 +74,28 @@ export default class NotesPage extends mixins(LoadScrollMixin) {
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
-  
+  listViewEnabled = false
+  toggleColor = "#99b8d1"
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
     if (val && this.loaded) {
       this.LoadMoreQuestions()
     }
   }
+    toggleListView() {
+    if(this.listViewEnabled) {
+      this.listViewEnabled = false
+      this.toggleColor = "#99b8d1"
+    }
+    else {
+      this.listViewEnabled = true
+      this.toggleColor = "#6398de"
+      if (this.questionList.length < 10){
+          this.LoadMoreQuestions()
+      }
+    }
+  }
+
   
   async filter() {
     const loading = this.$vs.loading()

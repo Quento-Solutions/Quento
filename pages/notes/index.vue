@@ -112,7 +112,10 @@ export default class NotesPage extends mixins(LoadScroll) {
     }
     else {
       this.listViewEnabled = true
-      this.toggleColor = "#ed8936"
+      this.toggleColor = "#6398de"
+      if (this.notesList.length < 10){
+          this.LoadMoreNotes()
+      }
     }
   }
 

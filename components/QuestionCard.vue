@@ -1,5 +1,91 @@
 <template>
+<div class="w-full">
   <VxCard
+    v-if="listView && preview"
+    fitContent="true"
+    class="mb-8"
+    id="note-card"
+    :class="clickable ? 'previewClickable' : ''"
+    @click="PushNotesPage()"
+  >
+  <template slot="no-body">
+  <div class="card-content" :style="preview? 'cursor: pointer;':''">
+
+
+<div class="w-full vx-row p-2 justify-start items-center text-sm flex-row my-2">
+      
+      <div class="w-1/12 vx-row list-icons">
+      
+      <div
+        class="rounded-full w-10 h-10 ml-2 vx-row items-center justify-center"
+        style="background-color: #9f7aea">
+        <i
+          class="bx text-xl text-white"
+          :class="getIcon(question.subject)"
+          style="background-color:transparent;"
+        /></div>
+      <div
+        class="rounded-full  w-10 h-10 ml-2 vx-row items-center justify-center font-ginger-b text-white bottom-icon" 
+        style="background-color: #ed8936;"
+      >{{ question.grade }}</div>
+
+      </div>
+<div class="w-2/5 vx-row list-title" style="overflow: hidden;white-space: nowrap;">
+
+      <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ question.title }}</div>
+
+</div>
+
+<div class="w-1/6 vx-row list-date" style="overflow: hidden;white-space: nowrap;">
+    <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ question.createdAt.toDateString().slice(4, 10) + ',' + question.createdAt.toDateString().slice(10) }}</div>
+
+</div>
+
+<div class="w-1/6 vx-row list-name" style="overflow: hidden;white-space: nowrap;">
+    <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ question.userDisplayName }}</div>
+</div>
+
+ <div class="w-1/6 vx-row justify-between pl-4 list-buttons"> 
+    <vs-avatar
+        class="icon-small"
+        :color="userLiked(question.id) ? 'danger' : '#f4f7f8'"
+        badge-color="#7d33ff"
+        @click.stop="toggleLike(question.id)"
+      >
+        <i
+          class="bx bx-heart primary"
+          :style="`color : ${userLiked(question.id) ? 'white' : '#ff4757'}`"
+        ></i>
+        <template #badge>{{ question.upVotes }}</template>
+      </vs-avatar>
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small bottom-icon">
+          <i class="bx bx-show"></i>
+          <template #badge>{{ question.views }}</template>
+        </vs-avatar>
+        <template #tooltip>{{ question.views }} Views</template>
+      </VxTooltip>
+
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small bottom-icon">
+          <i class="bx bx-bookmark"></i>
+        </vs-avatar>
+        <template #tooltip>Bookmark</template>
+      </VxTooltip>
+ </div>
+    </div>
+
+  </div>
+  </template>
+  </VxCard>
+  <VxCard
+    v-if="!listView || !preview"
     fitContent="true"
     class="mb-8"
     id="note-card"
@@ -102,6 +188,7 @@
      </div>
      </template>
   </VxCard>
+</div>
 </template>
 
 <script lang="ts">
@@ -124,6 +211,8 @@ export default class QuestionCard extends mixins(UserMixin) {
   @Prop({ default: false }) clickable!: boolean
   // Loaded full content
   @Prop({ default: false }) preview!: boolean
+  @Prop({ default: false }) listView!: boolean
+
   // Whether buttons should work or not
   @Prop({ default: false }) disabled!: boolean
 

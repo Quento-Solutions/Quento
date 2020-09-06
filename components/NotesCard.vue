@@ -8,6 +8,7 @@
     :class="clickable ? 'previewClickable' : ''"
     @click="PushNotesPage()"
   >
+  <template slot="no-body">
   <div class="card-content" :style="preview? 'cursor: pointer;':''">
 
 
@@ -81,6 +82,7 @@
     </div>
 
   </div>
+  </template>
   </VxCard>
 
      <VxCard
