@@ -137,11 +137,11 @@
     >
       <div
         class="rounded-full bg-orange-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white" 
-        style="background-color: #ed8936 padding-top:0.6rem;padding-bottom:0.6rem;"
+        style="background-color: #ed8936;"
       >Grade {{ note.grade }}</div>
       <div
         class="rounded-full bg-purple-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white mt-0 mx-2"
-        style="background-color: #9f7aea"
+        style="background-color: #9f7aea;"
       >
         <i
           class="bx text-xl text-white mr-2"

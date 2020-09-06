@@ -18,7 +18,7 @@
       </vs-button>
       <vs-button :color="toggleColor" @click="toggleListView()" class="w-full">
         <i class="bx bx-list-ul text-4xl" />
-        <div class="text-2xl font-ginger-b">&nbsp; List View</div>
+        <div class="text-2xl font-ginger-b">&nbsp; {{listViewText}}</div>
       </vs-button>
     </FilterSidebar>
     <div class="sidebar-spacer"></div>
@@ -30,6 +30,30 @@
           </vs-avatar>
         </div>
       </div>
+      <VxCard
+      v-if="listViewEnabled"
+      fitContent="true"
+      class="mb-8"
+      style="background-color:#99b8d1 !important;"
+      >
+    <template slot="no-body">
+      <div class="card-content py-1">
+        <div class="w-full vx-row p-2 justify-start items-center text-sm flex-row my-2">
+          <div class="w-1/12 vx-row list-icons"></div>
+          <div class="w-2/5 vx-row list-title" style="overflow: hidden;white-space: nowrap;">
+        <div class="text-ginger text-xl ml-4 text-white">Title</div>
+      </div>
+      <div class="w-1/6 vx-row list-date" style="overflow: hidden;white-space: nowrap;">
+        <div class="text-ginger text-xl ml-4 text-white">Date Created</div>
+      </div>
+    <div class="w-1/6 vx-row list-name" style="overflow: hidden;white-space: nowrap;">
+    <div class="text-ginger text-xl ml-4 text-white">Name</div>
+  </div>
+  <div class="w-1/6 vx-row justify-between pl-4 list-buttons"></div>
+</div>
+</div>
+  </template>
+  </VxCard>
       <QuestionCard
         v-for="(question, index) in questionList"
         :key="index"
@@ -75,6 +99,7 @@ export default class NotesPage extends mixins(LoadScrollMixin) {
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
   listViewEnabled = false
+  listViewText = "List View"
   toggleColor = "#99b8d1"
   @Watch('IsScrolledDown')
   PageHeightChange(val: boolean, oldVal: boolean) {
@@ -86,10 +111,12 @@ export default class NotesPage extends mixins(LoadScrollMixin) {
     if(this.listViewEnabled) {
       this.listViewEnabled = false
       this.toggleColor = "#99b8d1"
+      this.listViewText = "List View"
     }
     else {
       this.listViewEnabled = true
       this.toggleColor = "#6398de"
+      this.listViewText = "Grid View"
       if (this.questionList.length < 10){
           this.LoadMoreQuestions()
       }
@@ -154,4 +181,67 @@ export default class NotesPage extends mixins(LoadScrollMixin) {
 </script>
 
 <style lang="scss">
+
+@media only screen and (max-width: 1670px) {
+  .list-icons {
+    width:15%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-date{
+    display: none;
+  }
+  .list-buttons{
+    width:20%;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .list-name{
+    display:none;
+  }
+  .list-title{
+    width:50%;
+  }
+  .list-buttons{
+    width:30%;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .list-icons {
+    width:20%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-title div {
+    font-size: 0.9rem !important;
+    white-space: pre-wrap;
+  }
+  .list-buttons{
+    width:40%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .list-icons {
+    flex-direction:column;
+    width:15%;
+  }
+  .list-title{
+    width:60%;
+  }
+  .list-title div {
+    font-size: 1rem !important;
+  }
+  .list-buttons{
+    flex-direction:column;
+    width: 15%;
+  }
+  .bottom-icon {
+    margin-top: 1rem;
+  }
+}
 </style>
