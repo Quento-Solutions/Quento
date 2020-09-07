@@ -73,7 +73,7 @@ export default class NotesContentPage extends Vue {
     }
   }
   goBack() {
-    this.$router.push('/notes')
+    this.$router.back()
   }
 }
 </script>

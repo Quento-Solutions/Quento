@@ -10,6 +10,7 @@ import questions from '~/store/questions'
 import newsletters from '~/store/newsletters'
 import NotificationsModule from '~/store/notifications'
 import feeds from '~/store/feeds'
+import groups from '~/store/groups';
 
 let windowStore: window
 let navigationStore: navigation
@@ -21,6 +22,8 @@ let userGuideStore: userGuide
 let questionStore: questions
 let notificationStore: NotificationsModule
 let feedsStore: feeds;
+let groupsStore: groups;
+
 function initialiseStores(store: Store<any>): void {
   windowStore = getModule(window, store)
   navigationStore = getModule(navigation, store)
@@ -32,6 +35,8 @@ function initialiseStores(store: Store<any>): void {
   newslettersStore = getModule(newsletters, store)
   notificationStore = getModule(NotificationsModule, store)
   feedsStore = getModule(feeds, store);
+  groupsStore = getModule(groups, store)
+
 }
 
 export {
@@ -46,4 +51,5 @@ export {
   questionStore,
   newslettersStore,
   notificationStore,
+  groupsStore
 }
