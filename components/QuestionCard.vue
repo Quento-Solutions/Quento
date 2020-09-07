@@ -1,7 +1,7 @@
 <template>
   <VxCard
     fitContent="true"
-    class="mb-8"
+    class="mb-8 cursor-pointer"
     id="note-card"
     :class="clickable ? 'previewClickable' : ''"
     @click="PushQuestionsPage()"

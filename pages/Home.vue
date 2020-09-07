@@ -1,121 +1,116 @@
 <template>
   <div id="home-page">
-        <VxCard class="greet-user" content-color="#fff">
-          <template slot="no-body">
-            <div class="titleContainer vx-row w-full p-8">
-              <div class="vx-col w-full lg:w-1/4 sm:w-1/2" style="">
-                <img
-                  src="~/assets/images/quento_bird.png"
-                  class="p-6 inline-flex center w-full"
-                  alt="Logo"
-                />
-              </div>
-
+    <VxCard class="greet-user">
+      <template slot="no-body">
+        <div class="titleContainer vx-row w-full md:p-8 p-0">
+          <!-- Featured Content -->
+          <div class="w-full lg:w-1/3 col lg:px-1">
+            <VxCard v-if="featuredNewsletter">
               <div
-                class="vx-col w-full md:w-1/2 p-8 flex flex-col justify-around lg:w-1/2"
-                style=""
+                class="flex flex-row md:flex-no-wrap flex-wrap w-full justify-center items-center"
               >
-                <div class="text-ginger-b text-6xl text-black" style="">
-                  Welcome to Quento
-                </div>
-                <div class="text-body text-2xl text-black my-10" style="">
-                  Our mission is to create a community of like minded students who share, create and use academic resources.
-                </div>
-                <div class="vx-row w-full justify-around" style="">
-                  <vs-tooltip
-                    v-for="(item, index) in contactInformation"
-                    :key="index"
-                  >
-                    <vs-avatar
-                      class="bottomIcon rounded-full cursor-pointer"
-                      style="width: 5vmax; height: 5vmax;"
-                      :color="item.backgroundColor"
-                      @click="pushWebsite(item.href)"
-                    >
-                      <i
-                        :class="item.iconClass"
-                        :style="`font-size: 4vmax; color: ${item.color}`"
-                        v-if="item.iconClass"
-                      ></i>
-                      <img v-else :src="item.imageUrl" />
+                <div class="flex flex-row flex-no-wrap justify-center items-center" style>
+                  <VxTooltip>
+                    <vs-avatar class="icon" style="flex-shrink: 0;">
+                      <img
+                        v-if="featuredNewsletter.authorPhotoUrl"
+                        :src="featuredNewsletter.authorPhotoUrl"
+                      />
+                      <template #text v-else>{{ featuredNewsletter.authorDisplayName }}</template>
                     </vs-avatar>
-                    <template #tooltip>
-                      {{ item.toolTipText }}
-                    </template>
-                  </vs-tooltip>
+                    <template #tooltip>{{ featuredNewsletter.authorDisplayName }}</template>
+                  </VxTooltip>
+                  <div class="vx-row flex-wrap pl-4" style="min-width: 0;">
+                    <div class="w-full text-ginger font-semibold text-xl" style>Newsletter</div>
+                    <div
+                      class="w-full text-ginger font-light md:mt-1 mt-0 text-gray-700"
+                      style
+                    >Welcome to Quento! Read about our first big update</div>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Newsletter -->
-              <div
-                class="vx-col w-full xl:w-1/4 flex flex-col justify-around"
-                style=""
-              >
                 <div
-                  class="w-full text-ginger-b text-black text-4xl my-6"
-                  style=""
+                  class="flex-shrink-0 w-full md:w-auto flex flex-row justify-center mt-4 md:mt-0"
                 >
-                  Newsletter
-                </div>
-                <NewsletterCard
-                  :newsletter="featuredNewsletter"
-                  v-if="featuredNewsletter"
-                ></NewsletterCard>
-              </div>
-
-              <!-- Videos -->
-              <div
-                class="text-ginger-b w-full p-4 text-3xl text-black"
-                style=""
-              >
-                Featured
-              </div>
-              <div class="vx-row w-full p-2 md:p-6" style="">
-                <swiper
-                  :options="swiperOption"
-                  :dir="$vs.rtl ? 'rtl' : 'ltr'"
-                  :key="$vs.rtl"
-                  style="width: 100%; height: 100%;"
-                >
-                  <swiper-slide
-                    v-for="(item, index) in featuredContent"
-                    :key="index"
+                  <vs-button
+                    gradient
+                    color="rgb(159, 122, 234)"
+                    @click="$router.push(`/newsletters/${featuredNewsletter.id}`)"
                   >
-                    <div class="" style="padding-bottom: 56.25%;">
-                      <iframe
-                        style="
-                          width: 100%;
-                          height: 100%;
-                          position: absolute;
-                          left: 0px;
-                          top: 0px;
-                        "
-                        frameborder="0"
-                        width="100%"
-                        class="rounded-md"
-                        :src="item.videoUrl"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      ></iframe>
-                    </div>
-                  </swiper-slide>
-                  <div class="swiper-pagination" slot="pagination"></div>
-                  <div class="swiper-button-prev" slot="button-prev"></div>
-                  <div class="swiper-button-next" slot="button-next"></div>
-                </swiper>
+                    <span class="text-ginger p-2 text-xl">Read&nbsp;Now</span>
+                  </vs-button>
+                </div>
               </div>
+            </VxCard>
+            <VxCard class="mt-4 overflow-hidden" :fitContent="true">
+              <template #no-body>
+                <a href="https://www.theauxilium.com/" target="_blank">
+                  <div>
+                    <div
+                      class="justify-between items-center background-cover"
+                      :style="AuxiliumImage"
+                      style="height: 200px"
+                    ></div>
+                    <div class="p-4">
+                      <h1 class="text-ginger-b">Auxilium Mentorship Program</h1>
+                      <div
+                        class="text-ginger p-4 text-gray-600"
+                        style="line-height:1.5"
+                      >{{AuxiliumText.substring(0, 200)}}...</div>
+                      <div class="float-right pb-4">
+                        <nuxt-link to="/">Learn More</nuxt-link>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </template>
+            </VxCard>
+            <VxCard class="mt-6 overflow-hidden" :fitContent="true">
+              <template #no-body>
+                <a href="https://www.youtube.com/channel/UCAP7VmyGvC0xS3jErySLQNQ" target="_blank">
+                  <div
+                    class="justify-between items-center background-cover"
+                    :style="SBBImage"
+                    style="height: 200px"
+                  ></div>
+                  <div class="p-4">
+                    <h1 class="text-ginger-b">School But Better</h1>
+                    <div
+                      class="text-ginger p-4 text-gray-600"
+                      style="line-height:1.5"
+                    >{{SBBText.substring(0, 200)}}...</div>
+                    <div class="float-right pb-4">
+                      <nuxt-link to="/">Learn More</nuxt-link>
+                    </div>
+                  </div>
+                </a>
+              </template>
+            </VxCard>
+          </div>
+
+          <!-- Feed -->
+          <div class="w-full lg:w-2/3 mt-6 lg:mt-0 lg:px-1 col" v-if="notesList">
+            <div v-for="(item, index) in notesList" :key="index">
+              <NotesCard :note="item.docData" :clickable="true" :preview="true" v-if="item.dataType ==='note'"/>
+              <QuestionCard :question="item.docData" :clickable="true" :preview="true" v-if="item.dataType ==='question'"/>
             </div>
-          </template>
-        </VxCard>
+          </div>
+        </div>
+      </template>
+    </VxCard>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, mixins } from 'nuxt-property-decorator'
 
-import { windowStore, authStore, newslettersStore } from '~/store'
+import { windowStore, authStore, newslettersStore, feedsStore } from '~/store'
 import NewsletterCard from '~/components/NewsletterCard.vue'
-import Analytics from '~/mixins/AnalyticsMixin';
+import NotesCard from '~/components/NotesCard.vue'
+import QuestionCard from '~/components/QuestionCard.vue'
+
+
+import Analytics from '~/mixins/AnalyticsMixin'
 
 export interface ContactInformation {
   name: string
@@ -131,17 +126,42 @@ export interface ContactInformation {
 
 @Component({
   layout: 'main',
-  components: { NewsletterCard },
-  mounted() 
-  {
-    newslettersStore.GetNewsletters();
+  components: { NewsletterCard, NotesCard, QuestionCard },
+  async mounted() {
+    newslettersStore.GetNewsletters()
+    try {
+      await feedsStore.GetMoreNotes(true)
+    } catch(error)
+    {
+      console.error(error);
+      this.$vs.notification({
+        title : error.message,
+        color : 'danger'
+      })
+    }
   },
-  name : "Home"
+  name: 'Home'
 })
 export default class Home extends mixins(Analytics) {
-  logPage = true;
+  logPage = true
+
   get featuredNewsletter() {
     return newslettersStore?.newsletterList[0]
+  }
+
+  get AuxiliumImage() {
+    return 'background-image : url("https://media.discordapp.net/attachments/738198413987938464/744677326499086347/wp5910896.jpg?width=1211&height=681")'
+  }
+  AuxiliumText =
+    'Prompt: Reflect on a time when you questioned or challenged a belief or idea. What prompted your thinking? What was the outcome? / Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story.'
+
+  SBBImage =
+    'background-image : url("https://lh3.googleusercontent.com/-YN27kTK8hLk/X1LbR5gA7JI/AAAAAAAADbw/VpxYFnTRQSA9rraPIXzCgw19oiLcSntCwCK8BGAsYHg/s0/2020-09-04.png");'
+  SBBText =
+    'Roughly eight inches. Measuring from the root, I pulled the longest strand straight and measured it. All other regions were even, trimmed neatly above the ears, and equal in length— satisfactory for normality. It was only the two-thirds of my frontal hair, parted in an asymmetrical manner towards my left that was a chaotic mess— defying all rules. From all the sleepless nights on my stomach and lack of neatening after showers, my hair defied gravity, occupying vertical territory. '
+
+  get notesList() {
+    return feedsStore.ActiveItems
   }
 
   pushComingSoon() {
@@ -237,8 +257,10 @@ export default class Home extends mixins(Analytics) {
 }
 .titleContainer {
   display: flex;
-  justify-content: center;
-  line-height: 1.125;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
-
+.containerImage {
+  transform: translateY(-25%);
+}
 </style>

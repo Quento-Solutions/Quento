@@ -76,7 +76,7 @@
 
   <!-- ----------------------------------MY VERSION---------------------------------- -->
 
-  <div id="notes-screen-container" class="vx-row">
+  <div id="notes-screen-container" class="vx-row w-full relative justify-evenly pl-4">
     <!-- Yay we need a root because fun vue -->
     <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
       <div class="vx-row">
@@ -110,7 +110,7 @@
         :school.sync="school"
         :grade.sync="grade"
         :sortEnabled="false"
-        style="top : auto"
+        style="top : auto; left: 10px"
         @filter="filter()"
       >
         <vs-button to="/groups" class="w-full">
