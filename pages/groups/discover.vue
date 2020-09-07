@@ -114,7 +114,7 @@ export default class DiscoverGroups extends mixins(LoadScroll) {
   async filter() {
     const loading = this.$vs.loading()
     groupsStore.SetFilter({
-      sortSelect: this.sort,
+      sortSelect: 'createdAt',
       filterSubjects: this.subjects,
       filterGrades: this.grade,
       filterSchools: this.school

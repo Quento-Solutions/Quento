@@ -75,25 +75,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   backgroundImageUrl =
     'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
   title = ''
-  @Watch('IsReset')
-  // onResetChanged(value: boolean, oldVal: boolean) {
-  //   if (value) {
-  //     this.ClearFields()
-  //     groupsStore.SET_RESET(false)
-  //   }
-  // }
 
-  // get IsReset() {
-  //   return groupsStore.IsReset
-  // }
-
-  // readonly GradeList = GradeList.filter((v) => v !== 'ALL')
-  // Cancel() {}
-  // // make this a mixin
-  // getIcon(subject: SubjectGroup_O | Subject_O) {
-  //   return SubjectIconList[subject]
-  // }
-  // readonly SubjectGroupList = NestedSubjectList
   get active() {
     return groupsStore.openGroupsModal
   }
