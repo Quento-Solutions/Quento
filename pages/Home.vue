@@ -56,7 +56,7 @@
                       <div
                         class="text-ginger p-4 text-gray-600"
                         style="line-height:1.5"
-                      >{{AuxiliumText.substring(0, 200)}}...</div>
+                      >{{AuxiliumText.substring(0,200)}}...</div>
                       <div class="float-right pb-4">
                         <nuxt-link to="/">Learn More</nuxt-link>
                       </div>
@@ -78,7 +78,7 @@
                     <div
                       class="text-ginger p-4 text-gray-600"
                       style="line-height:1.5"
-                    >{{SBBText.substring(0, 200)}}...</div>
+                    >{{SBBText}}</div>
                     <div class="float-right pb-4">
                       <nuxt-link to="/">Learn More</nuxt-link>
                     </div>
@@ -150,15 +150,17 @@ export default class Home extends mixins(Analytics) {
   }
 
   get AuxiliumImage() {
-    return 'background-image : url("https://media.discordapp.net/attachments/738198413987938464/744677326499086347/wp5910896.jpg?width=1211&height=681")'
+    return `background-image : url("${require('~/assets/images/Auxilium.png')}")`
   }
   AuxiliumText =
-    'Prompt: Reflect on a time when you questioned or challenged a belief or idea. What prompted your thinking? What was the outcome? / Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story.'
+    'Quento is excited to announce that we will be featuring Auxilium’ s mentorship Program. Auxilium is a virtual peer mentorship program for students in Ottawa, Ontario (however, we are looking to expand in the future). Our team will match mentees to mentors depending on needs and strengths. Our mentors are qualified middle and high students who wish to give back to their community. High school mentors are also eligible for volunteer and CAS hours. They must have at least an 85% in their mentoring subjects. Mentee applications are opened to everyone in the Ottawa area. '
 
   SBBImage =
     'background-image : url("https://lh3.googleusercontent.com/-YN27kTK8hLk/X1LbR5gA7JI/AAAAAAAADbw/VpxYFnTRQSA9rraPIXzCgw19oiLcSntCwCK8BGAsYHg/s0/2020-09-04.png");'
   SBBText =
-    'Roughly eight inches. Measuring from the root, I pulled the longest strand straight and measured it. All other regions were even, trimmed neatly above the ears, and equal in length— satisfactory for normality. It was only the two-thirds of my frontal hair, parted in an asymmetrical manner towards my left that was a chaotic mess— defying all rules. From all the sleepless nights on my stomach and lack of neatening after showers, my hair defied gravity, occupying vertical territory. '
+    `School is dumb - but you don't have to be.
+We make videos to make school easier under the conditions of COVID-19.
+Just videos, not necessarily good ones.`
 
   get notesList() {
     return feedsStore.ActiveItems
