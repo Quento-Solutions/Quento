@@ -9,7 +9,7 @@
       <h1 class = "inline block">{{group.title}}</h1>
       <div class = "absolute right-0 inline-block"> <!-- Button Container -->
         <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10" @click="ToggleGroupsModal(true)">
-          <div class="text-lg text-xs font-ginger-b">Create/Join by Link</div>
+          <div class="text-lg font-ginger-b">Create/Join by Link</div>
           <template #animate>
             <i class="bx bx-plus text-2xl"></i>
           </template>
@@ -72,7 +72,7 @@
     groupId: string | null = null
     docNotFound = false
     group: Group | null = null
-    allUserData: UserData[] | null = null
+    allUserData: UserData[] | [] = []
     
     get JoinToken() {
       if (this.group?.inviteToken) {
@@ -179,18 +179,26 @@
     }
 
     async getUsersData() {
-
       const loading = this.$vs.loading()
-      var a = []
       
+      // const a = this.group?.memberList.map(query_id => {
+      //     const doc = await firestore.collection('users').doc(query_id as string).get()
+      //     const userData = doc.data() as UserData
+      //   }
+      // )
+      
+      if(!this.group?.memberList.length){
+        return
+      }
 
+      var a = []
       for (var i = 0; i < this.group?.memberList.length; i++) {
         const query_id = this.group?.memberList[i]
         const doc = await firestore.collection('users').doc(query_id as string).get()
         const userData = doc.data() as UserData
         a.push(userData)
       }
-      this.allUserData = a
+      this.allUserData = a 
 
       loading.close()
     }
