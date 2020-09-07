@@ -1,13 +1,14 @@
 <template>
   <div v-if="group">
-    <vs-avatar class="icon-small" @click="goBack()">
-        <i class="bx bx-arrow-back cursor-pointer" style="font-size: 1.25rem;" />
-    </vs-avatar>
-
+    <div :style="`background-image:url('${group.backgroundImageUrl}')`" class = "w-full background-cover h-64">
+      <vs-avatar class="icon-small cursor-pointer" style = "top:1rem;left:1rem" @click="goBack()">
+        <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
+      </vs-avatar>
+    </div>
     <!-- Header -->
-    <div>
-      <h1 class = "inline block">{{group.title}}</h1>
-      <div class = "absolute right-0 inline-block"> <!-- Button Container -->
+    <div class = "relative my-4">
+      <div class = "inline block font-open font-bold text-6xl">{{group.title}}</div>
+      <div class = "absolute right-0 bottom-0 inline-block"> <!-- Button Container -->
         <vs-button circle flat success animation-type="vertical" class=" inline-block float-right mr-10" @click="ToggleGroupsModal(true)">
           <div class="text-lg font-ginger-b">Create/Join by Link</div>
           <template #animate>
@@ -18,10 +19,10 @@
     </div>
 
     <!-- GRID -->
-    <div class="grid grid-cols-3" style="column-gap: 1.5rem;row-gap: 1rem;">
+    <div class="grid md:grid-cols-3 sm:grid-cols-1" style="column-gap: 1rem;row-gap: 1rem;">
       <!-- MAIN SCREEN -->
-      <div class = "h-full w-full bg-gray-300 col-span-2 row-span-3 p-4">
-        <div id="selectors" class = "text-xl cursor-pointer grid grid-cols-3 w-50% text-center relative">
+      <div class = "rounded-md h-full w-full bg-gray-300 md:col-span-2 sm:col-span-1 md:row-span-3 sm:row-span-1 p-4">
+        <div id="selectors" class = "text-xl cursor-pointer grid grid-cols-3 w-50% text-center relative mt-2">
           <div>Summary</div>
           <div @click="pushNotes()">Notes</div>
           <div>Questions</div>
@@ -30,20 +31,25 @@
       </div>
 
       <!-- Side Screens -->
-      <div class = "h-32 w-full bg-gray-500 col-start-3 p-4">
-        <h1>Description</h1>
+      <div class = "rounded-md h-32 w-full bg-gray-500 md:col-start-3 sm:col-start-1 p-4">
+        <div class="mb-2 font-open font-semibold text-3xl">Description</div>
+        {{ group.description }}
       </div>
-      <div class = "h-32 w-full bg-gray-500 col-start-3 p-4" >
-        <h1>Admins</h1>
+
+      <div class = "rounded-md h-32 w-full bg-gray-500 md:col-start-3 sm:col-start-1 p-4" >
+        <div class="mb-2 font-open font-semibold text-3xl">Admins</div>
+        <p>Coming Soon</p>
       </div>
-      <div class = "h-32 w-full bg-gray-500 col-start-3 p-4" >
-        <h1>Members</h1>
+
+      <div class = "rounded-md h-32 w-full bg-gray-500 md:col-start-3 sm:col-start-1 p-4" >
+        <div class="mb-2 font-open font-semibold text-3xl">Members</div>
         <vs-avatar-group max="7">
-          <vs-avatar v-for="(person, index) in allUserData" :key="index">
+          <vs-avatar v-for="(person, index) in allUserData" :key="index" >
             <img :src="person.photoURL" alt="Avatar">
           </vs-avatar>
         </vs-avatar-group>
       </div>
+
     </div>
   </div>
 </template>
@@ -61,9 +67,8 @@
     components: {},
     async mounted() {
       await this.fetchGroup()
-      await this.getUsersData()
-      console.log(this.allUserData)
-    
+      console.log(this.group)
+      await this.getUsersData()    
     }
   })
 
@@ -181,43 +186,31 @@
     async getUsersData() {
       const loading = this.$vs.loading()
       
+      // The map way???
       // const a = this.group?.memberList.map(query_id => {
       //     const doc = await firestore.collection('users').doc(query_id as string).get()
       //     const userData = doc.data() as UserData
       //   }
       // )
-      
-      if(!this.group?.memberList.length){
-        return
-      }
 
-      var a = []
-      for (var i = 0; i < this.group?.memberList.length; i++) {
-        const query_id = this.group?.memberList[i]
-        const doc = await firestore.collection('users').doc(query_id as string).get()
-        const userData = doc.data() as UserData
-        a.push(userData)
-      }
-      this.allUserData = a 
-
-      loading.close()
-    }
-
-    async fetchUser(userID:string){
-      const loading = this.$vs.loading()
       try{
-        const doc = await firestore.doc(`users/${userID}`).get()
-        const userData = doc.data() as UserData
-        if(!userData){
-          loading.close()
+        if(!this.group?.memberList.length){
+          this.$router.push('/groups')
           return
         }
-
-        this.allUserData.push() 
+        var a = []
+        for (var i = 0; i < this.group?.memberList.length; i++) {
+          const query_id = this.group?.memberList[i]
+          const doc = await firestore.collection('users').doc(query_id as string).get()
+          const userData = doc.data() as UserData
+          a.push(userData)
+        }
+        this.allUserData = a 
         loading.close()
         return
       }
-      catch (error) {
+      catch (error){
+        console.log("-----------------MAJOR ERROR---------------------")
         console.log({error})
         loading.close()
       }
@@ -239,36 +232,31 @@
     background-size: cover;
   }
   
+  $underbarWidth:15%;
+  $extra:(33%-$underbarWidth)/2;
+  $extra-2:33%+$extra;
+  $extra-3:66%+$extra;
+  $underlineColor:#195BFF;
   .underbar{
-    width: 0;
     height: 5px;
-    background: rgba(100,100,200,0);
-    //left: -50px;
+    width: $underbarWidth;
+    left:$extra;
     top: 25px;
+
+    background: $underlineColor;
+
     position: absolute;
     transition: 0.5s ease;
   }
   #selectors div{
-    $underbarWidth:15%;
-    $extra:(33%-$underbarWidth)/2;
-    $extra-2:33%+$extra;
-    $extra-3:66%+$extra;
-    $underlineColor:#195BFF;
-    left:$extra;
     &:nth-of-type(1):hover ~ .underbar{
       left: $extra;
-      width: $underbarWidth;
-      background: $underlineColor;
     }
     &:nth-of-type(2):hover ~ .underbar{
       left: $extra-2; 
-      width: $underbarWidth;
-      background: $underlineColor;
     }
     &:nth-of-type(3):hover ~ .underbar{
       left: $extra-3;
-      width: $underbarWidth;
-      background: $underlineColor;
     }
   }
 </style>

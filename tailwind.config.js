@@ -13,7 +13,6 @@ module.exports = {
       'lg': '1024px',
       'xl': '1280px',
       'xxlmin': '1351px',
-      'xxlmax': { max: '1350px' }
     },
     fontFamily: {
       display: ['Quicksand', 'sans-serif'],
@@ -30,7 +29,9 @@ module.exports = {
       '4': '4px'
     },
     borderRadius: {
-      
+      'sm': '0.125rem',
+      'md': '0.375rem',
+      'lg': '0.5rem',
       'full' : '1rem',
       'super': '1.25rem',
     },

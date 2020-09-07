@@ -116,7 +116,7 @@
       
       <div v-if="groupsList.length" class="flex flex-row justify-between flex-wrap self-start" id="groupCard">
         <div v-for="(item, index) in groupsList" :key="index" class="px-2 w-full xxlmin:w-33% lg:w-50% xs:w-100%">
-          <GroupsCard :group="item"></GroupsCard>
+          <GroupsCard :group="item" id="groupsCard"></GroupsCard>
         </div>
       </div>
     </div>
@@ -158,6 +158,7 @@ import {School_O} from '~/types/schools'
     loading.close()
   }
 })
+
 export default class DiscoverGroups extends mixins(LoadScroll) {
   get noNotesFound() {
     return notesStore.EndOfList && this.groupsList.length == 0
@@ -185,13 +186,11 @@ export default class DiscoverGroups extends mixins(LoadScroll) {
       this.LoadMoreGroups()
     }
   }
-
   async LoadMoreGroups() {
     const loading = this.$vs.loading()
     await groupsStore.GetMoreGroups()
     loading.close()
   }
-
   get endOfList() {
     return groupsStore.EndOfList
   }
@@ -212,3 +211,12 @@ export default class DiscoverGroups extends mixins(LoadScroll) {
   }
 }
 </script>
+
+<style scoped>
+  #groupsCard{
+    transition: transform 0.2s cubic-bezier(0.64, -0.01, 0.47, 1.02), box-shadow 0.4s cubic-bezier(0.64, -0.01, 0.47, 1.02);
+  }
+  #groupsCard:hover{
+      transform: translateY(-3px);
+  }
+</style>
