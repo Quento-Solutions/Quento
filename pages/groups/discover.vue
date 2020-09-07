@@ -1,78 +1,5 @@
 <template>
-  <!-- ----------------------------------JEFF'S VERSION---------------------------------- -->
-  <!--
-  <div
-    class="vx-row w-full relative justify-evenly"
-    :class="[{ 'show-overlay': bodyOverlay }]"
-    id="groups-screen-container"
-  >
-    <div id="notes-content-overlay"></div>
-    <FilterSidebar
-      :sort.sync="sort"
-      :subjects.sync="subjects"
-      :school.sync="school"
-      :grade.sync="grade"
-      :sortEnabled="false"
-      @filter="filter()"
-    >
-      <vs-button to="/groups" class="w-full">
-        <i class="bx bx-arrow-back text-4xl" />
-        <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
-      </vs-button>
-    </FilterSidebar>
 
-    <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
-      Mobile
-      <div class="vx-col w-full inline-flex lg:hidden" style>
-        <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
-          <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
-            <i class="bx bx-menu" style="font-size: 1.25rem;" />
-            piss
-          </vs-avatar>
-        </div>
-      </div>
-      
-      <div class="vx-row" style>
-        Join Group
-        <div
-          class="vx-col flex flex-col justify-center items-center w-full lg:w-1/3 md:w-1/2"
-          style
-        >
-          <div
-            @click="ToggleGroupsModal(true)"
-            class="flex flex-col justify-center items-center cursor-pointer"
-          >
-            <vs-avatar class="w-full" size="160">
-              <i class="bx bx-plus-circle" style="font-size: 8rem" />
-            </vs-avatar>
-            <div class="my-4 text-title text-2xl">Add Or Join A Group</div>
-          </div>
-        </div>
-
-        <div
-          class="vx-col w-full lg:w-1/3 md:w-1/2"
-          v-for="(group, index) in groupsList"
-          :key="index"
-          style
-        >
-          <GroupsCard
-            class="w-full lg:w-1/3 md:w-1/2"
-            :group="group"
-            :clickable="true"
-            :preview="true"
-          />
-        </div>
-      </div>
-
-      <vs-alert color="danger" v-if="noNotesFound">
-        <template #title>No Groups Found For This Search</template>
-        <b>Sorry!</b> Something went wrong when fetching the Groups. Please Try
-        Again.
-      </vs-alert>
-    </div>
-  </div>
-  -->
 
   <!-- ----------------------------------MY VERSION---------------------------------- -->
 
@@ -124,7 +51,6 @@
         <div
           v-for="(item, index) in groupsList"
           :key="index"
-          class="px-2 w-full md:w-1/2 xxlmin:w-1/3"
         >
           <GroupsCard :group="item"></GroupsCard>
         </div>
