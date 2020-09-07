@@ -40,12 +40,14 @@ export interface UserData {
   newsletter?: boolean
   progressionExp?: number
   progressionLevel?: number
-  totalExp : number;
+  totalExp: number;
 
   discordId?: string
   discordUsername?: string
   photoFileName?: string | null
 
   notifications?: boolean
+  pendingFollowing?: string[]
+  following?: string[]
   lastFeedUpdated ?: Timestamp
 }
