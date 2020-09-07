@@ -63,25 +63,17 @@ import PostQuestionModal from '~/screens/questions/PostQuestionModal.vue'
     PreviewQuestionModal
   },
   async mounted() {
+    const loading = this.$vs.loading()
     this.fetchQuestions()
     this.fetchGroup()
-    const loading = this.$vs.loading()
-    await questionStore.GetMoreQuestions()
-    this.loaded = true
     loading.close()
   }
 })
 export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
   groupQuestion: Question[] = []
-  question: Question | null = null
-  questionId: string | null = null
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
-  sort: typeof questionStore.SortSelect = 'createdAt'
-  subjects: Subject_O[] = []
-  grade: Grade_O = 'ALL'
-  school: School_O | 'All Schools' = 'All Schools'
 
   get memberOfGroup() {
     return (
@@ -131,7 +123,7 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
       return
     }
     try {
-      const doc = await firestore.doc(`groups/${this.groupId}`).get()
+      const doc = await firestore.collection('groups').doc(this.groupId).get()
       const groupData = doc.data() as Group_t_F
       if (!groupData) {
         this.docNotFound = true

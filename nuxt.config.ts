@@ -1,8 +1,7 @@
 import type { NuxtConfig } from '@nuxt/types'
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
-import path from 'path'
-import fs from 'fs'
+
 
 console.log(process.env.BASE_URL, process.env.host, process.env.port)
 

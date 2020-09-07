@@ -57,15 +57,14 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 @Component<GroupNotes>({
   components: {NotesCard, FilterSidebar, PreviewNotesModal, PostNotesModal},
   async mounted() {
-    this.fetchNotes()
-    this.fetchGroup()
     const loading = this.$vs.loading({
       type: 'circles',
       text: 'Loading Data'
     })
     try {
-      const notes = notesStore.GetMoreNotes(true)
-      await Promise.all([notes])
+      const notes = this.fetchNotes()
+      const group = this.fetchGroup()
+      await Promise.all([notes, group])
     } catch (error) {
       console.error({error})
       this.$vs.notification({
@@ -79,7 +78,6 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 })
 export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   groupNotes: Note[] = []
-  note: Note | null = null
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
@@ -170,7 +168,7 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
       return
     }
     try {
-      const doc = await firestore.doc(`groups/${this.groupId}`).get()
+      const doc = await firestore.collection('groups').doc(this.groupId).get()
       const groupData = doc.data() as Group_t_F
       if (!groupData) {
         this.docNotFound = true

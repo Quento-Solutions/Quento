@@ -47,7 +47,7 @@
       </FilterSidebar>
       <div class="sidebar-spacer"></div>
 
-      <div v-if="groupsList.length" class="flex flex-row w-full md:w-auto flex-wrap" id="groupCard">
+      <div v-if="groupsList.length" class="flex flex-row w-full flex-wrap" id="groupCard">
         <div
           v-for="(item, index) in groupsList"
           :key="index"
