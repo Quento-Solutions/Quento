@@ -36,7 +36,14 @@
                   size="medium"
                   class="ml-"
                   v-if="pendingFollowing"
-                >Follow Request Pending</vs-button>
+                >
+                  Follow Request Pending
+                  <i
+                    class="bx bx-x-circle text-xl text-white ml-2"
+                    id="remove_icon"
+                    @click="removePending()"
+                  />
+                </vs-button>
                 <vs-button
                   color="danger"
                   type="filled"
@@ -205,18 +212,42 @@ export default class UserPage extends mixins(UserMixin) {
   UserNotes: Note[] = []
   docNotFound = false
 
-  get pendingFollowing()
-  {
-    return this.userId && this.UserData?.pendingFollowing?.includes(this.userId);
+  async removePending() {
+    const loading = this.$vs.loading()
+    try {
+      const doc = await firestore
+        .collection('users')
+        .doc(this.AuthUser?.uid)
+        .update({
+          pendingFollowing: firebase.firestore.FieldValue.arrayRemove(
+            this.userId
+          )
+        })
+
+      const doc2 = await firestore
+        .collection('users')
+        .doc(this.userId as string)
+        .collection('followers')
+        .doc(this.AuthUser?.uid)
+        .delete()
+    } catch (e) {
+      console.log(e)
+    }
+    loading.close()
   }
 
-  get acceptedFollowing()
-  {
-    return this.userId && this.UserData?.following?.includes(this.userId);
+  get pendingFollowing() {
+    return this.userId && this.UserData?.pendingFollowing?.includes(this.userId)
   }
-  get personFollowsYou()
-  {
-    return this.AuthUser?.uid && this.userInfo?.following?.includes(this.AuthUser?.uid);
+
+  get acceptedFollowing() {
+    return this.userId && this.UserData?.following?.includes(this.userId)
+  }
+  get personFollowsYou() {
+    return (
+      this.AuthUser?.uid &&
+      this.userInfo?.following?.includes(this.AuthUser?.uid)
+    )
   }
 
   async fetchUser() {
@@ -254,11 +285,11 @@ export default class UserPage extends mixins(UserMixin) {
       })
 
     const unFollowFriendDoc = firestore
-    .collection('users')
-    .doc(this.userId as string)
-    .collection('followers')
-    .doc(this.AuthUser?.uid)
-    .delete()
+      .collection('users')
+      .doc(this.userId as string)
+      .collection('followers')
+      .doc(this.AuthUser?.uid)
+      .delete()
     // this.$router.go((this.$router.currentRoute as unknown) as number)
 
     loading.close()

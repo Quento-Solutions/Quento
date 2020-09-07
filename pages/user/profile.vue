@@ -188,6 +188,12 @@
                     size="medium"
                     @click="unFollowFriend(person.uid)"
                   >Unfollow</vs-button>
+                  <vs-button
+                    v-if="userFollowPerson(person)"
+                    color="success"
+                    type="filled"
+                    size="medium"
+                  >Follows You</vs-button>
                 </div>
               </div>
             </div>
@@ -214,7 +220,20 @@
                 <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.name}}</div>
 
                 <div class="pl-2">
-                  <vs-button color="warn" type="filled" size="medium">Follow Request Pending</vs-button>
+                  <vs-button color="warn" type="filled" size="medium">
+                    Follow Request Pending
+                    <i
+                      class="bx bx-x-circle text-xl text-white ml-2"
+                      id="remove_icon"
+                      @click="removePending(person.uid)"
+                    />
+                  </vs-button>
+                  <vs-button
+                    v-if="userFollowPerson(person)"
+                    color="success"
+                    type="filled"
+                    size="medium"
+                  >Follows You</vs-button>
                 </div>
               </div>
             </div>
@@ -293,10 +312,10 @@ import firebase from 'firebase/app'
   async mounted() {
     await this.getUserNotes()
     await this.getFriends()
-    if(this.$route.query.followers)
-    {
-      this.followerModal = true;
+    if (this.$route.query.followers) {
+      this.followerModal = true
     }
+    console.log(this.followers)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -325,6 +344,41 @@ export default class UserProfile extends mixins(UserMixin) {
     } catch (error) {
       console.error({ error })
       return
+    }
+  }
+
+  async removePending(uid: string) {
+    const loading = this.$vs.loading()
+    console.log(uid)
+    try {
+      const doc = await firestore
+        .collection('users')
+        .doc(this.AuthUser?.uid)
+        .update({
+          pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
+        })
+
+      const doc2 = await firestore
+        .collection('users')
+        .doc(uid)
+        .collection('followers')
+        .doc(this.AuthUser?.uid)
+        .delete()
+    } catch (e) {
+      console.log(e)
+    }
+    this.getFriends()
+    loading.close()
+  }
+
+  async userFollowPerson(person: UserData) {
+    if (!person.following) {
+      return false
+    }
+    if (person.following.includes(this.AuthUser?.uid as string)) {
+      return true
+    } else {
+      return false
     }
   }
 
@@ -464,13 +518,25 @@ export default class UserProfile extends mixins(UserMixin) {
     return SubjectIconList[subject]
   }
 
-  cmyk(color : number) {
-    const minBlack = 10;
-    const maxBlack = 90;
-    return 255 * (1 - (color / 100)) * (1 - (Math.floor(Math.random() * (maxBlack - minBlack)) + minBlack) / 100)
+  cmyk(color: number) {
+    const minBlack = 10
+    const maxBlack = 90
+    return (
+      255 *
+      (1 - color / 100) *
+      (1 - (Math.floor(Math.random() * (maxBlack - minBlack)) + minBlack) / 100)
+    )
   }
   randomColor() {
-    return "rgb(" + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ")"
+    return (
+      'rgb(' +
+      this.cmyk(Math.floor(Math.random() * 100)).toString() +
+      ', ' +
+      this.cmyk(Math.floor(Math.random() * 100)).toString() +
+      ', ' +
+      this.cmyk(Math.floor(Math.random() * 100)).toString() +
+      ')'
+    )
   }
 }
 </script>
