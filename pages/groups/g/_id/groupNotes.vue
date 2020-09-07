@@ -57,15 +57,14 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 @Component<GroupNotes>({
   components: {NotesCard, FilterSidebar, PreviewNotesModal, PostNotesModal},
   async mounted() {
-    this.fetchNotes()
-    this.fetchGroup()
     const loading = this.$vs.loading({
       type: 'circles',
       text: 'Loading Data'
     })
     try {
-      const notes = notesStore.GetMoreNotes(true)
-      await Promise.all([notes])
+      const notes = this.fetchNotes()
+      const group = this.fetchGroup()
+      await Promise.all([notes, group])
     } catch (error) {
       console.error({error})
       this.$vs.notification({
@@ -79,8 +78,6 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 })
 export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   groupNotes: Note[] = []
-  note: Note | null = null
-  noteId: string | null = null
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
@@ -93,12 +90,6 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
 
-  @Watch('IsReset')
-  onResetChanged(value: boolean, oldVal: boolean) {
-    if (value) {
-      this.fetchNotes()
-    }
-  }
 
   get IsReset() {
     return notesStore.IsReset
@@ -141,15 +132,15 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   }
   async fetchNotes() {
     const loading = this.$vs.loading()
-    this.noteId = this.$route.params.id
-    if (!this.noteId) {
-      this.$router.push('/notes')
+    this.groupId = this.$route.params.id
+    if (!this.groupId) {
+      this.$router.push('/groups/g/')
       return
     }
     try {
       const doc = await firestore
         .collection('notes')
-        .where('groupId', '==', this.noteId)
+        .where('groupId', '==', this.groupId)
         .orderBy('magicRank', 'desc')
         .get()
       this.groupNotes = doc.docs.map((document) =>
@@ -171,7 +162,7 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
       return
     }
     try {
-      const doc = await firestore.doc(`groups/${this.groupId}`).get()
+      const doc = await firestore.collection('groups').doc(this.groupId).get()
       const groupData = doc.data() as Group_t_F
       if (!groupData) {
         this.docNotFound = true

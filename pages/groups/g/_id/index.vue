@@ -375,7 +375,6 @@ export default class GroupsSummary extends mixins(UserMixin) {
 
   copyLink() {
     const tokenEl = document.querySelector('#joinInput') as HTMLInputElement
-    console.log({tokenEl})
     tokenEl.setAttribute('type', 'text')
     tokenEl.select()
     // tokenEl.setSelectionRange(0, 99999); /*For mobile devices*/

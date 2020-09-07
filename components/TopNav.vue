@@ -372,15 +372,13 @@ export default class TopNav extends mixins(UserMixin) {
     z-index: 0;
     width: 100%;
     height: 103px;
-    left : 0;
+    left: 0;
     transition-duration: 0.5s;
     top: 0;
-    .show-overlay &
-    {
+    .show-overlay & {
       opacity: 0;
     }
-    .show-lower-overlay &
-    {
+    .show-lower-overlay & {
       opacity: 0;
     }
   }

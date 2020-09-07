@@ -198,7 +198,6 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   }
 
   unsetGroup() {
-    console.log('UNSET GROUP')
     this.group = null
   }
 

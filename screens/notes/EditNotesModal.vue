@@ -174,7 +174,6 @@ export default class EditNotesModal extends mixins(PasteImage) {
     this.ActiveNote = Object.assign({}, value)
     this.images = value?.storedImages ? [...value.storedImages] : []
     this.activeSchool = value?.school || 'All Schools'
-    // console.log(value, this.ActiveNote);
   }
 
   get StoreEditNotes() {

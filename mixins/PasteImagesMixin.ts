@@ -92,8 +92,6 @@ export default class PasteImagesMixin extends Vue {
         startPos += myValue.length
         myField.selectionStart = myField.selectionEnd = startPos
       }, 10)
-
-      console.log({startPos})
     } else {
       this.contents += myValue
     }
