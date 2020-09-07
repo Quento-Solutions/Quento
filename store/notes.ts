@@ -72,7 +72,6 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public SetEditNote(note: Note | null) {
-    console.log({ note })
     this.SET_EDIT_NOTE(note)
   }
 
@@ -133,7 +132,6 @@ export default class NotesModule extends VuexModule {
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const noteRef = firestore.collection('notes').doc(id)
-    console.log(this.likedPosts)
     if (this.likedPosts?.includes(id)) {
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayRemove(id)
@@ -158,7 +156,6 @@ export default class NotesModule extends VuexModule {
   private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
     if (!authStore.userData) return
     const { likedNotes } = authStore.userData
-    console.log(likedNotes)
     var index = likedNotes?.indexOf(suggestionId)
     const suggestionIndex = this.ActiveNotes.findIndex(
       (doc) => doc.id! == suggestionId
@@ -200,7 +197,6 @@ export default class NotesModule extends VuexModule {
     }
 
     if (this.isPersonalized) {
-      console.log('CUSTOM RANK')
 
       if (!LastVisible) {
         if (!authStore.userData?.lastFeedUpdated) {
@@ -228,7 +224,7 @@ export default class NotesModule extends VuexModule {
         const notes = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
-              console.log({ parentPath: doc.data().parentPath })
+              if(!doc.data().parentPath) console.log({ parentPath: doc.data().parentPath, docData : doc.data() });
               return firestore.doc(doc.data().parentPath).get()
             })
             .map(async (docPromise) =>

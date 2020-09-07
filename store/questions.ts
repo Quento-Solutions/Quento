@@ -159,7 +159,7 @@ export default class QuestionsModule extends VuexModule {
         const questions = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
-              console.log({parentPath: doc.data().parentPath})
+            if(!doc.data().parentPath) console.log({id : doc.id, "error" : "error", doc : doc.data()})
               return firestore.doc(doc.data().parentPath).get()
             })
             .map(async (docPromise) =>

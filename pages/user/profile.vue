@@ -315,7 +315,6 @@ import firebase from 'firebase/app'
     if (this.$route.query.followers) {
       this.followerModal = true
     }
-    console.log(this.followers)
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -349,7 +348,6 @@ export default class UserProfile extends mixins(UserMixin) {
 
   async removePending(uid: string) {
     const loading = this.$vs.loading()
-    console.log(uid)
     try {
       const doc = await firestore
         .collection('users')
@@ -365,7 +363,6 @@ export default class UserProfile extends mixins(UserMixin) {
         .doc(this.AuthUser?.uid)
         .delete()
     } catch (e) {
-      console.log(e)
     }
     this.getFriends()
     loading.close()
@@ -427,7 +424,6 @@ export default class UserProfile extends mixins(UserMixin) {
       )
     ).map((doc) => ({ ...doc.data(), uid: doc.id }))
 
-    console.log({ hello: this.following_for_real })
   }
 
   async acceptFriend(uid: string, displayName: string, photoURL: string) {

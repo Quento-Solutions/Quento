@@ -170,7 +170,7 @@ export default class VxTooltip extends VsComponent {
         ],
         on: {
           click: () => {
-            console.log(this.activeTooltip)
+            // console.log(this.activeTooltip)
           }
         }
       },

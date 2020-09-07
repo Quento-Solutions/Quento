@@ -90,12 +90,6 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
 
-  @Watch('IsReset')
-  onResetChanged(value: boolean, oldVal: boolean) {
-    if (value) {
-      this.fetchNotes()
-    }
-  }
 
   get IsReset() {
     return notesStore.IsReset

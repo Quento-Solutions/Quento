@@ -28,7 +28,6 @@ export default class DiscordAuth extends Vue {
         code,
         scope
       })
-      console.log({ request })
       this.$vs.notification({
         title : "Success, Discord Linked!",
         message : 'Use the `/profile` command in the Quento Discord',
