@@ -58,7 +58,7 @@
                         style="line-height:1.5"
                       >{{AuxiliumText.substring(0,200)}}...</div>
                       <div class="float-right pb-4">
-                        <nuxt-link to="/">Learn More</nuxt-link>
+                        <a to="https://www.theauxilium.com/">Learn More</a>
                       </div>
                     </div>
                   </div>
@@ -80,7 +80,7 @@
                       style="line-height:1.5"
                     >{{SBBText}}</div>
                     <div class="float-right pb-4">
-                      <nuxt-link to="/">Learn More</nuxt-link>
+                      <a to="https://www.youtube.com/channel/UCAP7VmyGvC0xS3jErySLQNQ">Learn More</a>
                     </div>
                   </div>
                 </a>
