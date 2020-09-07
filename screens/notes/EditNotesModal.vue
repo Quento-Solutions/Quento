@@ -161,7 +161,6 @@ export default class EditNotesModal extends mixins(PasteImage) {
     return groupsStore.userGroups
   }
 
-
   get contents() {
     return this.ActiveNote?.contents || ''
   }

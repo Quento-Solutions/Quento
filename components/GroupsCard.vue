@@ -2,7 +2,7 @@
   <VxCard
     v-if="group"
     class="overlay-card mb-4 overflow-hidden cardster"
-    style="border-radius: 1.28rem !important"
+    style="border-radius: 1.28rem !important;"
   >
     <!-- Card Outside -->
     <template slot="no-body">
@@ -10,6 +10,7 @@
         <!-- Background -->
         <div
           class="text-white background-cover p-8 pt-4 relative"
+          style="min-height : 250px"
           :style="backgroundGradient(group.backgroundImageUrl)"
         >
           <vs-tooltip style="width: max-content">
@@ -24,7 +25,7 @@
           </vs-tooltip>
           <!-- MAIN INSIDE CARD -->
           <div
-            class="mb-2 mt-32 font-bold w-2/3 text-white font-open text-3xl truncate"
+            class="mb-2 md:mt-32 font-bold w-2/3 text-white font-open text-3xl"
             style="line-height : 1.25"
           >
             {{ group.title }}
@@ -32,7 +33,7 @@
           </div>
 
           <!-- Author Line -->
-          <div class="flex flex-row w-2/3" style>
+          <div class="flex flex-row flex-wrap md:flex-no-wrap w-2/3" style>
             <vs-tooltip class="truncate">
               <div
                 :style="`background-color: #${randomColor()}`"

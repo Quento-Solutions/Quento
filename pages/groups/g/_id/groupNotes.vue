@@ -5,34 +5,20 @@
     id="notes-screen-container"
     v-if="group"
   >
-    <div id="notes-content-overlay"></div>
-    <!-- <FilterSidebar
-      :sort.sync="sort"
-      :subjects.sync="subjects"
-      :school.sync="school"
-      :grade.sync="grade"
-      @filter="filter()"
-    >
-      <vs-button warn @click="notesModalActive = true" class="w-full">
-        <i class="bx bxs-plus-square text-4xl" />
-        <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
-      </vs-button>
-    </FilterSidebar>
-    <div class="sidebar-spacer"></div>
-    <div class="vx-col lg:w-2/3 md:w-2/3 w-full">
-      <div class="vx-col w-full inline-flex lg:hidden" style>
-        <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
-          <vs-avatar class="icon-small float-right" @click="openFilterSidebar()">
-            <i class="bx bx-menu" style="font-size: 1.25rem;" />
-          </vs-avatar>
-        </div>
-    </div>-->
-    <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-start">
+    <PostNotesModal :presetGroup="group"></PostNotesModal>
+    <PreviewNotesModal></PreviewNotesModal>
+
+    <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
       <vs-avatar class="icon-small float-left" @click="goBack()">
         <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
       </vs-avatar>
       <div class="text-4xl font-bold pl-4">{{group.title}}'s Notes</div>
+      <vs-button warn @click="notesModalActive = true">
+        <i class="bx bxs-plus-square text-4xl" />
+        <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
+      </vs-button>
     </div>
+
     <NotesCard
       v-for="(note, index) in groupNotes"
       :key="index"
@@ -65,9 +51,11 @@ import firestore from '~/plugins/firestore'
 import {Group, Group_t_F} from '~/types/groups'
 import functions from '~/plugins/firebaseFunctions'
 import UserMixin from '~/mixins/UserMixin'
+import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
+import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 
 @Component<NotesPage>({
-  components: {NotesCard, FilterSidebar},
+  components: {NotesCard, FilterSidebar, PreviewNotesModal, PostNotesModal},
   async mounted() {
     this.fetchNotes()
     this.fetchGroup()
@@ -99,34 +87,23 @@ export default class NotesPage extends mixins(LoadScroll, UserMixin) {
   get noNotesFound() {
     return notesStore.EndOfList && this.notesList.length == 0
   }
+
   sort: typeof notesStore.SortSelect = 'magicRank'
   subjects: Subject_O[] = []
   grade: Grade_O = 'ALL'
   school: School_O | 'All Schools' = 'All Schools'
 
-  async filter() {
-    const loading = this.$vs.loading()
-    notesStore.SetFilter({
-      sortSelect: this.sort,
-      filterSubjects: this.subjects,
-      filterGrades: this.grade,
-      filterSchools: this.school
-    })
-    await notesStore.GetMoreNotes(true)
-    loading.close()
-  }
-  @Watch('IsScrolledDown')
-  PageHeightChange(val: boolean, oldVal: boolean) {
-    if (val && this.loaded) {
-      this.LoadMoreNotes()
+  @Watch('IsReset')
+  onResetChanged(value: boolean, oldVal: boolean) {
+    if (value) {
+      this.fetchNotes()
     }
   }
 
-  async LoadMoreNotes() {
-    const loading = this.$vs.loading()
-    await notesStore.GetMoreNotes()
-    loading.close()
+  get IsReset() {
+    return notesStore.IsReset
   }
+
   get memberOfGroup() {
     return (
       this.group &&

@@ -1,9 +1,9 @@
 <template>
   <div style="width : 500px">
     <div>
-      <vs-alert>Enter an invite below to join an existing server.</vs-alert>
+      <vs-alert>Enter an invite below to join an existing group.</vs-alert>
       <div class = "p-6"></div>
-      <vs-input class = "block" border v-model="link" label="Enter an invite" placeholder = "Quento.ca/groups/join?exampletoken=QTxgBw1uvD5sAAtP2UI6" />
+      <vs-input class = "block" border v-model="link" label="Enter an invite" placeholder = "www.quento.ca/groups/join?token=your-token" />
       <div class="w-full flex flex-row justify-end mt-6 items-center" style></div>
     </div>
     <div class="flex flex-row justify-between items-center">

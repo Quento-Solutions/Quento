@@ -165,14 +165,19 @@ interface imageSrc {
     VsUpload
   },
   async mounted() {
+
     if (!this.userGroups.length && !groupsStore.userGroupFetched) {
       this.groupsLoading = true
       await groupsStore.GetUserGroups()
       this.groupsLoading = false
     }
+    if(this.presetGroup) this.groupSelect = this.presetGroup.id || '';
+    
   }
 })
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
+  @Prop({required: false}) presetGroup ?: Group;
+
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
   readonly SchoolList = ['All Schools', ...SchoolList]
@@ -206,7 +211,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   }
 
   get userGroups() {
-    return groupsStore.userGroups
+    return groupsStore.userGroups.filter(group => group.approved)
   }
   characterLimit = 5000
 

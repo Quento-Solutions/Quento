@@ -4,9 +4,9 @@
       v-if="description.length > characterLimit"
       danger
     >Your note cannot exceed 5000 characters</vs-alert>
-    <vs-alert>How the group works?</vs-alert>
+    <vs-alert>Create a class to keep all your work in one place.</vs-alert>
     <div class="con-form md:p-4 lg:p-8 p-2 flex vx-row w-full justify-evenly overflow-x-hidden">
-      <vs-input v-model="title" placeholder="Group Name" class="block mb-3 w-6 mt-3" width="w-6">
+      <vs-input v-model="title" placeholder="Group Name" class="block mb-3 w-6" width="w-6">
         <template #icon>
           <i class="bx bx-highlight" primary></i>
         </template>
@@ -79,13 +79,13 @@
         ref="textarea"
         @paste="onPaste"
       ></VsTextarea>
-      <div class="w-full flex flex-row justify-end mt-6 items-center" style>
+      <!-- <div class="w-full flex flex-row justify-end mt-6 items-center" style>
         <div class="text-ginger-b" style>Group Visibility: &nbsp;</div>
         <vs-switch v-model="groupPublic">
           <template #off>Private</template>
           <template #on>Public</template>
         </vs-switch>
-      </div>
+      </div> -->
     </div>
 
     <div class="flex flex-row justify-between items-center">
@@ -211,12 +211,11 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       userId: authStore.user?.uid!,
       createdAt: new Date(),
       description: this.description,
-      members: 0,
+      members: 1,
       private: !this.groupPublic,
-      approved: false,
+      approved: true,
       memberList: [authStore.user?.uid],
       backgroundImageUrl: this.backgroundImageUrl,
-
     })
     if (this.schoolSelect !== 'Any') {
       addGroup.school = this.schoolSelect

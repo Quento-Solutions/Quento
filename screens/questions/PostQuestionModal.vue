@@ -205,11 +205,9 @@ export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
     this.subjectSelect = group.subject || ''
     this.group = group
   }
-
   get userGroups() {
-    return groupsStore.userGroups
+    return groupsStore.userGroups.filter(group => group.approved)
   }
-
   get active() {
     return questionStore.PostQuestionModalOpen
   }
