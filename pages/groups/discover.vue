@@ -22,7 +22,7 @@
         class="inline-block float-right mr-10"
         @click="ToggleGroupsModal(true)"
       >
-        <div class="text-lg text-xs font-ginger-b">Create/Join by Link</div>
+        <div class="text-xs font-ginger-b">Create/Join by Link</div>
         <template #animate>
           <i class="bx bx-plus text-2xl"></i>
         </template>
@@ -45,12 +45,13 @@
           <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
         </vs-button>
       </FilterSidebar>
-      <div class="sidebar-spacer lg:h-full"></div>
+      <div class="sidebar-spacer h-full"></div>
 
       <div v-if="groupsList.length" class="flex flex-row w-full md:w-auto flex-wrap" id="groupCard">
         <div
           v-for="(item, index) in groupsList"
           :key="index"
+          class="w-full lg:w-1/2 xxlmin:w-1/3"
         >
           <GroupsCard :group="item"></GroupsCard>
         </div>
