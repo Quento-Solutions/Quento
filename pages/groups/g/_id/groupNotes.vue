@@ -80,7 +80,6 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   groupNotes: Note[] = []
   note: Note | null = null
-  noteId: string | null = null
   groupId: string | null = null
   docNotFound = false
   group: Group | null = null
@@ -141,15 +140,15 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   }
   async fetchNotes() {
     const loading = this.$vs.loading()
-    this.noteId = this.$route.params.id
-    if (!this.noteId) {
-      this.$router.push('/notes')
+    this.groupId = this.$route.params.id
+    if (!this.groupId) {
+      this.$router.push('/groups/g/')
       return
     }
     try {
       const doc = await firestore
         .collection('notes')
-        .where('groupId', '==', this.noteId)
+        .where('groupId', '==', this.groupId)
         .orderBy('magicRank', 'desc')
         .get()
       this.groupNotes = doc.docs.map((document) =>

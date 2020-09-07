@@ -100,15 +100,15 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
 
   async fetchQuestions() {
     const loading = this.$vs.loading()
-    this.questionId = this.$route.params.id
-    if (!this.questionId) {
+    this.groupId = this.$route.params.id
+    if (!this.groupId) {
       this.$router.push('/groups')
       return
     }
     try {
       const doc = await firestore
         .collection('questions')
-        .where('questionId', '==', this.questionId)
+        .where('groupId', '==', this.groupId)
         .orderBy('magicRank', 'desc')
         .get()
       this.groupQuestion = doc.docs.map((document) =>

@@ -74,6 +74,7 @@ export default class FeedsModule extends VuexModule {
       const notes = await Promise.all(
         rankingDocs.docs
           .map(async (doc) => {
+            if(!doc.data().parentPath) console.log({id : doc.id, "error" : "error", doc : doc.data()})
             return {
               doc: await firestore.doc(doc.data().parentPath).get(),
               dataType: doc.data().dataType
@@ -105,6 +106,7 @@ export default class FeedsModule extends VuexModule {
       ) as FeedItem_t[]
       this.PUSH_ITEMS(a)
     } catch (error) {
+
       throw error
     }
     return
