@@ -63,12 +63,18 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     this.screen = args
     this.active = true
   }
+  @Watch('active')
+  setModal(){
+    this.screen = 0
+  }
+  
+
   get currentScreen() {
+    console.log(this.screen);
     return this.screens[this.screen]
   }
   screens = [GroupSelectModal, GroupCreateModal, GroupJoinModal]
   screen = 0
-
   schoolSelect: School_O | 'All Schools' = 'All Schools'
   characterLimit = 5000
   description = ''
