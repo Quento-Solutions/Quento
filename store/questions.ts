@@ -1,11 +1,11 @@
-import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
+import {Module, VuexModule, Action, Mutation} from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { firestore as FirestoreModule } from 'firebase/app'
+import {firestore as FirestoreModule} from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
-import { Question, Question_t_F } from '~/types/questions'
-import { Response, Response_t_F } from '~/types/responses'
+import {Question, Question_t_F} from '~/types/questions'
+import {Response, Response_t_F} from '~/types/responses'
 import {
   Grade_O,
   SubjectList,
@@ -14,15 +14,15 @@ import {
   FilterOptions
 } from '~/types/subjects'
 
-import { authStore } from '~/store'
-import { School_O } from '~/types/schools'
-import { HourDiff } from '~/utils/time'
+import {authStore} from '~/store'
+import {School_O} from '~/types/schools'
+import {HourDiff} from '~/utils/time'
 
 let LastVisible: FirestoreModule.QueryDocumentSnapshot<
   FirestoreModule.DocumentData
 > | null = null
 
-@Module({ stateFactory: true, name: 'questions', namespaced: true })
+@Module({stateFactory: true, name: 'questions', namespaced: true})
 export default class QuestionsModule extends VuexModule {
   get likedPosts() {
     return authStore.userData?.likedQuestions
@@ -57,7 +57,7 @@ export default class QuestionsModule extends VuexModule {
   public SET_POST_MODAL_OPEN(value: boolean) {
     this.PostQuestionModalOpen = value
   }
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public SetFilter(filter: FilterOptions) {
     this.SET_FILTER(filter)
     this.RESET_ITEMS()
@@ -95,7 +95,7 @@ export default class QuestionsModule extends VuexModule {
     this.PreviewModalOpen = !!i
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public ResetPosts() {
     this.SET_POST_MODAL_OPEN(false)
     this.SET_PREVIEW_QUESTION(null)
@@ -111,8 +111,8 @@ export default class QuestionsModule extends VuexModule {
     this.ActiveItems.push(...questions)
   }
 
-  @Action({ rawError: true })
-  public async GetMoreQuestions(start ?: boolean) {
+  @Action({rawError: true})
+  public async GetMoreQuestions(start?: boolean) {
     if (this.EndOfList) {
       return
     }
@@ -159,7 +159,7 @@ export default class QuestionsModule extends VuexModule {
         const questions = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
-              console.log({ parentPath: doc.data().parentPath })
+              console.log({parentPath: doc.data().parentPath})
               return firestore.doc(doc.data().parentPath).get()
             })
             .map(async (docPromise) =>
@@ -171,7 +171,7 @@ export default class QuestionsModule extends VuexModule {
         )
         this.PUSH_QUESTIONS(questions)
       } catch (error) {
-        console.log({ error })
+        console.log({error})
         throw error
       }
       return
@@ -180,6 +180,8 @@ export default class QuestionsModule extends VuexModule {
     let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collection(
       'questions'
     )
+    query = query.where('private', '==', false)
+
     // Do query filtering things
 
     if (this.ActiveGrade !== 'ALL') {
@@ -207,12 +209,12 @@ export default class QuestionsModule extends VuexModule {
       LastVisible = snapshot.docs[snapshot.docs.length - 1]
       this.PUSH_QUESTIONS(notes)
     } catch (error) {
-      console.log({ error })
+      console.log({error})
       throw error
     }
   }
   // Question Data Logic
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async CreateQuestion(question: Question) {
     const deleteImages = question.storedImages?.map(async (image) => {
       // Deletes all unused images.
@@ -222,7 +224,7 @@ export default class QuestionsModule extends VuexModule {
           const deleteImage = await storage.ref(image.fileName).delete()
           return deleteImage
         } catch (error) {
-          console.log({ error })
+          console.log({error})
           return
         }
       }
@@ -259,7 +261,7 @@ export default class QuestionsModule extends VuexModule {
     this.ActiveResponses = responses
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async PostResponse({
     contents,
     questionId
@@ -285,7 +287,7 @@ export default class QuestionsModule extends VuexModule {
       .add(Response.toFirebase(response))
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async GetQuestion(id: string) {
     const questionDoc = await firestore.collection('questions').doc(id).get()
     const responseRefs = await firestore
@@ -300,12 +302,12 @@ export default class QuestionsModule extends VuexModule {
     )
     const questionData = questionDoc.data() as Question_t_F
     const question = Question.fromFirebase(questionData, id)
-    this.SET_ACTIVE_QUESTION_DATA({ question, responses })
+    this.SET_ACTIVE_QUESTION_DATA({question, responses})
     return question
   }
 
   // Response Data Logic
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async ToggleLikedQuestion(questionId: string) {
     const batch = firestore.batch()
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
@@ -325,7 +327,7 @@ export default class QuestionsModule extends VuexModule {
     await batch.commit()
     return
   }
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async ToggleLikedResponse({
     questionId,
     responseId
@@ -356,7 +358,7 @@ export default class QuestionsModule extends VuexModule {
     return
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async IncrementView(id: string) {
     const updateViews = await firestore
       .collection('questions')

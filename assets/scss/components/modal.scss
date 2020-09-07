@@ -3,8 +3,8 @@
     width: calc(260px);
     flex-shrink: 0;
     margin-left: 0;
-
-    @media only screen and (min-width: 768px) {
+    min-height :0;
+    @media only screen and (min-width: 1024px) {
       min-height: 100vh;
     }
   }

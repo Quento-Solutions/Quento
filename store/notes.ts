@@ -248,6 +248,7 @@ export default class NotesModule extends VuexModule {
 
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
+    query = query.where('private', "==", false);
 
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
@@ -258,7 +259,6 @@ export default class NotesModule extends VuexModule {
     if (this.ActiveSubjects.length != 0) {
       query = query.where('subject', 'in', this.ActiveSubjects.slice(0, 10))
     }
-
     query = query.orderBy(this.SortSelect, 'desc')
 
     if (LastVisible) {
