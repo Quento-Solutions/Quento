@@ -86,6 +86,7 @@
     "stylelint-config-standard": "^20.0.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
+    "tailwindcss-debug-screens": "^1.1.0",
     "ts-jest": "^26.1.4",
     "vue-cli-plugin-vuetify": "~2.0.7",
     "vue-jest": "^3.0.6",

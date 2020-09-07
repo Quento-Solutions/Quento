@@ -45,9 +45,9 @@
 						<p class = "text-xs italic font-thin mb-4 mt-2" style="max-height:50%;overflow:hidden">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer scelerisque semper tortor non ultrices. Nunc porttitor justo ac purus porta placerat. Ut nec diam eget leo volutpat placerat. Etiam a lacus a leo malesuada vehicula a non risus.
 						</p>
-
+						
 						<h5 class = "font-semibold text-md">Members</h5>
-						<p class = "font-light text-sm">{{group.members}}</p>
+						<p class = "font-light text-sm">{{numberOfMembers}}</p>
 					</div>
 				</div>
 			</nuxt-link>
@@ -63,6 +63,7 @@
 
 	export default class GroupCard extends Vue {
 		@Prop({ required: true }) group!: Group
+		numberOfMembers = (!this.group.memberList) ? 0 : this.group.memberList.length
 
 		backgroundGradient(imageUrl: string) {
 			return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`

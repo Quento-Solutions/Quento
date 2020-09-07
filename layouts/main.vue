@@ -9,7 +9,7 @@
 
 <template>
   <div
-    class="layout--main"
+    class="layout--main debug-screens"
     :class="[navbarClasses, footerClasses, { 'app-page': isAppPage }]"
   >
     <!-- onboarding, but everywhere 🤯 -->

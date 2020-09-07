@@ -40,6 +40,7 @@ module.exports = {
         grey: '#eeeeee'
       },
       spacing: {
+        '6': "1.5rem",
         '96': '24rem',
         '128': '32rem',
         '100%': '100%',
@@ -80,5 +81,6 @@ module.exports = {
   },
   variants: {},
   plugins: [
+    require('tailwindcss-debug-screens'),
   ]
 }
