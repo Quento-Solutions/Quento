@@ -102,7 +102,7 @@ export default class PreviewNotesModal extends Vue {
       console.log({error});
       this.$vs.notification({
         color: 'danger',
-        title: 'An Error Occurred While Posting Your Suggestion'
+        title: 'An Error Occurred While Posting Your Note'
       })
       this.state = false
       loading.close()

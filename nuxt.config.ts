@@ -1,8 +1,7 @@
 import type { NuxtConfig } from '@nuxt/types'
 // import {sortRoutes}from '@nuxt/utils';
 import { firebaseConfig } from './envars'
-import path from 'path'
-import fs from 'fs'
+
 
 console.log(process.env.BASE_URL, process.env.host, process.env.port)
 
@@ -13,6 +12,7 @@ const config: NuxtConfig = {
       `${process.env.host}:${process.env.port}` ||
       'localhost:3000'
   },
+
   head: {
     title: 'Quento',
     meta: [
@@ -27,6 +27,7 @@ const config: NuxtConfig = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
+
   loading: { color: '#3B8070' },
   css: [
     '~/assets/css/main.css',
@@ -36,10 +37,12 @@ const config: NuxtConfig = {
     'video.js/dist/video-js.css',
     'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
   ],
+
   server: {
     port: process.env.port || 3000,
     host: process.env.host || 'localhost'
   },
+
   router: {
     middleware: 'router-auth',
     routeNameSplitter: '/'
@@ -48,12 +51,14 @@ const config: NuxtConfig = {
   build: {
     transpile : ['vue-instantsearch', 'instantsearch.js/es']
   },
+
   buildModules: [
     '@nuxt/typescript-build',
     // '@nuxtjs/stylelint-module',
     '@nuxtjs/tailwindcss',
     'nuxt-composition-api'
   ],
+
   modules: [
     '@nuxt/content',
     '@nuxtjs/axios',
@@ -63,6 +68,7 @@ const config: NuxtConfig = {
     '@nuxtjs/markdownit',
     '@nuxtjs/vuetify'
   ],
+
   plugins: [
     '@/plugins/vuesax',
     { src: '@/plugins/client_runtime', mode: 'client' },
@@ -76,6 +82,7 @@ const config: NuxtConfig = {
     { src: '@/plugins/fireanalytics', mode: 'client' },
 
   ],
+
   markdownit: {
     preset: 'default',
     linkify: true,
@@ -83,6 +90,7 @@ const config: NuxtConfig = {
 
     injected: true
   },
+
   pwa: {
     meta: false,
     icon: false,
@@ -96,6 +104,7 @@ const config: NuxtConfig = {
       dev: false
     }
   },
+
   firebase: {
     config: firebaseConfig,
     services: {
@@ -109,6 +118,7 @@ const config: NuxtConfig = {
       // Just as example. Can be any other service.
     }
   },
+  
   styleResources: {
     scss: ['./assets/scss/main.scss']
   },

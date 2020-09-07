@@ -7,13 +7,13 @@
 module.exports = {
   theme: {
     screens: {
-      xs: '320px',
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      xxlmin: '1351px',
-      xxlmax: { max: '1350px' }
+      'xs': '320px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      'xxlmin': '1351px',
+      'xxlmax': { max: '1350px' }
     },
     fontFamily: {
       display: ['Quicksand', 'sans-serif'],
@@ -21,6 +21,7 @@ module.exports = {
       'ginger' : ['ginger-light', 'sans-serif'],
       'ginger-n' : ['ginger-normal', 'sans-serif'],
       'ginger-b' : ['ginger-bold', 'sans-serif'],
+      'open': ['Open Sans']
     },
     borderWidth: {
       default: '1px',
@@ -28,14 +29,22 @@ module.exports = {
       '2': '2px',
       '4': '4px'
     },
+    borderRadius: {
+      
+      'full' : '1rem',
+      'super': '1.25rem',
+    },
     extend: {
       colors: {
         cyan: '#9cdbff',
-        
+        grey: '#eeeeee'
       },
       spacing: {
         '96': '24rem',
-        '128': '32rem'
+        '128': '32rem',
+        '100%': '100%',
+        '50%': '49%',
+        '33%': '32.9%'
       },
       height: {
         '84': '22rem'
@@ -69,6 +78,12 @@ module.exports = {
       'nuxt.config.js'
     ]
   },
+  future : 
+  {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
   variants: {},
-  plugins: []
+  plugins: [
+  ]
 }

@@ -1,6 +1,7 @@
 <template>
   <vs-sidebar
-    absolute
+    :absolute="absolute"
+    :relative="!absolute"
     :open.sync="open"
     id="notes-sidebar"
     class="rounded-md w-full notes-sidebar"
@@ -13,10 +14,7 @@
           <div class="text-2xl font-ginger-b">&nbsp;Close Menu</div>
         </vs-button>
 
-        <vs-button warn @click="toggleNotesModal(true)" class="w-full">
-          <i class="bx bxs-plus-square text-4xl" />
-          <div class="text-2xl font-ginger-b">&nbsp; Post New Note</div>
-        </vs-button>
+        <slot></slot>
       </div>
     </div>
     <div class="sidebar-content p-6 pt-0 w-full">
@@ -67,9 +65,26 @@
           <div class="font-bold truncate">Grade {{ grade }}</div>
         </vs-option>
       </vs-select>
+      <vs-select
+        label="School"
+        filter
+        class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
+        placeholder="School"
+        v-model="schoolSelect"
+      >
+        <vs-option
+          v-for="(school, subIndex) in SchoolList"
+          :key="subIndex"
+          :label="school"
+          :value="school"
+        >
+          <div class="font-bold truncate">{{ school }}</div>
+        </vs-option>
+      </vs-select>
 
       <vs-select
         label="Sort By"
+        v-if="sortEnabled"
         filter
         class="block mb-6 w-6 mt-6 w-full lg:w-1/2 sort-option"
         placeholder="Sort By"
@@ -107,7 +122,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, PropSync } from 'nuxt-property-decorator'
 import { windowStore, notesStore } from '~/store'
 import {
   NestedSubjectList,
@@ -120,6 +135,7 @@ import {
   SortOptionsList,
   SortOptions_O
 } from '~/types/subjects'
+import { SchoolList, School_O } from '~/types/schools'
 
 let s: {
   [index in Subject_O]?: boolean
@@ -128,11 +144,17 @@ SubjectList.forEach((subject) => (s[subject] = false))
 
 @Component<NotesSidebar>({ components: {} })
 export default class NotesSidebar extends Vue {
+  @PropSync('subjects', {type : Array}) ActiveSubjectList!: Subject_O[]
+  @PropSync('grade') gradeSelect!: Grade_O
+  @PropSync('school') schoolSelect!: School_O | 'All Schools'
+  @PropSync('sort') sortSelect!: typeof notesStore.SortSelect
+  @Prop({default : true}) sortEnabled !: boolean
+  @Prop({default : true}) absolute !: boolean
+
+  SubjectDict = s
   GradeList = GradeList
   SortOptions = [...SortOptionsList]
-  gradeSelect: Grade_O = notesStore.ActiveGrade
-  allGradesSelected = true
-  sortSelect = notesStore.SortSelect
+  readonly SchoolList = ['All Schools', ...SchoolList]
 
   subjectClicked(
     name: Subject_O,
@@ -160,12 +182,6 @@ export default class NotesSidebar extends Vue {
     )
   }
 
-  toggleNotesModal(val: boolean) {
-    notesStore.ToggleNotesModule(val)
-  }
-  SubjectDict = s
-  ActiveSubjectList: Subject_O[] = []
-
   currentSubjects = NestedSubjectList.flatMap((value) =>
     value.items.map((v2) => v2.name)
   )
@@ -182,29 +198,26 @@ export default class NotesSidebar extends Vue {
       this.allSelected = false
     }
   }
+  
   clearFilter() {
     if (!this.allSelected) {
       this.selectAllSubjects()
     }
+    this.gradeSelect = 'ALL'
+    this.schoolSelect = 'All Schools'
+    this.sortSelect = 'magicRank'
   }
 
   async filterSubjects() {
-    const loading = this.$vs.loading()
-    notesStore.SetActiveFilter({
-      sortSelect: this.sortSelect,
-      filterSubjects: this.ActiveSubjectList,
-      filterGrades: this.gradeSelect
-    })
-    await notesStore.GetMoreNotes()
-    loading.close()
+    this.$emit('filter')
   }
 
   get open() {
-    return !windowStore.smallerThanMd || windowStore.notesSidebarOpen
+    return !windowStore.smallerThanMd || windowStore.filterSidebarOpen
   }
 
   set open(open) {
-    windowStore.SetNotesState(open)
+    windowStore.SetFilterSidebar(open)
   }
 }
 </script>

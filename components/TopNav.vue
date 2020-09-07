@@ -1,28 +1,28 @@
 <template>
   <div class="vx-navbar-wrapper navbar-default" id="navbar-wrapper">
-    <vs-navbar
-      class="rounded-md shadow-md p-1"
-      center-collapsed
-      id="topnav"
-      fixed
-      :class="!windowSmall ? 'shrink' : ''"
-    >
-      <template #left>
+    <div class="navbar-fader"></div>
+    <vs-navbar class="rounded-md shadow-md" id="topnav" fixed :class="!windowSmall ? 'shrink' : ''">
+      <template #left v-if="!searchActive">
         <vs-avatar class="menuIcon icon" v-if="windowSmall" @click.stop="toggleSidenav()">
-          <i class="bx bx-menu" :style="`font-size: 2rem;`" />
+          <i class="bx bx-menu" :style="`font-size: 1.5rem;`" />
         </vs-avatar>
       </template>
-
-      <template #right>
-        <div class="vx-row items-center" style="max-width: 50vw; flex-wrap: nowrap;">
+      <div class="w-full" v-if="searchActive" v-click-outside="searchOff">
+        <NotesSearchBar @close="searchOff()"></NotesSearchBar>
+      </div>
+      <template #right v-if="!searchActive">
+        <div class="vx-row items-center justify-end" style="flex-wrap: nowrap;">
+          <vs-avatar class="icon" @click.stop="toggleSearch()">
+            <i class="bx bx-search" :style="`font-size: 1.5rem;`" />
+          </vs-avatar>
           <vs-navbar-group id="notifications" tabindex="0" v-click-outside="notificationsOff">
             <vs-avatar
-              class="profileIcon icon"
+              class="icon"
               badge
               badge-position="top-right"
               @click="notificationsVisible = !notificationsVisible"
             >
-              <i class="bx bx-bell" :style="`font-size: 2rem;`" />
+              <i class="bx bx-bell" :style="`font-size: 1.5rem;`" />
               <template #badge>{{notifications.length}}</template>
             </vs-avatar>
             <div
@@ -76,7 +76,7 @@
           <vs-navbar-group id="profile">
             <vs-avatar class="profileIcon icon" badge badge-color="success">
               <img v-if="photoURL" :src="photoURL" />
-              <i v-else class="bx bx-user-circle" :style="`font-size: 2rem;`" />
+              <i v-else class="bx bx-user-circle" :style="`font-size: 1.5rem;`" />
             </vs-avatar>
             <template #items>
               <vs-navbar-item to="/user/profile">Profile</vs-navbar-item>
@@ -100,6 +100,8 @@ import { Component, Vue, Prop, Watch, mixins } from 'nuxt-property-decorator'
 import { windowStore, authStore, notificationStore } from '~/store'
 import UserMixin from '~/mixins/UserMixin'
 import { User } from '~/types/user'
+import NotesSearchBar from '~/components/NotesSearchBar.vue'
+
 import {
   NotificationData_O,
   NotificationAction_O,
@@ -107,7 +109,9 @@ import {
 } from '~/types/notifications'
 import firestore from '~/plugins/firestore'
 @Component<TopNav>({
-  components: {},
+  components: {
+    NotesSearchBar
+  },
   mounted() {
     this.getNotifications()
   }
@@ -147,6 +151,16 @@ export default class TopNav extends mixins(UserMixin) {
       default:
         return 'bx-notification'
     }
+  }
+
+  searchActive = false
+  searchOff() {
+    this.searchActive = false
+    windowStore.SET_OVERLAY_VISIBLE(this.searchActive)
+  }
+  toggleSearch() {
+    this.searchActive = !this.searchActive
+    windowStore.SET_OVERLAY_VISIBLE(this.searchActive)
   }
 
   getColor(actionType: NotificationAction_O) {
@@ -259,7 +273,7 @@ export default class TopNav extends mixins(UserMixin) {
 
 <style lang="scss">
 #navbar-wrapper {
-  z-index: 41000;
+  z-index: 41001;
   #topnav {
     z-index: 100;
     top: 20px;
@@ -271,12 +285,15 @@ export default class TopNav extends mixins(UserMixin) {
       border-radius: 1rem !important;
       width: 93%;
     }
-    .notificationIcon {
-      margin-right: 2rem;
-    }
     .icon {
-      width: 3rem;
-      height: 3rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      cursor: pointer;
+    }
+
+    .vs-navbar__center {
+      max-width: 100%;
+      width: 100% !important;
     }
     #profile {
       .vs-navbar__group__items {
@@ -343,10 +360,26 @@ export default class TopNav extends mixins(UserMixin) {
       right: 30vw;
     }
   }
-  #topnav::before {
+  .navbar-fader {
+    background: linear-gradient(
+      to bottom,
+      rgba(248, 248, 248, 0.95) 44%,
+      rgba(248, 248, 248, 0.46) 73%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    position: fixed;
+    z-index: 0;
     width: 100%;
-    height: 100px;
-    background-color: rgba(0, 0, 0, 0.1);
+    height: 103px;
+    left: 0;
+    transition-duration: 0.5s;
+    top: 0;
+    .show-overlay & {
+      opacity: 0;
+    }
+    .show-lower-overlay & {
+      opacity: 0;
+    }
   }
   .shrink {
     width: calc(100vw - 110px) !important;

@@ -10,8 +10,8 @@
 
             <!-- card title -->
             <div class="vx-card__title">
-                <h4 v-if="this.$props.title" :style="titleStyles" style="font-size : 1.5rem" :class="titleClasses">{{ title }}</h4>
-                <h6 v-if="this.$props.subtitle" :style="subtitleStyles" :class="subtitleClasses">{{ subtitle }}</h6>
+                <h4 v-if="this.$props.title" class="text-ginger-b" :style="titleStyles" style="font-size : 1.5rem" :class="titleClasses">{{ title }}</h4>
+                <h6 v-if="this.$props.subtitle" class="text-ginger-b" :style="subtitleStyles" :class="subtitleClasses">{{ subtitle }}</h6>
             </div>
 
             <!-- card actions -->

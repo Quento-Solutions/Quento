@@ -1,27 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@500&display=swap');
-
-
+@import "../font/Helvetica/helveticaSheet.css";
+@import "../font/Quicksand/quicksandSheet.css";
+@import "../font/Source Code Pro/sourceCodeProSheet.css";
+@import "../font/OpenSans/stylesheet.css";
 
 @font-face {
     font-family: "Oswald";
-    src: url("../font/Oswald-VariableFont_wght.ttf"); 
-}
-@font-face {
-    font-family: "Quicksand";   
-    src: url("../font/Quicksand_Book.woff");    
+    src: url("../font/static/Oswald-VariableFont_wght.ttf"); 
 }
 
 @font-face {
   font-family: "ginger-bold";
-  src: url("../font/HelveticaNowText-Bold.woff");
+  src: url("../font/Helvetica/HelveticaNowText-Bold.woff");
 }
 @font-face {
   font-family: "ginger-normal";
-  src: url("../font/HelveticaNowText-Regular.woff");
+  src: url("../font/Helvetica/HelveticaNowText-Regular.woff");
 }
 @font-face {
   font-family: "ginger-light";
-  src: url("../font/HelveticaNowText-Light.woff");
+  src: url("../font/Helvetica/HelveticaNowText-Light.woff");
 }
 
 
