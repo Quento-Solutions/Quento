@@ -1,13 +1,11 @@
 #notes-screen-container {
-  
-
   .sidebar-spacer {
     width: calc(260px);
     flex-shrink: 0;
     margin-left: 0;
-    &.h-full {
-      min-height : 100vh;
-
+    min-height :0;
+    @media only screen and (min-width: 1024px) {
+      min-height: 100vh;
     }
   }
   #notes-content-overlay {
