@@ -1,5 +1,5 @@
 import { Subject_O, Grade_O } from './subjects'
-import { Date_t_F } from './firebaseTypes'
+import { Date_t_F, StoredImage } from './firebaseTypes'
 
 import { School_O } from './schools'
 import { Timestamp } from './env.utils'
@@ -13,6 +13,9 @@ export interface Group_t {
   approved : boolean
   description: string
   backgroundImageUrl: string,
+  fileUpload ?: StoredImage
+
+
   private : boolean
 
   id?: string
@@ -33,6 +36,8 @@ export interface Group_t_F {
   description: string
   backgroundImageUrl: string,
   private : boolean
+  fileUpload ?: StoredImage
+
   
   createdAt: Date | Date_t_F
   members : number

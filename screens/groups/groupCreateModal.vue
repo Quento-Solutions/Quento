@@ -79,13 +79,21 @@
         ref="textarea"
         @paste="onPaste"
       ></VsTextarea>
+
+      <VsUpload
+        :show-upload-button="false"
+        text="Upload Cover Image"
+        accept="image/*"
+        :limit="1"
+        ref="postImageUpload"
+      />
       <!-- <div class="w-full flex flex-row justify-end mt-6 items-center" style>
         <div class="text-ginger-b" style>Group Visibility: &nbsp;</div>
         <vs-switch v-model="groupPublic">
           <template #off>Private</template>
           <template #on>Public</template>
         </vs-switch>
-      </div> -->
+      </div>-->
     </div>
 
     <div class="flex flex-row justify-between items-center">
@@ -155,31 +163,22 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   readonly GradeList = [...GradeList.filter((v) => v !== 'ALL')]
   readonly SubjectGroupList = NestedSubjectList
 
+  get imageRefs() {
+    return (this.$refs.postImageUpload as
+      | (Vue & {
+          filesx: File[]
+          srcs: imageSrc[]
+          itemRemove: any[]
+        })
+      | undefined)?.filesx
+  }
   characterLimit = 5000
   groupPublic = true
   description = ''
   backgroundImageUrl =
-    'https://media.2oceansvibe.com/wp-content/uploads/2014/04/castingcouch.jpg'
+    'https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/static%2FpostedNote%40defaultBackground.png?alt=media'
   title = ''
-  @Watch('IsReset')
-  // onResetChanged(value: boolean, oldVal: boolean) {
-  //   if (value) {
-  //     this.ClearFields()
-  //     groupsStore.SET_RESET(false)
-  //   }
-  // }
 
-  // get IsReset() {
-  //   return groupsStore.IsReset
-  // }
-
-  // readonly GradeList = GradeList.filter((v) => v !== 'ALL')
-  // Cancel() {}
-  // // make this a mixin
-  // getIcon(subject: SubjectGroup_O | Subject_O) {
-  //   return SubjectIconList[subject]
-  // }
-  // readonly SubjectGroupList = NestedSubjectList
   get active() {
     return groupsStore.openGroupsModal
   }
@@ -187,18 +186,15 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     groupsStore.ToggleGroupsModule(value)
   }
 
-  // ClearFields() {
-  //   this.title = this.description = this.subjectSelect = this.gradeSelect = ''
-  //   this.schoolSelect = "All Schools";
-  // }
-
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
   async giveGroupInfo() {
     if (!authStore.user?.uid) return
-    const loading = this.$vs.loading()
+    const loading = this.$vs.loading({
+      type: 'scale'
+    })
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -206,6 +202,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       })
       return
     }
+
     const addGroup = new Group({
       title: this.title,
       userId: authStore.user?.uid!,
@@ -215,8 +212,9 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       private: !this.groupPublic,
       approved: true,
       memberList: [authStore.user?.uid],
-      backgroundImageUrl: this.backgroundImageUrl,
+      backgroundImageUrl: this.backgroundImageUrl
     })
+
     if (this.schoolSelect !== 'Any') {
       addGroup.school = this.schoolSelect
     }
@@ -227,7 +225,22 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
       addGroup.subject = this.subjectSelect
     }
     try {
-      await groupsStore.createGroup(addGroup)
+      const refs = this.$refs.postImageUpload as
+        | (Vue & {
+            filesx: File[]
+            srcs: imageSrc[]
+            itemRemove: any[]
+          })
+        | undefined
+      const uploadFile = refs?.filesx[0]
+      if (uploadFile && this.validateImageType(uploadFile)) {
+        const imageRef = await this.uploadImage(uploadFile)
+        addGroup.backgroundImageUrl = imageRef.imageURL
+        addGroup.fileUpload = imageRef
+      }
+      const groupId = await groupsStore.createGroup(addGroup)
+
+      this.$router.push(`/groups/g/${groupId}`)
       this.$vs.notification({
         color: 'success',
         title: 'Group Created'
@@ -241,13 +254,13 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
     }
     this.active = false
     loading.close()
-    // notesStore.TogglePreviewModal(true)
-    this.GetGroups()
+    groupsStore.GetUserGroups();
+    groupsStore.GetMoreGroups(true);
   }
   async GetGroups() {
     const loading = this.$vs.loading()
     try {
-      await groupsStore.GetMoreGroups()
+      await groupsStore.GetMoreGroups(true)
     } catch (error) {
       console.log({error})
     }

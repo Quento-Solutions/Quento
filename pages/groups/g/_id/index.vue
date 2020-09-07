@@ -86,7 +86,7 @@
             >
               <div class="text-xl px-2 text-ginger">Notes</div>
             </vs-button>
-            <vs-button transparent :active="active=='Questions'" v-if="inGroup && group.approved">
+            <vs-button  @click="pushQuestions()" transparent :active="active=='Questions'" v-if="inGroup && group.approved">
               <div class="text-xl px-2 text-ginger">Questions</div>
             </vs-button>
           </vs-button-group>
@@ -302,6 +302,9 @@ export default class GroupsSummary extends mixins(UserMixin) {
   }
   pushNotes() {
     this.$router.push('/groups/g/' + this.groupId + '/groupNotes')
+  }
+  pushQuestions(){
+    this.$router.push('/groups/g/' + this.groupId+'/groupQuestions')
   }
   get memberOfGroup() {
     return (

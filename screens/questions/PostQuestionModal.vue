@@ -171,9 +171,12 @@ interface imageSrc {
       await groupsStore.GetUserGroups()
       this.groupsLoading = false
     }
+    if (this.presetGroup) this.groupSelect = this.presetGroup.id || ''
   }
 })
 export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
+  @Prop({required: false}) presetGroup ?: Group;
+// Finish this 
   characterLimit = 5000
   readonly SchoolList = ['All Schools', ...SchoolList]
   schoolSelect: School_O | 'All Schools' = 'All Schools'
@@ -206,7 +209,7 @@ export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
     this.group = group
   }
   get userGroups() {
-    return groupsStore.userGroups.filter(group => group.approved)
+    return groupsStore.userGroups.filter((group) => group.approved)
   }
   get active() {
     return questionStore.PostQuestionModalOpen
@@ -274,9 +277,8 @@ export default class PostQuestionModal extends mixins(PasteImage, UserMixin) {
       grade: this.gradeSelect as Grade_O,
       storedImages: this.images
     })
-    if(this.group)
-    {
-      previewQuestion.groupId = this.group.id;
+    if (this.group) {
+      previewQuestion.groupId = this.group.id
       previewQuestion.groupName = this.group.title
     }
     questionStore.SET_PREVIEW_QUESTION(Object.assign({}, previewQuestion))

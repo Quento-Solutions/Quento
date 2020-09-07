@@ -1,10 +1,41 @@
-import { Component, Vue } from 'nuxt-property-decorator'
+import {Component, Vue} from 'nuxt-property-decorator'
 import functions from '~/plugins/firebaseFunctions'
-import type { StoredImage } from '~/types/firebaseTypes'
+import type {StoredImage} from '~/types/firebaseTypes'
 @Component<PasteImagesMixin>({})
 export default class PasteImagesMixin extends Vue {
   images: StoredImage[] = []
-  contents !: string;
+  contents!: string
+
+  async uploadImage(image: File, evt?: any) {
+    const reader = new FileReader()
+    const promise = new Promise<{imageURL : string, fileName : string}>((resolve, reject) => {
+      reader.addEventListener('load', async () => {
+        const base64image = reader.result
+        try {
+          const imageResponse = await functions.httpsCallable(
+            'functionPostImage'
+          )({name: image.name, image: base64image})
+
+          const imageURL = imageResponse.data.imageURL as string
+          const fileName = imageResponse.data.fileName as string
+          if (evt) {
+            this.insertAtCursor(evt.target, `\n![image](${imageURL})\n`)
+          }
+
+          this.images.push({
+            imageURL,
+            fileName
+          })
+          return resolve({imageURL, fileName})
+        } catch (error) {
+          console.log({error})
+          return reject(error)
+        }
+      })
+    })
+    reader.readAsDataURL(image)
+    return promise
+  }
 
   async onPaste(evt: any) {
     if (evt.clipboardData.files.length) {
@@ -19,7 +50,7 @@ export default class PasteImagesMixin extends Vue {
             try {
               const imageResponse = await functions.httpsCallable(
                 'functionPostImage'
-              )({ name: image.name, image: base64image })
+              )({name: image.name, image: base64image})
 
               const imageURL = imageResponse.data.imageURL as string
               const fileName = imageResponse.data.fileName as string
@@ -31,7 +62,7 @@ export default class PasteImagesMixin extends Vue {
               })
               return resolve(imageURL)
             } catch (error) {
-              console.log({ error })
+              console.log({error})
               return reject(error)
             }
           })
@@ -55,13 +86,13 @@ export default class PasteImagesMixin extends Vue {
       this.contents =
         myField.value.substring(0, startPos) +
         myValue +
-        myField.value.substring(endPos!, myField.value.length);
+        myField.value.substring(endPos!, myField.value.length)
 
-        setTimeout(() => {
-          startPos += myValue.length;
-          myField.selectionStart = myField.selectionEnd = startPos;
-        }, 10);
-      
+      setTimeout(() => {
+        startPos += myValue.length
+        myField.selectionStart = myField.selectionEnd = startPos
+      }, 10)
+
       console.log({startPos})
     } else {
       this.contents += myValue

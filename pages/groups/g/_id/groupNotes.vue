@@ -54,7 +54,7 @@ import UserMixin from '~/mixins/UserMixin'
 import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
 import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 
-@Component<NotesPage>({
+@Component<GroupNotes>({
   components: {NotesCard, FilterSidebar, PreviewNotesModal, PostNotesModal},
   async mounted() {
     this.fetchNotes()
@@ -77,7 +77,7 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
     loading.close()
   }
 })
-export default class NotesPage extends mixins(LoadScroll, UserMixin) {
+export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   groupNotes: Note[] = []
   note: Note | null = null
   noteId: string | null = null
@@ -150,6 +150,7 @@ export default class NotesPage extends mixins(LoadScroll, UserMixin) {
       const doc = await firestore
         .collection('notes')
         .where('groupId', '==', this.noteId)
+        .orderBy('magicRank', 'desc')
         .get()
       this.groupNotes = doc.docs.map((document) =>
         Note.fromFirebase(document.data() as Note_t_F, document.id)

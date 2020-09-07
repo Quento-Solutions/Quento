@@ -139,9 +139,11 @@ export default class GroupsModule extends VuexModule {
     const newGroup : Group = Object.assign({}, group)
     if(group.id)
     {
-      return await firestore.collection('groups').doc(group.id).update(Group.toFirebase(newGroup));
+      await firestore.collection('groups').doc(group.id).update(Group.toFirebase(newGroup));
+      return group.id
     }
-    await firestore.collection('groups').add(Group.toFirebase(newGroup));
+    const newDoc = await firestore.collection('groups').add(Group.toFirebase(newGroup));
+    return newDoc.id;
   }
   @Mutation
   private SET_ADD_GROUP(val: Group | null) {
