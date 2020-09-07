@@ -139,8 +139,7 @@
           <div class="vx-row w-full justify-start p-4 pt-0 m-0 pt-0 pl-0" style="margin: 0;">
             <div
               class="md:w-full w-full vx-row justify-center overflow-y-hidden relative rounded-md p-1 pb-0"
-              :style="
-          preview ? 'max-height: 200px' : ''"
+              :style="preview ? 'max-height: 200px' : ''"
             >
               <div
                 v-html="$md.render(question.contents)"
@@ -195,11 +194,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
 
-import { Question } from '~/types/questions'
-import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
-import { notesStore, authStore, questionStore } from '~/store'
+import {Question} from '~/types/questions'
+import {SubjectIconList, SubjectGroup_O, Subject_O} from '~/types/subjects'
+import {notesStore, authStore, questionStore} from '~/store'
 
 import UserMixin from '~/mixins/UserMixin'
 import AvatarBar from '~/components/AvatarBar.vue'
@@ -210,14 +209,13 @@ import AvatarBar from '~/components/AvatarBar.vue'
   }
 })
 export default class QuestionCard extends mixins(UserMixin) {
-  @Prop({ required: true }) question!: Question
-  @Prop({ default: false }) clickable!: boolean
+  @Prop({required: true}) question!: Question
+  @Prop({default: false}) clickable!: boolean
   // Loaded full content
   @Prop({ default: false }) preview!: boolean
   @Prop({ default: false }) listView!: boolean
-
   // Whether buttons should work or not
-  @Prop({ default: false }) disabled!: boolean
+  @Prop({default: false}) disabled!: boolean
 
   get QuestionOwner() {
     return authStore.user?.uid == this.question.userId
@@ -244,7 +242,7 @@ export default class QuestionCard extends mixins(UserMixin) {
         color: 'danger',
         message: error.message
       })
-      console.log({ error })
+      console.log({error})
     }
     loading.close()
   }
