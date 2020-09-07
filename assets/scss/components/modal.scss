@@ -1,9 +1,15 @@
 #notes-screen-container {
-  .sidebar-spacer {
-    width: calc(130px);
-    margin-left: 0;
-  }
+  
 
+  .sidebar-spacer {
+    width: calc(260px);
+    flex-shrink: 0;
+    margin-left: 0;
+    &.h-full {
+      min-height : 100vh;
+
+    }
+  }
   #notes-content-overlay {
     position: absolute;
     opacity: 0;

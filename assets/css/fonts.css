@@ -2,7 +2,7 @@
 @import "../font/Helvetica/helveticaSheet.css";
 @import "../font/Quicksand/quicksandSheet.css";
 @import "../font/Source Code Pro/sourceCodeProSheet.css";
-
+@import "../font/OpenSans/stylesheet.css";
 
 @font-face {
     font-family: "Oswald";
@@ -42,12 +42,3 @@
 .text-ginger {
 font-family: "ginger-normal", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-
-
-
-
-
-
-
-

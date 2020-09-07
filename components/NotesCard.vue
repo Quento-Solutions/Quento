@@ -1,5 +1,92 @@
 <template>
-  <VxCard
+<div class="w-full">
+<VxCard
+    v-if="listView && preview"
+    fitContent="true"
+    class="mb-8"
+    id="note-card"
+    :class="clickable ? 'previewClickable' : ''"
+    @click="PushNotesPage()"
+  >
+  <template slot="no-body">
+  <div class="card-content" :style="preview? 'cursor: pointer;':''">
+
+
+<div class="w-full vx-row p-2 justify-start items-center text-sm flex-row my-2">
+      
+      <div class="w-1/12 vx-row list-icons">
+      
+      <div
+        class="rounded-full w-10 h-10 ml-2 vx-row items-center justify-center"
+        style="background-color: #9f7aea">
+        <i
+          class="bx text-xl text-white"
+          :class="getIcon(note.subject)"
+          style="background-color:transparent;"
+        /></div>
+      <div
+        class="rounded-full  w-10 h-10 ml-2 vx-row items-center justify-center font-ginger-b text-white bottom-icon" 
+        style="background-color: #ed8936;"
+      >{{ note.grade }}</div>
+
+      </div>
+<div class="w-2/5 vx-row list-title" style="overflow: hidden;white-space: nowrap;">
+
+      <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ note.title }}</div>
+
+</div>
+
+<div class="w-1/6 vx-row list-date" style="overflow: hidden;white-space: nowrap;">
+    <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ note.createdAt.toDateString().slice(4, 10) + ',' + note.createdAt.toDateString().slice(10) }}</div>
+
+</div>
+
+<div class="w-1/6 vx-row list-name" style="overflow: hidden;white-space: nowrap;">
+    <div
+      class="text-ginger text-xl ml-4 text-gray-600"
+    >{{ note.userDisplayName }}</div>
+</div>
+
+ <div class="w-1/6 vx-row justify-between pl-4 list-buttons"> 
+    <vs-avatar
+        class="icon-small"
+        :color="userLiked(note.id) ? 'danger' : '#f4f7f8'"
+        badge-color="#7d33ff"
+        @click.stop="toggleLike(note.id)"
+      >
+        <i
+          class="bx bx-heart primary"
+          :style="`color : ${userLiked(note.id) ? 'white' : '#ff4757'}`"
+        ></i>
+        <template #badge>{{ note.upVotes }}</template>
+      </vs-avatar>
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small bottom-icon">
+          <i class="bx bx-show"></i>
+          <template #badge>{{ note.views }}</template>
+        </vs-avatar>
+        <template #tooltip>{{ note.views }} Views</template>
+      </VxTooltip>
+
+      <VxTooltip :interactivity="true">
+        <vs-avatar class="icon-small bottom-icon">
+          <i class="bx bx-bookmark"></i>
+        </vs-avatar>
+        <template #tooltip>Bookmark</template>
+      </VxTooltip>
+ </div>
+    </div>
+
+  </div>
+  </template>
+  </VxCard>
+
+     <VxCard
+     v-if="!listView || !preview"
     fitContent="true"
     class="mb-8"
     id="note-card"
@@ -50,11 +137,11 @@
     >
       <div
         class="rounded-full bg-orange-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white" 
-        style="background-color: #ed8936 padding-top:0.6rem;padding-bottom:0.6rem;"
+        style="background-color: #ed8936;"
       >Grade {{ note.grade }}</div>
       <div
         class="rounded-full bg-purple-500 md:p-2 md:px-4 p-2 px-4 vx-row items-center text-ginger text-white mt-0 mx-2"
-        style="background-color: #9f7aea"
+        style="background-color: #9f7aea;"
       >
         <i
           class="bx text-xl text-white mr-2"
@@ -170,6 +257,7 @@
   </div>
   </template>
   </VxCard>
+</div>
 </template>
 
 <script lang="ts">
@@ -199,6 +287,7 @@ export default class NotesCard extends Vue {
   @Prop({ default: false }) clickable!: boolean
   // Loaded full content
   @Prop({ default: false }) preview!: boolean
+  @Prop({ default: false }) listView!: boolean
   // Whether buttons should work or not
   @Prop({ default: false }) disabled!: boolean
 
@@ -331,6 +420,80 @@ export default class NotesCard extends Vue {
   background: rgba(90, 90, 90, 0.1);
   border-radius: 15px !important;
 }
+
+@media only screen and (max-width: 1670px) {
+  .list-icons {
+    width:15%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-date{
+    display: none;
+  }
+  .list-buttons{
+    width:20%;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .list-name{
+    display:none;
+  }
+  .list-title{
+    width:50%;
+  }
+  .list-buttons{
+    width:30%;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .list-icons {
+    width:20%;
+  }
+  .list-title{
+    width:40%;
+  }
+  .list-title div {
+    font-size: 0.9rem !important;
+    white-space: pre-wrap;
+  }
+  .list-buttons{
+    width:40%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .list-icons {
+    flex-direction:column;
+    width:15%;
+  }
+  .list-title{
+    width:60%;
+  }
+  .list-title div {
+    font-size: 1rem !important;
+  }
+  .list-buttons{
+    flex-direction:column;
+    width: 15%;
+  }
+  .bottom-icon {
+    margin-top: 1rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 @media only screen and (max-width: 1024px) {
   .content-max-height {

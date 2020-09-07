@@ -23,6 +23,9 @@ export interface Question_t
     userPhotoUrl ?: string;
     userId : string;
     userDisplayName : string;
+
+    groupId ?: string;
+    groupName ?: string;
 }
 
 
@@ -39,13 +42,16 @@ export interface Question_t_F
     views : number;
     responses : number;
     keywords ?: Keyword_O[]
-  school ?: School_O;
+    school ?: School_O;
 
     storedImages ?: StoredImage[];
     
     userPhotoUrl ?: string;
     userId : string;
     userDisplayName : string;
+
+    groupId ?: string;
+    groupName ?: string;
 }
 export type Question_t_A = Question_t_F &
 {
