@@ -19,7 +19,7 @@
               <div class="vx-row font-bold text-3xl" style>
                 {{ UserData.displayName }}
                 <vs-button
-                  color="#808080"
+                  success
                   style="margin-left: 0.75rem"
                   type="filled"
                   size="medium"
@@ -30,7 +30,6 @@
                 class="vx-row w-full text-2xl"
                 style
               >Grade {{ UserData.currentGrade }} at {{ UserData.school }}</div>
-
               <div class="vx-row w-full my-2 items-center">
                 <div class="font-bold text-xl mr-2 text-green">Level</div>
                 <vs-avatar warn size="25">
@@ -68,7 +67,7 @@
             <div class="w-full vx-row p-2 items-center text-sm">
               <div
                 class="rounded-full px-4 py-2 vx-row items-center text-ginger text-white mx-2 my-1"
-                :style="`background-color: #${randomColor()}`"
+                :style="`background-color: ${randomColor()}`"
                 v-for="(subject, index) in UserData.interestedSubjects"
                 :key="index"
               >
@@ -294,6 +293,10 @@ import firebase from 'firebase/app'
   async mounted() {
     await this.getUserNotes()
     await this.getFriends()
+    if(this.$route.query.followers)
+    {
+      this.followerModal = true;
+    }
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
@@ -460,8 +463,14 @@ export default class UserProfile extends mixins(UserMixin) {
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
+
+  cmyk(color : number) {
+    const minBlack = 10;
+    const maxBlack = 90;
+    return 255 * (1 - (color / 100)) * (1 - (Math.floor(Math.random() * (maxBlack - minBlack)) + minBlack) / 100)
+  }
   randomColor() {
-    return Math.floor(Math.random() * 16777215).toString(16)
+    return "rgb(" + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ", " + this.cmyk(Math.floor(Math.random() * 100)).toString() + ")"
   }
 }
 </script>

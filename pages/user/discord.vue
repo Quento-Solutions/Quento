@@ -29,7 +29,6 @@ export default class DiscordAuth extends Vue {
         scope
       })
       console.log({ request })
-      await authStore.refreshUserData();
       this.$vs.notification({
         title : "Success, Discord Linked!",
         message : 'Use the `/profile` command in the Quento Discord',

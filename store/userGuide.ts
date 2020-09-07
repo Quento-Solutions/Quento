@@ -1,6 +1,5 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { firestore as FirestoreModule } from 'firebase/app'
 import { authStore } from '~/store'
 import { Grade_O, Subject_O } from '~/types/subjects'
 import { School_O } from '~/types/schools'
@@ -34,7 +33,7 @@ export default class UserGuideModule extends VuexModule {
     await firestore.collection('users').doc(authStore.user?.uid).update({
       userGuideClosed: value
     })
-    return await authStore.refreshUserData()
+    return
   }
 
     @Action({ rawError: true })
@@ -46,6 +45,6 @@ export default class UserGuideModule extends VuexModule {
         await firestore.collection('users').doc(userId).update({ 
             interestedSubjects, currentGrade, school, bio, userInformationAdded : true, notifications
         });
-        return await authStore.refreshUserData();
+        return;
     }
 }

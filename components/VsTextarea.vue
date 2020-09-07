@@ -1,5 +1,7 @@
 <template>
   <div class="vs-input-parent" :style="style" style="background-color : #f4f7f8;position:relative;">
+    
+    <!-- Navbar -->
     <vs-navbar v-if="markdownOptions" class="rounded-lg mt-4" id="markdown-options" style="background:none;pointer-events: none;">
       <template #left>
         <div class="vx-row rounded-full bg-white mb-3" style="pointer-events: auto;flex-wrap: nowrap;margin-left:-0.25rem">
@@ -29,6 +31,7 @@
     <div class="vs-input-content vs-input-content--has-label w-full flex-col justify-start">
       <label class="label" id="label">{{label}}</label>
       <textarea
+        id = "mainText"
         :value="value"
         v-bind="$attrs"
         v-on="listeners"
@@ -85,7 +88,7 @@ export default class VsTextarea extends Vue {
     this.insertText('[', 'Link Text', '](url)')
   }
   insertCodeblock() {
-    this.insertText(' ` ', 'Code block text', ' `')
+    this.insertText('``` ', 'Code block text', ' ```')
   }
   insertIndent() {
     this.insertText('\n> ', 'Indented Text', '\n')
@@ -110,32 +113,36 @@ export default class VsTextarea extends Vue {
     return this.value
   }
 
-  insertText(
-    beforeText: string,
-    highlightText: string = '',
-    afterText: string = ''
-  ) {
-    if (this.input.selectionStart || this.input.selectionStart == 0) {
+  insertText(beforeText: string, defaultText: string = '', afterText: string = '') {
+    if (this.input.selectionStart == this.input.selectionEnd) { //IF NO AREA IS SELECTED
       var startPos = this.input.selectionStart
-      var endPos = this.input.selectionEnd || this.input.selectionStart
-      console.log({ startPos, endPos })
 
       this.contents =
         this.contents.substring(0, startPos) +
         beforeText +
-        highlightText +
+        defaultText +
         afterText +
-        this.contents.substring(endPos!)
-      // This is dumb code don't do this at home.
-      setTimeout(() => {
+        this.contents.substring(startPos!)
+    }else { //IF SOME AREA IS SELECTED
+      var startPos = this.input.selectionStart
+      var endPos = this.input.selectionEnd || this.input.selectionStart
+      var highLightText = this.contents.substring(startPos, endPos)
+
+      this.contents.replace(highLightText, "")
+      this.contents =
+        this.contents.substring(0, startPos) +
+        beforeText +
+        highLightText +
+        afterText +
+        this.contents.substring(endPos)
+    }
+    
+    setTimeout(() => {
         this.input.focus()
         startPos += beforeText.length
-        this.input.setSelectionRange(startPos, startPos + highlightText.length)
+        this.input.setSelectionRange(startPos, startPos + (highLightText ? highLightText.length : defaultText.length))
         this.textAreaAdjust()
       }, 10)
-    } else {
-      this.contents += beforeText + highlightText + afterText
-    }
   }
 
   get style() {

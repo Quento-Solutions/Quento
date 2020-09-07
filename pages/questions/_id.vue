@@ -10,12 +10,12 @@
       </div>
       <div v-if="question" class="w-full">
         <QuestionCard :question="question" v-on:toggle-like="RefreshLikes()"></QuestionCard>
-        <VxCard class="w-full mb-6" title="Post An Answer" collapseAction="true">
+        <VxCard class="w-full mb-6 p-6">
           <div class="vx-row w-full" style>
             <VsTextarea
               placeholder="Leave a response..."
               v-model="responseContent"
-              class="w-full"
+              class="w-full mb-6"
               height="10rem"
             ></VsTextarea>
             <div class="vx-row w-full justify-end p-0" style="padding: 0;">
@@ -31,7 +31,7 @@
           </div>
         </VxCard>
 
-        <VxCard class="w-full" :fitContent="true" title="Responses">
+        <VxCard class="w-full p-6" :fitContent="true" title="Answers">
           <div class="vx-row w-full" style>
             <ResponseCard
               v-for="(response, index) in ResponseList"

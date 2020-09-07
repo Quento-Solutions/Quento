@@ -1,6 +1,8 @@
 import { Grade_O, Subject_O } from './subjects'
 
 import { School_O } from './schools'
+import type firebase from '~/plugins/firebase'
+import { Timestamp } from './env.utils'
 
 export type User = {
   uid: string
@@ -47,4 +49,5 @@ export interface UserData {
   notifications?: boolean
   pendingFollowing?: string[]
   following?: string[]
+  lastFeedUpdated ?: Timestamp
 }
