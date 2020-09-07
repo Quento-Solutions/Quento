@@ -20,31 +20,26 @@
         </vs-alert>
       </div>
     </div>
-    <div class="vx-row w-full mt-8" style>
-      <div class="vx-col flex flex-col justify-center items-center w-full lg:w-1/3 md:w-1/2" style>
-        <div
-          class="flex flex-col justify-center items-center cursor-pointer"
-          @click="ToggleGroupsModal(true)"
-        >
-          <vs-avatar class="w-full" size="160">
-            <i class="bx bx-plus-circle" style="font-size: 8rem" />
-          </vs-avatar>
-          <div class="my-4 text-title text-2xl">Add Or Join A Group</div>
+
+    <div class = "flex flex-row">
+      <!-- Add/Join Group -->
+      <div class = "w-full xxlmin:w-33% lg:w-50% xs:w-100%" style = "text-align:center;">
+        <vs-avatar class="w-full cursor-pointer flex flex-row" size="160" @click="ToggleGroupsModal(true)">
+          <i class="bx bx-plus-circle" style="font-size: 8rem" />
+        </vs-avatar>
+        <div class="my-4 text-title text-2xl">
+          Add Or Join A Group
         </div>
       </div>
 
+      <!-- GroupCards -->
       <div
-        class="vx-col w-full lg:w-1/3 md:w-1/2"
+        class="w-full xxlmin:w-33% lg:w-50% xs:w-100%"
         v-for="(group, index) in groupsList"
         :key="index"
         style
       >
-        <GroupsCard
-          class="w-full"
-          :group="group"
-          :clickable="true"
-          :preview="true"
-        />
+        <GroupsCard class="w-full" :group="group" :clickable="true" :preview="true"/>
       </div>
     </div>
   </div>
@@ -82,6 +77,7 @@ import {School_O} from '~/types/schools'
       })
     }
     this.loaded = true
+    console.log(groupsStore.userGroups)
     loading.close()
   }
 })
