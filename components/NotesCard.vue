@@ -6,7 +6,6 @@
       fitContent="true"
       class="mb-8"
       id="note-card"
-      :class="clickable ? 'previewClickable' : ''"
       @click="PushNotesPage()"
     >
       <template slot="no-body">
@@ -47,20 +46,20 @@
                 @click.stop="toggleLike(note.id)"
               >
                 <i
-                  class="bx bx-heart primary bg-blue-500"
+                  class="bx bx-heart primary cursor-pointer"
                   :style="`color : ${userLiked(note.id) ? 'white' : '#ff4757'}`"
                 />
                 <template #badge>{{ note.upVotes }}</template>
               </vs-avatar>
               <VxTooltip :interactivity="true">
-                <vs-avatar class="icon-small bottom-icon">
+                <vs-avatar class="icon-small bottom-icon cursor-pointer">
                   <i class="bx bx-show"></i>
                   <template #badge>{{ note.views }}</template>
                 </vs-avatar>
                 <template #tooltip>{{ note.views }} Views</template>
               </VxTooltip>
               <VxTooltip :interactivity="true">
-                <vs-avatar class="icon-small bottom-icon">
+                <vs-avatar class="icon-small bottom-icon cursor-pointer">
                   <i class="bx bx-bookmark"></i>
                 </vs-avatar>
                 <template #tooltip>Bookmark</template>
@@ -77,7 +76,6 @@
       fitContent="true"
       class="mb-8"
       id="note-card"
-      :class="clickable ? 'previewClickable' : ''"
       @click="PushNotesPage()"
     >
       <template slot="no-body">
@@ -112,7 +110,7 @@
                 <div
                   @click.stop.prevent="OpenDeleteModal()"
                   v-if="NoteOwner"
-                  class="w-full px-2 py-1 menu-item rounded-md bg-red-600 text-white"
+                  class="w-full px-2 py-1 menu-item rounded-md  red-600 text-white"
                 >
                   <i class="bx bx-trash" style="font-size: 1.25rem;" />
                   Delete
@@ -198,7 +196,7 @@
                 :style="preview? '':'width:80%;margin-left:10%'"
               >
                 <vs-avatar
-                  class="icon-small"
+                  class="icon-small cursor-pointer"
                   :color="userLiked(note.id) ? 'danger' : '#f4f7f8'"
                   badge-color="#7d33ff"
                   @click.stop="toggleLike(note.id)"
@@ -210,14 +208,14 @@
                   <template #badge>{{ note.upVotes }}</template>
                 </vs-avatar>
                 <VxTooltip :interactivity="true">
-                  <vs-avatar class="icon-small">
+                  <vs-avatar class="icon-small cursor-pointer">
                     <i class="bx bx-show"></i>
                     <template #badge>{{ note.views }}</template>
                   </vs-avatar>
                   <template #tooltip>{{ note.views }} Views</template>
                 </VxTooltip>
                 <VxTooltip :interactivity="true">
-                  <vs-avatar class="icon-small">
+                  <vs-avatar class="icon-small cursor-pointer">
                     <i class="bx bx-bookmark"></i>
                   </vs-avatar>
                   <template #tooltip>Bookmark</template>
@@ -329,7 +327,6 @@ export default class NotesCard extends Vue {
   background: white !important;
 }
 </style>
-
 <style lang="scss" scoped>
 .content-max-height {
   max-height: 150px;
@@ -385,12 +382,6 @@ export default class NotesCard extends Vue {
       transform: translate(-25%, 90%);
     }
   }
-}
-.previewClickable {
-  :hover {
-    background-color: #f5f5f6;
-  }
-  transition-duration: 100ms !important;
 }
 ::-webkit-scrollbar {
   height: 10px;
