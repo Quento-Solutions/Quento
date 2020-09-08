@@ -297,7 +297,6 @@ export default class TopNav extends mixins(UserMixin) {
     }
     #profile {
       .vs-navbar__group__items {
-        transition: all 0.15s cubic-bezier(0.84, 0, 1, 1);
         min-width: 0 !important;
         // max-width : 100%;
         width: 150%;
