@@ -29,7 +29,7 @@
       align="center"
       style="border-style: solid;"
     >
-       <VxCard class="mt-6 p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/2 xl:w-5/12 relative">
+      <VxCard class="mt-6 p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/2 xl:w-5/12 relative">
         <div class="p-6">
           <h1 class="title">SIGN UP</h1>
           <vs-alert v-if="errorMessage" danger>Error : {{errorMessage}}</vs-alert>
@@ -71,31 +71,6 @@
             <template v-if="lastNameErrors.length == 0" #message-success>Last Name Valid</template>
           </vs-input>
         </div>
-         <div class="p-6">
-          <vs-input
-            v-model="firstName"
-            type="name"
-            label="First Name"
-            class="block w-6"
-          >
-            <template #icon>
-              <i class='bx bx-pencil' ></i>
-            </template>
-          </vs-input>
-        </div>
-
-        <div class="p-6" >
-          <vs-input
-            v-model="lastName"
-            type="name"
-            label="Last Name"
-            class="block w-6"
-          >
-            <template #icon>
-              <i class='bx bx-pencil' ></i>
-            </template>
-          </vs-input>
-        </div>
 
         <div class="p-6">
           <vs-input v-model="password" type="password" label="Password" class="block w-6">
@@ -135,7 +110,6 @@
 
         <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
-
             class="mt-8 ml-6 login"
             color="#6b3deb"
             type="filled"
@@ -155,15 +129,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, mixins } from 'nuxt-property-decorator'
+import {Component, Prop, Vue, mixins} from 'nuxt-property-decorator'
 
 import Auth from '~/mixins/AuthenticationMixin'
 import FooterCard from '~/components/FooterCard.vue'
 import EulaContent from './eulaContent.vue'
 
-import { navigationStore, authStore } from '~/store'
+import {navigationStore, authStore} from '~/store'
 @Component<SignUp>({
-  components: { FooterCard,  EulaContent},
+  components: {FooterCard, EulaContent},
 
   layout: 'auth'
 })
@@ -177,36 +151,40 @@ export default class SignUp extends mixins(Auth) {
   eulaActive = false
   termsAccepted = false
 
-  cancelEula()
-  {
-    this.eulaActive = this.termsAccepted = false;
+  cancelEula() {
+    this.eulaActive = this.termsAccepted = false
   }
 
-  get formErrors()
-  {
-    return !(this.validEmail(this.email) && this.email !== '' && !this.passwordErrors.length &&  !this.firstNameErrors.length && !this.lastNameErrors.length && this.password==this.confirm_password && this.termsAccepted);
+  get formErrors() {
+    return !(
+      this.validEmail(this.email) &&
+      this.email !== '' &&
+      !this.passwordErrors.length &&
+      !this.firstNameErrors.length &&
+      !this.lastNameErrors.length &&
+      this.password == this.confirm_password &&
+      this.termsAccepted
+    )
   }
-  acceptEula()
-  {
-    this.eulaActive = false;
-    this.termsAccepted = true;
+  
+  acceptEula() {
+    this.eulaActive = false
+    this.termsAccepted = true
   }
 
-  SignUpGoogle()
-  {
-    if(!this.termsAccepted) 
-    {
+  SignUpGoogle() {
+    if (!this.termsAccepted) {
       return this.$vs.notification({
-        title : "Accept the Terms and Conditions!",
-        color : "danger"
+        title: 'Accept the Terms and Conditions!',
+        color: 'danger'
       })
     }
-    this.LoginGoogle();
+    this.LoginGoogle()
   }
 
   formRules = [
-    { message: '1 characters minimum', regex: /^\d{0}$/ },
-    { message: 'Special Values are invalid', regex: /[^A-Za-z]+/ }
+    {message: '1 characters minimum', regex: /^\d{0}$/},
+    {message: 'Special Values are invalid', regex: /[^A-Za-z]+/}
   ]
   get firstNameErrors() {
     const errors = []
@@ -228,10 +206,10 @@ export default class SignUp extends mixins(Auth) {
   }
 
   passwordRules = [
-    { message: 'One lowercase letter required.', regex: /[a-z]+/ },
-    { message: 'One uppercase letter required.', regex: /[A-Z]+/ },
-    { message: '8 characters minimum.', regex: /.{8,}/ },
-    { message: 'One number required.', regex: /[0-9]+/ }
+    {message: 'One lowercase letter required.', regex: /[a-z]+/},
+    {message: 'One uppercase letter required.', regex: /[A-Z]+/},
+    {message: '8 characters minimum.', regex: /.{8,}/},
+    {message: 'One number required.', regex: /[0-9]+/}
   ]
   get passwordErrors() {
     const errors = []
