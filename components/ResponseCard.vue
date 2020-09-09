@@ -1,74 +1,48 @@
 <template>
-  <VxCard class="my-2 p-6 mt-6">
+  <VxCard class="my-2 p-0 mt-6">
     <div class="vx-row w-full">
-      <div class="vx-row w-full justify-between" style="flex-wrap: nowrap;">
+      <!-- Title -->
+      <div class="vx-row w-full justify-between">
         <!-- Profile Picture -->
-        <div class="justify-start w-1/2 m-0">
-          <div class="vx-row w-full justify-start items-center overflow-hidden">
-            <div class="vx-col">
-              <VxTooltip class="inline-block">
-                <vs-avatar class="icon">
-                  <img
-                    v-if="response.userPhotoUrl"
-                    :src="response.userPhotoUrl"
-                  />
-                  <template #text v-else>
-                    {{ response.userDisplayName }}
-                  </template>
-                </vs-avatar>
-                <template #tooltip>
-                  {{ response.userDisplayName }}
-                </template>
-              </VxTooltip>
-            </div>
-            <div class="vx-col">
-              <!-- User name -->
-              <div class="text-xl text-ginger-b">
-                <div class="">
-                  {{ response.userDisplayName }}
-                </div>
-              </div>
-              <div class="truncate">
-                {{ response.createdAt.toLocaleString() }}
-              </div>
-            </div>
-          </div>
-        </div>
+        <AvatarBar
+          :date="response.createdAt"
+          :photoURL="response.userPhotoUrl"
+          :username="response.userDisplayName"
+          :userId="response.userId"
+        ></AvatarBar>
+      </div>
+      <div class="vx-row w-full mt-4 lg:px-4" style>
+        <div
+          v-html="$md.render(response.contents)"
+          id="notes-md"
+          class="w-full text-ginger md-container"
+        ></div>
+      </div>
+      <div class="w-full" style>
         <vs-avatar
-          class="icon"
+          class="icon float-right"
           :color="userLiked ? 'danger' : '#f4f7f8'"
           badge-color="#7d33ff"
           @click.stop="toggleLike()"
         >
-          <i
-            class="bx bx-heart primary"
-            :style="`color : ${userLiked ? 'white' : '#ff4757'}`"
-          ></i>
-          <template #badge>
-            {{ response.upVotes }}
-          </template>
+          <i class="bx bx-heart primary" :style="`color : ${userLiked ? 'white' : '#ff4757'}`"></i>
+          <template #badge>{{ response.upVotes }}</template>
         </vs-avatar>
-      </div>
-      <div class="vx-row w-full p-4" style="">
-        <div
-          v-html="$md.render(response.contents)"
-          id="notes-md"
-          class="w-full text-ginger p-2 md-container"
-        ></div>
       </div>
     </div>
   </VxCard>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
-import { Response } from '~/types/responses'
-import { questionStore } from '~/store'
+import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
+import {Response} from '~/types/responses'
+import {questionStore} from '~/store'
 import UserMixin from '~/mixins/UserMixin'
+import AvatarBar from '~/components/AvatarBar.vue'
 
-@Component<ResponseCard>({ components: {} })
+@Component<ResponseCard>({components: {AvatarBar}})
 export default class ResponseCard extends mixins(UserMixin) {
-  @Prop({ required: true }) response!: Response
+  @Prop({required: true}) response!: Response
 
   async toggleLike() {
     if (!this.response?.id || !this.response?.questionId) return
@@ -78,24 +52,24 @@ export default class ResponseCard extends mixins(UserMixin) {
         questionId: this.response.questionId,
         responseId: this.response.id
       })
-      if(this.userLiked) {
-          this.response.upVotes++;
-          }
-      else {this.response.upVotes--;}
+      if (this.userLiked) {
+        this.response.upVotes++
+      } else {
+        this.response.upVotes--
+      }
       this.$emit('toggle-like')
     } catch (error) {
       this.$vs.notification({
         color: 'danger',
         message: error.message
       })
-      console.log({ error })
+      console.log({error})
     }
     loading.close()
   }
 
   get userLiked() {
-
-    if (!this.response.id) return;
+    if (!this.response.id) return
     return this.UserData?.likedResponses?.includes(this.response.id)
   }
 }
