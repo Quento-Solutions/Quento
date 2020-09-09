@@ -1,16 +1,19 @@
 <template>
   <div class="vx-row w-full justify-center" style>
+
     <div class="vx-row w-full md:w-2/3" style>
-      <div class="vx-col w-full display-none md:inline-flex" style>
+    <!-- Top Menu To Go Back -->
+      <div class="vx-col w-full" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="goBack()">
             <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
           </vs-avatar>
         </div>
       </div>
+
       <div v-if="question" class="w-full">
         <QuestionCard :question="question" v-on:toggle-like="RefreshLikes()"></QuestionCard>
-        <VxCard class="w-full mb-6 p-6">
+        <VxCard class="w-full mb-6">
           <div class="vx-row w-full" style>
             <VsTextarea
               placeholder="Leave a response..."
@@ -31,14 +34,16 @@
           </div>
         </VxCard>
 
-        <VxCard class="w-full p-6" :fitContent="true" title="Answers">
-          <div class="vx-row w-full" style>
-            <ResponseCard
-              v-for="(response, index) in ResponseList"
-              :key="index"
-              :response="response"
-            ></ResponseCard>
-          </div>
+        <VxCard class="w-full" :fitContent="true" title="Answers">
+          <template #no-body>
+            <div class="vx-row w-full px-4 md:p-6" style>
+              <ResponseCard
+                v-for="(response, index) in ResponseList"
+                :key="index"
+                :response="response"
+              ></ResponseCard>
+            </div>
+          </template>
         </VxCard>
       </div>
 
