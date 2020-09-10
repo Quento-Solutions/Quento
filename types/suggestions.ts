@@ -22,21 +22,17 @@ export interface Suggestion_t_F
 export class Suggestion
 {
 
-    constructor(
-        opts : Suggestion_t
-    ){
+    constructor(opts : Suggestion_t){
         return Object.assign(this, opts)
     }
 
     static fromFirebase = (doc : Suggestion_t_F, id ?: string) =>
     {
-
         const obj = {...doc, createdAt : new Date(doc.createdAt), id};
         return new Suggestion(obj)
     }
 
-    toFirebase() : Suggestion_t_F
-    {
+    toFirebase() : Suggestion_t_F{
         const {id, ...firebaseDoc} = {...this}
         return firebaseDoc
     }
