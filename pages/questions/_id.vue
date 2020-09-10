@@ -1,16 +1,19 @@
 <template>
   <div class="vx-row w-full justify-center" style>
-    <div class="vx-row w-full md:w-2/3 p-4" style>
-      <div class="vx-col w-full display-none md:inline-flex" style>
+
+    <div class="vx-row w-full md:w-2/3" style>
+    <!-- Top Menu To Go Back -->
+      <div class="vx-col w-full" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="goBack()">
             <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
           </vs-avatar>
         </div>
       </div>
+
       <div v-if="question" class="w-full">
         <QuestionCard :question="question" v-on:toggle-like="RefreshLikes()"></QuestionCard>
-        <VxCard class="w-full mb-6 p-6">
+        <VxCard class="w-full mb-6">
           <div class="vx-row w-full" style>
             <VsTextarea
               placeholder="Leave a response..."
@@ -31,14 +34,16 @@
           </div>
         </VxCard>
 
-        <VxCard class="w-full p-6" :fitContent="true" title="Answers">
-          <div class="vx-row w-full" style>
-            <ResponseCard
-              v-for="(response, index) in ResponseList"
-              :key="index"
-              :response="response"
-            ></ResponseCard>
-          </div>
+        <VxCard class="w-full" :fitContent="true" title="Answers">
+          <template #no-body>
+            <div class="vx-row w-full px-4 md:p-6" style>
+              <ResponseCard
+                v-for="(response, index) in ResponseList"
+                :key="index"
+                :response="response"
+              ></ResponseCard>
+            </div>
+          </template>
         </VxCard>
       </div>
 
@@ -52,16 +57,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
-import { Question, Question_t_F } from '~/types/questions'
-import { Response } from '~/types/responses'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
+import {Question, Question_t_F} from '~/types/questions'
+import {Response} from '~/types/responses'
 import UserMixin from '~/mixins/UserMixin'
-import { questionStore } from '~/store'
+import {questionStore} from '~/store'
 import QuestionCard from '~/components/QuestionCard.vue'
 import ResponseCard from '~/components/ResponseCard.vue'
 
 @Component<QuestionContentPage>({
-  components: { QuestionCard, ResponseCard },
+  components: {QuestionCard, ResponseCard},
   mounted() {
     this.FetchQuestion()
   }
@@ -71,15 +76,13 @@ export default class QuestionContentPage extends mixins(UserMixin) {
   questionId: string | null = null
   docNotFound = false
   responseContent = ''
-    get QuestionId()
-  {
-    return this.$route.params.id;
+  get QuestionId() {
+    return this.$route.params.id
   }
-  @Watch("QuestionId")
-  QuestionIdChange(value : string, oldValue : string)
-  {
+  @Watch('QuestionId')
+  QuestionIdChange(value: string, oldValue: string) {
     // This is to update the page when going from notes/note1 -> notes/note2
-    this.FetchQuestion();
+    this.FetchQuestion()
   }
   ResponseList: Response[] = []
   RefreshLikes() {
@@ -116,7 +119,7 @@ export default class QuestionContentPage extends mixins(UserMixin) {
         loading.close()
         return
       }
-      console.log({ error })
+      console.log({error})
       loading.close()
     }
   }
@@ -136,7 +139,7 @@ export default class QuestionContentPage extends mixins(UserMixin) {
       })
       this.responseContent = ''
     } catch (error) {
-      this.$vs.notification({ title: error.message, color: 'danger' })
+      this.$vs.notification({title: error.message, color: 'danger'})
     }
     loading.close()
     this.$forceUpdate()

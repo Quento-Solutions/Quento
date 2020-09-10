@@ -53,10 +53,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
-import { User } from '~/types/user'
-import { authStore } from '~/store'
+import {User} from '~/types/user'
+import {authStore} from '~/store'
 
 @Component<VerifyEmail>({
   components: {},
@@ -65,15 +65,13 @@ import { authStore } from '~/store'
   }
 })
 export default class VerifyEmail extends mixins(UserMixin) {
-  async goBack()
-  {
-    if(this.AuthUser)
-    {
-      const loading = this.$vs.loading();
-      await authStore.signOut();
-      loading.close();
+  async goBack() {
+    if (this.AuthUser) {
+      const loading = this.$vs.loading()
+      await authStore.signOut()
+      loading.close()
     }
-    this.$router.push("/auth/login");
+    this.$router.push('/auth/login')
   }
 
   @Watch('AuthUser')
