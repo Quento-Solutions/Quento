@@ -141,7 +141,7 @@
         </div>
 
         <div class="vx-row w-full">
-          <div class="vx-col w-full md:w-1/2 lg:w-1/4" v-for="note in UserNotes" :key="note.uid">
+          <div class="vx-col w-full md:w-1/2 lg:w-1/4" v-for="note in UserNotes" :key="note.id">
             <nuxt-link :to="`/notes/${note.id}`">
               <v-card class="my-4 overflow-hidden" id="userCard" color="#26c6da" dark width="100%">
                 <v-card-title>
@@ -191,11 +191,11 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
 import firestore from '~/plugins/firestore'
-import { UserData } from '~/types/user'
-import { SubjectIconList, SubjectGroup_O, Subject_O } from '~/types/subjects'
-import { Note_t, Note, Note_t_F } from '~/types/notes'
+import {UserData} from '~/types/user'
+import {SubjectIconList, SubjectGroup_O, Subject_O} from '~/types/subjects'
+import {Note_t, Note, Note_t_F} from '~/types/notes'
 import UserMixin from '~/mixins/UserMixin'
 import firebase from 'firebase/app'
 
@@ -269,7 +269,7 @@ export default class UserPage extends mixins(UserMixin) {
     } catch (error) {
       this.docNotFound = true
       loading.close()
-      console.error({ error })
+      console.error({error})
       return
     }
   }
@@ -293,6 +293,13 @@ export default class UserPage extends mixins(UserMixin) {
     // this.$router.go((this.$router.currentRoute as unknown) as number)
 
     loading.close()
+  }
+
+  get seePrivateNotes() {
+    return (
+      this.AuthUser &&
+      (this.userId === this.AuthUser.uid || this.acceptedFollowing)
+    )
   }
 
   async followUser() {
@@ -355,10 +362,14 @@ export default class UserPage extends mixins(UserMixin) {
     if (!this.userInfo) {
       return
     }
-    const notesCollection = await firestore
+    let notesQuery = await firestore
       .collection('notes')
       .where('uid', '==', this.userId)
-      .get()
+      .orderBy('createdAt', 'desc')
+    if (!this.seePrivateNotes) {
+      notesQuery = notesQuery.where('private', '==', false)
+    }
+    const notesCollection = await notesQuery.get()
     this.UserNotes = notesCollection.docs.map((doc) =>
       Note.fromFirebase(doc.data() as Note_t_F, doc.id)
     )

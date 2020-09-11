@@ -126,114 +126,126 @@
             </template>
 
             <!-- User's Followers -->
-
-            <div
-              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
-              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
-              v-for="person in followers"
-              :key="person.name"
-            >
-              <div>
-                <vs-avatar
-                  size="75"
-                  class="icon"
-                  @click.stop="$router.push(`/user/view/${person.uid}`)"
-                >
-                  <img v-if="person.photoURL" :src="person.photoURL" />
-                  <template slot="text" v-else>{{ person.displayName }}</template>
-                </vs-avatar>
-              </div>
-              <div class style=" min-width: 100%">
-                <!-- User name -->
-                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.displayName}}</div>
-
-                <div v-if="person.accepted == false" class="pl-2 vx-row">
-                  <vs-button
-                    color="success"
-                    size="medium"
-                    @click="acceptFriend(person.uid, person.displayName, person.photoURL)"
-                  >Accept</vs-button>
-                  <vs-button color="danger" size="medium" @click="declineFriend(person.uid)">Decline</vs-button>
+            <div>
+              <div
+                class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+                style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+                v-for="person in followers"
+                :key="person.id"
+              >
+                <div>
+                  <vs-avatar
+                    size="75"
+                    class="icon"
+                    @click.stop="$router.push(`/user/view/${person.uid}`)"
+                  >
+                    <img v-if="person.photoURL" :src="person.photoURL" />
+                    <template slot="text" v-else>{{ person.displayName }}</template>
+                  </vs-avatar>
                 </div>
-                <div v-if="person.accepted == true" class="pl-2 vx-row">
-                  <vs-button color="success" type="filled" size="medium">Follows You</vs-button>
+                <div class style=" min-width: 100%">
+                  <!-- User name -->
+                  <div
+                    class="md:text-2xl text-ginger-b truncate text-2xl pl-4"
+                  >{{person.displayName}}</div>
+
+                  <div v-if="person.accepted == false" class="pl-2 vx-row">
+                    <vs-button
+                      color="success"
+                      size="medium"
+                      @click="acceptFriend(person.uid, person.displayName, person.photoURL)"
+                    >Accept</vs-button>
+                    <vs-button
+                      color="danger"
+                      size="medium"
+                      @click="declineFriend(person.uid)"
+                    >Decline</vs-button>
+                  </div>
+                  <div v-if="person.accepted == true" class="pl-2 vx-row">
+                    <vs-button color="success" type="filled" size="medium">Follows You</vs-button>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- User's Following -->
-            <div
-              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
-              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
-              v-for="(person,index) in following_for_real"
-              :key="index"
-            >
-              <div>
-                <vs-avatar
-                  size="75"
-                  class="icon"
-                  @click.stop="$router.push(`/user/view/${person.uid}`)"
-                >
-                  <img v-if="person.photoURL" :src="person.photoURL" />
-                  <template slot="text" v-else>{{ person.displayName }}</template>
-                </vs-avatar>
-              </div>
-              <div class style=" min-width: 100%">
-                <!-- User name -->
-                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.displayName}}</div>
+            <div>
+              <div
+                class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+                style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+                v-for="(person,index) in following_for_real"
+                :key="index"
+              >
+                <div>
+                  <vs-avatar
+                    size="75"
+                    class="icon"
+                    @click.stop="$router.push(`/user/view/${person.uid}`)"
+                  >
+                    <img v-if="person.photoURL" :src="person.photoURL" />
+                    <template slot="text" v-else>{{ person.displayName }}</template>
+                  </vs-avatar>
+                </div>
+                <div class style=" min-width: 100%">
+                  <!-- User name -->
+                  <div
+                    class="md:text-2xl text-ginger-b truncate text-2xl pl-4"
+                  >{{person.displayName}}</div>
 
-                <div class="pl-2 vx-row">
-                  <vs-button
-                    color="danger"
-                    size="medium"
-                    @click="unFollowFriend(person.uid)"
-                  >Unfollow</vs-button>
-                  <vs-button
-                    v-if="userFollowPerson(person)"
-                    color="success"
-                    type="filled"
-                    size="medium"
-                  >Follows You</vs-button>
+                  <div class="pl-2 vx-row">
+                    <vs-button
+                      color="danger"
+                      size="medium"
+                      @click="unFollowFriend(person.uid)"
+                    >Unfollow</vs-button>
+                    <vs-button
+                      v-if="userFollowPerson(person)"
+                      color="success"
+                      type="filled"
+                      size="medium"
+                    >Follows You</vs-button>
+                  </div>
                 </div>
               </div>
             </div>
-
             <!-- User's Requested Followers -->
-            <div
-              class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
-              style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
-              v-for="person in following"
-              :key="person.name"
-            >
-              <div>
-                <vs-avatar
-                  size="75"
-                  class="icon"
-                  @click.stop="$router.push(`/user/view/${person.uid}`)"
-                >
-                  <img v-if="person.photoURL" :src="person.photoURL" />
-                  <template slot="text" v-else>{{ person.name }}</template>
-                </vs-avatar>
-              </div>
-              <div class style=" min-width: 100%">
-                <!-- User name -->
-                <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.name}}</div>
+            <div>
+              <div
+                class="justify-start w-5/6 m-0 vx-row items-center mb-6 pl-10 pr-10"
+                style="flex-wrap: nowrap; overflow-x: hidden; min-width:100%"
+                v-for="(person,index) in following"
+                :key="index"
+              >
+                <div>
+                  <vs-avatar
+                    size="75"
+                    class="icon"
+                    @click.stop="$router.push(`/user/view/${person.uid}`)"
+                  >
+                    <img v-if="person.photoURL" :src="person.photoURL" />
+                    <template slot="text" v-else>{{ person.name }}</template>
+                  </vs-avatar>
+                </div>
+                <div class style=" min-width: 100%">
+                  <!-- User name -->
+                  <div class="md:text-2xl text-ginger-b truncate text-2xl pl-4">{{person.name}}</div>
 
-                <div class="pl-2">
-                  <vs-button color="warn" type="filled" size="medium">
-                    Follow Request Pending
-                    <i
-                      class="bx bx-x-circle text-xl text-white ml-2"
-                      id="remove_icon"
-                      @click="removePending(person.uid)"
-                    />
-                  </vs-button>
-                  <vs-button
-                    v-if="userFollowPerson(person)"
-                    color="success"
-                    type="filled"
-                    size="medium"
-                  >Follows You</vs-button>
+                  <div class="pl-2">
+                    <vs-button color="warn" type="filled" size="medium">
+                      Follow Request Pending
+                      <i
+                        class="bx bx-x-circle text-xl text-white ml-2"
+                        id="remove_icon"
+                        @click="removePending(person.uid)"
+                      />
+                    </vs-button>
+                    <vs-button
+                      v-if="userFollowPerson(person)"
+                      color="success"
+                      type="filled"
+                      size="medium"
+                    >Follows You</vs-button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -248,7 +260,11 @@
         </div>
 
         <div class="vx-row w-full">
-          <div class="vx-col w-full md:w-1/2 lg:w-1/4" v-for="note in UserNotes" :key="note.uid">
+          <div
+            class="vx-col w-full md:w-1/2 lg:w-1/4"
+            v-for="(note,index) in UserNotes"
+            :key="index"
+          >
             <nuxt-link :to="`/notes/${note.id}`">
               <v-card class="my-4 overflow-hidden" id="userCard" color="#26c6da" dark width="100%">
                 <v-card-title>
@@ -294,16 +310,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
+import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
 import firestore from '~/plugins/firestore'
 
-import { SubjectGroup_O, Subject_O, SubjectIconList } from '~/types/subjects'
+import {SubjectGroup_O, Subject_O, SubjectIconList} from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
-import { Note_t, Note, Note_t_F } from '~/types/notes'
-import { auth } from 'firebase'
-import { UserData } from '~/types/user'
-import { User } from '~/types'
+import {Note_t, Note, Note_t_F} from '~/types/notes'
+import {auth} from 'firebase'
+import {UserData} from '~/types/user'
+import {User} from '~/types'
 import firebase from 'firebase/app'
 @Component<UserProfile>({
   components: {
@@ -333,6 +349,7 @@ export default class UserProfile extends mixins(UserMixin) {
   followers: any = []
   following: any = []
   following_for_real: any = []
+
   async fetchUser(uid: string) {
     try {
       const doc = await firestore.doc(`users/${uid}`).get()
@@ -341,7 +358,7 @@ export default class UserProfile extends mixins(UserMixin) {
       const userDataReq = Object.assign({}, userData2)
       return userDataReq
     } catch (error) {
-      console.error({ error })
+      console.error({error})
       return
     }
   }
@@ -362,8 +379,7 @@ export default class UserProfile extends mixins(UserMixin) {
         .collection('followers')
         .doc(this.AuthUser?.uid)
         .delete()
-    } catch (e) {
-    }
+    } catch (e) {}
     this.getFriends()
     loading.close()
   }
@@ -422,8 +438,7 @@ export default class UserProfile extends mixins(UserMixin) {
           firestore.collection('users').doc(id).get()
         ) || []
       )
-    ).map((doc) => ({ ...doc.data(), uid: doc.id }))
-
+    ).map((doc) => ({...doc.data(), uid: doc.id}))
   }
 
   async acceptFriend(uid: string, displayName: string, photoURL: string) {
@@ -481,24 +496,19 @@ export default class UserProfile extends mixins(UserMixin) {
   }
 
   async getUserNotes() {
-    if (!this.AuthUser) {
+    if (!this.AuthUser) 
+    {
       return
     }
     const userId = this.AuthUser?.uid
     const notesCollection = await firestore
       .collection('notes')
       .where('uid', '==', userId)
+      .orderBy('createdAt', 'desc')
       .get()
     this.UserNotes = notesCollection.docs.map((doc) =>
       Note.fromFirebase(doc.data() as Note_t_F, doc.id)
     )
-  }
-
-  @Watch('AuthUser')
-  onAuthChange(value: any, oldValue: any) {
-    if (value) {
-      this.getUserNotes()
-    }
   }
 
   get userLevel() {
