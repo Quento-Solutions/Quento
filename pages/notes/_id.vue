@@ -65,6 +65,8 @@ export default class NotesContentPage extends Vue {
       }
       notesStore.IncrementView(this.noteId);
       this.note = Note.fromFirebase(noteData, doc.id)
+      //Add note to activeNotes so functions work
+      notesStore.pushActiveNotes(this.note)
       loading.close()
       return
     } catch (error) {

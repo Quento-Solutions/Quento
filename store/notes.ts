@@ -9,19 +9,18 @@ import { authStore } from './index'
 import { firestore as store } from 'firebase/app'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
-
 // Fix the google
 import {
   Grade_O,
-  SubjectList,
   Subject_O,
   SortOptions_O,
+  SubjectList,
   FilterOptions
 } from '~/types/subjects'
-
 import { School_O } from '~/types/schools'
 import functions from '~/plugins/firebaseFunctions'
 import { HourDiff } from '~/utils/time'
+
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 
@@ -69,7 +68,7 @@ export default class NotesModule extends VuexModule {
     LastVisible = null
     this.EndOfList = false
   }
-
+  
   @Action({ rawError: true })
   public SetEditNote(note: Note | null) {
     this.SET_EDIT_NOTE(note)
@@ -129,10 +128,16 @@ export default class NotesModule extends VuexModule {
 
   @Action({ rawError: true })
   public async ToggleLikedNote(id: string) {
+    //==============Change server side==============
     const batch = firestore.batch()
+    //Getting the docuument in which the users, and notes live in
     const userRef = firestore.collection('users').doc(authStore.user?.uid)
     const noteRef = firestore.collection('notes').doc(id)
+
+    //id = xr2pf0aOW4ZZgIBefOXA
+
     if (this.likedPosts?.includes(id)) {
+      //Unliking the post
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayRemove(id)
       })
@@ -140,6 +145,7 @@ export default class NotesModule extends VuexModule {
         upVotes: store.FieldValue.increment(-1)
       })
     } else {
+      //Liking the post
       batch.update(userRef, {
         likedNotes: store.FieldValue.arrayUnion(id)
       })
@@ -147,25 +153,39 @@ export default class NotesModule extends VuexModule {
         upVotes: store.FieldValue.increment(1)
       })
     }
+
+    //Commit the change
     await batch.commit()
-    this.TOGGLE_LIKED_SUGGESTION(id)
+
+    //==============Change client side==============
+    this.toggleLikedClient(id)
     return
   }
 
   @Mutation
-  private TOGGLE_LIKED_SUGGESTION(suggestionId: string) {
+  private toggleLikedClient(suggestionId: string) {
+    //If userdata doesn't exist
     if (!authStore.userData) return
+    //Get liked notes from userData
     const { likedNotes } = authStore.userData
     var index = likedNotes?.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex(
-      (doc) => doc.id! == suggestionId
-    )!
+    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)!
+
     if (index !== -1) {
+      //Liking a post
       this.ActiveNotes[suggestionIndex].upVotes++
     } else {
-      this.ActiveNotes[suggestionIndex].upVotes != 0
+      //Disliking a post
+      this.ActiveNotes[suggestionIndex].upVotes > 0
         ? this.ActiveNotes[suggestionIndex].upVotes--
-        : ''
+        : console.log("YOU TRIED TO DISLIKE A POST WITH > 0 LIKES")
+    }
+  }
+
+  @Mutation
+  public pushActiveNotes(noteInQuestion: Note){
+    if (!this.ActiveNotes.some(note => note.id === noteInQuestion.id)) {
+      this.ActiveNotes.push(noteInQuestion)
     }
   }
 
@@ -177,6 +197,7 @@ export default class NotesModule extends VuexModule {
     this.ActiveNotes.push(...notes)
   }
 
+  //Load more notes for a list
   @Action({ rawError: true })
   public async GetMoreNotes(start = false) {
     if (this.EndOfList) {
@@ -224,7 +245,7 @@ export default class NotesModule extends VuexModule {
         const notes = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
-              if(!doc.data().parentPath) console.log({ parentPath: doc.data().parentPath, docData : doc.data() });
+              if(!doc.data().parentPath) console.log("(In noteStore/NotesModule/GetMoreNotes function " , { parentPath: doc.data().parentPath, docData : doc.data() });
               return firestore.doc(doc.data().parentPath).get()
             })
             .map(async (docPromise) =>
