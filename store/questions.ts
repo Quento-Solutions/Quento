@@ -8,7 +8,6 @@ import {Question, Question_t_F} from '~/types/questions'
 import {Response, Response_t_F} from '~/types/responses'
 import {
   Grade_O,
-  SubjectList,
   Subject_O,
   SortOptions_O,
   FilterOptions

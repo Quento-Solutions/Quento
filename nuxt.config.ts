@@ -27,7 +27,7 @@ const config: NuxtConfig = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
-
+                                                      
   loading: { color: '#3B8070' },
   css: [
     '~/assets/css/main.css',
