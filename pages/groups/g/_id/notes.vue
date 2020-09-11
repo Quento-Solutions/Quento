@@ -9,9 +9,6 @@
     <PreviewNotesModal></PreviewNotesModal>
 
     <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
-      <vs-avatar class="icon-small float-left" @click="goBack()">
-        <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
-      </vs-avatar>
       <div class="text-4xl font-bold pl-4">{{group.title}}'s Notes</div>
       <vs-button warn @click="notesModalActive = true">
         <i class="bx bxs-plus-square text-4xl" />
@@ -27,11 +24,6 @@
       :clickable="true"
       :preview="true"
     />
-    <vs-alert color="danger" v-if="noNotesFound">
-      <template #title>No Notes Found For This Search</template>
-      <b>Sorry!</b> Something went wrong when fetching the Note. Please Try
-      Again.
-    </vs-alert>
     <!-- </div> -->
   </div>
 </template>
@@ -42,29 +34,24 @@ import {Component, Vue, Prop, Watch, mixins} from 'nuxt-property-decorator'
 import {Note, Note_t_F} from '~/types/notes'
 
 import {windowStore, notesStore} from '~/store'
-import FilterSidebar from '~/components/FilterSidebar.vue'
 import NotesCard from '~/components/NotesCard.vue'
 import LoadScroll from '~/mixins/LoadScrollMixin'
-import {Subject_O, Grade_O} from '~/types/subjects'
-import {School_O} from '~/types/schools'
 import firestore from '~/plugins/firestore'
 import {Group, Group_t_F} from '~/types/groups'
-import functions from '~/plugins/firebaseFunctions'
 import UserMixin from '~/mixins/UserMixin'
 import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
 import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 
 @Component<GroupNotes>({
-  components: {NotesCard, FilterSidebar, PreviewNotesModal, PostNotesModal},
+  components: {NotesCard, PreviewNotesModal, PostNotesModal},
   async mounted() {
+    if(!this.memberOfGroup) return this.$router.push(`/groups/g/${this.groupId}`);
     const loading = this.$vs.loading({
       type: 'circles',
       text: 'Loading Data'
     })
     try {
-      const notes = this.fetchNotes()
-      const group = this.fetchGroup()
-      await Promise.all([notes, group])
+      await this.fetchNotes()
     } catch (error) {
       console.error({error})
       this.$vs.notification({
@@ -78,21 +65,19 @@ import PostNotesModal from '~/screens/notes/PostNotesModal.vue'
 })
 export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   groupNotes: Note[] = []
-  groupId: string | null = null
-  docNotFound = false
-  group: Group | null = null
-  get noNotesFound() {
-    return notesStore.EndOfList && this.notesList.length == 0
-  }
 
-  sort: typeof notesStore.SortSelect = 'magicRank'
-  subjects: Subject_O[] = []
-  grade: Grade_O = 'ALL'
-  school: School_O | 'All Schools' = 'All Schools'
-
+  @Prop({required: true}) group!: Group
+  @Prop({required: true, type: Array}) members!: any[]
+  @Prop({required: true, type: String}) groupId!: string
 
   get IsReset() {
     return notesStore.IsReset
+  }
+  @Watch('IsReset')
+  notePosted(val: boolean, oldVal: boolean) {
+    if (val) {
+      this.fetchNotes()
+    }
   }
 
   get memberOfGroup() {
@@ -102,12 +87,7 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
       this.group.memberList.includes(this.AuthUser.uid)
     )
   }
-  get endOfList() {
-    return notesStore.EndOfList
-  }
-  get bodyOverlay() {
-    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
-  }
+
   get previewModalActive() {
     return notesStore.PreviewModalOpen
   }
@@ -121,15 +101,11 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
   set notesModalActive(value: boolean) {
     notesStore.ToggleNotesModule(value)
   }
-  openFilterSidebar() {
-    windowStore.SetFilterSidebar(true)
-  }
-  get NoteId() {
-    return this.$route.params.id
-  }
+
   get notesList() {
     return notesStore.ActiveNotes
   }
+
   async fetchNotes() {
     const loading = this.$vs.loading()
     this.groupId = this.$route.params.id
@@ -152,56 +128,6 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
       console.log({error})
       loading.close()
     }
-  }
-  async fetchGroup() {
-    //   this.group!.bac
-    const loading = this.$vs.loading()
-    this.groupId = this.$route.params.id
-    if (!this.groupId) {
-      this.$router.push('/groups')
-      return
-    }
-    try {
-      const doc = await firestore.collection('groups').doc(this.groupId).get()
-      const groupData = doc.data() as Group_t_F
-      if (!groupData) {
-        this.docNotFound = true
-        loading.close()
-        return
-      }
-      this.group = Group.fromFirebase(groupData, doc.id)
-      loading.close()
-      return
-    } catch (error) {
-      console.log({error})
-      loading.close()
-    }
-  }
-  async GenerateJoinToken() {
-    const groupId = this.groupId
-    if (
-      !groupId ||
-      this.docNotFound ||
-      !this.group ||
-      !this.group.approved ||
-      !this.memberOfGroup
-    )
-      return
-    const loading = this.$vs.loading()
-    const res = await functions.httpsCallable('GenerateJoinToken')({groupId})
-    if (res.data.status !== 200) {
-      this.$vs.notification({
-        title: res.data.message,
-        color: 'danger'
-      })
-      console.log({res})
-    } else {
-      this.fetchGroup()
-    }
-    loading.close()
-  }
-  goBack() {
-    this.$router.push('/groups/g/' + this.groupId)
   }
 }
 </script>

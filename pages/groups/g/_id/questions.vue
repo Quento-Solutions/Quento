@@ -5,14 +5,10 @@
     id="notes-screen-container"
     v-if="group"
   >
-    <div id="notes-content-overlay"></div>
     <PostQuestionModal :presetGroup="group"></PostQuestionModal>
     <PreviewQuestionModal></PreviewQuestionModal>
 
     <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
-      <vs-avatar class="icon-small float-left" @click="goBack()">
-        <i class="bx bx-arrow-back" style="font-size: 1.25rem;" />
-      </vs-avatar>
       <div class="text-4xl font-bold pl-4">{{group.title}}'s Questions</div>
       <vs-button warn @click="questionModalActive = true">
         <i class="bx bxs-plus-square text-4xl" />
@@ -20,19 +16,13 @@
       </vs-button>
     </div>
     <QuestionCard
-      v-for="(question, index) in groupQuestion"
+      v-for="(question, index) in groupQuestions"
       :key="index"
       class
       :question="question"
       :clickable="true"
       :preview="true"
     />
-    <vs-alert color="danger" v-if="noItemsFound">
-      <template #title>Group Not Found</template>
-      <b>Sorry!</b> Something went wrong when fetching the Group. Please Try
-      Again.
-    </vs-alert>
-    <!-- </div> -->
   </div>
 </template>
 
@@ -40,40 +30,60 @@
 import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
 import {Question, Question_t_F} from '~/types/questions'
-import {Note} from '~/types/notes'
 import {Group, Group_t_F} from '~/types/groups'
 import firestore from '~/plugins/firestore'
 
 import {windowStore, questionStore} from '~/store'
-import FilterSidebar from '~/components/FilterSidebar.vue'
 import QuestionCard from '~/components/QuestionCard.vue'
 import {Subject_O, Grade_O} from '~/types/subjects'
 import {School_O} from '~/types/schools'
 import LoadScrollMixin from '~/mixins/LoadScrollMixin'
 import UserMixin from '~/mixins/UserMixin'
-import functions from '~/plugins/firebaseFunctions'
 import PreviewQuestionModal from '~/screens/questions/PreviewQuestionModal.vue'
 import PostQuestionModal from '~/screens/questions/PostQuestionModal.vue'
 
 @Component<groupQuestions>({
   components: {
     QuestionCard,
-    FilterSidebar,
     PostQuestionModal,
     PreviewQuestionModal
   },
   async mounted() {
-    const loading = this.$vs.loading()
-    this.fetchQuestions()
-    this.fetchGroup()
+    if(!this.memberOfGroup) return this.$router.push(`/groups/g/${this.groupId}`);
+    const loading = this.$vs.loading({
+      type: 'circles',
+      text: 'Loading Data'
+    })
+    try {
+      await this.fetchQuestions()
+    } catch (error) {
+      console.error({error})
+      this.$vs.notification({
+        title: error.message,
+        color: 'danger'
+      })
+    }
+    this.loaded = true
     loading.close()
   }
 })
 export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
-  groupQuestion: Question[] = []
-  groupId: string | null = null
-  docNotFound = false
-  group: Group | null = null
+  groupQuestions: Question[] = []
+  endOfList = false
+  @Prop({required: true}) group!: Group
+  @Prop({required: true, type: Array}) members!: any[]
+  @Prop({required: true, type: String}) groupId!: string
+
+  get IsReset() {
+    return questionStore.IsReset
+  }
+
+  @Watch('IsReset')
+  notePosted(val: boolean, oldVal: boolean) {
+    if (val) {
+      this.fetchQuestions()
+    }
+  }
 
   get memberOfGroup() {
     return (
@@ -103,34 +113,9 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
         .where('groupId', '==', this.groupId)
         .orderBy('magicRank', 'desc')
         .get()
-      this.groupQuestion = doc.docs.map((document) =>
+      this.groupQuestions = doc.docs.map((document) =>
         Question.fromFirebase(document.data() as Question_t_F, document.id)
       )
-      loading.close()
-      return
-    } catch (error) {
-      console.log({error})
-      loading.close()
-    }
-  }
-
-  async fetchGroup() {
-    //   this.group!.bac
-    const loading = this.$vs.loading()
-    this.groupId = this.$route.params.id
-    if (!this.groupId) {
-      this.$router.push('/groups')
-      return
-    }
-    try {
-      const doc = await firestore.collection('groups').doc(this.groupId).get()
-      const groupData = doc.data() as Group_t_F
-      if (!groupData) {
-        this.docNotFound = true
-        loading.close()
-        return
-      }
-      this.group = Group.fromFirebase(groupData, doc.id)
       loading.close()
       return
     } catch (error) {
@@ -144,15 +129,9 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
   }
 
   get noItemsFound() {
-    return questionStore.EndOfList && this.questionList.length == 0
+    return this.endOfList && this.groupQuestions.length === 0
   }
 
-  get endOfList() {
-    return questionStore.EndOfList
-  }
-  get bodyOverlay() {
-    return windowStore.filterSidebarOpen && windowStore.isSmallScreen
-  }
   get previewModalActive() {
     return questionStore.PreviewModalOpen
   }
@@ -160,15 +139,9 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
   get questionModalActive() {
     return questionStore.PostQuestionModalOpen
   }
+
   set questionModalActive(value: boolean) {
     questionStore.SET_POST_MODAL_OPEN(value)
-  }
-  openFilterSidebar() {
-    windowStore.SetFilterSidebar(true)
-  }
-
-  get questionList() {
-    return questionStore.ActiveItems
   }
 }
 </script>

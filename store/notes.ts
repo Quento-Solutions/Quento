@@ -169,8 +169,8 @@ export default class NotesModule extends VuexModule {
     //Get liked notes from userData
     const { likedNotes } = authStore.userData
     var index = likedNotes?.indexOf(suggestionId)
-    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)!
-
+    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)
+    if(suggestionIndex === -1) return;
     if (index !== -1) {
       //Liking a post
       this.ActiveNotes[suggestionIndex].upVotes++
