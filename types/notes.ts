@@ -27,13 +27,15 @@ export interface Note_t {
 
   subject: Subject_O
   grade: Grade_O
+  //Unique
   id?: string
   
   groupId ?: string;
   groupName ?: string;
 }
+
+// Firebase Interface
 export interface Note_t_F {
-  // How the data is stored in firebase
   title: string
   uid: string
   userDisplayName: string
@@ -42,19 +44,22 @@ export interface Note_t_F {
   images?: string[]
   contents : string
   storedImages?: StoredImage[]
+  school ?: School_O;
 
   createdAt: Date_t_F
-  
   upVotes: number
-  subject: Subject_O
-  school ?: School_O;
-  grade: Grade_O
   views: number
+  
+  subject: Subject_O
+  grade: Grade_O
 
-  groupName ?: string;
-  magicRank?: number
   groupId?: string
+  groupName ?: string;
+  //Unique to this one
+  magicRank?: number
 }
+
+//Julius Caesar, to Brutus in actual Latin (circa 45 BC)
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {
   createdAt: Date_t_A | Date
@@ -62,8 +67,7 @@ export type Note_t_A = Omit<Note_t_F, 'createdAt'> & {
   objectID: string
 }
 
-
-export class Note {
+export class Note{
   constructor(opts: Note_t) {
     return Object.assign(this, opts)
   }
@@ -93,4 +97,5 @@ export class Note {
     return new Note(obj)
   }
 }
+
 export interface Note extends Note_t {}

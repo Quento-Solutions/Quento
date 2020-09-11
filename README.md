@@ -4,7 +4,7 @@
 Welcome to Quento, a collection of utilities created by students, for students. Quento is an open source web app created by high school students using Vue.js, with the sole purpose of creating and compiling useful software to a single location to help students better manage their education.  
 
 ## Build Setup
-```
+```bash
 # install dependencies
 $ npm install # Or yarn install
 
@@ -114,6 +114,54 @@ div Layout Main
 /div
 (etc.)
 ```
+
+# Types and Objects which power this project
+All files are imported to the Vue Application through `~\types\index.ts`
+
+```bash
+index.ts
+├── Notes.ts
+  |________OBJECTS_____
+    ├── class Note
+    ├── interface Note_t
+    ├── interface Note_t_F
+    ├── type Note_t_A
+    ├── interface Note extends Note_t
+  ├── DEPEDANT ON: Subjects.ts
+├── Subjects.ts
+  |________OBJECTS_____
+    ├── const{Group} SubjectGroups -> Sub-Subjects
+    ├── const[number] AllSubjects -> Subjects
+    ├── type Subject_O
+    ├── const[Subjects] SubjectList -> default:empty
+    ├── const{Subject} SubjectOptions -> true|false
+    ├── const{Subject} SubjectIconList -> bx-___
+    ├── type SubjectGroup_O
+    ├── const[SubjectGroup_O] SubjectGroupList -> default:empty
+    ├ DEPENDANT ON : Schools.ts
+├── Schools.ts
+|________OBJECTS_____
+  ├── const[number] SchoolList -> Schools
+  ├── type School_O
+├── Suggestions.ts
+  ├── 
+├── Users.ts
+  ├── DEPENDANT ON: Subjects.ts, Groups.ts
+├── Questions.ts
+  ├── DEPENDANT ON: Schools.ts, Subjects.ts, firebaseTypes.ts
+├── Responses.ts
+  ├── DEPENDANT ON: firebaseTypes.ts
+├── Newsletters.ts
+  ├── 
+├── firebaseTypes.ts
+  ├── DEPENDANT ON: Not firebase apparently
+```
+
+# Store Management
+All store is based around util/store-accessor.ts
+
+# Firebase
+Store files -> firestore.ts -> firebase.ts
 
 ## Documentation/Dependencies
 For detailed explanation on how things work, checkout the following docs:

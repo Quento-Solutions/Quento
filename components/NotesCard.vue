@@ -290,8 +290,9 @@ export default class NotesCard extends Vue {
     return notesStore.likedPosts?.includes(id)
   }
 
-  async toggleLike(id?: string, time?: any) {
-    if (!id || this.disabled) return
+  async toggleLike(id: string, time?: any) {
+    if (this.disabled) return
+    
     const a = this.$vs.loading()
     await notesStore.ToggleLikedNote(id)
     a.close()
