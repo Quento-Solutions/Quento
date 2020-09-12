@@ -1,40 +1,19 @@
 import {Component, Vue} from 'nuxt-property-decorator'
 import functions from '~/plugins/firebaseFunctions'
 import type {StoredImage} from '~/types/firebaseTypes'
+import UploadImage from '~/utils/uploadImage'
 @Component<PasteImagesMixin>({})
 export default class PasteImagesMixin extends Vue {
   images: StoredImage[] = []
   contents!: string
 
   async uploadImage(image: File, evt?: any) {
-    const reader = new FileReader()
-    const promise = new Promise<{imageURL : string, fileName : string}>((resolve, reject) => {
-      reader.addEventListener('load', async () => {
-        const base64image = reader.result
-        try {
-          const imageResponse = await functions.httpsCallable(
-            'functionPostImage'
-          )({name: image.name, image: base64image})
-
-          const imageURL = imageResponse.data.imageURL as string
-          const fileName = imageResponse.data.fileName as string
-          if (evt) {
-            this.insertAtCursor(evt.target, `\n![image](${imageURL})\n`)
-          }
-
-          this.images.push({
-            imageURL,
-            fileName
-          })
-          return resolve({imageURL, fileName})
-        } catch (error) {
-          console.log({error})
-          return reject(error)
-        }
-      })
-    })
-    reader.readAsDataURL(image)
-    return promise
+    const imageUpload = await UploadImage(image)
+    if (evt) {
+      this.insertAtCursor(evt.target, `\n![image](${imageUpload.imageURL})\n`)
+    }
+    this.images.push(imageUpload)
+    return imageUpload;
   }
 
   async onPaste(evt: any) {
