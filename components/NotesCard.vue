@@ -124,7 +124,7 @@
             </AvatarBar>
 
             <div class="inner-content" :style="preview? '':'width:70%;margin-left:15%'">
-            <!-- Category Pills -->
+              <!-- Category Pills -->
               <CategoryPills :grade="note.grade" :school="note.school" :subject="note.subject"></CategoryPills>
 
               <!-- Title -->
@@ -141,7 +141,7 @@
                 >
                   <vue-flux
                     :options="vfOptions"
-                    :images="note.images"
+                    :images="coverImages"
                     :transitions="vfTransitions"
                     class="w-full"
                     ref="slider"
@@ -219,7 +219,7 @@
             :class="preview && !hasImage?'default-image':''"
           >
             <img
-              :src="note.images[0]"
+              :src="coverImages[0]"
               v-if="hasImage && preview"
               style="position:absolute;object-fit: cover;min-height:100%"
             />
@@ -248,9 +248,9 @@ import CategoryPills from '~/components/CategoryPills.vue'
 @Component<NotesCard>({
   components: {DeleteNotesModal, AvatarBar, CategoryPills},
   mounted() {
-    if (this.note.images && this.note.images.length) {
+    if (this.note.coverImages && this.note.coverImages.length) {
       this.image = new Image()
-      this.image.src = this.note.images[0]
+      this.image.src = this.note.coverImages[0]?.imageURL
       // this.note.userP
       this.hasImage = true
     }
@@ -269,6 +269,9 @@ export default class NotesCard extends Vue {
 
   deleteNotesOpen = false
 
+  get coverImages() {
+    return this.note.coverImages?.map((img) => img?.imageURL) || []
+  }
   OpenDeleteModal() {
     this.deleteNotesOpen = true
   }
@@ -292,7 +295,6 @@ export default class NotesCard extends Vue {
 
   async toggleLike(id: string, time?: any) {
     if (this.disabled) return
-    
     const a = this.$vs.loading()
     await notesStore.ToggleLikedNote(id)
     a.close()

@@ -19,6 +19,7 @@ export interface Note_t {
   images?: string[]
   contents : string
   storedImages?: StoredImage[]
+  coverImages ?: StoredImage[]
   school ?: School_O;
 
   createdAt: Date
@@ -44,6 +45,8 @@ export interface Note_t_F {
   images?: string[]
   contents : string
   storedImages?: StoredImage[]
+  coverImages ?: StoredImage[]
+
   school ?: School_O;
 
   createdAt: Date_t_F

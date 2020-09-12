@@ -20,6 +20,7 @@ import {
 import { School_O } from '~/types/schools'
 import functions from '~/plugins/firebaseFunctions'
 import { HourDiff } from '~/utils/time'
+import UploadImage from '~/utils/uploadImage'
 
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
@@ -312,11 +313,13 @@ export default class NotesModule extends VuexModule {
       }
       return
     })
+
+    const uploadImages = await Promise.all(this.UploadImages.map(file => UploadImage(file)));
     await Promise.all(deleteImages || [])
     const newImages = note.storedImages?.filter((value) =>
       note.contents?.includes(value.imageURL)
     )
-    const newNote: Note = Object.assign({}, note, { storedImages: newImages })
+    const newNote: Note = {...note, storedImages: newImages, coverImages : uploadImages };
     if (note.id) {
       return await firestore
         .collection('notes')

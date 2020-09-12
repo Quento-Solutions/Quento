@@ -47,7 +47,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="subjectSelect"
-        :disabled="group"
+        :disabled="!!group"
       >
         <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
@@ -70,7 +70,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="gradeSelect"
-        :disabled="group"
+        :disabled="!!group"
       >
         <vs-option
           v-for="(grade, subIndex) in GradeList"
@@ -86,7 +86,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="School"
         v-model="schoolSelect"
-        :disabled="group"
+        :disabled="!!group"
       >
         <vs-option
           v-for="(school, subIndex) in SchoolList"
@@ -106,6 +106,13 @@
         markdownOptions="true"
         @paste="onPaste"
       ></VsTextarea>
+
+      <VsUpload
+        :show-upload-button="false"
+        text="Upload Cover Image(s)"
+        accept="image/*"
+        ref="postImageUpload"
+      />
     </div>
     <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
       <vs-button
@@ -165,18 +172,16 @@ interface imageSrc {
     VsUpload
   },
   async mounted() {
-
     if (!this.userGroups.length && !groupsStore.userGroupFetched) {
       this.groupsLoading = true
       await groupsStore.GetUserGroups()
       this.groupsLoading = false
     }
-    if(this.presetGroup) this.groupSelect = this.presetGroup.id || '';
-    
+    if (this.presetGroup) this.groupSelect = this.presetGroup.id || ''
   }
 })
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
-  @Prop({required: false}) presetGroup ?: Group;
+  @Prop({required: false}) presetGroup?: Group
 
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
@@ -210,7 +215,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   }
 
   get userGroups() {
-    return groupsStore.userGroups.filter(group => group.approved)
+    return groupsStore.userGroups.filter((group) => group.approved)
   }
   characterLimit = 5000
 
@@ -229,7 +234,9 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   }
 
   readonly GradeList = GradeList.filter((v) => v !== 'ALL')
-  Cancel() {}
+  Cancel() {
+    // this.validateImageType()
+  }
   // make this a mixin
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
@@ -252,6 +259,19 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
     return windowStore.isLargeScreen
   }
 
+  get fileRefs() {
+    return (
+      (this.$refs.postImageUpload as Vue & {
+        filesx: (File & {remove : boolean})[]
+        srcs: imageSrc[]
+        itemRemove: any[]
+      }) || {
+        filesx: [],
+        srcs: [],
+        itemRemove: []
+      }
+    )
+  }
   async PreviewNote() {
     if (this.formErrors) {
       this.$vs.notification({
@@ -261,6 +281,18 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       return
     }
 
+    const uploadFile = [...this.fileRefs.filesx].filter(image => !image.remove) // Clones the list so that its not mutatable
+
+    const fileImageSrcs = [...this.fileRefs.srcs] // Clone list and check that it exists
+      .filter((v) => !v.remove) // Remove removed images
+      .map((v) => ({
+        // Turn them into StoredFile type
+        fileName: '',
+        imageURL: v.src || ''
+      }))
+
+    console.log({uploadFile});
+    notesStore.SET_UPLOAD_IMAGES(uploadFile)
     const previewNote = new Note({
       title: this.title,
       uid: authStore.user?.uid!,
@@ -272,8 +304,10 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       subject: this.subjectSelect as Subject_O,
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
-      storedImages: [...this.images]
+      storedImages: [...this.images],
+      coverImages: fileImageSrcs
     })
+
     if (this.schoolSelect != 'All Schools')
       previewNote.school = this.schoolSelect
 
@@ -290,7 +324,8 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       !this.title ||
       this.subjectSelect === '' ||
       this.gradeSelect === '' ||
-      !this.contents
+      !this.contents ||
+      !this.fileRefs.filesx.filter(image => !image.remove).every((image) => this.validateImageType(image))
     )
   }
 }
