@@ -13,7 +13,7 @@
               style="line-height: 1.125; min-width: 0;"
             >{{group.title}}</div>
             <div class style="display: flex">
-              <vs-tooltip style="width: max-content">
+              <VxTooltip style="width: max-content">
                 <div
                   class="rounded-full w-max-content px-1 mr-2"
                   style="width: max-content"
@@ -25,8 +25,8 @@
                   />
                 </div>
                 <template #tooltip>{{group.approved ? 'Verified' : 'Pending Approval'}}</template>
-              </vs-tooltip>
-              <vs-tooltip style="width: max-content">
+              </VxTooltip>
+              <VxTooltip style="width: max-content">
                 <button
                   class="rounded-full w-max-content px-1"
                   style="width: max-content;"
@@ -36,7 +36,7 @@
                   <i class="bx text-5xl" :class="!inGroup ? ' bxs-user-plus' : 'bx-group'" />
                 </button>
                 <template #tooltip>{{inGroup ? 'Group Member' : 'Join Group'}}</template>
-              </vs-tooltip>
+              </VxTooltip>
             </div>
           </div>
         </template>
