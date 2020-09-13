@@ -6,9 +6,9 @@ import {
   Mutation
 } from 'vuex-module-decorators'
 
-import type { User as FirebaseUser } from 'firebase'
+import type { User as FirebaseUser } from 'firebase/app'
 import type { FireAuthServerUser } from '@nuxtjs/firebase'
-import { User, UserData } from '~/types/user'
+import { User, UserData, UserToFirebase } from '~/types/user'
 import firestore from '~/plugins/firestore'
 import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase'
 let UserListener :(() => void) | null = null;
@@ -145,8 +145,10 @@ export default class AuthModule extends VuexModule implements AuthState {
 
   @Action({ rawError: true })
   public async updateUserData(userData: Partial<UserData>) {
-    const uid = this.user?.uid
-    await firestore.collection('users').doc(uid).update(userData)
+    if(!this.user?.uid) return;
+    const uid = this.user.uid
+    const firebaseUser = UserToFirebase(userData);
+    await firestore.collection('users').doc(uid).update(firebaseUser);
     return
   }
 

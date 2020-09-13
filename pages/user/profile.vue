@@ -317,10 +317,9 @@ import firestore from '~/plugins/firestore'
 import {SubjectGroup_O, Subject_O, SubjectIconList} from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
 import {Note_t, Note, Note_t_F} from '~/types/notes'
-import {auth} from 'firebase'
+import {firestore as FirestoreModule} from 'firebase/app'
 import {UserData} from '~/types/user'
-import {User} from '~/types'
-import firebase from 'firebase/app'
+
 @Component<UserProfile>({
   components: {
     NotesCard
@@ -370,7 +369,7 @@ export default class UserProfile extends mixins(UserMixin) {
         .collection('users')
         .doc(this.AuthUser?.uid)
         .update({
-          pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
+          pendingFollowing: FirestoreModule.FieldValue.arrayRemove(uid)
         })
 
       const doc2 = await firestore
@@ -481,7 +480,7 @@ export default class UserProfile extends mixins(UserMixin) {
       .collection('users')
       .doc(this.AuthUser?.uid)
       .update({
-        following: firebase.firestore.FieldValue.arrayRemove(uid)
+        following: FirestoreModule.FieldValue.arrayRemove(uid)
       })
 
     const unFollowQuery = await firestore

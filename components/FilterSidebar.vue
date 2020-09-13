@@ -154,7 +154,7 @@ export default class NotesSidebar extends Vue {
   SubjectDict = s
   GradeList = GradeList
   SortOptions = [...SortOptionsList]
-  readonly SchoolList = ['All Schools', ...SchoolList]
+  readonly SchoolList = [...SchoolList]
 
   subjectClicked(
     name: Subject_O,

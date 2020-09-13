@@ -152,7 +152,7 @@ import { Group } from '~/types/groups'
 export default class EditNotesModal extends mixins(PasteImage) {
   ActiveNote: Note | null = null
   characterLimit = 5000
-  readonly SchoolList = ['All Schools', ...SchoolList] as const
+  readonly SchoolList = [...SchoolList] as const
   groupSelect = ''
   groupsLoading = false
 
@@ -209,7 +209,7 @@ export default class EditNotesModal extends mixins(PasteImage) {
       })
       return
     }
-    if(this.activeSchool !== 'All Schools') this.ActiveNote!.school = this.activeSchool
+    this.ActiveNote!.school = this.activeSchool
     this.ActiveNote!.storedImages = [...this.images]
     notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote))
     notesStore.SET_UPLOAD_IMAGES([]);

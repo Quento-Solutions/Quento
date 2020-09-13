@@ -1,7 +1,6 @@
 import { Grade_O, Subject_O } from './subjects'
 
 import { School_O } from './schools'
-import type firebase from '~/plugins/firebase'
 import { Timestamp } from './env.utils'
 
 export type User = {
@@ -32,7 +31,7 @@ export interface UserData {
   currentGrade?: Grade_O
   interestedSubjects?: Subject_O[]
   bio?: string
-  school?: School_O
+  school?: School_O | null;
 
   postedSuggestions?: string[]
   postedNotes?: string[]
@@ -50,4 +49,11 @@ export interface UserData {
   pendingFollowing?: string[]
   following?: string[]
   lastFeedUpdated ?: Timestamp
+}
+export const UserToFirebase = (user : Partial<UserData>) =>
+{
+  const newUser = Object.assign({}, user);
+  if(newUser.lastFeedUpdated) newUser.lastFeedUpdated = new Timestamp(newUser.lastFeedUpdated.seconds, newUser.lastFeedUpdated.nanoseconds);
+  if(!newUser.school || newUser.school === 'All Schools') newUser.school = null;
+  return newUser
 }

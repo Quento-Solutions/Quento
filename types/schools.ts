@@ -7,7 +7,8 @@ export const SchoolList = [
   'Merivale High School',
   'John McCrae Secondary School',
   'École Secondaire Catholique Pierre-Savard',
-  'Other'
+  'Other',
+  "All Schools",
 ] as const
 
 export type School_O = typeof SchoolList[number]
