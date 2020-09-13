@@ -155,14 +155,10 @@ export default class SuggestionsPage extends mixins(LoadScroll) {
       const loading = this.$vs.loading()
       try {
         await suggestionsStore.GetLikedSuggestions()
-        loading.close()
       } catch (error) {
-        loading.close()
-        this.$vs.notification({
-          color: 'danger',
-          title: error.message
-        })
+        this.$qto.error(error);
       }
+      loading.close()
     }
     return
   }

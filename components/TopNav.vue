@@ -217,11 +217,7 @@ export default class TopNav extends mixins(UserMixin) {
       
       await notificationStore.getNotifications()
     } catch (error) {
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
-      console.error(error)
+      this.$qto.error(error);
     }
   }
 
@@ -237,11 +233,7 @@ export default class TopNav extends mixins(UserMixin) {
         })
       await notificationStore.getNotifications()
     } catch (error) {
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
-      console.log(error)
+      this.$qto.error(error);
     }
     this.notificationsVisible = false
   }

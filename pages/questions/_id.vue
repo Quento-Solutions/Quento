@@ -1,8 +1,7 @@
 <template>
   <div class="vx-row w-full justify-center" style>
-
     <div class="vx-row w-full md:w-2/3" style>
-    <!-- Top Menu To Go Back -->
+      <!-- Top Menu To Go Back -->
       <div class="vx-col w-full" style>
         <div class="vx-row mb-4 w-full bg-white rounded-md p-2">
           <vs-avatar class="icon-small float-right" @click="goBack()">
@@ -139,7 +138,7 @@ export default class QuestionContentPage extends mixins(UserMixin) {
       })
       this.responseContent = ''
     } catch (error) {
-      this.$vs.notification({title: error.message, color: 'danger'})
+      this.$qto.error(error)
     }
     loading.close()
     this.$forceUpdate()

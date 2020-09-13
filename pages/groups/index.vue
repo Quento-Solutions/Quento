@@ -39,12 +39,7 @@
         :key="index"
         style
       >
-        <GroupsCard
-          class="w-full"
-          :group="group"
-          :clickable="true"
-          :preview="true"
-        />
+        <GroupsCard class="w-full" :group="group" :clickable="true" :preview="true" />
       </div>
     </div>
   </div>
@@ -75,11 +70,7 @@ import {School_O} from '~/types/schools'
       const groups = groupsStore.GetUserGroups()
       await Promise.all([groups])
     } catch (error) {
-      console.error({error})
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
+      this.$qto.error(error)
     }
     this.loaded = true
     loading.close()

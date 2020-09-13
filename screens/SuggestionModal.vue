@@ -2,13 +2,14 @@
   <vs-dialog v-model="active" id="suggestionsPopup" class="content-popup" scroll overflow-hidden>
     <template #header>
       <div class="pt-10">
-        <h4 class="not-margin text-title text-4xl">Post A <b>Suggestion</b></h4>
+        <h4 class="not-margin text-title text-4xl">
+          Post A
+          <b>Suggestion</b>
+        </h4>
       </div>
     </template>
 
-    <div
-      class="con-form md:p-4 lg:p-8 p-2 flex flex-col justify-evenly overflow-x-hidden"
-    >
+    <div class="con-form md:p-4 lg:p-8 p-2 flex flex-col justify-evenly overflow-x-hidden">
       <vs-input
         v-model="title"
         placeholder="You should sell chocolate"
@@ -26,8 +27,7 @@
         class="block"
         height="20rem"
         label="Feature Suggestion"
-      >
-      </VsTextarea>
+      ></VsTextarea>
     </div>
 
     <template #footer>
@@ -39,18 +39,16 @@
           success
           :disabled="formErrors"
           @click="PostSuggestion()"
-        >
-          Post
-        </vs-button>
+        >Post</vs-button>
       </div>
     </template>
   </vs-dialog>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import {Component, Vue, Prop} from 'nuxt-property-decorator'
 
-import { suggestionsStore } from '~/store'
+import {suggestionsStore} from '~/store'
 import VsTextarea from '~/components/VsTextarea.vue'
 
 @Component<SuggestionModal>({
@@ -59,18 +57,14 @@ import VsTextarea from '~/components/VsTextarea.vue'
   }
 })
 export default class SuggestionModal extends Vue {
-  @Prop({ default: false }) value!: boolean
+  @Prop({default: false}) value!: boolean
 
-
-
-    get active()
-    {
-        return this.value;
-    }
-    set active(value : boolean)
-    {
-        this.$emit('input', value);
-    }
+  get active() {
+    return this.value
+  }
+  set active(value: boolean) {
+    this.$emit('input', value)
+  }
   title = ''
   contents = ''
 
@@ -84,7 +78,7 @@ export default class SuggestionModal extends Vue {
     }
 
     const loading = this.$vs.loading()
-    const payload = { title: this.title, contents: this.contents }
+    const payload = {title: this.title, contents: this.contents}
     try {
       await suggestionsStore.PostSuggestion(payload)
       this.$vs.notification({
@@ -93,18 +87,13 @@ export default class SuggestionModal extends Vue {
         text:
           'Thank you for your insights, we will notify you once it is implemented!'
       })
-        await suggestionsStore.GetSuggestions();
-      this.state = false
-      loading.close()
+      await suggestionsStore.GetSuggestions()
     } catch (error) {
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Posting Your Suggestion'
-      })
-    
-      this.state = false
-      loading.close()
+      this.$qto.error(error)
     }
+    this.state = false
+
+    loading.close()
   }
 
   set state(value: boolean) {
@@ -122,7 +111,6 @@ export default class SuggestionModal extends Vue {
 </script>
 
 <style lang="scss">
-
 #suggestionsPopup {
   .vs-dialog {
     min-width: 40vw !important;

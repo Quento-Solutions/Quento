@@ -210,11 +210,7 @@ export default class QuestionCard extends mixins(UserMixin) {
       await questionStore.ToggleLikedQuestion(this.question.id)
       this.$emit('toggle-like')
     } catch (error) {
-      this.$vs.notification({
-        color: 'danger',
-        message: error.message
-      })
-      console.log({error})
+      this.$qto.error(error);
     }
     loading.close()
   }

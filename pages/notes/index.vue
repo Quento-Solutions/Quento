@@ -98,11 +98,7 @@ import { School_O } from '~/types/schools'
       await Promise.all([notes])
     } catch (error)
     {
-      console.error({error});
-      this.$vs.notification({
-        title : error.message,
-        color : "danger"
-      })
+      this.$qto.error(error)
     }
     this.loaded = true;
     loading.close()
