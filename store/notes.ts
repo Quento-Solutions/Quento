@@ -14,7 +14,6 @@ import {
   Grade_O,
   Subject_O,
   SortOptions_O,
-  SubjectList,
   FilterOptions
 } from '~/types/subjects'
 import { School_O } from '~/types/schools'

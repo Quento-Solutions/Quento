@@ -38,7 +38,7 @@ export interface Group_t_F {
   fileUpload ?: StoredImage
 
   
-  createdAt: Date | Date_t_F
+  createdAt: Timestamp
   members : number
   memberList : string[]
 

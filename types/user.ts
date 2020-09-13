@@ -1,7 +1,6 @@
 import { Grade_O, Subject_O } from './subjects'
 
 import { School_O } from './schools'
-import type firebase from '~/plugins/firebase'
 import { Timestamp } from './env.utils'
 
 export type User = {
@@ -33,7 +32,7 @@ export interface UserData {
   interestedSubjects?: Subject_O[]
   bio?: string
   school?: School_O | null;
-  
+
   postedSuggestions?: string[]
   postedNotes?: string[]
 

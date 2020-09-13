@@ -6,7 +6,7 @@ import {
   Mutation
 } from 'vuex-module-decorators'
 
-import type { User as FirebaseUser } from 'firebase'
+import type { User as FirebaseUser } from 'firebase/app'
 import type { FireAuthServerUser } from '@nuxtjs/firebase'
 import { User, UserData, UserToFirebase } from '~/types/user'
 import firestore from '~/plugins/firestore'
