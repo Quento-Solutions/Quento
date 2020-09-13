@@ -326,6 +326,7 @@ export default class NotesModule extends VuexModule {
     {
       newNote.coverImages = uploadImages;
     }
+
     if (note.id) {
       return await firestore
         .collection('notes')
