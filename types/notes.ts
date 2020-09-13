@@ -81,10 +81,11 @@ export class Note{
     return new Note(obj)
   }
 
-  static toFirebase = (note: Note): Note_t_F => {
+  static toFirebase = (note: Note) => {
     const createdAt = Timestamp.fromDate(note.createdAt)
+    const school = (!note.school || note.school === 'All Schools') ? null : note.school;
     const { id, ...firebaseDoc } = { ...note }
-    return { ...firebaseDoc, createdAt }
+    return { ...firebaseDoc, createdAt, school }
   }
   static toAlgolia = (note: Note, objectID: string): Note_t_A => {
     const { id, grade, ...firebaseDoc } = { ...note }

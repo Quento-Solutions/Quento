@@ -80,10 +80,11 @@ export class Question
         return new Question(obj)
     }
 
-    static toFirebase(question : Question) : Question_t_F
+    static toFirebase(question : Question)
     {
+        const school = (!question.school || question.school === 'All Schools') ? null : question.school;
         const {id, ...firebaseDoc} = {...question}
-        return firebaseDoc
+        return {...firebaseDoc, school}
     }
 }
 export interface Question extends Question_t {}

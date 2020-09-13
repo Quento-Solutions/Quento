@@ -152,7 +152,7 @@ import { Group } from '~/types/groups'
 export default class EditNotesModal extends mixins(PasteImage) {
   ActiveNote: Note | null = null
   characterLimit = 5000
-  readonly SchoolList = ['All Schools', ...SchoolList] as const
+  readonly SchoolList = [...SchoolList] as const
   groupSelect = ''
   groupsLoading = false
 
@@ -201,6 +201,7 @@ export default class EditNotesModal extends mixins(PasteImage) {
   }
 
   async PreviewNote() {
+    if(!this.ActiveNote) return;
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -208,10 +209,10 @@ export default class EditNotesModal extends mixins(PasteImage) {
       })
       return
     }
-    this.ActiveNote!.school =
-      this.activeSchool == 'All Schools' ? undefined : this.activeSchool
+    this.ActiveNote!.school = this.activeSchool
     this.ActiveNote!.storedImages = [...this.images]
     notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote))
+    notesStore.SET_UPLOAD_IMAGES([]);
     notesStore.TogglePreviewModal(true)
   }
 

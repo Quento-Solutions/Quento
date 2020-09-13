@@ -316,12 +316,17 @@ export default class NotesModule extends VuexModule {
       return
     })
 
-    const uploadImages = await Promise.all(this.UploadImages.map(file => UploadImage(file)));
     await Promise.all(deleteImages || [])
     const newImages = note.storedImages?.filter((value) =>
-      note.contents?.includes(value.imageURL)
+    note.contents?.includes(value.imageURL)
     )
-    const newNote: Note = {...note, storedImages: newImages, coverImages : uploadImages };
+    const newNote: Note = {...note, storedImages: newImages };
+    const uploadImages = await Promise.all(this.UploadImages.map(file => UploadImage(file)));
+    if(uploadImages.length)
+    {
+      newNote.coverImages = uploadImages;
+    }
+
     if (note.id) {
       return await firestore
         .collection('notes')

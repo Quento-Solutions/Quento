@@ -15,7 +15,6 @@ export interface Group_t {
   backgroundImageUrl: string,
   fileUpload ?: StoredImage
 
-
   private : boolean
 
   id?: string
@@ -59,12 +58,14 @@ export class Group {
   static fromFirebase = (doc: Group_t_F, id?: string) => {
     const createdAt = new Date((doc.createdAt as Date_t_F).seconds * 1000)
     const obj = { ...doc, createdAt, id }
+    
     return new Group(obj)
   }
 
-  static toFirebase(doc: Group): Group_t_F {
+  static toFirebase(doc: Group) {
+    const school = (!doc.school || doc.school === 'All Schools') ? null : doc.school;
     const { id, ...firebaseDoc } = { ...doc }
-    return firebaseDoc
+    return {...firebaseDoc, school}
   }
 }
 
