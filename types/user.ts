@@ -32,7 +32,6 @@ export interface UserData {
   interestedSubjects?: Subject_O[]
   bio?: string
   school?: School_O | null;
-
   postedSuggestions?: string[]
   postedNotes?: string[]
 
