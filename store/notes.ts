@@ -321,7 +321,11 @@ export default class NotesModule extends VuexModule {
     const newImages = note.storedImages?.filter((value) =>
       note.contents?.includes(value.imageURL)
     )
-    const newNote: Note = {...note, storedImages: newImages, coverImages : uploadImages };
+    const newNote: Note = {...note, storedImages: newImages };
+    if(uploadImages.length)
+    {
+      newNote.coverImages = uploadImages;
+    }
     if (note.id) {
       return await firestore
         .collection('notes')
