@@ -185,7 +185,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
 
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
-  readonly SchoolList = ['All Schools', ...SchoolList]
+  readonly SchoolList = [...SchoolList]
   schoolSelect: School_O | 'All Schools' = 'All Schools'
   groupSelect = ''
   groupsLoading = false
