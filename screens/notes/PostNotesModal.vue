@@ -1,6 +1,6 @@
 <template>
   <vs-dialog
-    v-model="active"
+    v-model="isActive"
     id="suggestionsPopup"
     class="content-popup"
     style="z-index: 1000000000;"
@@ -9,6 +9,7 @@
     prevent-close
     overflow-hidden
   >
+    <PreviewNotesModal :previewNote="previewNote" :active.sync="previewActive" @post="PostNote()"></PreviewNotesModal>
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">
@@ -128,7 +129,14 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
+import {
+  Component,
+  Vue,
+  Prop,
+  mixins,
+  Watch,
+  PropSync
+} from 'nuxt-property-decorator'
 
 import {
   suggestionsStore,
@@ -149,12 +157,11 @@ import {
 import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
 import {Note} from '~/types/notes'
-import VsUpload from '~/components/VsUpload.vue'
 import storage from '~/plugins/firebaseStorage'
 import functions from '~/plugins/firebaseFunctions'
 
 import {v4} from 'uuid'
-
+import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
 import {authStore} from '~/store'
 import {School_O, SchoolList} from '~/types/schools'
 import {Group} from '~/types/groups'
@@ -168,9 +175,7 @@ interface imageSrc {
 }
 
 @Component<PostNotesModal>({
-  components: {
-    VsUpload
-  },
+  components: {PreviewNotesModal},
   async mounted() {
     if (!this.userGroups.length && !groupsStore.userGroupFetched) {
       this.groupsLoading = true
@@ -182,6 +187,15 @@ interface imageSrc {
 })
 export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   @Prop({required: false}) presetGroup?: Group
+  @PropSync('active') isActive!: boolean
+
+  previewNote: Note | null = null
+  get previewActive() {
+    return !!this.previewNote
+  }
+  set previewActive(val: boolean) {
+    if (!val) this.previewNote = null
+  }
 
   subjectSelect: Subject_O | '' = ''
   gradeSelect: Grade_O | '' = ''
@@ -208,7 +222,6 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
 
   setGroup(group: Group) {
     this.schoolSelect = group.school || 'All Schools'
-
     this.gradeSelect = group.grade || 'ALL'
     this.subjectSelect = group.subject || ''
     this.group = group
@@ -221,18 +234,6 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
 
   contents = ''
 
-  @Watch('IsReset')
-  onResetChanged(value: boolean, oldVal: boolean) {
-    if (value) {
-      this.ClearFields()
-      notesStore.SET_RESET(false)
-    }
-  }
-
-  get IsReset() {
-    return notesStore.IsReset
-  }
-
   readonly GradeList = GradeList.filter((v) => v !== 'ALL')
   Cancel() {
     // this.validateImageType()
@@ -241,18 +242,17 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   getIcon(subject: SubjectGroup_O | Subject_O) {
     return SubjectIconList[subject]
   }
+
   readonly SubjectGroupList = NestedSubjectList
-  get active() {
-    return notesStore.NotesModuleOpen
-  }
-  set active(value: boolean) {
-    notesStore.ToggleNotesModule(value)
-  }
+
   title = ''
 
-  ClearFields() {
+  reset() {
+    this.isActive = false;
+    this.previewActive = false;
     this.title = this.contents = this.subjectSelect = this.gradeSelect = ''
     this.schoolSelect = 'All Schools'
+    this.fileRefs.filesx.forEach(file => file.remove = true);
   }
 
   get isLargeScreen() {
@@ -262,7 +262,7 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
   get fileRefs() {
     return (
       (this.$refs.postImageUpload as Vue & {
-        filesx: (File & {remove : boolean})[]
+        filesx: (File & {remove: boolean})[]
         srcs: imageSrc[]
         itemRemove: any[]
       }) || {
@@ -271,6 +271,13 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
         itemRemove: []
       }
     )
+  }
+
+  get uploadFiles()
+  {
+    return  [...this.fileRefs.filesx].filter(
+      (image) => !image.remove
+    ) // Clones the list so that its not mutatable
   }
   async PreviewNote() {
     if (this.formErrors) {
@@ -281,8 +288,6 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       return
     }
 
-    const uploadFile = [...this.fileRefs.filesx].filter(image => !image.remove) // Clones the list so that its not mutatable
-
     const fileImageSrcs = [...this.fileRefs.srcs] // Clone list and check that it exists
       .filter((v) => !v.remove) // Remove removed images
       .map((v) => ({
@@ -291,8 +296,6 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
         imageURL: v.src || ''
       }))
 
-    console.log({uploadFile});
-    notesStore.SET_UPLOAD_IMAGES(uploadFile)
     const previewNote = new Note({
       title: this.title,
       uid: authStore.user?.uid!,
@@ -305,27 +308,43 @@ export default class PostNotesModal extends mixins(ValidateImage, PasteImage) {
       grade: this.gradeSelect as Grade_O,
       contents: this.contents,
       storedImages: [...this.images],
-      coverImages: fileImageSrcs
+      coverImages: fileImageSrcs,
+      school : this.schoolSelect != 'All Schools' ? this.schoolSelect : null
     })
-
-    if (this.schoolSelect != 'All Schools')
-      previewNote.school = this.schoolSelect
 
     if (this.group) {
       previewNote.groupId = this.group.id
       previewNote.groupName = this.group.title
     }
-    notesStore.SetPreviewNote(previewNote)
-    notesStore.TogglePreviewModal(true)
+    this.previewNote = previewNote
   }
 
+  async PostNote() {
+    if (!this.previewNote) return this.$qto.error({message: 'Post note error'})
+    const loading = this.$vs.loading()
+    try {
+      const noteId = await notesStore.PostNote({note : this.previewNote, coverImageFiles : this.uploadFiles})
+      this.$emit('post', noteId);
+      this.$vs.notification({
+        color : "success",
+        title : "Note Posted"
+      })
+      this.$router.push(`/notes/${noteId}`);
+    } catch (error) {
+      this.$qto.error(error)
+    }
+    this.reset()
+    loading.close()
+  }
   get formErrors() {
     return (
       !this.title ||
       this.subjectSelect === '' ||
       this.gradeSelect === '' ||
       !this.contents ||
-      !this.fileRefs.filesx.filter(image => !image.remove).every((image) => this.validateImageType(image))
+      !this.fileRefs.filesx
+        .filter((image) => !image.remove)
+        .every((image) => this.validateImageType(image))
     )
   }
 }
