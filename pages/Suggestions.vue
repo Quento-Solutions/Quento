@@ -49,10 +49,10 @@
                         <h6 class="truncated mt-2">Posted {{ parseDate(item.createdAt.seconds) }}</h6>
                       </div>
 
-                      <vs-tooltip class="float-right">
+                      <VxTooltip class="float-right">
                         <vs-avatar>{{trimText(item.userDisplayName)}}</vs-avatar>
                         <template #tooltip>{{ item.userDisplayName }}</template>
-                      </vs-tooltip>
+                      </VxTooltip>
                     </div>
                   </template>
                   <div>
