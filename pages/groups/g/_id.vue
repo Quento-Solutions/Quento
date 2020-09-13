@@ -108,8 +108,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
   group: Group | null = null
   members: any[] = []
 
-  checkRoute() 
-  {
+  checkRoute() {
     if (!this.inGroup && this.active !== 'Summary') this.active = 'Summary'
   }
 
@@ -136,7 +135,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
   }
 
   @Watch('groupUrl')
-  onGroupUrlChange(oldVal ?: string, newVal ?: string) {
+  onGroupUrlChange(oldVal?: string, newVal?: string) {
     this.fetchGroup()
   }
 
@@ -149,10 +148,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
   async JoinGroup() {
     if (!this.group || this.inGroup || !this.AuthUser?.uid) return
     if (!this.group?.approved) {
-      this.$vs.notification({
-        title: 'Group Is Not Verified, Cannot Join',
-        color: 'danger'
-      })
+      this.$qto.error({message: 'Group Is Not Approved'})
     }
     const loading = this.$vs.loading()
     try {
@@ -169,11 +165,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
         color: 'success'
       })
     } catch (error) {
-      console.error(error)
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
+      this.$qto.error(error)
     }
     loading.close()
   }

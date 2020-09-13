@@ -282,10 +282,7 @@ export default class UserSettings extends mixins(
         color: 'success'
       })
     } catch (error) {
-      this.$vs.notification({
-        title: 'An Error Occured',
-        color: 'warn'
-      })
+      this.$qto.error(error)
     }
     loading.close()
     this.$router.push('/user/profile')

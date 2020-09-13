@@ -111,10 +111,9 @@ export default class AuthenticationMixin extends Vue {
       this.$router.push("/auth/Login");
       // Handle Sign Up Stuff Actually this should be in Actions but
     } catch (error) {
-      this.$vs.notification({ color: 'danger', title: 'Email Invalid/In Use' }) 
+      this.$qto.error(error);
       this.stopLoading()
       this.error = error
-      console.error(error)
       return
     }
   }

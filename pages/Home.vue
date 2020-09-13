@@ -133,11 +133,7 @@ export interface ContactInformation {
       await feedsStore.GetMoreNotes(true)
     } catch(error)
     {
-      console.error(error);
-      this.$vs.notification({
-        title : error.message,
-        color : 'danger'
-      })
+      this.$qto.error(error);
     }
   },
   name: 'Home'
