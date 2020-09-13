@@ -1,6 +1,4 @@
 <template>
-
-
   <!-- ----------------------------------MY VERSION---------------------------------- -->
 
   <div id="notes-screen-container" class="vx-row w-full relative justify-evenly pl-4">
@@ -85,11 +83,7 @@ import {School_O} from '~/types/schools'
       const groups = groupsStore.GetMoreGroups(true)
       await Promise.all([groups])
     } catch (error) {
-      console.error({error})
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
+      this.$qto.error(error)
     }
     this.loaded = true
     loading.close()
@@ -99,8 +93,7 @@ export default class DiscoverGroups extends mixins(LoadScroll) {
   ToggleMenu() {
     windowStore.SetFilterSidebar(!windowStore.filterSidebarOpen)
   }
-  get isSmallScreen()
-  {
+  get isSmallScreen() {
     return windowStore.smallerThanMd
   }
   get noNotesFound() {

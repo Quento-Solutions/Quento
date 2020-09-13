@@ -39,11 +39,7 @@ export default class DeleteNotesModal extends Vue {
         color: 'success'
       })
     } catch (error) {
-      console.log({ error }, error.message)
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
+      this.$qto.error(error);
     }
     loading.close()
   }

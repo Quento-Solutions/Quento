@@ -49,10 +49,10 @@
                         <h6 class="truncated mt-2">Posted {{ parseDate(item.createdAt.seconds) }}</h6>
                       </div>
 
-                      <vs-tooltip class="float-right">
+                      <VxTooltip class="float-right">
                         <vs-avatar>{{trimText(item.userDisplayName)}}</vs-avatar>
                         <template #tooltip>{{ item.userDisplayName }}</template>
-                      </vs-tooltip>
+                      </VxTooltip>
                     </div>
                   </template>
                   <div>
@@ -155,14 +155,10 @@ export default class SuggestionsPage extends mixins(LoadScroll) {
       const loading = this.$vs.loading()
       try {
         await suggestionsStore.GetLikedSuggestions()
-        loading.close()
       } catch (error) {
-        loading.close()
-        this.$vs.notification({
-          color: 'danger',
-          title: error.message
-        })
+        this.$qto.error(error);
       }
+      loading.close()
     }
     return
   }

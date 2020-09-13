@@ -61,34 +61,6 @@ export default class PreviewNotesModal extends Vue {
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
-
-  async PostNote() {
-    if (!notesStore.PreviewNote) return
-
-    const loading = this.$vs.loading()
-
-    try {
-      await notesStore.PostNote({
-        note: notesStore.PreviewNote
-      })
-
-      this.$vs.notification({
-        color: 'success',
-        title: 'Worked'
-      })
-      this.isActive = false
-      await notesStore.ResetPosts()
-      loading.close()
-    } catch (error) {
-      console.log({error})
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Posting Your Note'
-      })
-      this.isActive = false
-      loading.close()
-    }
-  }
 }
 </script>
 

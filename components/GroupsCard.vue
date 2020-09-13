@@ -13,7 +13,7 @@
           style="min-height : 250px"
           :style="backgroundGradient(group.backgroundImageUrl)"
         >
-          <vs-tooltip style="width: max-content">
+          <VxTooltip style="width: max-content">
             <div
               class="rounded-full w-max-content px-1"
               style="width: max-content"
@@ -22,7 +22,7 @@
               <i class="bx text-3xl" :class="group.approved ? ' bx-check' : 'bx-dots-horizontal'" />
             </div>
             <template #tooltip>{{group.approved ? 'Verified' : 'Pending Approval'}}</template>
-          </vs-tooltip>
+          </VxTooltip>
           <!-- MAIN INSIDE CARD -->
           <div
             class="mb-2 md:mt-32 font-bold w-2/3 text-white font-open text-3xl"
@@ -34,7 +34,7 @@
 
           <!-- Author Line -->
           <div class="flex flex-row flex-wrap md:flex-no-wrap w-2/3" style>
-            <vs-tooltip class="truncate">
+            <VxTooltip class="truncate">
               <div
                 :style="`background-color: #${randomColor()}`"
                 style="min-width : 0"
@@ -42,8 +42,8 @@
                 v-if="group.subject"
               >{{group.subject}}</div>
               <template #tooltip>{{group.subject}}</template>
-            </vs-tooltip>
-            <vs-tooltip class="truncate">
+            </VxTooltip>
+            <VxTooltip class="truncate">
               <div
                 :style="`background-color: #${randomColor()}`"
                 style="min-width : 0"
@@ -51,8 +51,8 @@
                 v-if="group.school"
               >{{group.school}}</div>
               <template #tooltip>{{group.school}}</template>
-            </vs-tooltip>
-            <vs-tooltip class="truncate">
+            </VxTooltip>
+            <VxTooltip class="truncate">
               <div
                 :style="`background-color: #${randomColor()}`"
                 style="min-width : 0"
@@ -60,7 +60,7 @@
                 v-if="group.grade"
               >Grade {{group.grade}}</div>
               <template #tooltip>Grade {{group.grade}}</template>
-            </vs-tooltip>
+            </VxTooltip>
           </div>
 
           <!-- Side -->
