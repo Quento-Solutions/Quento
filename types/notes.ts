@@ -20,7 +20,7 @@ export interface Note_t {
   contents : string
   storedImages?: StoredImage[]
   coverImages ?: StoredImage[]
-  school ?: School_O;
+  school ?: School_O | null;
 
   createdAt: Date
   upVotes: number
@@ -47,7 +47,7 @@ export interface Note_t_F {
   storedImages?: StoredImage[]
   coverImages ?: StoredImage[]
 
-  school ?: School_O;
+  school ?: School_O | null;
 
   createdAt: Date_t_F
   upVotes: number

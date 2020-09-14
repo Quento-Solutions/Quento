@@ -5,7 +5,8 @@ import UploadImage from '~/utils/uploadImage'
 @Component<PasteImagesMixin>({})
 export default class PasteImagesMixin extends Vue {
   images: StoredImage[] = []
-  contents!: string
+  contents !: string
+
 
   async uploadImage(image: File, evt?: any) {
     const imageUpload = await UploadImage(image)

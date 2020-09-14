@@ -1,6 +1,6 @@
 <template>
   <vs-dialog
-    v-model="active"
+    v-model="isActive"
     id="suggestionsPopup"
     class="content-popup"
     style="z-index: 1000000001;"
@@ -24,7 +24,7 @@
 
     <template #footer>
       <div class="footer-dialog vx-row justify-center md:pb-8 md:px-12 px-2">
-        <vs-button class="md:w-1/2 w-full" success @click="PostNote()">
+        <vs-button class="md:w-1/2 w-full" success @click="$emit('post')">
           <div class="text-xl p-2 font-bold lg:text-2xl" style>POSTED NOTE</div>
         </vs-button>
       </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop} from 'nuxt-property-decorator'
+import {Component, Vue, Prop, PropSync} from 'nuxt-property-decorator'
 
 import {suggestionsStore, notesStore, windowStore, authStore} from '~/store'
 import {
@@ -54,49 +54,12 @@ import NotesCard from '~/components/NotesCard.vue'
   }
 })
 export default class PreviewNotesModal extends Vue {
-  get previewNote() {
-    return notesStore.PreviewNote
-  }
 
-  get active() {
-    return notesStore.PreviewModalOpen
-  }
-  set active(value: boolean) {
-    notesStore.TogglePreviewModal(value)
-  }
+  @PropSync('active') isActive!: boolean
+  @Prop({default: null}) previewNote!: Note | null
 
   get isLargeScreen() {
     return windowStore.isLargeScreen
-  }
-
-  async PostNote() {
-    if (!notesStore.PreviewNote) return
-
-    const loading = this.$vs.loading()
-
-    try {
-      await notesStore.PostNote({
-        note: notesStore.PreviewNote
-      })
-
-      this.$vs.notification({
-        color: 'success',
-        title: 'Worked'
-      })
-      await notesStore.ResetPosts()
-    } catch (error) {
-      this.$qto.error(error)
-    }
-    this.state = false
-    loading.close()
-  }
-
-  set state(value: boolean) {
-    this.active = false
-  }
-
-  get state() {
-    return this.active
   }
 }
 </script>
