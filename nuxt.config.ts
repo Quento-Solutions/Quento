@@ -66,7 +66,7 @@ const config: NuxtConfig = {
     '@nuxtjs/firebase',
     '@nuxtjs/pwa',
     '@nuxtjs/markdownit',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
   ],
 
   plugins: [
