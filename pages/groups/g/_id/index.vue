@@ -148,7 +148,6 @@ import {groupsStore} from '~/store'
   mounted() {}
 })
 export default class GroupsSummary extends mixins(UserMixin) {
-
   @Prop({required: true}) group!: Group
   @Prop({required: true, type: Array}) members!: any[]
   @Prop({required: true, type: String}) groupId!: string
@@ -173,17 +172,13 @@ export default class GroupsSummary extends mixins(UserMixin) {
         .update({
           memberList: store.FieldValue.arrayRemove(this.kickUser.id)
         })
-        this.$emit('refetch');
+      this.$emit('refetch')
       if (this.kickUser.id === this.AuthUser?.uid) {
         await groupsStore.GetUserGroups()
         this.$router.push('/groups')
       }
     } catch (error) {
-      console.error(error)
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
+      this.$qto.error(error)
     }
     loading.close()
   }
@@ -222,26 +217,16 @@ export default class GroupsSummary extends mixins(UserMixin) {
     return this.group?.userId === userId
   }
 
-
   async GenerateJoinToken() {
     const groupId = this.groupId
-    if (
-      !groupId ||
-      !this.group ||
-      !this.group.approved ||
-      !this.memberOfGroup
-    )
+    if (!groupId || !this.group || !this.group.approved || !this.memberOfGroup)
       return
     const loading = this.$vs.loading()
     const res = await functions.httpsCallable('GenerateJoinToken')({groupId})
     if (res.data.status !== 200) {
-      this.$vs.notification({
-        title: res.data.message,
-        color: 'danger'
-      })
-      console.log({res})
+      this.$qto.error(res.data)
     } else {
-      this.$emit('refetch');
+      this.$emit('refetch')
     }
     loading.close()
   }

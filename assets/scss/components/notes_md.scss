@@ -1,5 +1,5 @@
 .previewClickable {
-  :hover {
+  &:hover {
     background-color: #f5f5f6;
   }
   transition-duration: 100ms !important;
@@ -28,8 +28,7 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
   }
-  b 
-  {
+  b {
     font-weight: bold !important;
   }
 
@@ -58,7 +57,7 @@
     }
   }
 
-  pre{
+  pre {
     border-style: solid;
     border-width: 0.05rem;
     border-radius: 0.4rem;

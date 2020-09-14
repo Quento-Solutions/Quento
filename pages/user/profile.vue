@@ -333,6 +333,7 @@ import {UserData} from '~/types/user'
   }
 })
 export default class UserProfile extends mixins(UserMixin) {
+
   linkDiscord() {
     const redirect_uri = encodeURIComponent(
       `${window.location.origin}/user/discord`

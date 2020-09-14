@@ -1,6 +1,6 @@
 <template>
   <vs-dialog
-    v-model="active"
+    v-model="ModalActive"
     id="editNotesModal"
     class="content-popup"
     style="z-index: 1000000000;"
@@ -10,6 +10,7 @@
     overflow-hidden
     v-if="ActiveNote"
   >
+    <PreviewNotesModal :active.sync="PreviewActive" :previewNote="ActiveNote" @post="PostNote()"></PreviewNotesModal>
     <template #header>
       <div class="pt-10">
         <h4 class="not-margin text-title text-4xl">
@@ -45,7 +46,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Subject"
         v-model="ActiveNote.subject"
-        :disabled="ActiveNote.groupId"
+        :disabled="!!ActiveNote.groupId"
       >
         <vs-option-group v-for="(subjectGroup, index) in SubjectGroupList" :key="index">
           <div slot="title" class="w-full vx-row">
@@ -68,7 +69,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="Grade"
         v-model="ActiveNote.grade"
-        :disabled="ActiveNote.groupId"
+        :disabled="!!ActiveNote.groupId"
       >
         <vs-option
           v-for="(grade, subIndex) in GradeList"
@@ -84,7 +85,7 @@
         class="block mb-3 w-6 mt-3 w-full lg:w-1/2"
         placeholder="School"
         v-model="activeSchool"
-        :disabled="ActiveNote.groupId"
+        :disabled="!!ActiveNote.groupId"
       >
         <vs-option
           v-for="(school, subIndex) in SchoolList"
@@ -122,7 +123,14 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
+import {
+  Component,
+  Vue,
+  Prop,
+  mixins,
+  Watch,
+  PropSync
+} from 'nuxt-property-decorator'
 
 import {suggestionsStore, notesStore, windowStore, groupsStore} from '~/store'
 import {
@@ -139,7 +147,11 @@ import PasteImage from '~/mixins/PasteImagesMixin'
 import {Note} from '~/types/notes'
 import {authStore} from '~/store'
 import {SchoolList, School_O} from '~/types/schools'
-import { Group } from '~/types/groups'
+import {Group} from '~/types/groups'
+import PreviewNotesModal from '~/screens/notes/PreviewNotesModal.vue'
+import IconMixin from '~/mixins/IconMixin'
+import firestore from '~/plugins/firestore'
+
 @Component<EditNotesModal>({
   async mounted() {
     if (!this.userGroups.length && !groupsStore.userGroupFetched) {
@@ -147,9 +159,17 @@ import { Group } from '~/types/groups'
       await groupsStore.GetUserGroups()
       this.groupsLoading = false
     }
+  },
+  components: {
+    PreviewNotesModal
   }
 })
-export default class EditNotesModal extends mixins(PasteImage) {
+export default class EditNotesModal extends mixins(PasteImage, IconMixin) {
+  @PropSync('isActive') ModalActive!: boolean
+  @Prop({default: null}) NoteData!: Note | null
+
+  PreviewActive = false
+
   ActiveNote: Note | null = null
   characterLimit = 5000
   readonly SchoolList = [...SchoolList] as const
@@ -157,6 +177,7 @@ export default class EditNotesModal extends mixins(PasteImage) {
   groupsLoading = false
 
   group: Group | null = null
+
   get userGroups() {
     return groupsStore.userGroups
   }
@@ -164,44 +185,30 @@ export default class EditNotesModal extends mixins(PasteImage) {
   get contents() {
     return this.ActiveNote?.contents || ''
   }
+
   set contents(value) {
     this.ActiveNote ? (this.ActiveNote.contents = value) : ''
   }
 
   activeSchool: 'All Schools' | School_O = 'All Schools'
-  @Watch('StoreEditNotes')
+
+  @Watch('NoteData')
   onStoreEditNoteChanged(value: Note | null, oldVal: Note | null) {
     this.ActiveNote = Object.assign({}, value)
     this.images = value?.storedImages ? [...value.storedImages] : []
     this.activeSchool = value?.school || 'All Schools'
   }
 
-  get StoreEditNotes() {
-    return notesStore.EditingNote
-  }
-
   readonly GradeList = GradeList.filter((v) => v !== 'ALL')
 
-  // make this a mixin
-  getIcon(subject: SubjectGroup_O | Subject_O) {
-    return SubjectIconList[subject]
-  }
   readonly SubjectGroupList = NestedSubjectList
-
-  get active() {
-    return notesStore.EditModalOpen
-  }
-
-  set active(value: boolean) {
-    if (!value) notesStore.SetEditNote(null)
-  }
 
   get isLargeScreen() {
     return windowStore.isLargeScreen
   }
 
   async PreviewNote() {
-    if(!this.ActiveNote) return;
+    if (!this.ActiveNote) return
     if (this.formErrors) {
       this.$vs.notification({
         color: 'danger',
@@ -211,11 +218,31 @@ export default class EditNotesModal extends mixins(PasteImage) {
     }
     this.ActiveNote!.school = this.activeSchool
     this.ActiveNote!.storedImages = [...this.images]
-    notesStore.SetPreviewNote(Object.assign({}, this.ActiveNote))
-    notesStore.SET_UPLOAD_IMAGES([]);
-    notesStore.TogglePreviewModal(true)
+    this.PreviewActive = true
+  }
+  reset() {
+    this.ActiveNote = null
+    this.PreviewActive = false
+    this.ModalActive = false
   }
 
+  async PostNote() {
+    if (this.formErrors || !this.ActiveNote?.id) return
+    const loading = this.$vs.loading()
+    try {
+      await firestore
+        .collection('notes')
+        .doc(this.ActiveNote.id)
+        .update(Note.toFirebase(this.ActiveNote))
+      this.$vs.notification({
+        color: 'success',
+        title: 'Note Updated'
+      })
+    } catch (error) {}
+    this.$emit('reset')
+    this.reset()
+    loading.close()
+  }
   get formErrors() {
     return (
       !this.ActiveNote ||

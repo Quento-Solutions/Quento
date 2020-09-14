@@ -246,11 +246,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
         title: 'Group Created'
       })
     } catch (error) {
-      console.log({error})
-      this.$vs.notification({
-        color: 'danger',
-        title: 'An Error Occurred While Creating Your Group'
-      })
+      this.$qto.error(error);
     }
     this.active = false
     loading.close()

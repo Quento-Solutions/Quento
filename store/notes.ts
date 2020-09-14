@@ -1,13 +1,8 @@
-import {
-  Module,
-  VuexModule,
-  Action,
-  Mutation
-} from 'vuex-module-decorators'
+import {Module, VuexModule, Action, Mutation} from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { authStore } from './index'
-import { firestore as store } from 'firebase/app'
-import { Note, Note_t, Note_t_F } from '~/types/notes'
+import {authStore} from './index'
+import {firestore as store} from 'firebase/app'
+import {Note, Note_t, Note_t_F} from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
 // Fix the google
 import {
@@ -16,15 +11,15 @@ import {
   SortOptions_O,
   FilterOptions
 } from '~/types/subjects'
-import { School_O } from '~/types/schools'
+import {School_O} from '~/types/schools'
 import functions from '~/plugins/firebaseFunctions'
-import { HourDiff } from '~/utils/time'
+import {HourDiff} from '~/utils/time'
 import UploadImage from '~/utils/uploadImage'
-
+import {StoredImage} from '~/types/firebaseTypes'
 
 let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
 
-@Module({ stateFactory: true, name: 'notes', namespaced: true })
+@Module({stateFactory: true, name: 'notes', namespaced: true})
 export default class NotesModule extends VuexModule {
   PreviewNote: Note | null = null
   EditingNote: Note | null = null
@@ -68,8 +63,8 @@ export default class NotesModule extends VuexModule {
     LastVisible = null
     this.EndOfList = false
   }
-  
-  @Action({ rawError: true })
+
+  @Action({rawError: true})
   public SetEditNote(note: Note | null) {
     this.SET_EDIT_NOTE(note)
   }
@@ -80,7 +75,7 @@ export default class NotesModule extends VuexModule {
     this.EditModalOpen = !!note
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async ResetPosts() {
     this.RESET_NOTES()
     this.SET_RESET(true)
@@ -91,7 +86,7 @@ export default class NotesModule extends VuexModule {
     return await this.GetMoreNotes(true)
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public SetFilter(filter: FilterOptions) {
     this.SET_FILTER(filter)
     this.RESET_NOTES()
@@ -110,7 +105,7 @@ export default class NotesModule extends VuexModule {
     this.SortSelect = sortSelect
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async IncrementView(id: string) {
     const updateViews = await firestore
       .collection('notes')
@@ -126,7 +121,7 @@ export default class NotesModule extends VuexModule {
     this.UploadImages = images || []
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async ToggleLikedNote(id: string) {
     //==============Change server side==============
     const batch = firestore.batch()
@@ -167,11 +162,13 @@ export default class NotesModule extends VuexModule {
     //If userdata doesn't exist
     if (!authStore.userData) return
     //Get liked notes from userData
-    const { likedNotes } = authStore.userData
+    const {likedNotes} = authStore.userData
     var index = likedNotes?.indexOf(suggestionId)
 
-    const suggestionIndex = this.ActiveNotes.findIndex((doc) => doc.id! == suggestionId)
-    if(suggestionIndex === -1) return;
+    const suggestionIndex = this.ActiveNotes.findIndex(
+      (doc) => doc.id! == suggestionId
+    )
+    if (suggestionIndex === -1) return
 
     if (index !== -1) {
       //Liking a post
@@ -180,13 +177,13 @@ export default class NotesModule extends VuexModule {
       //Disliking a post
       this.ActiveNotes[suggestionIndex].upVotes > 0
         ? this.ActiveNotes[suggestionIndex].upVotes--
-        : console.log("YOU TRIED TO DISLIKE A POST WITH > 0 LIKES")
+        : console.log('YOU TRIED TO DISLIKE A POST WITH > 0 LIKES')
     }
   }
 
   @Mutation
-  public pushActiveNotes(noteInQuestion: Note){
-    if (!this.ActiveNotes.some(note => note.id === noteInQuestion.id)) {
+  public pushActiveNotes(noteInQuestion: Note) {
+    if (!this.ActiveNotes.some((note) => note.id === noteInQuestion.id)) {
       this.ActiveNotes.push(noteInQuestion)
     }
   }
@@ -200,7 +197,7 @@ export default class NotesModule extends VuexModule {
   }
 
   //Load more notes for a list
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async GetMoreNotes(start = false) {
     if (this.EndOfList) {
       return
@@ -220,7 +217,6 @@ export default class NotesModule extends VuexModule {
     }
 
     if (this.isPersonalized) {
-
       if (!LastVisible) {
         if (!authStore.userData?.lastFeedUpdated) {
           // If the user is generating the feed for the first time, wait for it to be generated completely
@@ -230,12 +226,14 @@ export default class NotesModule extends VuexModule {
           functions.httpsCallable('PersonalRank')()
         }
       }
-      let query: store.Query<store.DocumentData> = firestore.collectionGroup('personalRanking')
+      let query: store.Query<store.DocumentData> = firestore.collectionGroup(
+        'personalRanking'
+      )
 
-      query = query.where("dataType", "==", "note");
-      query = query.where('userId', '==', authStore.user?.uid);
-      query = query.orderBy("updatedAt", "desc");
-      query = query.orderBy('magicRank', 'desc');
+      query = query.where('dataType', '==', 'note')
+      query = query.where('userId', '==', authStore.user?.uid)
+      query = query.orderBy('updatedAt', 'desc')
+      query = query.orderBy('magicRank', 'desc')
       if (LastVisible) {
         query = query.startAfter(LastVisible)
       }
@@ -247,7 +245,11 @@ export default class NotesModule extends VuexModule {
         const notes = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
-              if(!doc.data().parentPath) console.log("(In noteStore/NotesModule/GetMoreNotes function " , { parentPath: doc.data().parentPath, docData : doc.data() });
+              if (!doc.data().parentPath)
+                console.log(
+                  '(In noteStore/NotesModule/GetMoreNotes function ',
+                  {parentPath: doc.data().parentPath, docData: doc.data()}
+                )
               return firestore.doc(doc.data().parentPath).get()
             })
             .map(async (docPromise) =>
@@ -259,7 +261,7 @@ export default class NotesModule extends VuexModule {
         )
         this.PUSH_NOTES(notes)
       } catch (error) {
-        console.log({ error })
+        console.log({error})
         throw error
       }
       return
@@ -267,7 +269,7 @@ export default class NotesModule extends VuexModule {
 
     let query: store.Query<store.DocumentData> = firestore.collection('notes')
     // Do query filtering things
-    query = query.where('private', "==", false);
+    query = query.where('private', '==', false)
 
     if (!(this.ActiveGrade === 'ALL')) {
       query = query.where('grade', '==', this.ActiveGrade)
@@ -294,13 +296,21 @@ export default class NotesModule extends VuexModule {
       // this.SET_LAST_VISIBLE(lastVisible);
       this.PUSH_NOTES(notes)
     } catch (error) {
-      console.log({ error })
+      console.log({error})
       throw error
     }
   }
-  @Action({ rawError: true })
-  public async PostNote({ note }: { note: Note }) {
-    const deleteImages = note.storedImages?.map(async (image) => {
+  @Action({rawError: true})
+  public async PostNote({
+    note,
+    deleteImages,
+    coverImageFiles
+  }: {
+    note: Note
+    deleteImages ?: StoredImage[]
+    coverImageFiles ?: File[]
+  }) {
+    const unusedImages = note.storedImages?.map(async (image) => {
       // Delete unused images.
       const imageUsed = note.contents?.includes(image.imageURL)
       if (!imageUsed) {
@@ -308,31 +318,32 @@ export default class NotesModule extends VuexModule {
           const deleteImage = await storage.ref(image.fileName).delete()
           return deleteImage
         } catch (error) {
-          console.log({ error })
+          console.log({error})
           return
         }
       }
       return
     })
 
-    await Promise.all(deleteImages || [])
+    await Promise.all(unusedImages || [])
     const newImages = note.storedImages?.filter((value) =>
-    note.contents?.includes(value.imageURL)
+      note.contents?.includes(value.imageURL)
     )
-    const newNote: Note = {...note, storedImages: newImages };
-    const uploadImages = await Promise.all(this.UploadImages.map(file => UploadImage(file)));
-    if(uploadImages.length)
-    {
-      newNote.coverImages = uploadImages;
-    }
+    const uploadImages = await Promise.all(
+      coverImageFiles?.map((file) => UploadImage(file)) || []
+    )
+    const coverImages = [...(note.coverImages || []), ...uploadImages]
+    const newNote: Note = {...note, storedImages: newImages, coverImages}
 
     if (note.id) {
-      return await firestore
+      await firestore
         .collection('notes')
         .doc(note.id)
         .update(Note.toFirebase(newNote))
+      return note.id;
     }
-    await firestore.collection('notes').add(Note.toFirebase(newNote))
+    const noteRef = await firestore.collection('notes').add(Note.toFirebase(newNote))
+    return noteRef.id;
   }
 
   @Mutation
@@ -340,7 +351,7 @@ export default class NotesModule extends VuexModule {
     this.NotesModuleOpen = val
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public ToggleNotesModule(val: boolean) {
     this.TOGGLE_NOTES_MODULE(val)
   }
@@ -350,7 +361,7 @@ export default class NotesModule extends VuexModule {
     this.PreviewModalOpen = val
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public TogglePreviewModal(val: boolean) {
     this.TOGGLE_PREVIEW_MODAL(val)
   }
@@ -360,12 +371,12 @@ export default class NotesModule extends VuexModule {
     this.PreviewNote = val
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public SetPreviewNote(val: Note | null) {
     this.SET_PREVIEW_NOTE(val)
   }
 
-  @Action({ rawError: true })
+  @Action({rawError: true})
   public async DeleteNote(id: string) {
     await firestore.collection('notes').doc(id).delete()
     return await this.ResetPosts()

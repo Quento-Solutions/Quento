@@ -303,6 +303,7 @@ export default class UserPage extends mixins(UserMixin) {
   }
 
   async followUser() {
+    // Wtf someone needs to rewrite this
     const loading = this.$vs.loading()
     var length_of_following: number = 0
     var length_of_pendingFollowing: number = 0

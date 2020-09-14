@@ -71,7 +71,7 @@
               </div>
             </div>
           </vs-navbar-group>
-          <h3 class="text-title truncate hidden sm:block">{{ userName }}</h3>
+          <h3 class="text-title truncate hidden sm:block" style="font-weight: 500">{{ userName }}</h3>
 
           <vs-navbar-group id="profile">
             <vs-avatar class="profileIcon icon" badge badge-color="success">
@@ -217,11 +217,7 @@ export default class TopNav extends mixins(UserMixin) {
       
       await notificationStore.getNotifications()
     } catch (error) {
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
-      console.error(error)
+      this.$qto.error(error);
     }
   }
 
@@ -237,11 +233,7 @@ export default class TopNav extends mixins(UserMixin) {
         })
       await notificationStore.getNotifications()
     } catch (error) {
-      this.$vs.notification({
-        title: error.message,
-        color: 'danger'
-      })
-      console.log(error)
+      this.$qto.error(error);
     }
     this.notificationsVisible = false
   }

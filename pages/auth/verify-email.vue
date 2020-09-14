@@ -88,11 +88,7 @@ export default class VerifyEmail extends mixins(UserMixin) {
             displayName: val.displayName
           })
         } catch (error) {
-          this.$vs.notification({
-            title: error.message,
-            color: 'danger'
-          })
-          console.error(error)
+          this.$qto.error(error)
         }
         loading.close()
       }

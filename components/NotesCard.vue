@@ -280,8 +280,9 @@ export default class NotesCard extends Vue {
     return authStore.user?.uid == this.note.uid
   }
 
-  OpenEditingModal() {
-    notesStore.SetEditNote(this.note)
+  OpenEditingModal() 
+  {
+    this.$router.replace(`/notes/${this.note.id}?editing=true`)
   }
 
   getIcon(subject: SubjectGroup_O | Subject_O) {
