@@ -47,6 +47,7 @@
     "vee-validate": "^3.3.9",
     "vue-awesome-swiper": "^3.1.3",
     "vue-backtotop": "^1.6.1",
+    "vue-chartjs": "^3.5.1",
     "vue-feather-icons": "^5.1.0",
     "vue-flux": "^6.2.2",
     "vue-gallery-slideshow": "^1.5.2",
