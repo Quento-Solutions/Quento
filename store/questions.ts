@@ -1,6 +1,7 @@
 import {Module, VuexModule, Action, Mutation} from 'vuex-module-decorators'
+
+import firebase from 'firebase'
 import firestore from '~/plugins/firestore'
-import {firestore as FirestoreModule} from 'firebase/app'
 import functions from '~/plugins/firebaseFunctions'
 import storage from '~/plugins/firebaseStorage'
 
@@ -17,9 +18,8 @@ import {authStore} from '~/store'
 import {School_O} from '~/types/schools'
 import {HourDiff} from '~/utils/time'
 
-let LastVisible: FirestoreModule.QueryDocumentSnapshot<
-  FirestoreModule.DocumentData
-> | null = null
+let isLastVisible = false;
+let FirestoreModule = firebase.firestore;
 
 @Module({stateFactory: true, name: 'questions', namespaced: true})
 export default class QuestionsModule extends VuexModule {
@@ -65,7 +65,7 @@ export default class QuestionsModule extends VuexModule {
   @Mutation
   public RESET_ITEMS() {
     this.ActiveItems = []
-    LastVisible = null
+    isLastVisible = false
     this.isPersonalized = false
     this.EndOfList = false
   }
@@ -78,7 +78,7 @@ export default class QuestionsModule extends VuexModule {
     sortSelect
   }: FilterOptions) {
     this.ActiveItems = []
-    LastVisible = null
+    isLastVisible = false
     this.ActiveSubjects = [...filterSubjects]
     this.ActiveGrade = filterGrades
     this.ActiveSchool = filterSchools
@@ -130,7 +130,7 @@ export default class QuestionsModule extends VuexModule {
     }
 
     if (this.isPersonalized) {
-      if (!LastVisible) {
+      if (!isLastVisible) {
         if (!authStore.userData?.lastFeedUpdated) {
           // If the user is generating the feed for the first time, wait for it to be generated completely
           await functions.httpsCallable('PersonalRank')()
@@ -139,22 +139,19 @@ export default class QuestionsModule extends VuexModule {
           functions.httpsCallable('PersonalRank')()
         }
       }
-      let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collectionGroup(
-        'personalRanking'
-      )
-
-      query = query.where('dataType', '==', 'question')
-      query = query.where('userId', '==', authStore.user?.uid)
-      query = query.orderBy('updatedAt', 'desc')
-      query = query.orderBy('magicRank', 'desc')
-      if (LastVisible) {
-        query = query.startAfter(LastVisible)
+      let query = firestore.collectionGroup('personalRanking')
+      .where('dataType', '==', 'question')
+      .where('userId', '==', authStore.user?.uid)
+      .orderBy('updatedAt', 'desc')
+      .orderBy('magicRank', 'desc')
+      .limit(this.ItemsPerPage)
+      if (isLastVisible) {
+        query = query.startAfter(isLastVisible)
       }
-      query = query.limit(this.ItemsPerPage)
-
+      
       try {
         const rankingDocs = await query.get()
-        LastVisible = rankingDocs.docs[rankingDocs.docs.length - 1]
+        isLastVisible = !!rankingDocs.docs[rankingDocs.docs.length - 1]
         const questions = await Promise.all(
           rankingDocs.docs
             .map((doc) => {
@@ -176,13 +173,10 @@ export default class QuestionsModule extends VuexModule {
       return
     }
 
-    let query: FirestoreModule.Query<FirestoreModule.DocumentData> = firestore.collection(
-      'questions'
-    )
-    query = query.where('private', '==', false)
+    let query = firestore.collection('questions')
+    .where('private', '==', false)
 
     // Do query filtering things
-
     if (this.ActiveGrade !== 'ALL') {
       query = query.where('grade', '==', this.ActiveGrade)
     }
@@ -195,8 +189,8 @@ export default class QuestionsModule extends VuexModule {
 
     query = query.orderBy(this.SortSelect, 'desc')
 
-    if (LastVisible) {
-      query = query.startAfter(LastVisible)
+    if (isLastVisible) {
+      query = query.startAfter(isLastVisible)
     }
 
     query = query.limit(this.ItemsPerPage)
@@ -205,13 +199,15 @@ export default class QuestionsModule extends VuexModule {
       const notes = snapshot.docs.map((doc) =>
         Question.fromFirebase(doc.data() as Question_t_F, doc.id)
       )
-      LastVisible = snapshot.docs[snapshot.docs.length - 1]
+      isLastVisible = !!snapshot.docs[snapshot.docs.length - 1]
       this.PUSH_QUESTIONS(notes)
     } catch (error) {
       console.log({error})
       throw error
     }
   }
+
+
   // Question Data Logic
   @Action({rawError: true})
   public async CreateQuestion(question: Question) {
@@ -363,7 +359,7 @@ export default class QuestionsModule extends VuexModule {
       .collection('questions')
       .doc(id)
       .update({
-        views: FirestoreModule.FieldValue.increment(1)
+        views: firebase.firestore.FieldValue.increment(1)
       })
     return updateViews
   }

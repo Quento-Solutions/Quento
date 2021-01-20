@@ -1,6 +1,6 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
-import { firestore as FirestoreModule } from 'firebase/app'
+import firebase from 'firebase/app'
 import { authStore } from './index'
 import { Suggestion } from '~/types/suggestions'
 
@@ -76,17 +76,17 @@ export default class SuggestionsModule extends VuexModule {
 
     if (this.likedSuggestions.includes(id)) {
       batch.update(userRef, {
-        likedSuggestions: FirestoreModule.FieldValue.arrayRemove(id)
+        likedSuggestions: firebase.firestore.FieldValue.arrayRemove(id)
       })
       batch.update(suggestionRef, {
-        upVotes: FirestoreModule.FieldValue.increment(-1)
+        upVotes: firebase.firestore.FieldValue.increment(-1)
       })
     } else {
       batch.update(userRef, {
-        likedSuggestions: FirestoreModule.FieldValue.arrayUnion(id)
+        likedSuggestions: firebase.firestore.FieldValue.arrayUnion(id)
       })
       batch.update(suggestionRef, {
-        upVotes: FirestoreModule.FieldValue.increment(1)
+        upVotes: firebase.firestore.FieldValue.increment(1)
       })
     }
     await batch.commit()

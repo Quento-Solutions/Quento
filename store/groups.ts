@@ -1,7 +1,7 @@
 import { Module, VuexModule, MutationAction,Mutation, Action } from 'vuex-module-decorators'
 
 import firestore from '~/plugins/firestore'
-import { firestore as store } from 'firebase/app'
+import firebase from 'firebase'
 import {Group, Group_t_F, Group_t} from '~/types/groups'
 import { School_O } from '~/types/schools'
 
@@ -18,7 +18,7 @@ import { authStore } from '~/utils/store-accessor'
 import { Timestamp } from '~/types/env.utils'
 
 
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+let LastVisible: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData> | null = null
 
 @Module({ stateFactory: true, name: 'groups', namespaced: true })
 export default class GroupsModule extends VuexModule {
@@ -61,7 +61,7 @@ export default class GroupsModule extends VuexModule {
     if (start && this.ItemsPerPage <= this.groupList.length) return
     // If you are just trying to get the first notes and note trying to load more, dont load more than you need to
     
-    let query: store.Query<store.DocumentData> = firestore.collection('groups')
+    let query: firebase.firestore.Query<firebase.firestore.DocumentData> = firestore.collection('groups')
     // Do query filtering things
 
     if (!(this.ActiveGrade === 'ALL')) 

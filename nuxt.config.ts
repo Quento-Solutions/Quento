@@ -115,7 +115,6 @@ const config: NuxtConfig = {
       functions: true,
       storage: true,
       analytics: true
-      // Just as example. Can be any other service.
     }
   },
   

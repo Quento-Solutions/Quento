@@ -91,10 +91,14 @@
 <script lang="ts">
 import {Component, Vue, Prop, Watch, mixins} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
+import firebase from 'firebase'
 import firestore from '~/plugins/firestore'
 import {Group, Group_t_F} from '~/types/groups'
-import {firestore as store} from 'firebase/app'
 import {groupsStore} from '~/store'
+
+
+// import {firestore as store} from 'firebase/app'
+
 
 @Component<GroupsGroup>({
   components: {},
@@ -160,7 +164,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
         .collection('groups')
         .doc(this.group.id)
         .update({
-          memberList: store.FieldValue.arrayUnion(this.AuthUser.uid)
+          memberList: firebase.firestore.FieldValue.arrayUnion(this.AuthUser.uid)
         })
       await Promise.all([this.fetchGroup(), groupsStore.GetUserGroups()])
 

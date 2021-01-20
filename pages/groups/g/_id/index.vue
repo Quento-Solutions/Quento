@@ -139,8 +139,12 @@ import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
 import functions from '~/plugins/firebaseFunctions'
 import firestore from '~/plugins/firestore'
+import firebase from 'firebase'
 import {Group, Group_t_F} from '~/types/groups'
-import {firestore as store} from 'firebase/app'
+
+//WHICH PERSON WROTE THIS I CRIED
+// import {firestore as store} from 'firebase/app'
+
 import {groupsStore} from '~/store'
 
 @Component<GroupsSummary>({
@@ -171,7 +175,7 @@ export default class GroupsSummary extends mixins(UserMixin) {
         .collection('groups')
         .doc(this.groupId)
         .update({
-          memberList: store.FieldValue.arrayRemove(this.kickUser.id)
+          memberList: firebase.firestore.FieldValue.arrayRemove(this.kickUser.id)
         })
         this.$emit('refetch');
       if (this.kickUser.id === this.AuthUser?.uid) {

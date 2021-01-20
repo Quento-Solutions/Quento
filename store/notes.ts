@@ -5,8 +5,8 @@ import {
   Mutation
 } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
+import firebase from 'firebase'
 import { authStore } from './index'
-import { firestore as store } from 'firebase/app'
 import { Note, Note_t, Note_t_F } from '~/types/notes'
 import storage from '~/plugins/firebaseStorage'
 // Fix the google
@@ -22,8 +22,7 @@ import functions from '~/plugins/firebaseFunctions'
 import { HourDiff } from '~/utils/time'
 import UploadImage from '~/utils/uploadImage'
 
-
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+let LastVisible: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData> | null = null
 
 @Module({ stateFactory: true, name: 'notes', namespaced: true })
 export default class NotesModule extends VuexModule {
@@ -117,7 +116,7 @@ export default class NotesModule extends VuexModule {
       .collection('notes')
       .doc(id)
       .update({
-        views: store.FieldValue.increment(1)
+        views: firebase.firestore.FieldValue.increment(1)
       })
     return updateViews
   }
@@ -140,18 +139,18 @@ export default class NotesModule extends VuexModule {
     if (this.likedPosts?.includes(id)) {
       //Unliking the post
       batch.update(userRef, {
-        likedNotes: store.FieldValue.arrayRemove(id)
+        likedNotes: firebase.firestore.FieldValue.arrayRemove(id)
       })
       batch.update(noteRef, {
-        upVotes: store.FieldValue.increment(-1)
+        upVotes: firebase.firestore.FieldValue.increment(-1)
       })
     } else {
       //Liking the post
       batch.update(userRef, {
-        likedNotes: store.FieldValue.arrayUnion(id)
+        likedNotes: firebase.firestore.FieldValue.arrayUnion(id)
       })
       batch.update(noteRef, {
-        upVotes: store.FieldValue.increment(1)
+        upVotes: firebase.firestore.FieldValue.increment(1)
       })
     }
 
@@ -231,7 +230,7 @@ export default class NotesModule extends VuexModule {
           functions.httpsCallable('PersonalRank')()
         }
       }
-      let query: store.Query<store.DocumentData> = firestore.collectionGroup('personalRanking')
+      let query: firebase.firestore.Query<firebase.firestore.DocumentData> = firestore.collectionGroup('personalRanking')
 
       query = query.where("dataType", "==", "note");
       query = query.where('userId', '==', authStore.user?.uid);
@@ -266,7 +265,7 @@ export default class NotesModule extends VuexModule {
       return
     }
 
-    let query: store.Query<store.DocumentData> = firestore.collection('notes')
+    let query: firebase.firestore.Query<firebase.firestore.DocumentData> = firestore.collection('notes')
     // Do query filtering things
     query = query.where('private', "==", false);
 

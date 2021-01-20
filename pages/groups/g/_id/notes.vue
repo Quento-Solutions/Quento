@@ -113,21 +113,18 @@ export default class GroupNotes extends mixins(LoadScroll, UserMixin) {
       this.$router.push('/groups/g/')
       return
     }
-    try {
-      const doc = await firestore
-        .collection('notes')
-        .where('groupId', '==', this.groupId)
-        .orderBy('magicRank', 'desc')
-        .get()
+    await this.$fire.firestore.collection('notes').where('groupId', '==', this.groupId).orderBy('magicRank', 'desc').get()
+    .then((doc)=>{
       this.groupNotes = doc.docs.map((document) =>
         Note.fromFirebase(document.data() as Note_t_F, document.id)
       )
+    })
+    .catch((err: Error)=>{
+      console.log({err})
       loading.close()
-      return
-    } catch (error) {
-      console.log({error})
-      loading.close()
-    }
+    })
+    loading.close()
+    return
   }
 }
 </script>

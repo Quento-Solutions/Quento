@@ -1,14 +1,14 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firestore from '~/plugins/firestore'
 import { authStore } from './index'
-import { firestore as store } from 'firebase/app'
+import firebase from 'firebase'
 import { Note, Note_t_F } from '~/types/notes'
 
 import functions from '~/plugins/firebaseFunctions'
 import { HourDiff } from '~/utils/time'
 import { Question, Question_t_F } from '~/types/questions'
 
-let LastVisible: store.QueryDocumentSnapshot<store.DocumentData> | null = null
+let LastVisible: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData> | null = null
 
 export type FeedItem_t =
   | {
@@ -36,7 +36,7 @@ export default class FeedsModule extends VuexModule {
       // If you are generating a new feed and the conditions are met
       this.SET_FEED_PERSONALIZED(true)
     }
-    let query: store.Query<store.DocumentData>
+    let query: firebase.firestore.Query<firebase.firestore.DocumentData>
 
     // personalized, no feed, outdated feed -> regen feed, give personalized
     if (this.isPersonalized) {
