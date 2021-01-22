@@ -10,11 +10,10 @@ import type { Context as AppContext, } from "@nuxt/types";
 export const actions = {
     async nuxtServerInit({}, ctx : AppContext) {
         console.log("NUXT SERVER INIT");
-        if(ctx.res && ctx.res.locals && ctx.res.locals.user)
-        {
+        if(ctx.res && ctx.res.locals && ctx.res.locals.user){
             initialiseStores(ctx.store);
             const { allClaims : claims, idToken : token, ...authUser } = ctx.res.locals.user;
-            authStore.serverAuthStateChangeAction(ctx.res.locals.user) ;
+            authStore.serverAuthStateChangeAction(ctx.res.locals.user)
         }
     }
 }

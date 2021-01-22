@@ -12,7 +12,7 @@ import Analytics from '~/mixins/AnalyticsMixin';
 import GroupsModal from '~/screens/groups/NewGroupsModal.vue'
 
 @Component<GroupsPage>({
-  layout: 'main',
+  layout: 'standard',
   components: { GroupsModal},
   name : "GroupsPage"
 })

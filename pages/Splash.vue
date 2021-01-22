@@ -337,14 +337,14 @@ When you’re ready, submit your application using the form to your right; it sh
     </section>
   </section>
 </template>
-    <script src="https://kit.fontawesome.com/ed68982581.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/ed68982581.js" crossorigin="anonymous"></script>
 
 <script lang="ts">
 import { Component, Vue, Prop, mixins } from 'nuxt-property-decorator'
-import VueTilt from 'vue-tilt.js'
-Vue.use(VueTilt)
 import AOS from 'aos'
 import AnalyticsMixin from '~/mixins/AnalyticsMixin'
+import VueTilt from 'vue-tilt.js'
+Vue.use(VueTilt)
 
 @Component<Splash>({
   components: {},
@@ -383,6 +383,8 @@ export default class Splash extends mixins(AnalyticsMixin) {
 
 <style lang="scss" scoped>
 @import '../assets/css/splash.css';
+
+//NECESSARY?? Because main.css already imports fonts.css
 @import '../assets/css/fonts.css';
 
 #formSubmitted {

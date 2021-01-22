@@ -1,10 +1,6 @@
 <template>
-
-
-  <!-- ----------------------------------MY VERSION---------------------------------- -->
-
-  <div id="notes-screen-container" class="vx-row w-full relative justify-evenly pl-4">
-    <!-- Yay we need a root because fun vue -->
+  <div class="w-full ml-4">
+    <!-- LOCAL NAVBAR -->
     <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
       <div class="vx-row">
         <vs-avatar class="icon-small float-left" @click="$router.back()">
@@ -28,8 +24,10 @@
         </template>
       </vs-button>
     </div>
+
+
     <!-- CARDS -->
-    <div class="flex flex-row flex-wrap lg:flex-no-wrap w-full">
+    <div class="w-full relative flex flex-row">
       <!-- BANDAID SOLUTIONS 4 LIFE -->
       <FilterSidebar
         :sort.sync="sort"
@@ -37,7 +35,7 @@
         :school.sync="school"
         :grade.sync="grade"
         :sortEnabled="false"
-        style="top : auto; left: 10px"
+        style="top : auto;"
         @filter="filter()"
       >
         <vs-button to="/groups" class="w-full">
@@ -45,16 +43,9 @@
           <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
         </vs-button>
       </FilterSidebar>
-      <div class="sidebar-spacer"></div>
-
-      <div v-if="groupsList.length" class="flex flex-row w-full flex-wrap" id="groupCard">
-        <div
-          v-for="(item, index) in groupsList"
-          :key="index"
-          class="w-full lg:w-1/2 xxlmin:w-1/3 p-2"
-        >
-          <GroupsCard :group="item"></GroupsCard>
-        </div>
+      <div style="width:350px"></div>
+      <div v-if="groupsList.length" class="grid grid-cols-3 w-full gap-4" id="groupCard">
+        <GroupsCard v-for="(item, index) in groupsList" :key="index" :group="item"></GroupsCard>
       </div>
     </div>
   </div>
@@ -74,6 +65,7 @@ import {Subject_O, Grade_O} from '~/types/subjects'
 import {School_O} from '~/types/schools'
 
 @Component<DiscoverGroups>({
+  name: 'discoverGroups',
   components: {NotesCard, FilterSidebar, GroupsCard},
   async mounted() {
     if (groupsStore.groupList.length) return

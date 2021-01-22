@@ -54,7 +54,7 @@ export default class AuthModule extends VuexModule implements AuthState {
   @Action({ rawError: true })
   public async authStateChange(firebaseUser: firebase.User) {
     this.context.commit('SET_LOADING', true)
-
+    
     const firebaseUserInfo = firebaseUser.providerData[0]!
     let user: User = {
       ...firebaseUserInfo,
@@ -66,6 +66,7 @@ export default class AuthModule extends VuexModule implements AuthState {
 
     this.context.commit('SET_USER', user)
     this.listenUserData();
+    
     this.context.commit('SET_LOADING', false)
   }
   @Action({ rawError: true })

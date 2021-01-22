@@ -139,7 +139,7 @@ import { windowStore } from '~/store'
 import UserMixin from '~/mixins/UserMixin';
 import { User } from '~/types/user';
 
-@Component<MainLayout>({
+@Component<MainLayoute>({
   components: {
     Sidebar,
     TopNav,
@@ -170,7 +170,7 @@ import { User } from '~/types/user';
     }
   },
 })
-export default class MainLayout extends mixins(UserMixin) {
+export default class MainLayoute extends mixins(UserMixin) {
   @Watch("AuthUser")
   CheckUserLoggedIn(user : User, oldUser : User)
   {
@@ -275,8 +275,7 @@ export default class MainLayout extends mixins(UserMixin) {
 </script>
 
 <style lang="scss" scoped>
-#content-area
-{
+#content-area{
   .router-content
   {
     margin-top : 70px !important;

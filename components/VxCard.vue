@@ -50,7 +50,7 @@
         <div class="vx-card__code-container" ref="codeContainer" v-show="this.$slots.codeContainer" :style="codeContainerStyles" :class="{collapsed: !showCode}">
             <div class="code-content">
                 <prism :language="codeLanguage" :key="$vs.rtl">
-                        <slot name="codeContainer"></slot>
+                    <slot name="codeContainer"></slot>
                 </prism>
             </div>
         </div>

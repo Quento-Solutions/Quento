@@ -1,86 +1,48 @@
 <template>
-  <VxCard
-    v-if="group"
-    class="overlay-card mb-4 overflow-hidden cardster"
-    style="border-radius: 1.28rem !important;"
-  >
-    <!-- Card Outside -->
-    <template slot="no-body">
-      <nuxt-link :to="`/groups/g/${group.id}`">
-        <!-- Background -->
-        <div
-          class="text-white background-cover p-8 pt-4 relative"
-          style="min-height : 250px"
-          :style="backgroundGradient(group.backgroundImageUrl)"
-        >
-          <vs-tooltip style="width: max-content">
-            <div
-              class="rounded-full w-max-content px-1"
-              style="width: max-content"
-              :class="group.approved ? ' bg-green-400' : 'bg-orange-400'"
-            >
-              <i class="bx text-3xl" :class="group.approved ? ' bx-check' : 'bx-dots-horizontal'" />
-            </div>
-            <template #tooltip>{{group.approved ? 'Verified' : 'Pending Approval'}}</template>
-          </vs-tooltip>
-          <!-- MAIN INSIDE CARD -->
-          <div
-            class="mb-2 md:mt-32 font-bold w-2/3 text-white font-open text-3xl"
-            style="line-height : 1.25"
-          >
-            {{ group.title }}
-            <!--Title-->
-          </div>
+	<!-- Card Outside -->
+	<nuxt-link :to="`/groups/g/${group.id}`" v-if="group" id="cardster" tag="div" :style="backgroundGradient(group.backgroundImageUrl)"
+		class="
+			h-full cursor-pointer
+			rounded-super overflow-hidden
+			text-white relative
+			background-cover
+			grid grid-cols-3
+		"
+	>
+		<div class="h-full col-span-2 p-8 flex flex-col justify-between">
+			<!-- ===== MAIN INSIDE CARD ===== -->
+			<!-- CHECKBOX -->
+			<vs-tooltip style="width: max-content">
+				<div
+					class="rounded-full h-8 w-8 flex items-center justify-center"
+					:class="group.approved ? ' bg-green-400' : 'bg-orange-400'"
+				>
+					<i class="bx text-3xl font-bold" :class="group.approved ? ' bx-check' : 'bx-dots-horizontal'" />
+				</div>
+				<!-- WORD -->
+				<template #tooltip>{{group.approved ? 'Verified' : 'Pending Approval'}}</template>
+			</vs-tooltip>
+			<div class="flex flex-col">
+				<h2 class="text-white font-semibold text-base">Grade {{group.grade}} {{group.subject}}</h2>
+				<h1 class="text-white font-bold text-2xl mt-2">{{group.title}}</h1>
+				<h3 class="text-white text-sm">{{group.school}}</h3>
+			</div>
+		</div>
 
-          <!-- Author Line -->
-          <div class="flex flex-row flex-wrap md:flex-no-wrap w-2/3" style>
-            <vs-tooltip class="truncate">
-              <div
-                :style="`background-color: #${randomColor()}`"
-                style="min-width : 0"
-                class="p-1 px-2 text-sm truncate rounded-full m-1"
-                v-if="group.subject"
-              >{{group.subject}}</div>
-              <template #tooltip>{{group.subject}}</template>
-            </vs-tooltip>
-            <vs-tooltip class="truncate">
-              <div
-                :style="`background-color: #${randomColor()}`"
-                style="min-width : 0"
-                class="p-1 px-2 text-sm truncate rounded-full m-1"
-                v-if="group.school"
-              >{{group.school}}</div>
-              <template #tooltip>{{group.school}}</template>
-            </vs-tooltip>
-            <vs-tooltip class="truncate">
-              <div
-                :style="`background-color: #${randomColor()}`"
-                style="min-width : 0"
-                class="p-1 px-2 text-sm truncate rounded-full m-1"
-                v-if="group.grade"
-              >Grade {{group.grade}}</div>
-              <template #tooltip>Grade {{group.grade}}</template>
-            </vs-tooltip>
-          </div>
-
-          <!-- Side -->
-          <div
-            class="sideboi rounded-r-super absolute top-0 right-0 h-full w-33% p-4 text-black font-open"
-          >
-            <h4 class="font-bold my-1">Description</h4>
-
-            <p
-              class="text-xs italic mb-4 mt-2"
-              style="max-height:50%;overflow:hidden"
-            >{{group.description}}</p>
-
-            <h5 class="font-semibold text-md">Members</h5>
-            <p class="font-light text-sm">{{group.memberList.length}}</p>
-          </div>
-        </div>
-      </nuxt-link>
-    </template>
-  </VxCard>
+		<!-- ====SIDE==== -->
+		<div id="sideboi" class="h-full col-span-1 p-4 text-black font-open flex flex-col justify-between">
+			<div>
+				<h4 class="font-bold my-1">Description</h4>
+				<p id="description" class="text-xs italic mb-4 mt-2 overflow-hidden">
+					{{group.description}}
+				</p>
+			</div>
+			<div>
+				<h5 class="font-semibold text-md">Members</h5>
+				<p class="font-light text-sm">{{group.memberList.length}}</p>
+			</div>
+		</div>
+	</nuxt-link>
 </template>
 
 <script lang="ts">
@@ -89,31 +51,33 @@ import {Group} from '~/types/groups'
 
 @Component<GroupCard>({components: {}})
 export default class GroupCard extends Vue {
-  @Prop({required: true}) group!: Group
+	@Prop({required: true}) group!: Group
 
-  backgroundGradient(imageUrl: string) {
-    return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
-  }
-  randomColor() {
-    return Math.floor(Math.random() * 16777215).toString(16)
-  }
+	backgroundGradient(imageUrl: string) {
+		return `background-image : linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${imageUrl}')`
+	}
+	randomColor() {
+		return Math.floor(Math.random() * 16777215).toString(16)
+	}
 }
 </script>
 
 <style lang = "scss">
-.cardster {
-  box-shadow: 0px 12px 15px -7px rgba(0, 0, 0, 0.27);
-}
-.sideboi {
-  background-color: #f9f9f9;
-  transition: background-color 0.8s ease-in-out;
-}
-.cardster:hover {
-  box-shadow: 0px 19px 37px 3px rgba(0, 0, 0, 0.21);
-  .sideboi {
-    background-color: white;
-    box-shadow: 0px 10px 34px 0px rgba(0, 0, 0, 0.42);
-    transition: box-shadow 0.3s ease-in-out;
-  }
-}
+	#sideboi {
+		background-color: #f9f9f9;
+		transition: background-color 0.8s ease-in-out;
+	}
+	#cardster {
+		box-shadow: 0px 12px 15px -7px rgba(0, 0, 0, 0.27);
+		min-height: 250px;
+	}
+	/*
+	.cardster:hover {
+		box-shadow: 0px 19px 37px 3px rgba(0, 0, 0, 0.21);
+		.sideboi {
+			background-color: white;
+			box-shadow: 0px 10px 34px 0px rgba(0, 0, 0, 0.42);
+			transition: box-shadow 0.3s ease-in-out;
+		}
+	} */
 </style>

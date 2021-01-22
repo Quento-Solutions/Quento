@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "private": false,
   "description": "Welcome to Quento - a collection of utilities to enhance online learning created by students, for students.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Quento-Solutions/Quento.git"
+  },
   "scripts": {
     "build": "nuxt-ts build",
     "dev": "nuxt-ts",
@@ -55,7 +60,7 @@
     "vue-gallery-slideshow": "^1.5.2",
     "vue-instantsearch": "^3.4.3",
     "vue-markdown": "^2.2.4",
-    "vue-prism-component": "^2.0.0",
+    "vue-prism-component": "^1.2.0",
     "vue-runtime-helpers": "^1.1.2",
     "vue-select": "^3.11.2",
     "vue-textarea-autosize": "^1.1.1",

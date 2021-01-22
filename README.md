@@ -6,17 +6,17 @@ Welcome to Quento, a collection of utilities created by students, for students. 
 ## Build Setup
 ```bash
 # install dependencies
-$ npm install # Or yarn install
+$ npm install # Or yarn install if you don't like yourself
 
 # serve with hot reload at localhost:3000
-$ npm run dev
+$ npm run dev #HAHAHA look who tried to use yarn
 
 # build for production and launch server
 $ npm run build
-$ npm start
+$ npm start #But don't actually do this one
 
 # generate static project
-$ npm run generate
+$ npm run generate #oops no more vue
 ```
 
 ## Sitemap (Addresses from Quento\pages)
@@ -81,6 +81,10 @@ $ npm run generate
 - Types 
   - All the typescript files
 - Utils (not to be confused with ~\assets\utils)
+  - Static Typescript i'm pretty sure
+  - store-accessor.ts (very important)
+  - themeConfig.ts (also pretty important)
+  - vuesax.ts (fairly confident no one uses this one)
 
 ## An open letter to whoever needs to build a new page
 Here is the default layout of the page (also at localhost:3000/basepiece or quento.ca/basepiece)

@@ -1,0 +1,34 @@
+<!--Title-->
+<!-- <div class="mb-2 md:mt-32 font-bold w-2/3 text-white font-open text-3xl" style="line-height : 1.25">
+    {{ group.title }}
+</div> -->
+<!-- Author Line -->
+<!-- <div class="flex flex-row flex-wrap md:flex-no-wrap w-2/3" style>
+    <vs-tooltip class="truncate">
+        <div
+            :style="`background-color: #${randomColor()}`"
+            style="min-width : 0"
+            class="p-1 px-2 text-sm truncate rounded-full m-1"
+            v-if="group.subject"
+        >{{group.subject}}</div>
+        <template #tooltip>{{group.subject}}</template>
+    </vs-tooltip>
+    <vs-tooltip class="truncate">
+        <div
+            :style="`background-color: #${randomColor()}`"
+            style="min-width : 0"
+            class="p-1 px-2 text-sm truncate rounded-full m-1"
+            v-if="group.school"
+        >{{group.school}}</div>
+        <template #tooltip>{{group.school}}</template>
+    </vs-tooltip>
+    <vs-tooltip class="truncate">
+        <div
+            :style="`background-color: #${randomColor()}`"
+            style="min-width : 0"
+            class="p-1 px-2 text-sm truncate rounded-full m-1"
+            v-if="group.grade"
+        >Grade {{group.grade}}</div>
+        <template #tooltip>Grade {{group.grade}}</template>
+    </vs-tooltip>
+</div> -->

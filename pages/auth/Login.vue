@@ -1,13 +1,10 @@
 <template>
-  <vs-row class="w-full" justify="center" style="height: 100%;">
-    <vs-col
-      w="10"
-      class="h-full border-solid"
-      justify="center"
-      align="center"
-      style="border-style: solid;"
-    >
-      <VxCard class="mt-6 p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/2 xl:w-5/12 relative">
+  <vs-row class="w-full h-screen" justify="center">
+    <div class="h-full w-full border-solid flex justify-center items-center">
+      <VxCard
+        class="p-4 px-2 lg:px-6 w-full md:w-2/3 lg:w-1/3 relative"
+        align="center"
+      >
         <div class="p-6">
           <h1 class="title">SIGN IN</h1>
           <vs-alert v-if="errorMessage" danger
@@ -20,9 +17,12 @@
             class="google"
             ><i class="bx bxl-google"></i>Sign in with google</vs-button
           >
+        </div>
+        <form class="p-6">
           <vs-input
             v-model="email"
-            label="Email"
+            label="email"
+            type="email"
             color="primary"
             placeholder="studentEmail@ocdsb.ca"
             class="block"
@@ -31,19 +31,19 @@
               <i class="bx bx-user"></i>
             </template>
           </vs-input>
-        </div>
-        <div class="p-6">
           <vs-input
             v-model="password"
-            type="password"
             label="Password"
-            class="block w-6"
+            type="password"
+            color="primary"
+            placeholder="******"
+            class="block mt-10"
           >
             <template #icon>
               <i class="bx bx-lock-open-alt"></i>
             </template>
           </vs-input>
-        </div>
+        </form>
 
         <vs-col justify="space-between" class="mt-8 justify-end">
           <vs-button
@@ -61,7 +61,7 @@
         </vs-col>
         <FooterCard />
       </VxCard>
-    </vs-col>
+    </div>
   </vs-row>
 </template>
 
