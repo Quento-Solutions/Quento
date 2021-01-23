@@ -173,4 +173,5 @@ For detailed explanation on how things work, checkout the following docs:
 Vue: [Vue.js](https://vuejs.org/v2/guide/)
 Nuxt: [Nuxt.js](https://nuxtjs.org/guide/installation/)
 Vuesax: [Vuesax](https://vuesax.com/docs/components/Input.html#default)
+Vuetify: [Vuetify](https://vuetifyjs.com/en/getting-started/installation/)
 Tailwind: [Tailwind.css](https://tailwindcss.com/docs/installation)

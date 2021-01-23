@@ -2,7 +2,7 @@ import type { NuxtConfig } from '@nuxt/types'
 import { firebaseConfig } from './envars'
 // import {sortRoutes}from '@nuxt/utils';
 
-
+console.log("Config logs")
 console.log(process.env.BASE_URL, process.env.host, process.env.port)
 
 const config: NuxtConfig = {
@@ -29,15 +29,22 @@ const config: NuxtConfig = {
                                                       
   loading: { color: '#3B8070' },
   css: [
-    '~/assets/css/main.css',
+    //Module CSS
     'aos/dist/aos.css',
     'boxicons/css/boxicons.min.css',
     'video.js/dist/video-js.css',
     'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
+    
+    //Middle ground, also Tons of garbage
     'vuesax/dist/vuesax.css',
   ],
   styleResources: {
-    scss: ['./assets/scss/main.scss']
+    scss: [
+      './assets/scss/main.scss',
+
+      //Ehh garbage
+      './assets/scss/vuexy.scss'
+    ]
   },
 
   server: {
@@ -65,20 +72,22 @@ const config: NuxtConfig = {
     '@nuxtjs/firebase',
     '@nuxtjs/pwa',
     '@nuxtjs/markdownit',
-    '@nuxtjs/vuetify',
+    // '@nuxtjs/vuetify',
   ],
   plugins: [
-    '@/plugins/vuesax',
     { src: '@/plugins/client_runtime', mode: 'client' },
     { src: '@/plugins/vue-video-player', ssr: false },
-    '@/plugins/firebase',
-    '@/plugins/firestore',
-    '@/plugins/firebaseStorage',
-    '@/plugins/fireauth',
+    
+    //FIREBASE
+    // '@/plugins/firebase',
+    // '@/plugins/firebase/firestore',
+    // '@/plugins/firebase/firebaseStorage',
+    // '@/plugins/firebase/fireauth',
+    // { src: '@/plugins/firebase/fireanalytics', mode: 'client' },
+
     '@/plugins/globalComponents',
     '@/plugins/messyPlugins',
-    { src: '@/plugins/fireanalytics', mode: 'client' },
-
+    '@/plugins/vuesax',
   ],
 
   markdownit: {
@@ -99,7 +108,7 @@ const config: NuxtConfig = {
       ],
       // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
       // only set this true for testing and remember to always clear your browser cache in development
-      dev: false
+      dev: process.env.NODE_ENV === 'development',
     }
   },
   firebase: {

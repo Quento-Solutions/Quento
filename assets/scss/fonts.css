@@ -5,11 +5,6 @@
 @import "../font/OpenSans/stylesheet.css";
 
 @font-face {
-    font-family: "Oswald";
-    src: url("../font/static/Oswald-VariableFont_wght.ttf"); 
-}
-
-@font-face {
   font-family: "ginger-bold";
   src: url("../font/Helvetica/HelveticaNowText-Bold.woff");
 }
@@ -24,18 +19,14 @@
 
 
 .text-title {
-    font-family: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-family: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
-
-.text-ginger-b
-{
+.text-ginger-b{
   font-family: "ginger-bold", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
-.text-ginger-l
-{
+.text-ginger-l{
   font-family: "ginger-light", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 

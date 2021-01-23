@@ -1,0 +1,36 @@
+.content-popup {
+    .vs-dialog--scroll .vs-dialog__content {
+        max-height: calc(100vh - 200px);
+    }
+
+    .vs-dialog {
+        min-width: 60vw !important;
+        min-height: 60vh !important;
+    }
+}
+
+.content-popup.no-footer {
+    .vs-dialog--scroll .vs-dialog__content {
+        max-height: calc(90vh);
+    }
+}
+
+.vs-select__options {
+    z-index: 1000000000;
+}
+
+.vs-loading {
+    z-index: 10000000000;
+}
+
+.vs-select__option {
+    max-height: fit-content !important;
+}
+
+.vs-select {
+    background-color: #f6f6f6;
+}
+
+.vs-button--size-xl .vs-button__content {
+    padding: 1.5rem 2rem !important;
+}
