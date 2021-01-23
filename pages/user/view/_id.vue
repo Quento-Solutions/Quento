@@ -192,7 +192,6 @@
 </template>
 <script lang="ts">
 import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
-import firestore from '~/plugins/firestore'
 import {UserData} from '~/types/user'
 import {SubjectIconList, SubjectGroup_O, Subject_O} from '~/types/subjects'
 import {Note_t, Note, Note_t_F} from '~/types/notes'
@@ -215,7 +214,7 @@ export default class UserPage extends mixins(UserMixin) {
   async removePending() {
     const loading = this.$vs.loading()
     try {
-      const doc = await firestore
+      const doc = await this.$fire.firestore
         .collection('users')
         .doc(this.AuthUser?.uid)
         .update({
@@ -224,7 +223,7 @@ export default class UserPage extends mixins(UserMixin) {
           )
         })
 
-      const doc2 = await firestore
+      const doc2 = await this.$fire.firestore
         .collection('users')
         .doc(this.userId as string)
         .collection('followers')
@@ -255,7 +254,7 @@ export default class UserPage extends mixins(UserMixin) {
 
     try {
       this.userId = this.$route.params.id
-      const doc = await firestore.doc(`users/${this.userId}`).get()
+      const doc = await this.$fire.firestore.doc(`users/${this.userId}`).get()
       if (!doc.exists) {
         this.docNotFound = true
         loading.close()
@@ -277,14 +276,14 @@ export default class UserPage extends mixins(UserMixin) {
   async unFollowFriend(uid: string) {
     const loading = this.$vs.loading()
 
-    const doc = await firestore
+    const doc = await this.$fire.firestore
       .collection('users')
       .doc(this.AuthUser?.uid)
       .update({
         following: firebase.firestore.FieldValue.arrayRemove(this.userId)
       })
 
-    const unFollowFriendDoc = firestore
+    const unFollowFriendDoc = this.$fire.firestore
       .collection('users')
       .doc(this.userId as string)
       .collection('followers')
@@ -327,7 +326,7 @@ export default class UserPage extends mixins(UserMixin) {
     }
 
     try {
-      const userSide = await firestore
+      const userSide = await this.$fire.firestore
         .collection('users')
         .doc(this.AuthUser?.uid as string)
         .update({
@@ -336,7 +335,7 @@ export default class UserPage extends mixins(UserMixin) {
           )
         })
 
-      const profileSide = await firestore
+      const profileSide = await this.$fire.firestore
         .collection('users')
         .doc(this.userId as string)
         .collection('followers')
@@ -362,7 +361,7 @@ export default class UserPage extends mixins(UserMixin) {
     if (!this.userInfo) {
       return
     }
-    let notesQuery = await firestore
+    let notesQuery = await this.$fire.firestore
       .collection('notes')
       .where('uid', '==', this.userId)
       .orderBy('createdAt', 'desc')

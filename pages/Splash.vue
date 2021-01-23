@@ -384,9 +384,6 @@ export default class Splash extends mixins(AnalyticsMixin) {
 <style lang="scss" scoped>
 @import '../assets/css/splash.css';
 
-//NECESSARY?? Because main.css already imports fonts.css
-@import '../assets/css/fonts.css';
-
 #formSubmitted {
   position: absolute;
   transform: translateY(20%);

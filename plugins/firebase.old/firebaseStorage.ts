@@ -1,4 +1,4 @@
-import firebase from './firebase';
+import firebase from '.';
 import 'firebase/storage';
 
 const storage = firebase.storage();

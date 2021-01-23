@@ -31,7 +31,6 @@ import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 
 import {Question, Question_t_F} from '~/types/questions'
 import {Group, Group_t_F} from '~/types/groups'
-import firestore from '~/plugins/firestore'
 
 import {windowStore, questionStore} from '~/store'
 import QuestionCard from '~/components/QuestionCard.vue'
@@ -108,7 +107,7 @@ export default class groupQuestions extends mixins(LoadScrollMixin, UserMixin) {
       return
     }
     try {
-      const doc = await firestore
+      const doc = await this.$fire.firestore
         .collection('questions')
         .where('groupId', '==', this.groupId)
         .orderBy('magicRank', 'desc')

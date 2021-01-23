@@ -68,7 +68,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Newsletter, Newsletter_t_F } from '~/types/newsletters'
-import firestore from '~/plugins/firestore'
 
 @Component<NewsletterContentPage>({
   components: {},
@@ -90,7 +89,7 @@ export default class NewsletterContentPage extends Vue {
     if (!this.newsletterId) return this.$router.push('/notes')
     const loading = this.$vs.loading()
     try {
-      const doc = await firestore.doc(`newsletters/${this.newsletterId}`).get()
+      const doc = await this.$fire.firestore.doc(`newsletters/${this.newsletterId}`).get()
       const newsletterData = doc.data() as Newsletter_t_F
       if (!newsletterData) {
         this.docNotFound = true

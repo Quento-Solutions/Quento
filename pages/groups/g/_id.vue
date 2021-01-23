@@ -91,13 +91,10 @@
 <script lang="ts">
 import {Component, Vue, Prop, Watch, mixins} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
-import firebase from 'firebase'
-import firestore from '~/plugins/firestore'
 import {Group, Group_t_F} from '~/types/groups'
 import {groupsStore} from '~/store'
 
-
-// import {firestore as store} from 'firebase/app'
+import firebase from 'firebase'
 
 
 @Component<GroupsGroup>({
@@ -160,7 +157,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
     }
     const loading = this.$vs.loading()
     try {
-      await firestore
+      await this.$fire.firestore
         .collection('groups')
         .doc(this.group.id)
         .update({
@@ -189,7 +186,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
       return
     }
     try {
-      const doc = await firestore.doc(`groups/${this.groupId}`).get()
+      const doc = await this.$fire.firestore.doc(`groups/${this.groupId}`).get()
       const groupData = doc.data() as Group_t_F
       if (!groupData) {
         this.docNotFound = true
@@ -209,7 +206,7 @@ export default class GroupsGroup extends mixins(UserMixin) {
     if (!this.group) return
     const userDocs = await Promise.all(
       this.group.memberList.map((id) =>
-        firestore.collection('users').doc(id).get()
+        this.$fire.firestore.collection('users').doc(id).get()
       )
     )
     userDocs[0].data()

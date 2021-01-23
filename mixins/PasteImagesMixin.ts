@@ -1,5 +1,4 @@
 import {Component, Vue} from 'nuxt-property-decorator'
-import functions from '~/plugins/firebaseFunctions'
 import type {StoredImage} from '~/types/firebaseTypes'
 import UploadImage from '~/utils/uploadImage'
 @Component<PasteImagesMixin>({})
@@ -27,7 +26,7 @@ export default class PasteImagesMixin extends Vue {
           reader.addEventListener('load', async () => {
             const base64image = reader.result
             try {
-              const imageResponse = await functions.httpsCallable(
+              const imageResponse = await this.$fire.functions.httpsCallable(
                 'functionPostImage'
               )({name: image.name, image: base64image})
 

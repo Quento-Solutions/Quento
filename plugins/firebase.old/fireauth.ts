@@ -1,4 +1,4 @@
-import { firebaseAuth } from '~/plugins/firebase';
+import { firebaseAuth } from '.';
 import type { User } from '@firebase/auth-types';
 
 export default async ({ store  } : any) => {

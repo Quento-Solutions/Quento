@@ -137,13 +137,9 @@
 <script lang="ts">
 import {Component, Vue, Prop, mixins} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
-import functions from '~/plugins/firebaseFunctions'
-import firestore from '~/plugins/firestore'
 import firebase from 'firebase'
 import {Group, Group_t_F} from '~/types/groups'
 
-//WHICH PERSON WROTE THIS I CRIED
-// import {firestore as store} from 'firebase/app'
 
 import {groupsStore} from '~/store'
 
@@ -171,7 +167,7 @@ export default class GroupsSummary extends mixins(UserMixin) {
     if (!this.kickUser.id || this.kickUser.id === '' || !this.groupId) return
     const loading = this.$vs.loading()
     try {
-      await firestore
+      await this.$fire.firestore
         .collection('groups')
         .doc(this.groupId)
         .update({
@@ -237,7 +233,7 @@ export default class GroupsSummary extends mixins(UserMixin) {
     )
       return
     const loading = this.$vs.loading()
-    const res = await functions.httpsCallable('GenerateJoinToken')({groupId})
+    const res = await this.$fire.functions.httpsCallable('GenerateJoinToken')({groupId})
     if (res.data.status !== 200) {
       this.$vs.notification({
         title: res.data.message,

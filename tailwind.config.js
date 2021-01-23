@@ -21,6 +21,7 @@ module.exports = {
       'ginger' : ['ginger-light', 'sans-serif'],
       'ginger-n' : ['ginger-normal', 'sans-serif'],
       'ginger-b' : ['ginger-bold', 'sans-serif'],
+      'title': ['Oswald', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
       'open': ['Open Sans']
     },
     fontSize:{
@@ -86,7 +87,7 @@ module.exports = {
   },
   purge: {
     // Learn more on https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
-    enabled: process.env.NODE_ENV === 'production',
+    // enabled: process.env.NODE_ENV === 'production',
     content: [
       'components/**/*.vue',
       'layouts/**/*.vue',
@@ -94,11 +95,6 @@ module.exports = {
       'plugins/**/*.js',
       'nuxt.config.js'
     ]
-  },
-  future : 
-  {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
   },
   variants: {},
   plugins: [

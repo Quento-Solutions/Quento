@@ -38,8 +38,6 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
 import {Group, Group_t} from '~/types/groups'
 import VsUpload from '~/components/VsUpload.vue'
-import storage from '~/plugins/firebaseStorage'
-import functions from '~/plugins/firebaseFunctions'
 
 import {v4} from 'uuid'
 

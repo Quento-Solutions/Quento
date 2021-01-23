@@ -1,4 +1,4 @@
-import app from './firebase';
+import app from '.';
 import 'firebase/analytics';
 import type firebase from 'firebase';
 

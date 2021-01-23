@@ -3,7 +3,6 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import functions from '~/plugins/firebaseFunctions'
 import {authStore} from '~/store';
 @Component<DiscordAuth>({
   components: {},
@@ -23,7 +22,7 @@ export default class DiscordAuth extends Vue {
     const redirect_uri = window.location.origin + window.location.pathname
     const scope = 'identify'
     try {
-      const request = await functions.httpsCallable('discordOauth')({
+      const request = await this.$fire.functions.httpsCallable('discordOauth')({
         redirect_uri,
         code,
         scope

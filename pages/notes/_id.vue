@@ -23,7 +23,6 @@
 import { Component, Vue, Prop, Watch } from 'nuxt-property-decorator'
 import NotesCard from '~/components/NotesCard.vue'
 import { Note, Note_t_F } from '~/types/notes'
-import firestore from '~/plugins/firestore'
 import { notesStore } from '~/store'
 @Component<NotesContentPage>({
   components: { NotesCard },
@@ -56,7 +55,7 @@ export default class NotesContentPage extends Vue {
       return
     }
     try {
-      const doc = await firestore.doc(`notes/${this.noteId}`).get()
+      const doc = await this.$fire.firestore.doc(`notes/${this.noteId}`).get()
       const noteData = doc.data() as Note_t_F
       if (!noteData) {
         this.docNotFound = true

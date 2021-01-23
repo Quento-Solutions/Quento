@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full ml-4">
+  <div class="w-full" id="discoverMain">
     <!-- LOCAL NAVBAR -->
     <div class="vx-row mb-4 w-full bg-white rounded-md p-2 justify-between">
       <div class="vx-row">
@@ -37,12 +37,7 @@
         :sortEnabled="false"
         style="top : auto;"
         @filter="filter()"
-      >
-        <vs-button to="/groups" class="w-full">
-          <i class="bx bx-arrow-back text-4xl" />
-          <div class="text-2xl font-ginger-b">&nbsp; Your Groups</div>
-        </vs-button>
-      </FilterSidebar>
+      />
       <div style="width:350px"></div>
       <div v-if="groupsList.length" class="grid grid-cols-3 w-full gap-4" id="groupCard">
         <GroupsCard v-for="(item, index) in groupsList" :key="index" :group="item"></GroupsCard>

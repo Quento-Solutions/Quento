@@ -1,18 +1,15 @@
-import functions from '~/plugins/firebaseFunctions'
+import {Context as AppContext} from '@nuxt/types'
+import {StoredImage} from '~/types/firebaseTypes'
 
-const UploadImage =  async (image: File) => {
+const UploadImage =  async ({$fire}: AppContext, image: File): Promise<StoredImage> => {
   const reader = new FileReader()
-  const promise = new Promise<{imageURL: string; fileName: string}>(
-    (resolve, reject) => {
+
+  const promise = new Promise<{imageURL: string; fileName: string}>((resolve, reject) => {
       reader.addEventListener('load', async () => {
         const base64image = reader.result
         try {
-          const imageResponse = await functions.httpsCallable(
-            'functionPostImage'
-          )({name: image.name, image: base64image})
-
-          const imageURL = imageResponse.data.imageURL as string
-          const fileName = imageResponse.data.fileName as string
+          const imageResponse = await $fire.functions.httpsCallable('functionPostImage')({name: image.name, image: base64image})
+          const {imageURL, fileName}: {imageURL: string, fileName: string}  = imageResponse.data
           return resolve({imageURL, fileName})
         } catch (error) {
           console.log({error})

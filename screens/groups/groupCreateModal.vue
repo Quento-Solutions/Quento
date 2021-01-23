@@ -127,8 +127,6 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
 import {Group, Group_t} from '~/types/groups'
 import VsUpload from '~/components/VsUpload.vue'
-import storage from '~/plugins/firebaseStorage'
-import functions from '~/plugins/firebaseFunctions'
 
 import {v4} from 'uuid'
 
@@ -176,7 +174,7 @@ export default class GroupsModal extends mixins(ValidateImage, PasteImage) {
   groupPublic = true
   description = ''
   backgroundImageUrl =
-    'https://firebasestorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/static%2FpostedNote%40defaultBackground.png?alt=media'
+    'https://firebase/firebaseStorage.googleapis.com/v0/b/supplant-44e15.appspot.com/o/static%2FpostedNote%40defaultBackground.png?alt=media'
   title = ''
 
   get active() {

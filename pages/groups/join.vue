@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import {Component, Vue, Prop} from 'nuxt-property-decorator'
-import functions from '~/plugins/firebaseFunctions'
 
 @Component<JoinGroups>({components: {}, mounted() {this.joinGroup()}})
 export default class JoinGroups extends Vue {
@@ -15,7 +14,7 @@ export default class JoinGroups extends Vue {
     })
 
     try {
-      const request = await functions.httpsCallable('JoinGroup')({token})
+      const request = await this.$fire.functions.httpsCallable('JoinGroup')({token})
       if (request.data.status !== 200) throw request.data
       const groupId = request.data.groupId;
       this.$router.push(`/groups/g/${groupId}`)

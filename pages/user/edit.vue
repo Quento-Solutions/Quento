@@ -133,7 +133,6 @@
 <script lang="ts">
 import { Component, Vue, Prop, mixins, Watch } from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
-import firestore from '~/plugins/firestore'
 
 import {
   SubjectGroup_O,
@@ -148,13 +147,9 @@ import NotesCard from '~/components/NotesCard.vue'
 import { Note_t, Note, Note_t_F } from '~/types/notes'
 import { School_O, SchoolList } from '~/types/schools'
 import SubjectsDropdown from '~/components/SubjectsDropdown.vue'
-import { firebaseAuth, GoogleAuthProvider } from '~/plugins/firebase'
 import { UserData } from '~/types/user'
 import { authStore } from '~/store'
 import ValidateImageMixin from '~/mixins/ValidateImageMixin'
-import functions from '~/plugins/firebaseFunctions'
-import storage from '~/plugins/firebaseStorage'
-
 
 @Component<UserSettings>({
   components: {
@@ -191,7 +186,7 @@ export default class UserSettings extends mixins(
       return
     }
     const userId = this.AuthUser?.uid
-    const notesCollection = await firestore
+    const notesCollection = await this.$fire.firestore
       .collection('notes')
       .where('uid', '==', userId)
       .get()
@@ -266,12 +261,12 @@ export default class UserSettings extends mixins(
       if (this.newImageUpload) {
         const base64image = this.UserInfo.photoURL
 
-        const newImageUrl = await functions.httpsCallable('functionPostImage')({
+        const newImageUrl = await this.$fire.functions.httpsCallable('functionPostImage')({
           image: base64image,
           name: 'bruh'
         })
         if (this.UserInfo?.photoFileName) {
-          await storage.ref(this.UserInfo.photoFileName).delete()
+          await this.$fire.storage.ref(this.UserInfo.photoFileName).delete()
         }
         this.UserInfo.photoURL = newImageUrl.data.imageURL
         this.UserInfo.photoFileName = newImageUrl.data.fileName as string

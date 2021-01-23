@@ -150,8 +150,6 @@ import ValidateImage from '~/mixins/ValidateImageMixin'
 import PasteImage from '~/mixins/PasteImagesMixin'
 import {Note} from '~/types/notes'
 import VsUpload from '~/components/VsUpload.vue'
-import storage from '~/plugins/firebaseStorage'
-import functions from '~/plugins/firebaseFunctions'
 
 import {v4} from 'uuid'
 

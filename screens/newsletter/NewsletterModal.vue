@@ -129,7 +129,6 @@ import VsTextarea from '~/components/VsTextarea.vue'
 import VsUpload from '~/components/VsUpload.vue'
 
 import { authStore } from '~/store'
-import firestore from '~/plugins/firestore';
 
 interface imageSrc {
   error: boolean
@@ -230,7 +229,7 @@ export default class PostNotesModal extends mixins(ValidateImage) {
       authorPhotoUrl : "https://cdn.discordapp.com/attachments/737856336133357669/744956933114691634/quag_but_purple.png"
     });
 
-    await firestore.collection("newsletters").doc("welcome-newsletter").set(Newsletter.toFirebase(previewNote));
+    await this.$fire.firestore.collection("newsletters").doc("welcome-newsletter").set(Newsletter.toFirebase(previewNote));
   }
 
   set state(value: boolean) {

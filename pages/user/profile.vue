@@ -312,7 +312,6 @@
 <script lang="ts">
 import {Component, Vue, Prop, mixins, Watch} from 'nuxt-property-decorator'
 import UserMixin from '~/mixins/UserMixin'
-import firestore from '~/plugins/firestore'
 
 import {SubjectGroup_O, Subject_O, SubjectIconList} from '~/types/subjects'
 import NotesCard from '~/components/NotesCard.vue'
@@ -352,7 +351,7 @@ export default class UserProfile extends mixins(UserMixin) {
 
   async fetchUser(uid: string) {
     try {
-      const doc = await firestore.doc(`users/${uid}`).get()
+      const doc = await this.$fire.firestore.doc(`users/${uid}`).get()
       const userData2 = doc.data() as UserData
 
       const userDataReq = Object.assign({}, userData2)
@@ -366,14 +365,14 @@ export default class UserProfile extends mixins(UserMixin) {
   async removePending(uid: string) {
     const loading = this.$vs.loading()
     try {
-      const doc = await firestore
+      const doc = await this.$fire.firestore
         .collection('users')
         .doc(this.AuthUser?.uid)
         .update({
           pendingFollowing: firebase.firestore.FieldValue.arrayRemove(uid)
         })
 
-      const doc2 = await firestore
+      const doc2 = await this.$fire.firestore
         .collection('users')
         .doc(uid)
         .collection('followers')
@@ -420,7 +419,7 @@ export default class UserProfile extends mixins(UserMixin) {
     }
 
     // Get friends
-    const doc = await firestore
+    const doc = await this.$fire.firestore
       .collection('users')
       .doc(this.AuthUser?.uid)
       .collection('followers')
@@ -435,7 +434,7 @@ export default class UserProfile extends mixins(UserMixin) {
     this.following_for_real = (
       await Promise.all(
         this.UserData?.following?.map((id) =>
-          firestore.collection('users').doc(id).get()
+          this.$fire.firestore.collection('users').doc(id).get()
         ) || []
       )
     ).map((doc) => ({...doc.data(), uid: doc.id}))
@@ -445,7 +444,7 @@ export default class UserProfile extends mixins(UserMixin) {
     const loading = this.$vs.loading()
 
     // Add friend to user's collection
-    const doc = await firestore
+    const doc = await this.$fire.firestore
       .collection('users')
       .doc(this.AuthUser?.uid)
       .collection('followers')
@@ -462,7 +461,7 @@ export default class UserProfile extends mixins(UserMixin) {
     const loading = this.$vs.loading()
     // Remove the pending follow request from user's collection
 
-    const doc = await firestore
+    const doc = await this.$fire.firestore
       .collection('users')
       .doc(this.AuthUser?.uid)
       .collection('followers')
@@ -477,14 +476,14 @@ export default class UserProfile extends mixins(UserMixin) {
   async unFollowFriend(uid: string) {
     const loading = this.$vs.loading()
 
-    const doc = await firestore
+    const doc = await this.$fire.firestore
       .collection('users')
       .doc(this.AuthUser?.uid)
       .update({
         following: firebase.firestore.FieldValue.arrayRemove(uid)
       })
 
-    const unFollowQuery = await firestore
+    const unFollowQuery = await this.$fire.firestore
       .collection('users')
       .doc(uid)
       .collection('followers')
@@ -501,7 +500,7 @@ export default class UserProfile extends mixins(UserMixin) {
       return
     }
     const userId = this.AuthUser?.uid
-    const notesCollection = await firestore
+    const notesCollection = await this.$fire.firestore
       .collection('notes')
       .where('uid', '==', userId)
       .orderBy('createdAt', 'desc')
