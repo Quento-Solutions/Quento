@@ -38,7 +38,7 @@
     "fs": "0.0.1-security",
     "js-cookie": "^2.2.1",
     "net": "^1.0.2",
-    "nuxt": "^2.14.4",
+    "nuxt": "^3.4.3",
     "nuxt-composition-api": "^0.10.6",
     "nuxt-property-decorator": "2.7.2",
     "swiper": "^6.2.0",
